@@ -1,8 +1,8 @@
 import React from "react";
 import {Link} from "react-router-dom";
-import SearchForm from "./includes/SearchForm";
 import Logout from "./includes/Logout";
 import SpinnerButtonLoader from "../loader/SpinnerButtonLoader";
+import MobileSearchForm from "./includes/MobileSearchForm";
 
 const Header = (props) => {
 	const {customer, wishList, cart, settings} = props;
@@ -23,7 +23,7 @@ const Header = (props) => {
 					</div>
 
 					<div className="header-center">
-						<SearchForm/>
+						<MobileSearchForm/>
 					</div>
 
 					<div className="header-right">

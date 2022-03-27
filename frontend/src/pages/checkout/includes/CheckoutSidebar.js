@@ -9,7 +9,7 @@ const CheckoutSidebar = (props) => {
 	const [manageShipping, setManageShipping] = useState(false);
 
 	const currency = settings?.currency_icon;
-	const advanced_rate = 60;
+	const advanced_rate = settings?.payment_advanched_rate || 0;
 
 	const {totalPrice, advanced, dueAmount, totalQty} = CartProductSummary(cart, advanced_rate);
 	const shipping = cart?.shipping ? JSON.parse(cart?.shipping) : {};

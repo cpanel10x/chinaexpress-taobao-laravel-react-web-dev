@@ -499,7 +499,11 @@ blockquote {
 }
 
 
-
+.table th, .table td {
+  padding: 0.5rem;
+  vertical-align: middle;
+  border-top: 1px solid #dee2e6;
+}
 
 
 

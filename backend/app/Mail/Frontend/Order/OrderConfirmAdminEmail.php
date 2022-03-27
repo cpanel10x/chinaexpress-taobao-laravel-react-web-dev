@@ -49,9 +49,9 @@ class OrderConfirmAdminEmail extends Mailable
       'order_id' => $order_id
     ]);
 
-//    return $this->view('frontend.mail.admin')
-//      ->subject(__('strings.emails.contact.subject', ['app_name' => app_name()]));
+    //    return $this->view('frontend.mail.admin')
+    //      ->subject(__('strings.emails.contact.subject', ['app_name' => app_name()]));
 
-//        return $this->view('view.name');
+    //        return $this->view('view.name');
   }
 }

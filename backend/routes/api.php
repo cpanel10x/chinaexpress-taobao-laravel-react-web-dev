@@ -36,6 +36,8 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function () {
   Route::get('/page/{slug}', [GeneralController::class, 'singlePages']);
 
 
+  Route::get('/user', [AuthController::class, 'authUser']);
+
   Route::post('/check-exists-customer', [AuthController::class, 'checkExistsCustomer']);
   Route::post('/login', [AuthController::class, 'loginCustomer']);
   Route::post('/register-customer', [AuthController::class, 'registerCustomer']);
@@ -80,14 +82,8 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function () {
   Route::post('/related-products/{item_id}', [HomeController::class, 'relatedProducts']);
 
 
-  Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-  });
-
-
   Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
 
-    // Route::get('/me', [AuthController::class, 'me']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/update-profile', [AuthController::class, 'updateProfile']);
 

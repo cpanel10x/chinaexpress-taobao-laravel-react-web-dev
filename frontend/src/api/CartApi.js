@@ -120,7 +120,7 @@ export const useCartMutation = () => {
 	const confirmOrder = useMutation("confirmOrder", async (props) => {
 		try {
 			const {data} = await instance.post(`/cart/place-order`, {token: token, ...props});
-			return data?.cart ? data.cart : {};
+			return data;
 		} catch (error) {
 			console.log(error);
 		}

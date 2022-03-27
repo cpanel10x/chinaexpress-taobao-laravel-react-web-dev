@@ -15,69 +15,66 @@ import LoadSearchProducts from "./pages/search/LoadSearchProducts";
 import Dashboard from "./auth/dashboard/Dashboard";
 import AuthRoute from "./AuthRoute";
 import Payment from "./pages/payment/Payment";
-// import PaymentSuccessFail from "../pages/payment/PaymentSuccessFail";
 import LoadPictureSearchProduct from "./pages/search/LoadPictureSearchProduct";
 // import OrderDetails from "./auth/dashboard/orders/OrderDetails";
-import PaymentStatus from "./auth/dashboard/orders/paymentStatus/PaymentStatus";
 import AliExpressSearch from "./pages/aliexpress/search/AliExpressSearch";
 import AliProductPage from "./pages/aliexpress/product/AliProductPage";
 import ForgotPassword from "./auth/forgot/ForgotPassword";
+import OnlinePaymentStatus from "./pages/payment/OnlinePaymentStatus";
+import PaymentProcess from "./auth/dashboard/orders/payment/PaymentProcess";
 
 const Routing = () => {
-   return (
-      <Switch>
-         <Route path="/" exact component={Home}/>
-         <Route path="/login" exact component={Login}/>
-         <Route path="/forgot-password" exact component={ForgotPassword}/>
-         <Route path="/faq" exact component={Faq}/>
-         <Route path="/contact" exact component={Contact}/>
+	return (
+		<Switch>
+			<Route path="/" exact component={Home}/>
+			<Route path="/login" exact component={Login}/>
+			<Route path="/forgot-password" exact component={ForgotPassword}/>
+			<Route path="/faq" exact component={Faq}/>
+			<Route path="/contact" exact component={Contact}/>
 
-         <Route path="/pages/:slug" exact component={SinglePage}/>
-         <Route path="/product/:item_id" exact component={ProductSingle}/>
-         <Route
-            path="/search"
-            exact={true}
-            component={LoadSearchProducts}
-         />
-         <Route path="/search/picture/:search_id" exact component={LoadPictureSearchProduct}/>
-         <Route
-            path="/shop/:category_slug"
-            exact
-            component={LoadShopProducts}
-         />
+			<Route path="/pages/:slug" exact component={SinglePage}/>
+			<Route path="/product/:item_id" exact component={ProductSingle}/>
+			<Route
+				path="/search"
+				exact={true}
+				component={LoadSearchProducts}
+			/>
+			<Route path="/search/picture/:search_id" exact component={LoadPictureSearchProduct}/>
+			<Route
+				path="/shop/:category_slug"
+				exact
+				component={LoadShopProducts}
+			/>
 
-         {/* start aliexpress route develop */}
-         <Route path="/aliexpress/search" exact={true} component={AliExpressSearch}/>
-         <Route path="/aliexpress/product/:productId" exact={true} component={AliProductPage}/>
-         {/* end aliexpress route develop */}
+			{/* start aliexpress route develop */}
+			<Route path="/aliexpress/search" exact={true} component={AliExpressSearch}/>
+			<Route path="/aliexpress/product/:productId" exact={true} component={AliProductPage}/>
+			{/* end aliexpress route develop */}
 
-         <AuthRoute path="/checkout" exact component={Checkout}/>
+			<AuthRoute path="/checkout" exact component={Checkout}/>
 
-         <AuthRoute
-            path="/dashboard/:section?"
-            exact
-            component={Dashboard}
-         />
-         <AuthRoute path="/payment" exact component={Payment}/>
-         <AuthRoute path="/wishlist" exact component={Wishlist}/>
-         {/*<AuthRoute path="/order/:orderId" exact component={OrderDetails}/>*/}
-         <AuthRoute
-            path="/payment/:orderId"
-            exact
-            component={PaymentStatus}
-         />
+			<AuthRoute
+				path="/dashboard/:section?"
+				exact
+				component={Dashboard}
+			/>
+			<AuthRoute path="/payment" exact component={Payment}/>
+			<AuthRoute path="/wishlist" exact component={Wishlist}/>
+			{/*<AuthRoute path="/order/:orderId" exact component={OrderDetails}/>*/}
 
-         {/* <AuthRoute path="/online/payment/:status/:tran_id" exact component={PaymentSuccessFail}/> */}
+			<AuthRoute path="/online/payment/:status" exact component={OnlinePaymentStatus}/>
 
-         <Route
-            path="/:category_slug/:sub_slug?"
-            exact
-            component={LoadCategory}
-         />
+			<AuthRoute path="/dashboard/orders/payment/:tran_id" exact component={PaymentProcess}/>
 
-         <Route path="*" exact component={My404Component}/>
-      </Switch>
-   );
+			<Route
+				path="/:category_slug/:sub_slug?"
+				exact
+				component={LoadCategory}
+			/>
+
+			<Route path="*" exact component={My404Component}/>
+		</Switch>
+	);
 };
 
 export default Routing;

@@ -17,17 +17,9 @@ const LoadPictureSearchProduct = props => {
 	const currentPage = page ? page : 1;
 
 	const limit = 35;
-	const offset = currentPage ? Math.ceil(currentPage * limit) : 0;
 
-	const {data, isLoading} = usePictureSearch(search_id, currentPage);
+	const {data: products, isLoading} = usePictureSearch(search_id, currentPage);
 
-
-	const queryUrl = `/default/get-picture-result/${search_id}?offset=${offset}&limit=${limit}`;
-	// const {resData, isLoading} = SwrPostRequest(search_id ? queryUrl : null);
-	const resData  = {};
-
-	let products = resData?.data?.products;
-	products = products ? JSON.parse(products) : {Content: {}, TotalCount: 0};
 	const Content = products?.Content ? products.Content : 0;
 	const TotalCount = products?.TotalCount ? products.TotalCount : 1;
 	const totalPage = Math.ceil(TotalCount / limit);

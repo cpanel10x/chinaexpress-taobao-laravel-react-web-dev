@@ -1,6 +1,5 @@
 import {instance} from "./AxiosInstance";
 import _ from "lodash";
-import axios from "axios";
 
 export const getProductDescription = async (product_id) => {
 	return await instance

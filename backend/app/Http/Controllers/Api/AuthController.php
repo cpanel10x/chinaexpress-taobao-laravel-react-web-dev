@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Auth\SocialAccount;
 use App\Models\Auth\User;
 use App\Models\Content\Frontend\Address;
+use App\Notifications\Frontend\Auth\OTPMail;
 use App\Repositories\Frontend\Auth\UserRepository;
 use App\Traits\ApiResponser;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -13,7 +14,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
 
 /**
  * Class HomeController.
@@ -37,25 +37,24 @@ class AuthController extends Controller
     $this->userRepository = $userRepository;
   }
 
-
-  public function generateAndSendOTP($phone, $otp)
+  public function generateAndSendOTP($user, $otp)
   {
-    try {
-      $appUrl = get_setting('site_url', env('APP_URL'));
-      if (get_setting('sms_active_otp_message')) {
-        $txt = get_setting('sms_otp_message');
-        $txt = str_replace('[otp]', $otp, $txt);
-        $txt = str_replace('[appUrl]', $appUrl, $txt);
-      } else {
-        $txt = "Your {$appUrl} One Time Password(OTP) is {$otp} Validity for OTP is 3 minutes. Helpline 01515234363";
-      }
-      if ($phone) {
-        return send_ware_SMS($txt, $phone);
-      }
-    } catch (\Exception $ex) {
+    $appUrl = get_setting('site_url', env('APP_URL'));
+    if (get_setting('sms_active_otp_message')) {
+      $txt = get_setting('sms_otp_message');
+      $txt = str_replace('[otp]', $otp, $txt);
+      $txt = str_replace('[appUrl]', $appUrl, $txt);
+    } else {
+      $txt = "Your {$appUrl} One Time Password(OTP) is {$otp} Validity for OTP is 3 minutes. Helpline 01515234363";
     }
-    return false;
+    if ($user->phone) {
+      return send_ware_SMS($txt, $user->phone);
+    }
+    if ($user->email) {
+      $user->notify(new OTPMail($txt));
+    }
   }
+
 
   public function checkExistsCustomer(Request $request)
   {
@@ -75,7 +74,6 @@ class AuthController extends Controller
     $user = $email ? User::where('email', $email)->first() : $user;
     $hasPassword = false;
     if (!$user) {
-      $smsResponse = $phone ? $this->generateAndSendOTP($phone, $otpCode) : [];
       $emailUser = str_replace('+88', '', $phone);
       $userData['name'] = null;
       $userData['phone'] = $phone;
@@ -83,6 +81,8 @@ class AuthController extends Controller
       $userData['password'] = '#chinaexpress@123';
       $userData['email'] = $email ? $email : $emailUser . '@chinaexpress.com.bd';
       $user = $this->userRepository->create($userData, false);
+
+      $smsResponse = $this->generateAndSendOTP($user, $otpCode);
 
       return response([
         'status' => true,
@@ -101,7 +101,7 @@ class AuthController extends Controller
 
     if ($user) {
       if (!$hasPassword) {
-        $smsResponse = $phone ? $this->generateAndSendOTP($phone, $otpCode) : [];
+        $smsResponse = $this->generateAndSendOTP($user, $otpCode);
         $user->update(['otp_code' => $otpCode]);
       }
       return response([
@@ -139,13 +139,12 @@ class AuthController extends Controller
     $user = $email ? User::where('email', $email)->where('otp_code', $otp_code)->first() : $user;
 
     if ($user) {
-      Auth::loginUsingId($user->id, true);
       $data['token'] =  $user->createToken('ChinaExpress')->plainTextToken;
       $data['user'] =  $user;
-      return response(['status' => true, 'msg' => 'User login successfully.', 'user' => $data]);
+      return response($data);
     }
 
-    return response(['status' => false, 'msg' => 'User login failed.', 'user' => []]);
+    return response(['token' => null, 'user' => ['asdf' => 'sdf']]);
   }
 
   public function loginCustomer(Request $request)
@@ -170,14 +169,13 @@ class AuthController extends Controller
       return response(['errors' => ['password' => ['Password does not match!']]]);
     }
 
-    if (Auth::attempt(['email' => $user->email, 'password' => $password])) {
-      $user = Auth::user();
-      $success['token'] =  $user->createToken('ChinaExpress')->plainTextToken;
-      $success['user'] =  $user;
-      return response(['status' => true, 'msg' => 'User login successfully.', 'user' => $success]);
+    if ($user) {
+      $data['token'] =  $user->createToken('ChinaExpress')->plainTextToken;
+      $data['user'] =  $user;
+      return response($data);
     }
 
-    return response(['status' => false, 'msg' => 'Login failed, Try again', 'user' => []]);
+    return response(['token' => null, 'user' => []]);
   }
 
   public function updateProfile(Request $request)
@@ -201,11 +199,11 @@ class AuthController extends Controller
     $user->first_name = request('name', $user->name);
     $user->email = request('email', $user->email);
     $user->phone = request('phone', $user->phone);
-    if($password){
+    if ($password) {
       $user->password = Hash::make(request('password'));
     }
     $user->save();
-    
+
     return response([
       'status' => true,
       'update' => true,
@@ -293,11 +291,13 @@ class AuthController extends Controller
   }
 
 
-  public function me()
+  public function authUser()
   {
-    $user = auth()->check() ? auth()->user() : null;
+    $user = auth('sanctum')->check() ? auth('sanctum')->user() : null;
+    $token = request()->bearerToken();
     return response([
-      'user' => $user
+      'user' => $user,
+      'token' => $token,
     ]);
   }
 

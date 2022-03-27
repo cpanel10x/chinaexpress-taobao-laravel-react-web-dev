@@ -26,7 +26,11 @@ return [
   'allowed_methods' => ['GET, POST, PUT, PATCH, DELETE, OPTIONS'],
 
   'allowed_origins' => [
-    config('app.frontend_url')
+    config('app.frontend_url'),
+    'https://www.chinaexpress.com.bd',
+    'https://chinaexpress.com.bd',
+    'http://chinaexpress.com.bd',
+    'chinaexpress.com.bd',
   ],
 
   'allowed_origins_patterns' => [],

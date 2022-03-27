@@ -30,18 +30,26 @@ export const useAuthMutation = () => {
 		cache.invalidateQueries(["customer"]);
 	};
 
+	const authUserValidate = (data) => {
+		const token = data?.token ? data?.token : null;
+		const user = data?.user ? data?.user : {};
+		instanceSetToken(token);
+		setAuthenticated(user);
+		if (user?.id) {
+			cache.setQueryData(["customer"], user);
+		}
+		return user;
+	};
+
 	const customer = useQuery(["customer"], async () => {
-		if (token) {
-			instanceSetToken(token);
+		instanceSetToken(token);
+		try {
+			const {data} = await instance.get(`/user`);
+			return authUserValidate(data);
+		} catch (error) {
+			console.log(error);
 		}
-		if (!isAuth) {
-			setAuthenticated({});
-			instanceSetToken();
-			return {}
-		}
-		const {data} = await instance.get(`/user`);
-		setAuthenticated(data);
-		return data;
+
 	});
 
 	const checkExistsUser = useMutation(["checkExistsUser"], async (props) => {
@@ -56,22 +64,7 @@ export const useAuthMutation = () => {
 	const registerSubmit = useMutation(["registerSubmit"], async (props) => {
 		try {
 			const {data} = await instance.post(`/register-customer`, props);
-			if (data.status) {
-				const token = data?.user?.token ? data?.user?.token : null;
-				const user = data?.user?.user ? data?.user?.user : {};
-				instanceSetToken(token);
-				setAuthenticated(user);
-				if (user?.id) {
-					cache.setQueryData(["customer"], user);
-				}
-				return user;
-			} else {
-				swal({
-					'text': data?.msg,
-					icon: 'error'
-				});
-			}
-			return {};
+			return authUserValidate(data);
 		} catch (error) {
 			console.log(error);
 		}
@@ -80,14 +73,7 @@ export const useAuthMutation = () => {
 	const loginSubmit = useMutation(["loginSubmit"], async (props) => {
 		try {
 			const {data} = await instance.post(`/login`, props);
-			const token = data?.user?.token ? data?.user?.token : null;
-			const user = data?.user?.user ? data?.user?.user : {};
-			instanceSetToken(token);
-			setAuthenticated(user);
-			if (user?.id) {
-				cache.setQueryData(["customer"], user);
-			}
-			return user;
+			return authUserValidate(data);
 		} catch (error) {
 			console.log(error);
 		}

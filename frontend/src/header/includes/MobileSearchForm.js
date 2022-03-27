@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import {withRouter} from "react-router";
 import {useQuery} from "../../utils/customHooks";
 import {useSearchPictureUpload} from "../../api/ProductApi";
+import swal from "sweetalert";
 
 const MobileSearchForm = props => {
 	const query = useQuery();
@@ -13,7 +14,15 @@ const MobileSearchForm = props => {
 
 	const submitTextSearch = e => {
 		e.preventDefault();
-		props.history.push(`/search?keyword=${search}`);
+		if (search) {
+			props.history.push(`/search?keyword=${search}`);
+		} else {
+			swal({
+				text: 'Type your keyword first',
+				icon: 'info',
+				button: 'Dismiss'
+			})
+		}
 	};
 
 	const submitPictureSearch = async (e) => {
@@ -24,12 +33,12 @@ const MobileSearchForm = props => {
 			formData.append("picture", selectedFile);
 			await mutateAsync(formData)
 				.then(response => {
-				let picture = response.picture;
-				let search_id = response.search_id;
-				if (search_id && picture) {
-					props.history.push(`/search/picture/${search_id}`);
-				}
-			});
+					let picture = response.picture;
+					let search_id = response.search_id;
+					if (search_id && picture) {
+						props.history.push(`/search/picture/${search_id}`);
+					}
+				});
 		}
 	};
 

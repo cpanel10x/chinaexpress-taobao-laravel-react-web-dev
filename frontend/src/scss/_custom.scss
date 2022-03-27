@@ -140,7 +140,9 @@ a:focus {
       height: 45px;
     }
   }
+}
 
+.header {
   .input-group .form-control {
     height: 38px;
     padding: 0.65rem 1rem;
@@ -164,8 +166,9 @@ a:focus {
 
     &:hover,
     &:focus {
-      background-color: #751f8a;
+      background-color: rgb(117 31 138 / 90%);
       color: #fff;
+      box-shadow: none;
     }
   }
 }

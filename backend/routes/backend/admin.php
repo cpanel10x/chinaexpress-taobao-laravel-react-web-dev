@@ -116,7 +116,6 @@ Route::namespace('Content')->group(function () {
     Route::get('top-notice', [SettingController::class, 'topNoticeCreate'])->name('topNotice.create');
     Route::post('top-notice', [SettingController::class, 'topNoticeStore'])->name('topNotice.store');
 
-
     Route::get('manage-sections', [SettingController::class, 'manageSections'])->name('manage.sections');
     Route::post('manage-section-store', [SettingController::class, 'manageSectionsStore'])->name('manage.section.store');
 

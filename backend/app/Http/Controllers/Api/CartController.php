@@ -112,7 +112,7 @@ class CartController extends Controller
       $response = [
         'status' => true,
         'msg' => 'Order placed successfully',
-        'redirect' => 'bkash/payment/' . $order->transaction_id,
+        'redirect' => url('bkash/payment/' . $order->transaction_id),
       ];
     } else {
       $response = [
