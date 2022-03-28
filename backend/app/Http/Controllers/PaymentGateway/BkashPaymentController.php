@@ -142,9 +142,9 @@ class BkashPaymentController extends Controller
 
     $data = $this->CreatePayment($body);
 
-    Setting::save_settings([
-      'bkash_create_api' => json_encode($data),
-    ]);
+    // Setting::save_settings([
+    //   'bkash_create_api' => json_encode($data),
+    // ]);
 
     return response($data);
   }

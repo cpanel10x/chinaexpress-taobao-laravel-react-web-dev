@@ -58,6 +58,14 @@ const PaymentItem = (props) => {
 													</div>
 												</div>
 											}
+											{
+												parseInt(product?.DeliveryCost) > 0 &&
+												<div className="row">
+													<div className="col-12">
+														<div className="mb-2 small">China Local Shipping cost: <strong>{currency + ' ' + product?.DeliveryCost}</strong></div>
+													</div>
+												</div>
+											}
 											<div className="row align-items-center">
 												<div className="col-6 text-left ">
 													<p className="m-0 pt-3 pt-lg-0"><strong>{`${currency + ' ' + variation.price} x ${variation.qty} Pcs`}</strong>

@@ -40,8 +40,7 @@ const ProductSummary = props => {
 			<table className="table table-bordered table-striped">
 				<thead>
 				<tr>
-					<th className="w-50 text-center">From China</th>
-					<th className="w-50 text-center">To Bangladesh</th>
+					<th colSpan={2} className="text-center">From China To Bangladesh</th>
 				</tr>
 				</thead>
 				<tbody>

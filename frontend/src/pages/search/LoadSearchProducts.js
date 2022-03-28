@@ -1,5 +1,5 @@
 import React, {useEffect} from "react";
-import {withRouter} from "react-router-dom";
+import {useHistory, withRouter} from "react-router-dom";
 import ProductListSkeleton from "../../skeleton/productSkeleton/ProductListSkeleton";
 import {goPageTop} from "../../utils/Helpers";
 import SearchProductList from "./includes/SearchProductList";
@@ -9,6 +9,7 @@ import {useSearchKeyword} from "../../api/ProductApi";
 
 
 const LoadSearchProducts = (props) => {
+	const history = useHistory();
 	const query = useQuery();
 	const keyword = query.get("keyword");
 	const page = query.get("page");
@@ -16,12 +17,23 @@ const LoadSearchProducts = (props) => {
 
 	const limit = 35;
 	const offset = currentPage ? Math.ceil(currentPage * limit) : 0;
-
 	const {data: products, isLoading} = useSearchKeyword(keyword, currentPage);
+
+
+	const Content = products?.Content || [];
+	const TotalCount = products?.TotalCount || 1;
+	const totalPage = Math.ceil(TotalCount / limit);
 
 	useEffect(() => {
 		goPageTop();
-	}, [keyword, currentPage]);
+		if (Content?.length === 1) {
+			let product = Content?.[0];
+			const product_code = product?.product_code ? product?.product_code : product?.ItemId;
+			if(product_code){
+				history.push(`/product/${product_code}`);
+			}
+		}
+	}, [keyword, currentPage, Content]);
 
 
 	if (isLoading) {
@@ -36,9 +48,6 @@ const LoadSearchProducts = (props) => {
 		)
 	}
 
-	const Content = products?.Content || [];
-	const TotalCount = products?.TotalCount || 1;
-	const totalPage = Math.ceil(TotalCount / limit);
 
 
 	if (!Content?.length) {

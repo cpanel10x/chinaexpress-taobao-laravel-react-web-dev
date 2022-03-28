@@ -4,7 +4,7 @@ import ProductCart from "../../product/productList/ProductCart";
 import {withRouter} from "react-router-dom";
 
 const PictureSearchProductList = (props) => {
-	const {search_id, currentPage, totalPage, Content, TotalCount} = props;
+	const {search_id, currentPage, totalPage, currencyIcon, Content, TotalCount} = props;
 
 	const handlePaginationClick = (data) => {
 		props.history.push(`/search/picture/${search_id}?page=${data.selected + 1}`);
@@ -21,7 +21,7 @@ const PictureSearchProductList = (props) => {
 					className={`row justify-content-center row-cols-2 row-cols-md-4 row-cols-lg-5`}>
 					{Content?.length > 0 &&
 					Content.map((product, key) => (
-						<ProductCart key={key} product={product} productClass="col"/>
+						<ProductCart key={key} product={product} currencyIcon={currencyIcon} productClass="col"/>
 					))}
 				</div>
 			</div>

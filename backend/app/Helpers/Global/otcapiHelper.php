@@ -82,9 +82,9 @@ if (!function_exists('otc_search_items')) {
   function otc_search_items($search, $type, $offset = 1, $limit = 24)
   {
     // otc_search_items('bag', 'text', 0, 5)
-    parse_str(parse_url($search, PHP_URL_QUERY), $search_array);
-    $data_id = key_exists('id', $search_array) ? $search_array['id'] : null;
-    $search = $data_id ? "https://item.taobao.com/item.htm?id={$data_id}" : $search;
+    // parse_str(parse_url($search, PHP_URL_QUERY), $search_array);
+    // $data_id = key_exists('id', $search_array) ? $search_array['id'] : null;
+    // $search = $data_id ? "https://item.taobao.com/item.htm?id={$data_id}" : $search;
 
     $query = setOtcParams();
     $query['type'] = $type;

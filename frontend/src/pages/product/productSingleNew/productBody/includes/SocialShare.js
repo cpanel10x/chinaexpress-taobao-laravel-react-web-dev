@@ -12,7 +12,6 @@ const SocialShare = (props) => {
    const copyLink = (e, link) => {
       e.preventDefault();
       navigator.clipboard.writeText(link);
-      alert('Copy link');
    };
 
    return (

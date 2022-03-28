@@ -76,7 +76,14 @@ const CheckoutItem = (props) => {
 													</div>
 												</div>
 											}
-
+											{
+												parseInt(product?.DeliveryCost) > 0 &&
+												<div className="row">
+													<div className="col-12">
+														<div className="mb-2 small">China Local Shipping cost: <strong>{currency + ' ' + product?.DeliveryCost}</strong></div>
+													</div>
+												</div>
+											}
 											<div className="row align-items-center">
 												<div className="col-6 pr-0 col-lg-4">
 													<p className="m-0 small d-block d-lg-none">Max: {variation.maxQuantity}</p>
@@ -93,6 +100,7 @@ const CheckoutItem = (props) => {
 														<strong>{`${currency + ' ' + Math.round(Number(variation.qty) * Number(variation.price))}`}</strong></p>
 												</div>
 											</div>
+
 										</div>
 									</div>
 									<hr className="my-2"/>
