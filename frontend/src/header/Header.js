@@ -29,7 +29,7 @@ const Header = (props) => {
 					<div className="header-right">
 						<div className="header-dropdown-link">
 							<div className="wishlist">
-								<Link to="/wishlist" title="Wishlist">
+								<Link to="/dashboard/wishlist" title="Wishlist">
 									<div className="icon">
 										<i className="icon-heart-empty"/>
 										<span className="wishlist-count badge">{wishList?.length || 0}</span>
@@ -76,7 +76,7 @@ const Header = (props) => {
 											My Orders
 										</Link>
 										<Link
-											to="/dashboard/account"
+											to="/dashboard/profile"
 											className="dropdown-item"
 										>
 											Account

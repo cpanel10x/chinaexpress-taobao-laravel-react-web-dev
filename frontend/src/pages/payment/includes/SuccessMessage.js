@@ -1,7 +1,18 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Link} from "react-router-dom";
+import {usePaymentStatusUpdate} from "../../../api/ApiDashboard";
 
-const SuccessMessage = ({ref_no, tran_id, n_msg}) => {
+const SuccessMessage = ({ref_no, tran_id, n_msg, paymentID}) => {
+
+	const {mutateAsync, isLoading} = usePaymentStatusUpdate();
+
+	useEffect(() => {
+		if (tran_id && paymentID !=='undefined') {
+			mutateAsync({tran_id, paymentID});
+		}
+	}, [tran_id]);
+
+
 	return (
 		<div className="text-center order_complete">
 			<img
@@ -12,7 +23,7 @@ const SuccessMessage = ({ref_no, tran_id, n_msg}) => {
 			<div className="heading_s1">
 				<h3>Payment successful</h3>
 			</div>
-			<p>
+			<p className="mb-4">
 				Thank you for your order! Your order is being processed and will be
 				completed soon. You will receive an email confirmation when your
 				order is on the way.

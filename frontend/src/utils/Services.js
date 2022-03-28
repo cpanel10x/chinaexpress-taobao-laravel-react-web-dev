@@ -73,22 +73,6 @@ export const deleteCustomerAddress = async (deleteData) => {
 };
 
 
-export const getCustomerAllOrders = async () => {
-	return await instance
-		.get("orders")
-		.then((res) => {
-			const resData = res.data;
-			if (!_.isEmpty(resData)) {
-				return resData.data;
-			}
-			return {};
-		})
-		.catch((error) => {
-			console.log(error.response);
-		});
-};
-
-
 
 export const loadTextSearchProducts = async (searchKey, offset, limit) => {
 	return await instance

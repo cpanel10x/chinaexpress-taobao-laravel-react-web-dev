@@ -1,6 +1,10 @@
 function redirectWithErrors(url, tran_id, data) {
   let errorMessage = data?.errorMessage || null;
-  return `${url}&tran_id=${tran_id}&paymentID=${data?.paymentID}`+(errorMessage ? `&n_msg=${errorMessage}` : '');
+  let paymentID = data?.paymentID || null;
+  let endpoint = `${url}&tran_id=${tran_id}`;
+  endpoint += paymentID ? `&paymentID=${data?.paymentID}` : '';
+  endpoint += errorMessage ? `&n_msg=${errorMessage}` : '';
+  return endpoint;
 }
 
 function callReconfigure(val) {
@@ -18,7 +22,7 @@ function callReconfigure(val) {
   const success_url = paymentInfo?.success_url;
   const failed_url = paymentInfo?.failed_url;
   const cancel_url = paymentInfo?.cancel_url;
-  
+
   const csrfToken = $('meta[name="csrf-token"]').attr("content");
 
   function clickPayButton() {
@@ -71,7 +75,7 @@ function callReconfigure(val) {
     },
     executeRequestOnAuthorization: function () {
       $.ajax({
-        url: `${execute_url+paymentID}`,
+        url: `${execute_url + paymentID}`,
         type: "POST",
         headers: { "X-CSRF-TOKEN": csrfToken },
         contentType: "application/json",

@@ -33,10 +33,7 @@ const PaymentItem = (props) => {
 							product?.variations?.map((variation, key) =>
 								<div className="variation" key={variation.id}>
 									<div className="row align-items-center">
-										<div className="col-1">
-											<span>{key + 1}</span>
-										</div>
-										<div className="col-2 p-0">
+										<div className="col-3 p-0">
 											<AttributeImage product={product} attributes={variation?.attributes}/>
 										</div>
 										<div className="col-9">
@@ -68,7 +65,7 @@ const PaymentItem = (props) => {
 											}
 											<div className="row align-items-center">
 												<div className="col-6 text-left ">
-													<p className="m-0 pt-3 pt-lg-0"><strong>{`${currency + ' ' + variation.price} x ${variation.qty} Pcs`}</strong>
+													<p className="m-0 pt-3 pt-lg-0"><strong>{`${currency + ' ' + variation.price} x ${variation.qty}`}</strong>
 													</p>
 												</div>
 												<div className="col-6 text-right">

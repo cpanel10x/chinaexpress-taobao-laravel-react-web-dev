@@ -1,13 +1,13 @@
-import React, {useState} from "react";
+import React, {useState} from 'react';
 import {Link} from "react-router-dom";
 import swal from "sweetalert";
-import SpinnerButtonLoader from "../../../loader/SpinnerButtonLoader";
 
-const BkashPayment = (props) => {
-	const {confirmOrder} = props;
+const RePayment = ({order}) => {
+
+	const [payMethod, setPayMethod] = useState('bkash');
 	const [accept, setAccept] = useState(false);
 
-	const confirmNagadPayment = (e) => {
+	const confirmPaymentProcess = () => {
 		if (!accept) {
 			swal({
 				text: "Please accept terms and conditions!",
@@ -15,13 +15,40 @@ const BkashPayment = (props) => {
 				buttons: "Ok, Understood",
 			});
 		} else {
-			props.paymentConfirm(e);
+			const base_path = process.env.REACT_APP_ASSET_ENDPOINT;
+			window.location.href = `${base_path}/bkash/payment/${order.transaction_id}`;
 		}
 	};
 
 
 	return (
 		<div>
+			<div className="my-3 my-lg-5 justify-content-center row ">
+				<div className="col-md-6">
+					<div className="card payment_card text-center">
+						<div className="form-check form-check-inline mx-auto">
+							<input
+								className="form-check-input mr-2"
+								type="radio"
+								name="payment_method"
+								onChange={() => setPayMethod('bkash')}
+								id="bkash"
+								value="bkash"
+								checked={payMethod === 'bkash'}
+							/>
+							<label
+								className="form-check-label"
+								htmlFor="bkash"
+							>
+								<img
+									src={`/assets/img/payment/bkash.png`}
+									alt="bkash"
+								/>
+							</label>
+						</div>
+					</div>
+				</div>
+			</div>
 			<div>
 				<p>
 					Please Note <br/>
@@ -67,20 +94,15 @@ const BkashPayment = (props) => {
 					</label>
 				</div>
 			</div>
-			{
-				confirmOrder?.isLoading ?
-					<SpinnerButtonLoader buttonClass="btn-block btn-default" textClass="text-white"/>
-					:
-					<button
-						type="button"
-						onClick={(e) => confirmNagadPayment(e)}
-						className="btn btn-block btn-default py-2 mt-3"
-					>
-						Pay Now
-					</button>
-			}
+			<button
+				type="button"
+				onClick={() => confirmPaymentProcess()}
+				className="btn btn-block btn-default py-2 mt-3"
+			>
+				Pay Now
+			</button>
 		</div>
 	);
 };
 
-export default BkashPayment;
+export default RePayment;

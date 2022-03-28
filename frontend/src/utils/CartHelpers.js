@@ -564,9 +564,18 @@ export const CartProductSummary = (cart, advanced_rate) => {
 	return {totalPrice, advanced, dueAmount, totalQty};
 };
 
-
-export const cartCalculateNeedToPay = (totalPrice, percent = 50) => {
-	return (Number(totalPrice) * percent) / 100;
+export const orderSummaryCalculation = (order_items) => {
+	let productValue = 0;
+	let firstPayment = 0;
+	let dueAmount = 0;
+	order_items?.map(item => {
+		let price = parseInt(item.product_value);
+		let firstPrice = parseInt(item.first_payment);
+		productValue += price;
+		firstPayment += firstPrice;
+		dueAmount += (price - firstPrice);
+	});
+	return {productValue, firstPayment, dueAmount};
 };
 
 

@@ -21,7 +21,9 @@ import AliExpressSearch from "./pages/aliexpress/search/AliExpressSearch";
 import AliProductPage from "./pages/aliexpress/product/AliProductPage";
 import ForgotPassword from "./auth/forgot/ForgotPassword";
 import OnlinePaymentStatus from "./pages/payment/OnlinePaymentStatus";
-import PaymentProcess from "./auth/dashboard/orders/payment/PaymentProcess";
+import OrderDetails from "./auth/dashboard/orders/OrderDetails";
+import AllOrders from "./auth/dashboard/orders/AllOrders";
+import Profile from "./auth/dashboard/Profile";
 
 const Routing = () => {
 	return (
@@ -52,19 +54,14 @@ const Routing = () => {
 			{/* end aliexpress route develop */}
 
 			<AuthRoute path="/checkout" exact component={Checkout}/>
-
-			<AuthRoute
-				path="/dashboard/:section?"
-				exact
-				component={Dashboard}
-			/>
 			<AuthRoute path="/payment" exact component={Payment}/>
-			<AuthRoute path="/wishlist" exact component={Wishlist}/>
-			{/*<AuthRoute path="/order/:orderId" exact component={OrderDetails}/>*/}
-
 			<AuthRoute path="/online/payment/:status" exact component={OnlinePaymentStatus}/>
+			<AuthRoute path="/dashboard" exact component={Dashboard} />
+			<AuthRoute path="/dashboard/orders" exact component={AllOrders} />
+			<AuthRoute path="/dashboard/wishlist" exact component={Wishlist} />
+			<AuthRoute path="/dashboard/profile" exact component={Profile} />
+			<AuthRoute path="/dashboard/orders/:tran_id" exact component={OrderDetails}/>
 
-			<AuthRoute path="/dashboard/orders/payment/:tran_id" exact component={PaymentProcess}/>
 
 			<Route
 				path="/:category_slug/:sub_slug?"

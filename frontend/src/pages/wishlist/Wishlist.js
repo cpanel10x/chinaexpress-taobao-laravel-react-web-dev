@@ -3,23 +3,65 @@ import WishlistPage from "./wishlistPage/WishlistPage";
 import {goPageTop} from "../../utils/Helpers";
 import {useSettings, useWishList} from "../../api/GeneralApi";
 import {useAuthMutation} from "../../api/Auth";
+import PageSkeleton from "../../skeleton/PageSkeleton";
+import Breadcrumb from "../breadcrumb/Breadcrumb";
 
 const Wishlist = () => {
-   const {data: wishList} = useWishList();
+	const {data: wishLists, isLoading} = useWishList();
 
-   useEffect(() => {
-      goPageTop();
-   }, []);
+	useEffect(() => {
+		goPageTop();
+	}, []);
 
-   return (
-      <div>
-         <div className="row justify-content-center">
-            <div className="col-md-6">
-               <WishlistPage wishList={wishList}/>
-            </div>
-         </div>
-      </div>
-   );
+	if (isLoading) {
+		return <PageSkeleton/>;
+	}
+
+
+	return (
+		<main className="main">
+			<div className="page-content">
+				<Breadcrumb
+					current={'Wishlist'}
+					collections={[
+						{name: 'Dashboard', url: 'dashboard'}
+					]}/>
+				<div className="container">
+					<div className="row">
+						<div className="col-md-12">
+							<div className="card my-3">
+								<div className="card-body">
+									<h2 className="card-title">My Wishlist</h2>
+									<table className="table table-wishlist table-mobile">
+										<thead>
+										<tr>
+											<th>#ID</th>
+											<th colSpan={2}>Product</th>
+											<th style={{width: '100px'}}>Price</th>
+											<th>Remove</th>
+										</tr>
+										</thead>
+										<tbody>
+										{
+                       wishLists?.length > 0 ? (
+                           wishLists.map((wishList, index) => <WishlistPage key={index} indexItem={index} wishList={wishList}/>)
+												) :
+												<tr>
+													<td colSpan={4} className="text-center">
+														No wishlist
+													</td>
+												</tr>
+										}
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+	);
 };
 
 

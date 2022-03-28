@@ -36,15 +36,17 @@ class BkashPaymentController extends Controller
   public function bkashPaymentProcess($tran_id)
   {
     $amount = $this->processAmount($tran_id);
+    $frontend = config('app.frontend_url');
+
     $data = [
       'ref_no' => $tran_id,
       'amount' => $amount,
       'token_url' => url('/bkash/token'),
       'checkout_url' => url("/bkash/checkout?ref_no={$tran_id}&intent=sale"),
       'execute_url' => url('/bkash/execute?paymentID='),
-      'success_url' => "/online/payment/success?ref_no={$tran_id}",
-      'failed_url' => "/online/payment/failed?ref_no={$tran_id}",
-      'cancel_url' => "/online/payment/cancel?ref_no={$tran_id}"
+      'success_url' => "{$frontend}/online/payment/success?ref_no={$tran_id}",
+      'failed_url' => "{$frontend}/online/payment/failed?ref_no={$tran_id}",
+      'cancel_url' => "{$frontend}/online/payment/cancel?ref_no={$tran_id}"
     ];
     return view('frontend.payment.bkash', compact('data'));
   }

@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\AliExpressApiController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\CatalogController;
+use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\GeneralController;
 use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\Api\OrderController;
@@ -35,7 +36,7 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function () {
   Route::get('/contact-us', [GeneralController::class, 'contactUs']);
   Route::get('/page/{slug}', [GeneralController::class, 'singlePages']);
 
-
+  // sanctum auth user
   Route::get('/user', [AuthController::class, 'authUser']);
 
   Route::post('/check-exists-customer', [AuthController::class, 'checkExistsCustomer']);
@@ -81,7 +82,6 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function () {
 
   Route::post('/related-products/{item_id}', [HomeController::class, 'relatedProducts']);
 
-
   Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
 
     Route::post('/logout', [AuthController::class, 'logout']);
@@ -90,8 +90,6 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function () {
     Route::post('/confirm-order', [OrderController::class, 'confirmOrders']);
     Route::post('/payment-confirm', [OrderController::class, 'confirmOrderPayment']);
 
-    Route::get('/orders', [OrderController::class, 'orders']);
-    Route::get('/order/{orderId}', [OrderController::class, 'orderDetails']);
     Route::post('/invoices', [OrderController::class, 'invoices']);
     Route::post('/invoice/{id}', [OrderController::class, 'invoiceDetails']);
 
@@ -103,6 +101,13 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function () {
     Route::post('/delete-address', [AddressController::class, 'deleteAddress']);
 
     Route::post('nagad/payment', [NagadPaymentController::class, 'payment_process']);
+
+
+    // dashboard operations
+    Route::group(['prefix' => 'dashboard', 'as' => 'dashboard.'], function () {
+      Route::get('/orders', [DashboardController::class, 'orderIndex']);
+      Route::get('/order/{id}', [DashboardController::class, 'orderDetails']);
+    });
   });
 
   // cart system

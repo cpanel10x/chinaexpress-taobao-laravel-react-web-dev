@@ -210,35 +210,6 @@ class OrderController extends Controller
     return $this->error('You have no orders', 417);
   }
 
-  public function orders()
-  {
-    $user_id = auth()->id();
-    $orders = Order::with('orderItems')->where('user_id', $user_id)->latest()->get();
-    if (!empty($orders)) {
-      return $this->success([
-        'orders' => $orders
-      ]);
-    }
-    return $this->error('You have no orders', 417);
-  }
-
-  public function orderDetails($orderId)
-  {
-    $user_id = auth()->id();
-    $order = Order::with('orderItems')
-      ->where('id', $orderId)
-      ->where('user_id', $user_id)
-      ->first();
-
-    if ($order) {
-      return $this->success([
-        'order' => $order
-      ]);
-    }
-
-    return $this->error('Order not found!', 417);
-  }
-
   public function invoices()
   {
     $user_id = auth()->id();

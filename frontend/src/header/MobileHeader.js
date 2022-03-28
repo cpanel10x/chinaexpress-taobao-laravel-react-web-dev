@@ -18,7 +18,7 @@ const MobileHeader = (props) => {
 					<div className="header-right">
 						<div className="header-dropdown-link">
 							<div className="wishlist">
-								<Link to="/wishlist" title="Wishlist">
+								<Link to="/dashboard/wishlist" title="Wishlist">
 									<div className="icon">
 										<i className="icon-heart-empty"/>
 										<span className="wishlist-count badge">

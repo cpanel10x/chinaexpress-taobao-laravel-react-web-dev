@@ -35,6 +35,6 @@ class OrderItem extends Model
 
   public function itemVariations()
   {
-    return $this->hasMany(OrderItemVariation::class, 'order_item_id', 'id');
+    return $this->hasMany(OrderItemVariation::class, 'item_id', 'id');
   }
 }

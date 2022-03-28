@@ -153,6 +153,7 @@ export const useCart = () => useQuery("customer_cart", async () => {
 });
 
 
+
 export const addItemToWishList = async (processData) => {
 	try {
 		const {data} = await instance.post(`/add-to-wishlist`, processData);
@@ -204,8 +205,6 @@ export const storeShippingAddress = async (processData) => {
 		throw Error(error.response.statusText);
 	}
 };
-
-
 
 
 export const useDeleteShippingAddress = () => useMutation(["deleteShippingAddress"], async ({...props}) => {
