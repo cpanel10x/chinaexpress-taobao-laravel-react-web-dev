@@ -138,24 +138,60 @@ class BkashApiResponseController extends Controller
       return response(['status' => false, 'msg' => 'Order no found']);
     }
     $response = $this->SearchTransaction($order->bkash_trx_id);
-    return response(['status' => true, 'response' => $response]);
+    $response = is_array($response) ? $response : ['response' => 'error'];
+    $html = view('backend.content.bkash.includes.bkashResponse', compact('response'))->render();
+    return response(['status' => true, 'html' => $html]);
   }
 
   public function refundProcess($id)
   {
-    $order = Order::find($id);
+    $order = Order::with('orderItems')->find($id);
     if (!$order) {
       return response(['status' => false, 'msg' => 'Order no found']);
     }
-    return response(['refund_process' => true]);
+    $html = view('backend.content.bkash.includes.refundForm', compact('order'))->render();
+    return response(['status' => true, 'html' => $html]);
   }
 
-  public function refundStatus($id)
+  public function refundSubmit($id)
+  {
+    $order = Order::with('orderItems')->find($id);
+    if (!$order) {
+      return response(['status' => false, 'msg' => 'Order no found']);
+    }
+    $reason = request('reason');
+    $amount = request('amount');
+    $response = $this->RefundTransaction([
+      'paymentID' => $order->bkash_payment_id,
+      'trxID' => $order->bkash_trx_id,
+      'amount' => $amount,
+      'transaction_id' => $order->transaction_id,
+      'reason' => $reason,
+    ]);
+
+    $status = getArrayKeyData($response, 'transactionStatus');
+    if ($status == 'Completed') {
+      $order->update([
+        'status' => 'refunded'
+      ]);
+    }
+
+    $html = view('backend.content.bkash.includes.bkashResponse', compact('response'))->render();
+    return response(['status' => true, 'html' => $html]);
+  }
+
+  public function refundStatusCheck($id)
   {
     $order = Order::find($id);
     if (!$order) {
       return response(['status' => false, 'msg' => 'Order no found']);
     }
-    return response(['refund_status' => true]);
+    $response = $this->RefundStatus([
+      'paymentID' => $order->bkash_payment_id,
+      'trxID' => $order->bkash_trx_id,
+    ]);
+    $response = is_array($response) ? $response : ['response' => 'error'];
+    $html = view('backend.content.bkash.includes.bkashResponse', compact('response'))->render();
+    return response(['status' => true, 'html' => $html]);
   }
 }

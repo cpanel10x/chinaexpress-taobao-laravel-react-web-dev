@@ -8,7 +8,6 @@ use App\Models\Content\Order;
 class DashboardController extends Controller
 {
 
-
   public function paymentStatusUpdate()
   {
     $tran_id = request('tran_id');

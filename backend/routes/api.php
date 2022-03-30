@@ -96,7 +96,7 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function () {
     Route::post('/add-to-wishlist', [WishlistController::class, 'AddToWishList']);
     Route::post('/remove-wishlist', [WishlistController::class, 'removeCustomerWishList']);
 
-    Route::post('/address', [AddressController::class, 'AllAddress']);
+    Route::get('/address', [AddressController::class, 'AllAddress']);
     Route::post('/store-new-address', [AddressController::class, 'StoreNewAddress']);
     Route::post('/delete-address', [AddressController::class, 'deleteAddress']);
 

@@ -51,6 +51,8 @@ class BkashRefundOrder extends TableComponent
         ->format(function (Order $model) {
           return date('d-M-Y', strtotime($model->created_at));
         }),
+      Column::make('OrderNumber', 'order_number')
+        ->searchable(),
       Column::make('Transaction No', 'transaction_id')
         ->searchable(),
       Column::make('Customer', 'name')
@@ -65,7 +67,9 @@ class BkashRefundOrder extends TableComponent
         ->format(function (Order $model) {
           return floating($model->needToPay);
         }),
-      Column::make('BkashPaymentId', 'bkash_payment_id')
+      Column::make('paymentID', 'bkash_payment_id')
+        ->searchable(),
+      Column::make('trxID', 'bkash_trx_id')
         ->searchable(),
       Column::make('Status', 'status')
         ->searchable(),

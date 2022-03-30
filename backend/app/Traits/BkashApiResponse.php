@@ -173,13 +173,15 @@ trait BkashApiResponse
     $trxID = getArrayKeyData($execute, 'trxID');
     $paymentID = getArrayKeyData($execute, 'paymentID');
     $amount = getArrayKeyData($execute, 'amount');
-    $order = Order::where('bkash_payment_id', $paymentID)->first();
+    $transaction_id = getArrayKeyData($execute, 'transaction_id');
+    $reason = getArrayKeyData($execute, 'reason', 'Product Fault');
+    $transaction_id = $transaction_id ? $transaction_id : (Order::where('bkash_payment_id', $paymentID)->first()->transaction_id ?? '');
     $body = [
       'paymentID' => $paymentID,
       'amount' => ceil($amount),
       'trxID' => $trxID,
-      'sku' => $order->transaction_id ? $order->transaction_id : 'abb-562346076929',
-      'reason' => 'Product Fault'
+      'sku' => $transaction_id ? $transaction_id : 'abb-562346076929',
+      'reason' => $reason
     ];
     $base_url = $this->baseUrl;
     $url = "{$base_url}/checkout/payment/refund";

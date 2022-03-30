@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Content\Frontend\Address;
 use App\Traits\ApiResponser;
+use Illuminate\Support\Facades\Validator;
 
 /**
  * Class HomeController.
@@ -16,38 +17,47 @@ class AddressController extends Controller
 
   public function AllAddress()
   {
-    $addresses = Address::where('user_id', auth()->id())->latest()->get();
+    $address = Address::where('user_id', auth()->id())->latest()->get();
     return response([
-      'addresses' => $addresses,
+      'address' => $address,
     ]);
   }
 
   public function StoreNewAddress()
   {
+    $validator = Validator::make(request()->all(), [
+      'name' => 'required|string|max:255',
+      'phone' => 'required|string|max:191',
+      'city' => 'required|string|max:191',
+      'address' => 'required|string|max:600',
+    ]);
+    if ($validator->fails()) {
+      return response(['status' => false, 'errors' => $validator->errors()]);
+    }
+
     $user = auth()->user();
     $id = request('id');
     $data = [
       'name' => request('name'),
       'phone' => request('phone'),
-      'city' => request('district'),
+      'city' => request('city'),
       'address' => request('address'),
       'user_id' => auth()->id(),
     ];
 
     if ($id) {
       $address = Address::find($id);
-      if ($address) {
-        $address->update($data);
-      }
+      $address->update($data);
     } else {
       $address = Address::create($data);
-      $user->update(['shipping_id' => $address->id]);
     }
 
     if ($user) {
+      $updateData['shipping_id'] =  $address->id;
       if (!$user->name) {
-        $user->update(['name' => $address->name]);
+        $updateData['name'] =  $address->name;
       }
+      $user->update($updateData);
     }
 
     return response([
@@ -69,10 +79,8 @@ class AddressController extends Controller
         $address->delete();
       }
     }
-    $addresses = Address::where('user_id', auth()->id())->latest()->get();
     return response([
       'status' => $status,
-      'addresses' => $addresses,
       'msg' => $msg
     ]);
   }

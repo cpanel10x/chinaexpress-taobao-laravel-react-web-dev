@@ -30,7 +30,11 @@
           </button>
         </div>
         <div class="modal-body">
-          ...
+          <div class="text-center my-5">
+            <div class="spinner-border text-secondary" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>

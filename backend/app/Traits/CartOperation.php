@@ -70,8 +70,12 @@ trait CartOperation
       ->first();
 
     if ($auth_check) {
+      $auth_id = auth('sanctum')->id();
+      $shipping = User::with('shipping')->find($auth_id);
+      $shipping = $shipping->shipping ? json_encode($shipping->shipping) : null;
       $cart->update([
-        'user_id' => auth('sanctum')->id()
+        'shipping' => $shipping,
+        'user_id' => $auth_id
       ]);
     }
 
