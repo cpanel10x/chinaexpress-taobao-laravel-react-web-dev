@@ -25,13 +25,13 @@ const ShippingAddress = (props) => {
 							className="modal-title"
 							id="chooseAddressModalLabel"
 						>
-							Manage your shipping
+							Choose shipping
 							<a
 								href={`/add-new-address`}
 								onClick={(e) => addNewAddress(e)}
 								className="btn ml-2 text-violet"
 							>
-								<i className="icon-pencil"/> Add New Address
+								<i className="icon-edit"/> New Address
 							</a>
 						</h5>
 						<button

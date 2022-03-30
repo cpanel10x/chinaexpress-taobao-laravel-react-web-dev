@@ -25,7 +25,7 @@ const Breadcrumb = (props) => {
 						)
 					}
 					<li className="breadcrumb-item active" aria-current="page">
-						{current.substring(0, 40)+`...`}
+						{current.substring(0, 40)}
 					</li>
 				</ol>
 

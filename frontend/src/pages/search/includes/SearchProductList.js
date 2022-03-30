@@ -3,6 +3,7 @@ import ReactPaginate from "react-paginate";
 import ProductCart from "../../product/productList/ProductCart";
 import {withRouter, useHistory} from "react-router-dom";
 import {useSettings} from "../../../api/GeneralApi";
+import PagePaginator from "../../../pagination/PagePaginator";
 
 const SearchProductList = (props) => {
 	const history = useHistory();
@@ -11,9 +12,12 @@ const SearchProductList = (props) => {
 
 	const {data: settings} = useSettings();
 	const currencyIcon = settings?.currency_icon || '৳';
-	
+
 	const handlePaginationClick = (data) => {
-		history.push(`/search?keyword=${keyword}&page=${data.selected + 1}`);
+		let selectPage = data?.selected || 0;
+		if (parseInt(selectPage) > 0) {
+			history.push(`/search?keyword=${keyword}&page=${parseInt(selectPage) + 1}`);
+		}
 	};
 
 	return (
@@ -32,28 +36,11 @@ const SearchProductList = (props) => {
 				</div>
 			</div>
 
-			<nav aria-label="Page navigation">
-				<ReactPaginate
-					previousLabel={`Prev`}
-					nextLabel={"Next"}
-					breakLabel={"..."}
-					breakClassName={"break-me"}
-					forcePage={currentPage - 1}
-					pageCount={totalPage}
-					marginPagesDisplayed={2}
-					pageRangeDisplayed={3}
-					onPageChange={handlePaginationClick}
-					containerClassName={"pagination justify-content-center"}
-					pageClassName={`page-item`}
-					pageLinkClassName={`page-link`}
-					previousClassName={`page-item`}
-					previousLinkClassName={`page-link page-link-prev`}
-					nextClassName={`page-item`}
-					nextLinkClassName={`page-link page-link-next`}
-					disabledClassName={"disabled"}
-					activeClassName={"active"}
-				/>
-			</nav>
+			<PagePaginator
+				handlePaginationClick={handlePaginationClick}
+				currentPage={currentPage}
+				totalPage={totalPage}/>
+
 		</div>
 	);
 };

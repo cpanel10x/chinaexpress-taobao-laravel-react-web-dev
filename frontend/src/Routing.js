@@ -24,6 +24,7 @@ import OnlinePaymentStatus from "./pages/payment/OnlinePaymentStatus";
 import OrderDetails from "./auth/dashboard/orders/OrderDetails";
 import AllOrders from "./auth/dashboard/orders/AllOrders";
 import Profile from "./auth/dashboard/Profile";
+import ManageAddress from "./auth/dashboard/address/ManageAddress";
 
 const Routing = () => {
 	return (
@@ -59,6 +60,7 @@ const Routing = () => {
 			<AuthRoute path="/dashboard" exact component={Dashboard} />
 			<AuthRoute path="/dashboard/orders" exact component={AllOrders} />
 			<AuthRoute path="/dashboard/wishlist" exact component={Wishlist} />
+			<AuthRoute path="/dashboard/address" exact component={ManageAddress} />
 			<AuthRoute path="/dashboard/profile" exact component={Profile} />
 			<AuthRoute path="/dashboard/orders/:tran_id" exact component={OrderDetails}/>
 

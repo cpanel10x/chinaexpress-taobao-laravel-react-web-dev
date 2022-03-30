@@ -1,16 +1,15 @@
 import React from 'react';
 import swal from "sweetalert";
-import {deleteCustomerAddress} from "../../../../utils/Services";
-import {useSaveShippingAddress} from "../../../../api/Queries";
 import {useQueryClient} from "react-query";
-import {useDeleteShippingAddress} from "../../../../api/CartApi";
+import {useDeleteAddress, useSaveAddress} from "../../../../api/AddressApi";
 
 const AddressItem = (props) => {
 	const {cart, address, setEdit, setEditAddress, setManageShipping} = props;
 	const cache = useQueryClient();
-	const {isLoading, isSuccess, mutateAsync} = useSaveShippingAddress();
 
-	const {mutateAsync: deleteShippingAddress} = useDeleteShippingAddress();
+	const {isLoading, mutateAsync} = useSaveAddress();
+
+	const {mutateAsync: deleteShippingAddress} = useDeleteAddress();
 
 	const selectShippingAddress = async (e) => {
 		e.preventDefault();

@@ -68,13 +68,13 @@ const ProfileUpdate = (props) => {
 			<div className="modal-dialog modal-dialog-centered">
 				<div className="modal-content">
 					<div className="modal-header">
-						<h5 className="modal-title" id="staticBackdropLabel">
+						<h4 className="modal-title" id="staticBackdropLabel">
 							Update your profile
-						</h5>
+						</h4>
 						<button
 							type="button"
 							className="close"
-							onClick={() => setEdit(true)}
+							onClick={() => setEdit(false)}
 						>
 							<span aria-hidden="true">×</span>
 						</button>
@@ -155,7 +155,7 @@ const ProfileUpdate = (props) => {
 								<div className="float-left">
 									<button
 										type="button"
-										onClick={() => setEdit(true)}
+										onClick={() => setEdit(false)}
 										className={`btn py-2 btn-default`}>
 										Skip Now
 									</button>

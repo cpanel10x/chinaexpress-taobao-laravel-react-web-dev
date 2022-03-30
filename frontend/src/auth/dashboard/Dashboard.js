@@ -69,7 +69,7 @@ const Dashboard = (props) => {
 									</NavLink>
 								</div>
 								<div className="col-lg-3 col-md-4 col-6">
-									<NavLink to={`/dashboard/addresses`} className="d-block">
+									<NavLink to={`/dashboard/address`} className="d-block">
 										<div className="card">
 											<div className="card-body">
 												<div className="card_icon">
@@ -83,7 +83,7 @@ const Dashboard = (props) => {
 									</NavLink>
 								</div>
 								<div className="col-lg-3 col-md-4 col-6">
-									<NavLink to={`/dashboard/account`} className="d-block">
+									<NavLink to={`/dashboard/profile`} className="d-block">
 										<div className="card">
 											<div className="card-body">
 												<div className="card_icon">

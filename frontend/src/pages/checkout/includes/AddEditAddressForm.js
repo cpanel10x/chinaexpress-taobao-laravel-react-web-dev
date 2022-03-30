@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import swal from "sweetalert";
-import {useSaveAddress} from "../../../api/Queries";
 import SpinnerButtonLoader from "../../../loader/SpinnerButtonLoader";
+import {useSaveAddress} from "../../../api/AddressApi";
 
 const AddEditAddressForm = props => {
 
@@ -13,7 +13,7 @@ const AddEditAddressForm = props => {
 	const [district, setDistrict] = useState('');
 	const [address, setAddress] = useState('');
 
-	const {isLoading, isSuccess, mutateAsync} = useSaveAddress();
+	const {isLoading, mutateAsync} = useSaveAddress();
 
 	useEffect(() => {
 		if (editAddress?.id) {

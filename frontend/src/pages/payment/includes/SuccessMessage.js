@@ -36,7 +36,7 @@ const SuccessMessage = ({ref_no, tran_id, n_msg, paymentID}) => {
 				</div>
 				<div className="col">
 					<Link to="/dashboard/orders" className="btn btn-default btn-block">
-						Goto My Orders
+						Go Orders
 					</Link>
 				</div>
 			</div>

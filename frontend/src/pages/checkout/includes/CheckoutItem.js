@@ -6,11 +6,13 @@ import AttributeImage from "./attributes/AttributeImage";
 import AttrConfigs from "./attributes/AttrConfigs";
 import CheckoutQuantity from "./tableComponents/CheckoutQuantity";
 import {characterLimiter} from "../../../utils/Helpers";
+import {useMediaQuery} from "react-responsive";
 
 const CheckoutItem = (props) => {
 
 	const {cart, cartItems, currency, shippingRate, removeCart, removeItemFromCart} = props;
 
+	const isMobile = useMediaQuery({query: '(max-width: 991px)'});
 
 	const approxWeight = (qty, product) => {
 		const weight = product?.weight || 0;
@@ -21,7 +23,7 @@ const CheckoutItem = (props) => {
 	return (
 		<div className="checkout_grid">
 			<div className="row">
-				<div className="col">
+				<div className="col-8">
 					<AllCheck cart={cart} cartItems={cartItems}/>
 					<div className="removeBtn mx-3 text-center d-inline-block">
 						{
@@ -54,12 +56,17 @@ const CheckoutItem = (props) => {
 										<div className="col-1">
 											<ItemCheck product={product} variation={variation}/>
 										</div>
-										<div className="col-2 p-0">
+										<div className="col-2">
 											<AttributeImage product={product} attributes={variation?.attributes}/>
 										</div>
 										<div className="col-9">
 											<Link to={`/product/${product.ItemId}`} title={product.Title}>
-												{characterLimiter(product.Title, 130)}
+												{
+													isMobile ?
+														characterLimiter(product.Title, 55)
+														:
+														product.Title
+												}
 											</Link>
 											<div className="row">
 												<div className="col-12">
@@ -80,7 +87,8 @@ const CheckoutItem = (props) => {
 												parseInt(product?.DeliveryCost) > 0 &&
 												<div className="row">
 													<div className="col-12">
-														<div className="mb-2 small">China Local Shipping cost: <strong>{currency + ' ' + product?.DeliveryCost}</strong></div>
+														<div className="mb-2 small">China Local Shipping cost: <strong>{currency + ' ' + product?.DeliveryCost}</strong>
+														</div>
 													</div>
 												</div>
 											}

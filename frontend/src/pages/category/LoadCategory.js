@@ -4,6 +4,7 @@ import CategorySidebar from "./includes/CategorySidebar";
 import {goPageTop} from "../../utils/Helpers";
 import SubCategory from "./includes/SubCategory";
 import {useAllCategories} from "../../api/GeneralApi";
+import Defaul404 from "../404/Defaul404";
 
 const LoadCategory = (props) => {
 
@@ -21,13 +22,9 @@ const LoadCategory = (props) => {
 	const allChildren = categories?.filter(filter => filter.ParentId === category.otc_id) || [];
 	const siblings = categories?.filter(filter => filter.ParentId === category.ParentId) || [];
 
-	// children.map(child => (
-	// 	<SubCategory
-	// 		key={child.id}
-	// 		parent={category}
-	// 		child={child}
-	// 	/>
-	// ))
+	if (!category?.id) {
+		return <Defaul404/>;
+	}
 
 	return (
 		<main className="main">

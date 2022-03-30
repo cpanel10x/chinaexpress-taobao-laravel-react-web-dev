@@ -4,6 +4,7 @@ import {characterLimiter} from "../../../utils/Helpers";
 import AttributeImage from "../../checkout/includes/attributes/AttributeImage";
 import AttrConfigs from "../../checkout/includes/attributes/AttrConfigs";
 import {CartProductSummary} from "../../../utils/CartHelpers";
+import {useMediaQuery} from "react-responsive";
 
 const PaymentItem = (props) => {
 
@@ -16,6 +17,11 @@ const PaymentItem = (props) => {
 		const itemWeight = Number(weight) * Number(qty);
 		return Number(itemWeight).toFixed(3);
 	};
+
+	const isMobile = useMediaQuery({query: '(max-width: 991px)'});
+	const activeVariations = (product) => {
+		return product?.variations.filter(filter => parseInt(filter.is_checked) === 1);
+	}
 
 	return (
 		<div className="checkout_grid">
@@ -30,15 +36,20 @@ const PaymentItem = (props) => {
 				cartItems.map(product =>
 					<div className="cartItem" key={product.id}>
 						{
-							product?.variations?.map((variation, key) =>
-								<div className="variation" key={variation.id}>
+							activeVariations(product)?.map((variation, index) =>
+								<div className="variation" key={index}>
 									<div className="row align-items-center">
 										<div className="col-3 p-0">
 											<AttributeImage product={product} attributes={variation?.attributes}/>
 										</div>
 										<div className="col-9">
 											<Link to={`/product/${product.ItemId}`} title={product.Title}>
-												{characterLimiter(product.Title, 130)}
+												{
+													isMobile ?
+														characterLimiter(product.Title, 55)
+														:
+														product.Title
+												}
 											</Link>
 											<div className="row">
 												<div className="col-12">
@@ -59,7 +70,8 @@ const PaymentItem = (props) => {
 												parseInt(product?.DeliveryCost) > 0 &&
 												<div className="row">
 													<div className="col-12">
-														<div className="mb-2 small">China Local Shipping cost: <strong>{currency + ' ' + product?.DeliveryCost}</strong></div>
+														<div className="mb-2 small">China Local Shipping cost: <strong>{currency + ' ' + product?.DeliveryCost}</strong>
+														</div>
 													</div>
 												</div>
 											}
@@ -83,29 +95,25 @@ const PaymentItem = (props) => {
 					</div>
 				)
 			}
-			<hr className="my-2"/>
-
-			<div className="card my-3 my-lg-5">
-				<div className="card-body">
-					<h3>Order Summary</h3>
-					<table className="table table table-cart">
-						<tbody>
-						<tr className="summary-total">
-							<td className="text-left">Subtotal:</td>
-							<td className="text-right">{`${currency + ' ' + totalPrice}`}</td>
-						</tr>
-						<tr className="summary-total">
-							<td className="text-left">Need To Pay: {advanced_rate}%</td>
-							<td className="text-right">{`${currency + ' ' + advanced}`}</td>
-						</tr>
-						<tr className="summary-total">
-							<td className="text-left">Due Amount:</td>
-							<td className="text-right">{`${currency + ' ' + dueAmount}`}</td>
-						</tr>
-						</tbody>
-					</table>
+			<div className="summary_row">
+				<div className="row">
+					<div className="col-12 text-right">
+						<p className="my-2"><span className="mr-2">Total Payable: </span><strong> {currency + " " + totalPrice} </strong></p>
+					</div>
+				</div>
+				<div className="row">
+					<div className="col-12 text-right">
+						<p className="my-2"><span
+							className="mr-2">Need To Pay {advanced_rate}%: </span><strong> {currency + " " + advanced} </strong></p>
+					</div>
+				</div>
+				<div className="row">
+					<div className="col-12 text-right">
+						<p className="my-2"><span className="mr-2">Due Amount: </span><strong> {currency + " " + dueAmount} </strong></p>
+					</div>
 				</div>
 			</div>
+
 		</div>
 	);
 };

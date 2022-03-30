@@ -98,8 +98,10 @@ class CatalogController extends Controller
   public function getSearchResult()
   {
     $keyword = request('keyword');
-    $offset = request('offset', 0);
+    $page = request('page', 0);
     $limit = request('limit', 36);
+    $offset = $page * $limit;
+
     $products = null;
     if ($keyword) {
       $products = get_category_browsing_items($keyword, 'text', $offset, $limit);
