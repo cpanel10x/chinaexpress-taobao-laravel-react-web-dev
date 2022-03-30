@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import AddEditAddressForm from "../AddEditAddressForm";
-import {useAddress} from "../../../../api/Queries";
 import AddressItem from "./AddressItem";
+import {useAddress} from "../../../../api/AddressApi";
 
 const AddressLists = (props) => {
 	const {cart, setManageShipping} = props;

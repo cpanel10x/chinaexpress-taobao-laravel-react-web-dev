@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Http\Livewire\Backend;
 
 use App\Models\Content\Order;
 use Illuminate\Database\Eloquent\Builder;
@@ -8,7 +8,7 @@ use Rappasoft\LaravelLivewireTables\TableComponent;
 use Rappasoft\LaravelLivewireTables\Traits\HtmlComponents;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 
-class OrderTable extends TableComponent
+class BkashRefundOrder extends TableComponent
 {
   use HtmlComponents;
   /**
@@ -17,8 +17,8 @@ class OrderTable extends TableComponent
   public $sortField = 'id';
   public $sortDirection = 'desc';
 
-  public $perPage = 20;
-  public $perPageOptions = [10, 20, 50, 100, 150];
+  public $perPage = 15;
+  public $perPageOptions = [];
   public $loadingIndicator = true;
 
   protected $options = [
@@ -38,17 +38,14 @@ class OrderTable extends TableComponent
 
   public function query(): Builder
   {
-    return Order::with('user')->whereNotIn('status', ['Waiting for Payment']);
+    return Order::with('user')->where('payment_method', 'bkash');
   }
 
   public function columns(): array
   {
     return [
-      Column::make('<input type="checkbox" id="allSelectCheckbox">', 'checkbox')
-        ->format(function (Order $model) {
-          $checkbox = '<input type="checkbox" class="checkboxItem " data-status="' . $model->status . '" data-user="' . $model->user_id . '" name="wallet[]" value="' . $model->id . '">';
-          return $this->html($checkbox);
-        })->excludeFromExport(),
+      Column::make('#ID', 'id')
+        ->searchable(),
       Column::make('Date', 'created_at')
         ->searchable()
         ->format(function (Order $model) {
@@ -63,21 +60,18 @@ class OrderTable extends TableComponent
         ->format(function (Order $model) {
           return floating($model->amount);
         }),
-      Column::make('Paid', 'needToPay')
+      Column::make('1stPayment', 'needToPay')
         ->searchable()
         ->format(function (Order $model) {
           return floating($model->needToPay);
         }),
-      Column::make('Due', 'dueForProducts')
-        ->searchable()
-        ->format(function (Order $model) {
-          return floating($model->dueForProducts);
-        }),
+      Column::make('BkashPaymentId', 'bkash_payment_id')
+        ->searchable(),
       Column::make('Status', 'status')
         ->searchable(),
       Column::make('Actions', 'action')
         ->format(function (Order $model) {
-          return view('backend.content.order.includes.actions', ['order' => $model]);
+          return view('backend.content.bkash.includes.actions', ['order' => $model]);
         })
     ];
   }

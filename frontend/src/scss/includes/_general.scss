@@ -78,11 +78,11 @@ img {
 }
 
 .btn {
-  font-weight: 500;
-  padding: 0.5rem 0.7rem;
-  font-size: 0.9rem;
-  border-radius: 0.2rem;
   box-shadow: none;
+
+  &:hover, &:focus {
+    box-shadow: none;
+  }
 }
 
 .bg-light {

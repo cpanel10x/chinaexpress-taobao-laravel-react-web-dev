@@ -12,10 +12,10 @@ const CopyRight = (props) => {
 		<div className="footer-bottom font-weight-normal" style={width <= 751 ? {marginBottom: "60px"} : {marginBottom: "0"}}>
 			<div className="container">
 				<p className="footer-copyright font-weight-normal ml-lg-2 second-primary-color">
-					Copyright © {copyright_text}
+					© {copyright_text}
 				</p>
 				<div className="social-icons social-icons-color justify-content-center">
-					<span className="social-label">Social Media</span>
+					<span className="social-label d-none d-lg-block">We are social</span>
 					{
 						settings?.facebook &&
 						<a

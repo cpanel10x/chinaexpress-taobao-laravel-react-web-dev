@@ -34,7 +34,6 @@ const ProfileUpdateDialogues = (props) => {
 			});
 	};
 
-
 	useEffect(() => {
 		if (user?.id) {
 			if (user?.name === null) {

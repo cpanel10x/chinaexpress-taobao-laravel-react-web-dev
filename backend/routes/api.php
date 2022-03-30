@@ -105,6 +105,7 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function () {
 
     // dashboard operations
     Route::group(['prefix' => 'dashboard', 'as' => 'dashboard.'], function () {
+      Route::post('/payment/status/update', [DashboardController::class, 'paymentStatusUpdate']);
       Route::get('/orders', [DashboardController::class, 'orderIndex']);
       Route::get('/order/{id}', [DashboardController::class, 'orderDetails']);
     });

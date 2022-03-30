@@ -109,6 +109,12 @@ Route::namespace('Content')->group(function () {
       Route::get('api/search', [BkashApiResponseController::class, 'searchApi'])->name('api.search');
       Route::get('api/refund', [BkashApiResponseController::class, 'refundApi'])->name('api.refund');
       Route::get('api/refund/status', [BkashApiResponseController::class, 'refundStatusApi'])->name('api.refund.status');
+
+      // dashboard manageable
+      Route::get('refund/order', [BkashApiResponseController::class, 'refundOrder'])->name('refund.order');
+      Route::post('payment/status/{id}', [BkashApiResponseController::class, 'paymentStatus'])->name('payment.status');
+      Route::post('refund/process/{id}', [BkashApiResponseController::class, 'refundProcess'])->name('refund.process');
+      Route::post('refund/status/{id}', [BkashApiResponseController::class, 'refundStatus'])->name('refund.status');
     });
   });
 

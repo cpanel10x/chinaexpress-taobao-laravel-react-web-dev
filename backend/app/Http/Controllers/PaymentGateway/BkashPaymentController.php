@@ -42,7 +42,7 @@ class BkashPaymentController extends Controller
       'ref_no' => $tran_id,
       'amount' => $amount,
       'token_url' => url('/bkash/token'),
-      'checkout_url' => url("/bkash/checkout?ref_no={$tran_id}&intent=sale"),
+      'checkout_url' => url("/bkash/checkout?ref_no={$tran_id}"),
       'execute_url' => url('/bkash/execute?paymentID='),
       'success_url' => "{$frontend}/online/payment/success?ref_no={$tran_id}",
       'failed_url' => "{$frontend}/online/payment/failed?ref_no={$tran_id}",
@@ -132,13 +132,12 @@ class BkashPaymentController extends Controller
   public function createCheckoutPayment()
   {
     $ref_no = \request('ref_no'); // must be unique
-    $intent = \request('intent');
     $amount = $this->processAmount($ref_no);
 
     $body = [
       'amount' => $amount,
       'currency' => "BDT",
-      'intent' => $intent,
+      'intent' => "sale",
       'merchantInvoiceNumber' => $ref_no,
     ];
 

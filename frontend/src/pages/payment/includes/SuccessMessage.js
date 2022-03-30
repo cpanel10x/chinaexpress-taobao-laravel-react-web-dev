@@ -2,13 +2,13 @@ import React, {useEffect} from 'react';
 import {Link} from "react-router-dom";
 import {usePaymentStatusUpdate} from "../../../api/ApiDashboard";
 
-const SuccessMessage = ({ref_no, tran_id, n_msg, paymentID}) => {
+const SuccessMessage = ({ref_no, tran_id, n_msg, paymentID, trxID}) => {
 
 	const {mutateAsync, isLoading} = usePaymentStatusUpdate();
 
 	useEffect(() => {
 		if (tran_id && paymentID !=='undefined') {
-			mutateAsync({tran_id, paymentID});
+			mutateAsync({tran_id, paymentID, trxID});
 		}
 	}, [tran_id]);
 
@@ -36,7 +36,7 @@ const SuccessMessage = ({ref_no, tran_id, n_msg, paymentID}) => {
 				</div>
 				<div className="col">
 					<Link to="/dashboard/orders" className="btn btn-default btn-block">
-						Goto My Orders
+						Go Orders
 					</Link>
 				</div>
 			</div>

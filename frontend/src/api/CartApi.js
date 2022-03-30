@@ -1,9 +1,8 @@
 import {useMutation, useQuery, useQueryClient} from "react-query";
-import swal from "sweetalert";
 import {instance} from "../utils/AxiosInstance";
 
 
-const setGetToken = (token = null) => {
+export const setGetToken = (token = null) => {
 	let token_key = token;
 	if (token) {
 		window.localStorage.setItem('cart_token', token)
@@ -173,61 +172,6 @@ export const removeItemFromWishList = async (processData) => {
 };
 
 
-// manage shipping address
-export const shippingAddress = async () => {
-	const token = setGetToken();
-	try {
-		const {data} = await instance.post(`/address`, {token: token});
-		return data?.addresses ? data?.addresses : [];
-	} catch (error) {
-		throw Error(error.response.statusText);
-	}
-};
-
-
-export const saveShippingAddressToCart = async (processData) => {
-	const token = setGetToken();
-	try {
-		const {data} = await instance.post(`/cart/shipping`, {token: token, ...processData});
-		return data;
-	} catch (error) {
-		throw Error(error.response.statusText);
-	}
-};
-
-
-export const storeShippingAddress = async (processData) => {
-	const token = setGetToken();
-	try {
-		const {data} = await instance.post(`/store-new-address`, {token: token, ...processData});
-		return data;
-	} catch (error) {
-		throw Error(error.response.statusText);
-	}
-};
-
-
-export const useDeleteShippingAddress = () => useMutation(["deleteShippingAddress"], async ({...props}) => {
-	try {
-		const {data} = await instance.post(`/delete-address`, props);
-		if (data.status) {
-			swal({
-				title: data.msg,
-				icon: "success",
-				buttons: "Ok, Understood",
-			});
-		} else {
-			swal({
-				title: data.msg,
-				icon: "warning",
-				buttons: "Ok, Understood",
-			});
-		}
-		return data?.addresses ? data?.addresses : [];
-	} catch (error) {
-		console.log(error);
-	}
-});
 
 
 

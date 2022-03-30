@@ -4,3 +4,9 @@
 
 ALTER TABLE `mybdstore_web`.`order_item`
 ADD COLUMN `invoice_no` VARCHAR(45) NULL AFTER `due_payment`;
+
+
+
+ALTER TABLE `chinaexpress_web`.`orders` 
+ADD COLUMN `bkash_trx_id` VARCHAR(45) NULL AFTER `bkash_payment_id`,
+ADD COLUMN `bkash_refund_trx_id` VARCHAR(45) NULL AFTER `bkash_trx_id`;

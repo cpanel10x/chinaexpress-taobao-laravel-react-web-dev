@@ -1,7 +1,7 @@
 import React from "react";
-import ReactPaginate from "react-paginate";
 import ProductCart from "../../product/productList/ProductCart";
 import {withRouter} from "react-router-dom";
+import PagePaginator from "../../../pagination/PagePaginator";
 
 const PictureSearchProductList = (props) => {
 	const {search_id, currentPage, totalPage, currencyIcon, Content, TotalCount} = props;
@@ -26,28 +26,11 @@ const PictureSearchProductList = (props) => {
 				</div>
 			</div>
 
-			<nav aria-label="Page navigation">
-				<ReactPaginate
-					previousLabel={`Prev`}
-					nextLabel={"Next"}
-					breakLabel={"..."}
-					breakClassName={"break-me"}
-					forcePage={currentPage - 1}
-					pageCount={totalPage}
-					marginPagesDisplayed={2}
-					pageRangeDisplayed={3}
-					onPageChange={handlePaginationClick}
-					containerClassName={"pagination justify-content-center"}
-					pageClassName={`page-item`}
-					pageLinkClassName={`page-link`}
-					previousClassName={`page-item`}
-					previousLinkClassName={`page-link page-link-prev`}
-					nextClassName={`page-item`}
-					nextLinkClassName={`page-link page-link-next`}
-					disabledClassName={"disabled"}
-					activeClassName={"active"}
-				/>
-			</nav>
+			<PagePaginator
+				handlePaginationClick={handlePaginationClick}
+				currentPage={currentPage}
+				totalPage={totalPage}/>
+
 		</div>
 	);
 };

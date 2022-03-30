@@ -1,8 +1,10 @@
 function redirectWithErrors(url, tran_id, data) {
   let errorMessage = data?.errorMessage || null;
   let paymentID = data?.paymentID || null;
+  let trxID = data?.trxID || null;
   let endpoint = `${url}&tran_id=${tran_id}`;
   endpoint += paymentID ? `&paymentID=${data?.paymentID}` : '';
+  endpoint += trxID ? `&trxID=${trxID}` : '';
   endpoint += errorMessage ? `&n_msg=${errorMessage}` : '';
   return endpoint;
 }

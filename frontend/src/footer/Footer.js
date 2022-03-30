@@ -12,18 +12,17 @@ const Footer = () => {
 			<div className="footer-middle border-0">
 				<div className="container">
 					<div className="row">
-						<div className="col-6 col-lg-2-5cols">
+						<div className="col-12 col-sm-6 col-md-4 col-lg-3">
 							<div className="widget widget-about mb-4">
 								<Link to="/">
 									<img
 										src={"/assets/img/logo/chinaexpress.png"}
-										className="footer-logo"
+										className="footer-logo mb-2"
 										alt={settings?.site_name}
 									/>
 								</Link>
 								<div className="font-weight-normal second-primary-color">
 									{settings?.footer_description}
-									<br/>
 									<br/>
 									<ul className="contact-list">
 										<li>
@@ -48,17 +47,11 @@ const Footer = () => {
 										</li>
 									</ul>
 								</div>
-								{/* End .widget-about-info */}
 							</div>
-							{/* End .widget about-widget */}
 						</div>
-						{/* End .col-sm-12 col-lg-3 */}
-						<div className="col-6 col-lg-5cols">
+						<div className="col-12 col-sm-6 col-md-4 col-lg-3">
 							<div className="widget mb-4">
-								<h4 className="widget-title">
-									About Us
-								</h4>
-								{/* End .widget-title */}
+								<h4 className="widget-title"> About </h4>
 								<ul className="widget-list">
 									<li>
 										<Link to="/pages/about-us">
@@ -94,12 +87,9 @@ const Footer = () => {
 										</Link>
 									</li>
 								</ul>
-								{/* End .widget-list */}
 							</div>
-							{/* End .widget */}
 						</div>
-						{/* End .col-sm-4 col-lg-3 */}
-						<div className="col-6 col-lg-5cols">
+						<div className="col-12 col-sm-6 col-md-4 col-lg-3">
 							<div className="widget mb-4">
 								<h4 className="widget-title">
 									Service Link
@@ -133,10 +123,8 @@ const Footer = () => {
 								</ul>
 								{/* End .widget-list */}
 							</div>
-							{/* End .widget */}
 						</div>
-						{/* End .col-sm-4 col-lg-3 */}
-						<div className="col-6 col-lg-5cols">
+						<div className="col-12 col-sm-6 col-md-4 col-lg-3">
 							<div className="widget mb-4">
 								<h4 className="widget-title">
 									Customer
@@ -165,13 +153,9 @@ const Footer = () => {
 								</ul>
 								{/* End .widget-list */}
 							</div>
-							{/* End .widget */}
 						</div>
-						{/* End .col-sm-64 col-lg-3 */}
 					</div>
-					{/* End .row */}
 				</div>
-				{/* End .container */}
 			</div>
 
 			<StickyFooterManage settings={settings}/>

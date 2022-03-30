@@ -13,6 +13,7 @@ class DashboardController extends Controller
   {
     $tran_id = request('tran_id');
     $paymentID = request('paymentID');
+    $trxID = request('trxID');
     $method = request('payment_method', 'bkash');
 
     $user = auth('sanctum')->user();
@@ -24,6 +25,7 @@ class DashboardController extends Controller
     if ($order) {
       $order->update([
         'bkash_payment_id' => $paymentID,
+        'bkash_trx_id' => $trxID,
         'status' => 'partial-paid',
         'payment_method' => $method
       ]);

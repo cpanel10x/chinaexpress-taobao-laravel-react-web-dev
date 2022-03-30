@@ -76,10 +76,16 @@ const Header = (props) => {
 											My Orders
 										</Link>
 										<Link
+											to="/dashboard/address"
+											className="dropdown-item"
+										>
+											Address
+										</Link>
+										<Link
 											to="/dashboard/profile"
 											className="dropdown-item"
 										>
-											Account
+											Profile
 										</Link>
 										<Logout/>
 									</div>

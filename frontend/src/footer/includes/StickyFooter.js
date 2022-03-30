@@ -22,8 +22,8 @@ const StickyFooter = (props) => {
 						</a>
 					</div>
 					<div className="col text-center">
-						<Link className="nav-link" to="/dashboard/profile">
-							<span className=" sticky_nav_icon"><i className="icon-user-male"/></span>
+						<Link className="nav-link" to="/dashboard">
+							<span className="sticky_nav_icon"><i className=" icon-th-thumb-empty"/></span>
 						</Link>
 					</div>
 					<div className="col text-center">
