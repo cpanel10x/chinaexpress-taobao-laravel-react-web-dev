@@ -131,9 +131,28 @@ class HomeController extends Controller
         ->get();
     }
 
-
     return response([
       'relatedProducts' => json_encode($products)
+    ]);
+  }
+
+  public function recentViewProducts()
+  {
+    $recent_token = request('recent_view');
+    $products = Product::where('recent_view_token', $recent_token)
+      ->select('ItemId', 'ProviderType', 'Title', 'BrandName', 'MainPictureUrl', 'Price', 'Pictures', 'Features', 'MasterQuantity')
+      ->latest()
+      ->limit(20)
+      ->get();
+    if ($products->isEmpty()) {
+      $products = Product::select('ItemId', 'ProviderType', 'Title', 'BrandName', 'MainPictureUrl', 'Price', 'Pictures', 'Features', 'MasterQuantity')
+        ->latest()
+        ->limit(20)
+        ->get();
+    }
+
+    return response([
+      'recentView' => json_encode($products)
     ]);
   }
 

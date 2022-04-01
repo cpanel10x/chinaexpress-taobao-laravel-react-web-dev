@@ -2,8 +2,8 @@ import React from "react";
 import {Link} from "react-router-dom";
 import swal from "sweetalert";
 import {useQueryClient} from "react-query";
-import {useRemoveFromWishList} from "../../../api/Queries";
 import SpinnerButtonLoader from "../../../loader/SpinnerButtonLoader";
+import {useRemoveFromWishList} from "../../../api/WishListApi";
 
 const WishlistPage = (props) => {
 	const {wishList, indexItem} = props;

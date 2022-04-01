@@ -63,17 +63,6 @@ export const useCustomPageData = (url, Key) => useQuery(['customPageData', Key],
 });
 
 
-
-export const useWishList = (process) => useQuery("wishlist", async (process) => {
-	try {
-		const {data} = await instance.post(`/wishlist`, process);
-		return data?.wishlists ? data?.wishlists : [];
-	} catch (error) {
-		console.log(error);
-	}
-});
-
-
 export const useAllCategories = () => useQuery('allCategories', async () => {
 	try {
 		const startTime = new Date().getTime(); //one hour from now

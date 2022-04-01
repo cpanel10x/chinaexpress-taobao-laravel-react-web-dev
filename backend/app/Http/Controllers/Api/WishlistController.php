@@ -57,8 +57,9 @@ class WishlistController extends Controller
   public function getCustomerWishList()
   {
     $items = [];
-    if (auth()->check()) {
-      $items = Wishlist::where('user_id', auth()->id())->latest()->get();
+    $user = auth('sanctum')->check() ? auth('sanctum')->user() : null;
+    if ($user) {
+      $items = Wishlist::where('user_id', $user->id)->latest()->get();
     }
     return response([
       'status' => true,

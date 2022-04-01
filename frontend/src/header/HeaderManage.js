@@ -2,9 +2,9 @@ import React, {useLayoutEffect, useState} from "react";
 import Header from "./Header";
 import MobileHeader from "./MobileHeader";
 import {useMediaQuery} from 'react-responsive'
-import {useWishList} from "../api/GeneralApi";
 import {useCart} from "../api/CartApi";
 import {useAuthMutation} from "../api/Auth";
+import {useWishList} from "../api/WishListApi";
 
 
 const HeaderManage = props => {

@@ -2,7 +2,6 @@ import React from "react";
 import {withRouter} from "react-router-dom";
 import _, {isEmpty} from "lodash";
 import ProductCart from "./ProductCart";
-import ReactPaginate from "react-paginate";
 import ProductListSkeleton from "../../../skeleton/productSkeleton/ProductListSkeleton";
 import My404Component from "../../404/My404Component";
 import {useCategoryProducts} from "../../../api/ProductApi";

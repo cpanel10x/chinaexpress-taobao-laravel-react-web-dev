@@ -13,7 +13,7 @@ const AttributeImage = (props) => {
 	return (
 		<figure className="m-0">
 			<Link to={`/product/${ItemId}`}>
-				<img className="img-fluid" src={imagePath} alt="attributes"/>
+				<img className="img-fluid mx-auto" src={imagePath} alt="attributes"/>
 			</Link>
 		</figure>
 	);

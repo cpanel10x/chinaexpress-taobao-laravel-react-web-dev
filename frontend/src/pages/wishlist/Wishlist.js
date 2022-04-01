@@ -1,10 +1,9 @@
 import React, {useEffect} from "react";
 import WishlistPage from "./wishlistPage/WishlistPage";
 import {goPageTop} from "../../utils/Helpers";
-import {useSettings, useWishList} from "../../api/GeneralApi";
-import {useAuthMutation} from "../../api/Auth";
 import PageSkeleton from "../../skeleton/PageSkeleton";
 import Breadcrumb from "../breadcrumb/Breadcrumb";
+import {useWishList} from "../../api/WishListApi";
 
 const Wishlist = () => {
 	const {data: wishLists, isLoading} = useWishList();

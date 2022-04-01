@@ -31,6 +31,7 @@ if (!function_exists('get_product_picture')) {
   {
     $Pictures = array_key_exists('Pictures', $product) ? $product['Pictures'] : [];
     if (!empty($Pictures)) {
+      $Pictures = is_array($Pictures) ? $Pictures : (json_decode($Pictures, true) ?? []);
       $Medium = array_key_exists('Medium', $Pictures[0]) ? $Pictures[0]['Medium'] : [];
       return array_key_exists('Url', $Medium) ? $Medium['Url'] : '';
     }
@@ -76,6 +77,7 @@ if (!function_exists('get_product_sale_price')) {
 
     $Price = array_key_exists('Price', $product) ? $product['Price'] : [];
     if (!empty($Price)) {
+      $Price = is_array($Price) ? $Price : (json_decode($Price, true) ?? []);
       $OriginalPrice = array_key_exists('OriginalPrice', $Price) ? $Price['OriginalPrice'] : 0;
       if ($OriginalPrice) {
         return round($OriginalPrice * $rate);

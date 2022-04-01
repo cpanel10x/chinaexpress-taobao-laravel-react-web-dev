@@ -163,7 +163,8 @@ class CatalogController extends Controller
     $item = GetItemFullInfoWithDeliveryCosts($item_id);
     //return response(['sadf'=> $item]);
     if (!empty($item)) {
-      $this->storeProductToDatabase($item, $item_id);
+      $recent_token = request('recent_view');
+      $this->storeProductToDatabase($item, $item_id, $recent_token);
       return response([
         'status' => true,
         'item' => $item
@@ -194,7 +195,7 @@ class CatalogController extends Controller
   }
 
 
-  public function storeProductToDatabase($product, $item_id)
+  public function storeProductToDatabase($product, $item_id, $recent_token = null)
   {
     if (is_array($product)) {
       $product_id = key_exists('Id', $product) ? $product['Id'] : 0;
@@ -230,6 +231,7 @@ class CatalogController extends Controller
             'Features' => json_encode($Features ?? []),
             'MasterQuantity' => key_exists('MasterQuantity', $product) ? $product['MasterQuantity'] : '',
             'user_id' => $auth_id,
+            'recent_view_token' => $recent_token,
             'created_at' => now(),
             'updated_at' => now(),
           ]

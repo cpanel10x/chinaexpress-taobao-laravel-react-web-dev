@@ -83,7 +83,6 @@ const Payment = (props) => {
 											advanced_rate={advanced_rate}
 											shippingRate={shippingRate}/>
 
-
 										<div className="row my-3 my-lg-5">
 											<div className="col-md-6">
 												<div className="card payment_card text-center">

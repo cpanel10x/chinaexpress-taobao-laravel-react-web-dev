@@ -153,15 +153,6 @@ export const useCart = () => useQuery("customer_cart", async () => {
 
 
 
-export const addItemToWishList = async (processData) => {
-	try {
-		const {data} = await instance.post(`/add-to-wishlist`, processData);
-		return data;
-	} catch (error) {
-		throw Error(error.response.statusText);
-	}
-};
-
 export const removeItemFromWishList = async (processData) => {
 	try {
 		const {data} = await instance.post(`/remove-wishlist`, processData);

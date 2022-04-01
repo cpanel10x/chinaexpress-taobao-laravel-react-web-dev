@@ -69,7 +69,7 @@ const BkashPayment = (props) => {
 			</div>
 			{
 				confirmOrder?.isLoading ?
-					<SpinnerButtonLoader buttonClass="btn-block btn-default" textClass="text-white"/>
+					<SpinnerButtonLoader buttonClass="btn btn-block btn-default py-2 mt-3"/>
 					:
 					<button
 						type="button"

@@ -6,7 +6,7 @@ import swal from "sweetalert";
 
 export const isAuthenticated = () => {
 	const isAuthenticated = window.localStorage.getItem('isAuthenticate');
-	return isAuthenticated ? JSON.parse(isAuthenticated)?.login : false;
+	return isAuthenticated ? (JSON.parse(isAuthenticated)?.login || false) : false;
 };
 
 
@@ -32,7 +32,7 @@ export const useAuthMutation = () => {
 
 	const authUserValidate = (data) => {
 		const token = data?.token ? data?.token : null;
-		const user = data?.user ? data?.user : {};
+		const user = data?.user ? data?.user : data;
 		instanceSetToken(token);
 		setAuthenticated(user);
 		if (user?.id) {

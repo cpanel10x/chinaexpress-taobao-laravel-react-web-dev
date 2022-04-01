@@ -67,7 +67,7 @@ const OrderDetails = props => {
 										)
 									}
 
-									<OrderSummary order_items={order_items} currency={currency}/>
+									<OrderSummary order={order} order_items={order_items} currency={currency}/>
 
 									{order?.status === 'waiting-for-payment' && <hr className="my-2"/>}
 

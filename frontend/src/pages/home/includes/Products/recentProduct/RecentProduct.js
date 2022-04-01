@@ -1,40 +1,31 @@
-import React, {useEffect, useState} from 'react'
+import React from 'react'
 import ProductSectionSkeleton from "../../../../../skeleton/productSkeleton/ProductSectionSkeleton";
 import RecentItems from "./includes/RecentItems";
-import {loadRecentProducts} from "../../../../../utils/Services";
-import _ from "lodash";
+import {useRecentViewProducts} from "../../../../../api/ProductApi";
 
 const RecentProduct = (props) => {
-  const [loading, setLoading] = useState(true);
-  const [products, setProducts] = useState([]);
-
-  useEffect(() => {
-
-    if (_.isEmpty(products)) {
-      loadRecentProducts()
-          .then(response => {
-            const recentProducts = JSON.parse(response.recentProducts);
-            if (!_.isEmpty(recentProducts)) {
-              setProducts(recentProducts);
-            }
-            setLoading(false);
-          });
-    }
-
-  }, []);
 
 
-  return (
+   const {data: products, isLoading} = useRecentViewProducts();
+
+
+   return (
       <div className="container deal-section">
-        <h3 className="title mt-5">Chinaexpress Recent Viewed</h3>
+         <div className="card my-5">
+            <div className="card-body">
+               <div className="row mb-3">
+                  <div className="col-12">
+                     <h3 className="title">Recently Viewed </h3>
+                  </div>
+               </div>
 
-        {loading && <ProductSectionSkeleton/>}
-        {!loading && products.length > 0 && <RecentItems products={products}/>}
+               {isLoading && <ProductSectionSkeleton/>}
+               {!isLoading && products.length > 0 && <RecentItems products={products}/>}
 
-        <h3 className="title mt-5"/>
-
+            </div>
+         </div>
       </div>
-  )
+   )
 };
 
 

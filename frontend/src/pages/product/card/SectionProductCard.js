@@ -2,13 +2,13 @@ import React from "react";
 import {Link} from "react-router-dom";
 import LazyLoad from "react-lazyload";
 import {getDBProductPrice} from "../../../utils/CartHelpers";
-import {useAddToWishList} from "../../../api/Queries";
 import SmallSpinnerButtonLoader from "../../../loader/SmallSpinnerButtonLoader";
 import {useQueryClient} from "react-query";
 import {useSettings} from "../../../api/GeneralApi";
+import {useAddToWishList} from "../../../api/WishListApi";
 
 const SectionProductCard = (props) => {
-   const {product} = props;
+   const {product, className} = props;
 
    const {data: settings} = useSettings();
    const rate = settings?.increase_rate || 0;
@@ -28,17 +28,20 @@ const SectionProductCard = (props) => {
       });
    };
 
+   const image = product?.MainPictureUrl || product?.img;
+   const Title = product?.Title || product?.name;
+   const ItemId = product?.ItemId || product?.product_code;
 
    return (
-      <div className="col-lg-12 col-md-6 col-6">
+      <div className={className ? className : 'col-lg-12 col-md-6 col-6'}>
          <div className="product">
             <figure className="product-media">
-               <Link to={`/product/${product.ItemId}`} className="w-100">
+               <Link to={`/product/${ItemId}`} className="w-100">
                   <LazyLoad height={236} once>
                      <img
-                        src={product.MainPictureUrl}
+                        src={image}
                         className="product-image"
-                        alt={product?.Title}
+                        alt={Title}
                      />
                   </LazyLoad>
                </Link>
@@ -53,11 +56,11 @@ const SectionProductCard = (props) => {
                            title="Add Wishlist"
                            className="btn-product-icon btn-wishlist btn-expandable"
                         >
-                           <i className="icon-heart-empty"/> <span>add to wishlist</span>
+                           <i className="icon-heart-empty"/> <span>Love This</span>
                         </a>
                   }
                   <Link
-                     to={`/product/${product.ItemId}`}
+                     to={`/product/${ItemId}`}
                      className="btn-product-icon btn-quickview"
                      title="Quick view"
                   >
@@ -73,21 +76,20 @@ const SectionProductCard = (props) => {
                      textOverflow: "ellipsis",
                      overflow: "hidden",
                   }}
-                  title={product.Title}
+                  title={Title}
                >
-                  <Link to={`/product/${product.ItemId}`}>
-                     {product.Title}
+                  <Link to={`/product/${ItemId}`}>
+                     {Title}
                   </Link>
                </h3>
-
-               {/* End .product-title letter-spacing-normal font-size-normal */}
-               <div className="product-price">
-                  <div className="new-price">{`${currency_icon} ${getDBProductPrice(
-                     product,
-                     rate
-                  )}`}</div>
+               <div className="clearfix d-block product-price">
+                  <span className="float-left">{`${currency_icon}`} <span
+                     className="price_span">{getDBProductPrice(product, rate)}</span></span>
+                  {
+                     product?.total_sold && <span className="sold_item_text">SOLD: {product.total_sold}</span>
+                  }
                </div>
-               {/* End .product-price */}
+
             </div>
          </div>
       </div>

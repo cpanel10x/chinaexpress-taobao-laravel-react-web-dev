@@ -1,5 +1,6 @@
 import React from "react";
-import ProductCart from "../../../../../product/productList/ProductCart";
+// import ProductCart from "../../../../../product/productList/ProductCart";
+import SectionProductCard from "../../../../../product/card/SectionProductCard";
 
 const RecentItems = props => {
 	const {products, settings} = props;
@@ -8,12 +9,7 @@ const RecentItems = props => {
 	return (
 		<div className="row row-cols-lg-5 row-cols-md-4 row-cols-sm-3 row-cols-2 ">
 			{products?.map((product, index) =>
-				<ProductCart
-					key={index}
-					productClass={`col`}
-					product={product}
-					currencyIcon={currencyIcon}
-				/>
+				<SectionProductCard key={index} className={'col'} product={product}/>
 			)}
 		</div>
 	);

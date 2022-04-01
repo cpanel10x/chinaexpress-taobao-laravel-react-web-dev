@@ -166,7 +166,7 @@ class AuthController extends Controller
     $user = $email ? User::where('email', $email)->first() : $user;
 
     if (!Hash::check(trim($password), $user->password)) {
-      return response(['errors' => ['password' => ['Password does not match!']]]);
+      return response(['status' => false, 'errors' => ['password' => ['Password does not match!']]]);
     }
 
     if ($user) {
