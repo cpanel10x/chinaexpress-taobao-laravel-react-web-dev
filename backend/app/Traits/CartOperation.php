@@ -74,6 +74,7 @@ trait CartOperation
       $shipping = User::with('shipping')->find($auth_id);
       $shipping = $shipping->shipping ? json_encode($shipping->shipping) : null;
       $cart->update([
+        'payment_method' => 'bkash',
         'shipping' => $shipping,
         'user_id' => $auth_id
       ]);
@@ -272,7 +273,13 @@ trait CartOperation
       ]);
 
       $order_id = $order->id;
-      $cartItems = $cart->cartItems;
+      $cartItems = CartItem::where('cart_id', $cart->id)
+        ->with(['variations' => function ($variations) {
+          $variations->where('is_checked', 1);
+        }])
+        ->whereHas('variations', function ($variation) {
+          $variation->where('is_checked', 1);
+        })->get();
       $advanced_rate = get_setting('payment_advanched_rate', 60);
       foreach ($cartItems as $product) {
         $orderItem = OrderItem::create([

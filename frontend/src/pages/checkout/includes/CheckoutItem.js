@@ -7,6 +7,7 @@ import AttrConfigs from "./attributes/AttrConfigs";
 import CheckoutQuantity from "./tableComponents/CheckoutQuantity";
 import {characterLimiter} from "../../../utils/Helpers";
 import {useMediaQuery} from "react-responsive";
+import {singleProductTotal} from "../../../utils/CartHelpers";
 
 const CheckoutItem = (props) => {
 
@@ -19,6 +20,7 @@ const CheckoutItem = (props) => {
 		const itemWeight = Number(weight) * Number(qty);
 		return Number(itemWeight).toFixed(3);
 	};
+
 
 	return (
 		<div className="checkout_grid">
@@ -83,15 +85,6 @@ const CheckoutItem = (props) => {
 													</div>
 												</div>
 											}
-											{
-												parseInt(product?.DeliveryCost) > 0 &&
-												<div className="row">
-													<div className="col-12">
-														<div className="mb-2 small">China Local Shipping cost: <strong>{currency + ' ' + product?.DeliveryCost}</strong>
-														</div>
-													</div>
-												</div>
-											}
 											<div className="row align-items-center">
 												<div className="col-6 pr-0 col-lg-4">
 													<p className="m-0 small d-block d-lg-none">Max: {variation.maxQuantity}</p>
@@ -115,6 +108,24 @@ const CheckoutItem = (props) => {
 								</div>
 							)
 						}
+
+						{
+							parseInt(product?.DeliveryCost) > 0 &&
+							<div className="row">
+								<div className="col-12">
+									<div className="text-right">China Local Shipping cost: <strong>{currency + ' ' + product?.DeliveryCost}</strong>
+									</div>
+								</div>
+							</div>
+						}
+						{parseInt(product?.DeliveryCost) > 0 && <hr className="my-2"/>}
+						<div className="row">
+							<div className="col-12">
+								<div className="text-right">Item Total: <strong>{currency + ' ' + singleProductTotal(product)}</strong>
+								</div>
+							</div>
+						</div>
+						<hr className="my-2"/>
 					</div>
 				)
 			}

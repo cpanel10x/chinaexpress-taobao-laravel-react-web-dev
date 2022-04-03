@@ -31,28 +31,21 @@ const Wishlist = () => {
 							<div className="card my-3">
 								<div className="card-body">
 									<h2 className="card-title">My Wishlist</h2>
-									<table className="table table-wishlist table-mobile">
-										<thead>
-										<tr>
-											<th>#ID</th>
-											<th colSpan={2}>Product</th>
-											<th style={{width: '100px'}}>Price</th>
-											<th>Remove</th>
-										</tr>
-										</thead>
-										<tbody>
-										{
-                       wishLists?.length > 0 ? (
-                           wishLists.map((wishList, index) => <WishlistPage key={index} indexItem={index} wishList={wishList}/>)
-												) :
-												<tr>
-													<td colSpan={4} className="text-center">
-														No wishlist
-													</td>
-												</tr>
-										}
-										</tbody>
-									</table>
+
+									<div className="row align-items-center">
+										<div className="col-md-2 text-center  d-none d-md-block">SL</div>
+										<div className="col-9 col-md-8">Product</div>
+										<div className="col-3 col-md-2 text-right">Option</div>
+									</div>
+									<hr className="my-2"/>
+									{
+										wishLists?.length > 0 ? (
+												wishLists.map((wishList, index) => <WishlistPage key={index} indexItem={index} wishList={wishList}/>)
+											) :
+											<div className="row">
+												<div className="col-12 text-center">There is no Items</div>
+											</div>
+									}
 								</div>
 							</div>
 						</div>

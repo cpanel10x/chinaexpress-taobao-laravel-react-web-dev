@@ -3,6 +3,7 @@ import AttributeImage from "../../../../pages/checkout/includes/attributes/Attri
 import {Link} from "react-router-dom";
 import {characterLimiter} from "../../../../utils/Helpers";
 import AttrConfigs from "../../../../pages/checkout/includes/attributes/AttrConfigs";
+import {singleProductTotal} from "../../../../utils/CartHelpers";
 
 const OrderBody = (props) => {
 
@@ -36,14 +37,6 @@ const OrderBody = (props) => {
 										</div>
 									</div>
 								}
-								{
-									parseInt(product?.DeliveryCost) > 0 &&
-									<div className="row">
-										<div className="col-12">
-											<div className="mb-2 small">China Local Shipping cost: <strong>{currency + ' ' + product?.DeliveryCost}</strong></div>
-										</div>
-									</div>
-								}
 								<div className="row align-items-center">
 									<div className="col-6 text-left ">
 										<p className="m-0 pt-3 pt-lg-0"><strong>{`${currency + ' ' + variation.price} x ${variation.qty}`}</strong>
@@ -63,6 +56,23 @@ const OrderBody = (props) => {
 					</div>
 				)
 			}
+			{
+				parseInt(product?.DeliveryCost) > 0 &&
+				<div className="row">
+					<div className="col-12">
+						<div className="text-right">China Local Shipping cost: <strong>{currency + ' ' + product?.DeliveryCost}</strong>
+						</div>
+					</div>
+				</div>
+			}
+			{parseInt(product?.DeliveryCost) > 0 && <hr className="my-2"/>}
+			<div className="row">
+				<div className="col-12">
+					<div className="text-right">Item Total: <strong>{currency + ' ' + product?.product_value}</strong>
+					</div>
+				</div>
+			</div>
+			<hr className="my-2"/>
 		</div>
 	);
 };

@@ -35,6 +35,10 @@ const ProductSingle = props => {
 		return <My404Component/>;
 	}
 
+	if (!product?.Id) {
+		return <My404Component/>;
+	}
+
 	return (
 		<div className="main">
 			<div className="bg-gray main mt-4">

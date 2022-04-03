@@ -103,7 +103,6 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function () {
 
     Route::post('nagad/payment', [NagadPaymentController::class, 'payment_process']);
 
-
     // dashboard operations
     Route::group(['prefix' => 'dashboard', 'as' => 'dashboard.'], function () {
       Route::post('/payment/status/update', [DashboardController::class, 'paymentStatusUpdate']);

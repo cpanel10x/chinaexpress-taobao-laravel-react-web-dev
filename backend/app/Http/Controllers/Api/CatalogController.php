@@ -161,7 +161,6 @@ class CatalogController extends Controller
   public function productDetails($item_id)
   {
     $item = GetItemFullInfoWithDeliveryCosts($item_id);
-    //return response(['sadf'=> $item]);
     if (!empty($item)) {
       $recent_token = request('recent_view');
       $this->storeProductToDatabase($item, $item_id, $recent_token);

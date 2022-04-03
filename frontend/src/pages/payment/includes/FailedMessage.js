@@ -24,7 +24,7 @@ const FailedMessage = ({ref_no, tran_id, n_msg}) => {
 				</div>
 				<div className="col">
 					<Link to={`/dashboard/orders/${tran_id}`} className="btn btn-default btn-block">
-						Try Payment
+						Try Again
 					</Link>
 				</div>
 			</div>

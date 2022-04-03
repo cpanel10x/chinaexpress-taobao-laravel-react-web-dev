@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {withRouter} from "react-router-dom";
 import {
 	CartProductSummary,
@@ -8,8 +8,8 @@ import BkashPayment from "./includes/BkashPayment";
 import {useSettings} from "../../api/GeneralApi";
 import {useCartMutation, useCart} from "../../api/CartApi";
 import SmallSpinner from "../../loader/SmallSpinner";
-import {useAuthMutation} from "../../api/Auth";
 import PaymentItem from "./includes/PaymentItem";
+import {goPageTop} from "../../utils/Helpers";
 
 const Payment = (props) => {
 
@@ -26,6 +26,11 @@ const Payment = (props) => {
 
 	const payment_method = cart?.payment_method || false;
 	const {advanced} = CartProductSummary(cart, advanced_rate);
+
+
+	useEffect(() => {
+		goPageTop();
+	}, []);
 
 	const selectPaymentMethod = (event) => {
 		const method = event.target.value;
