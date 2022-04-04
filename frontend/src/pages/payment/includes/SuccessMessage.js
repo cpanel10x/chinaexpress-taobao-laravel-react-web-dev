@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import {Link} from "react-router-dom";
 import {usePaymentStatusUpdate} from "../../../api/ApiDashboard";
 
-const SuccessMessage = ({ref_no, tran_id, n_msg, paymentID, trxID}) => {
+const SuccessMessage = ({tran_id, n_msg, paymentID, trxID}) => {
 
 	const {mutateAsync, isLoading} = usePaymentStatusUpdate();
 

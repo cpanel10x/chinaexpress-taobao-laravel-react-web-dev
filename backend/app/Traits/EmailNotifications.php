@@ -29,6 +29,4 @@ trait EmailNotifications
     $users = User::role('administrator')->whereConfirmed(1)->get();
     Notification::send($users, new OrderAuthInformation($order));
   }
-
-
 }

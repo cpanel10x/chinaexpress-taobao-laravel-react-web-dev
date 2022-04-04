@@ -176,7 +176,6 @@
   margin-bottom: 1.5rem;
   background: #fff;
   padding: 1rem;
-  max-height: 85rem;
   overflow-y: auto;
   overflow-x: hidden;
 
@@ -1044,8 +1043,9 @@
   }
 }
 
-.video_thumb{
+.video_thumb, .previewVideoThumb {
   display: block;
+
   .videoPlayerIcon {
     position: absolute;
     background: rgba(0, 0, 0, 0.35);
@@ -1062,7 +1062,20 @@
       color: #fff;
     }
   }
+}
 
+.previewVideoThumb {
+  .videoPlayerIcon {
+    padding: 52% 0;
+    font-size: 4rem;
+    cursor: pointer;
+
+    &:hover {
+      i{
+        color: #eeeeee;
+      }
+    }
+  }
 }
 
 

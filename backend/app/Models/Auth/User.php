@@ -50,7 +50,9 @@ class User extends BaseUser
     'timezone',
     'last_login_at',
     'last_login_ip',
-    'to_be_logged_out'
+    'to_be_logged_out',
+    'api_token',
+    'payment_token'
   ];
 
   /**

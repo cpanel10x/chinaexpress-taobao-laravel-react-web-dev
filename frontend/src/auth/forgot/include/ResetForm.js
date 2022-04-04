@@ -7,6 +7,7 @@ import {withRouter} from "react-router-dom";
 const ResetForm = (props) => {
 	const {response, setResponse} = props;
 	const phone = response?.data?.phone;
+	const email = response?.data?.email;
 
 	const [otp, setOtp] = useState("");
 	const [password, setPassword] = useState("");
@@ -17,7 +18,7 @@ const ResetForm = (props) => {
 
 	const resetCustomerPassword = (event) => {
 		event.preventDefault();
-		reset.mutateAsync({phone, otp, password, password_confirmation: password})
+		reset.mutateAsync({email, phone, otp, password, password_confirmation: password})
 			.then(res => {
 				if (res?.login === true) {
 					props.history.push("/login");

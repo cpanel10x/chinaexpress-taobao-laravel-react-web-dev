@@ -1,13 +1,13 @@
 import React, {useState} from 'react';
 import {isValidPhoneNumber, parsePhoneNumber} from "react-phone-number-input";
-import Input from 'react-phone-number-input/input'
 import SpinnerButtonLoader from '../../../loader/SpinnerButtonLoader';
 import {useAuthMutation} from "../../../api/Auth";
 import ResetForm from "./ResetForm";
 import swal from "sweetalert";
+import {checkIsEmail} from "../../../utils/Helpers";
 
 const ForgotForm = (props) => {
-	const [phone, setPhone] = useState("");
+	const [input, setInput] = useState("");
 	const [isValidPhone, setIsValidPhone] = useState(true);
 	const [response, setResponse] = useState({});
 
@@ -15,32 +15,38 @@ const ForgotForm = (props) => {
 
 	const formSubmitForOtpSubmit = (event) => {
 		event.preventDefault();
-		if (isValidPhoneNumber(phone)) {
-			const intPhone = parsePhoneNumber(phone)?.number;
-			forgot.mutateAsync({phone: intPhone})
-				.then(res => {
-					if (res.status === true) {
-						setResponse(res);
-					} else {
-						swal({
-							text: res.message,
-							icon: "error",
-							buttons: "Dismiss",
-						});
-					}
-				});
-		} else {
+		let phone = input.startsWith('+880') ? input : `+880${input}`;
+		let isPhone = isValidPhoneNumber(phone);
+		let isEmail = checkIsEmail(input);
+		if (!isEmail && !isPhone) {
 			swal({
-				text: "Phone number is not valid!",
+				text: "Type your valid mobile or email",
 				icon: "warning",
 				buttons: "Dismiss",
 			});
+			setIsValidPhone(false);
+			return false;
 		}
+		phone = isPhone ? parsePhoneNumber(phone)?.number : null;
+		const email = isEmail ? input : null;
+
+		forgot.mutateAsync({phone, email})
+			.then(res => {
+				if (res.status === true) {
+					setResponse(res);
+				} else {
+					swal({
+						text: res.message,
+						icon: "error",
+						buttons: "Dismiss",
+					});
+				}
+			});
 	};
 
 
 	const handleValidPhone = () => {
-		setIsValidPhone(isValidPhoneNumber(phone))
+		setIsValidPhone(isValidPhoneNumber(input))
 	};
 
 	if (response?.forgot === true) {
@@ -59,17 +65,14 @@ const ForgotForm = (props) => {
 					<div className="countryPhoneInput">
             <span className="country_logo"
                   style={{backgroundImage: "url('/img/bangladesh.svg')"}}/>
-						<Input
+
+						<input
 							name="phone"
 							id="phone"
 							className="form-control"
-							international
-							country="BD"
-							withCountryCallingCode
-							placeholder="Enter phone number"
-							value={phone}
-							onBlur={() => handleValidPhone()}
-							onChange={(phone) => setPhone(phone)}/>
+							placeholder="Mobile or Email"
+							value={input}
+							onChange={(event) => setInput(event.target.value)}/>
 					</div>
 					{
 						!isValidPhone &&

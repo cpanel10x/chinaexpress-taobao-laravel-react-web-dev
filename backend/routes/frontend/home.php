@@ -59,18 +59,17 @@ Route::group(['middleware' => ['auth', 'password_expires']], function () {
   });
 });
 
-
 // nagad payment process
 Route::get('nagad/callback', [NagadPaymentController::class, 'nagad_payment_verify']);
 
 
 // start bkash payment
-Route::get('bkash/payment/status', [BkashPaymentController::class, 'PaymentStatus']);
+Route::get('bkash/payment/status', [BkashPaymentController::class, 'PaymentStatus'])->middleware('auth');
 Route::get('bkash/payment/{id}', [BkashPaymentController::class, 'bkashPaymentProcess']);
 
-Route::post('bkash/token', [BkashPaymentController::class, 'bkashToken']);
-Route::post('bkash/checkout', [BkashPaymentController::class, 'createCheckoutPayment']);
-Route::post('bkash/execute', [BkashPaymentController::class, 'executeCheckoutPayment']);
+Route::post('bkash/token', [BkashPaymentController::class, 'bkashToken'])->middleware('auth');
+Route::post('bkash/checkout', [BkashPaymentController::class, 'createCheckoutPayment'])->middleware('auth');
+Route::post('bkash/execute', [BkashPaymentController::class, 'executeCheckoutPayment'])->middleware('auth');
 // end bkash payment
 
 

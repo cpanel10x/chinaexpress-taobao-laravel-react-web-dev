@@ -6,6 +6,7 @@ import AliExpressSearchBar from './includes/searchBar/AliExpressSearchBar';
 import {useSettings} from "../../api/GeneralApi";
 import SectionsProducts from "./sections/SectionsProducts";
 import RecentProduct from "./includes/Products/recentProduct/RecentProduct";
+import NewArriveProduct from "./includes/Products/NewArriveProduct/NewArriveProduct";
 
 const Home = (props) => {
 
@@ -43,6 +44,8 @@ const Home = (props) => {
          )}
 
          <ProductsLoving/>
+
+         <NewArriveProduct/>
 
          <RecentProduct/>
          {/*<BrandProduct/>*/}

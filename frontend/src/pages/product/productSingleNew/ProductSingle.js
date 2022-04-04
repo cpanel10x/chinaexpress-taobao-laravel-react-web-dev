@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useRef} from "react";
 import {withRouter, useParams} from "react-router-dom";
 import ProductBody from "./productBody/ProductBody";
 import ProductDetailsTab from "./includes/ProductDetailsTab";
@@ -17,9 +17,12 @@ const ProductSingle = props => {
 	const {data: settings} = useSettings();
 	const {data: product, isLoading} = useTabobaoProduct(item_id);
 
+	const cardRef = useRef(null);
+
 	const currencyIcon = settings?.currency_icon || '৳';
 
 	const isMobile = useMediaQuery({query: '(max-width: 991px)'});
+
 
 	const cartConfigured = {};
 
@@ -44,7 +47,7 @@ const ProductSingle = props => {
 			<div className="bg-gray main mt-4">
 				<div className="container">
 
-					<div className="row">
+					<div className="row" ref={cardRef}>
 						<div className="col-lg-9 col-md-12">
 							<ProductBody
 								settings={settings}
@@ -52,7 +55,7 @@ const ProductSingle = props => {
 								cartConfigured={cartConfigured}
 							/>
 
-							<div className="card mb-3 mb-lg-5">
+							<div className="card mb-3 mb-lg-4">
 								<div className="card-body">
 									<ProductDetailsTab product={product}/>
 								</div>
@@ -62,7 +65,7 @@ const ProductSingle = props => {
 						{
 							!isMobile &&
 							<div className="col-lg-3 d-none d-lg-block">
-								<RelatedProduct item_id={item_id}/>
+								<RelatedProduct item_id={item_id} cardRef={cardRef}/>
 							</div>
 						}
 					</div>

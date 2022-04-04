@@ -69,12 +69,12 @@ const PaymentItem = (props) => {
 											}
 											<div className="row align-items-center">
 												<div className="col-6 text-left ">
-													<p className="m-0 pt-3 pt-lg-0">
+													<p className="m-0 pt-2 pt-lg-0">
 														<strong>{`${currency + ' ' + variation.price} x ${variation.qty}`}</strong>
 													</p>
 												</div>
 												<div className="col-6 text-right">
-													<p className="m-0 pt-3 pt-lg-0">
+													<p className="m-0 pt-2 pt-lg-0">
 														<strong>{`${currency + ' ' + Math.round(Number(variation.qty) * Number(variation.price))}`}</strong>
 													</p>
 												</div>

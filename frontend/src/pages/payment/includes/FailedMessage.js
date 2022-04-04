@@ -1,7 +1,7 @@
 import React from 'react';
 import {Link} from "react-router-dom";
 
-const FailedMessage = ({ref_no, tran_id, n_msg}) => {
+const FailedMessage = ({tran_id, n_msg}) => {
 	return (
 		<div className="text-center order_complete">
 			<img

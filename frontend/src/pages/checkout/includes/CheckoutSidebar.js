@@ -51,7 +51,7 @@ const CheckoutSidebar = (props) => {
 
 					<div className="border my-3 p-3 rounded shipping_info">
 						<div className="align-items-center row">
-							<div className="col">
+							<div className="col-7">
 								<h4 className="m-0">Shipping Address</h4>
 							</div>
 							<div className="col text-right">

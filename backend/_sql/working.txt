@@ -15,3 +15,7 @@ ADD COLUMN `bkash_refund_trx_id` VARCHAR(45) NULL AFTER `bkash_trx_id`;
 
 ALTER TABLE `chinaexpress_web`.`products` 
 ADD COLUMN `recent_view_token` VARCHAR(191) NULL AFTER `user_id`;
+
+
+ALTER TABLE `chinaexpress_web`.`users` 
+ADD COLUMN `payment_token` VARCHAR(191) NULL AFTER `api_token`;

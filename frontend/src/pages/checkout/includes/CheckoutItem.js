@@ -58,14 +58,14 @@ const CheckoutItem = (props) => {
 										<div className="col-1">
 											<ItemCheck product={product} variation={variation}/>
 										</div>
-										<div className="col-2">
+										<div className="col-3 pr-0 pr-lg-0">
 											<AttributeImage product={product} attributes={variation?.attributes}/>
 										</div>
-										<div className="col-9">
+										<div className="col-8">
 											<Link to={`/product/${product.ItemId}`} title={product.Title}>
 												{
 													isMobile ?
-														characterLimiter(product.Title, 55)
+														characterLimiter(product.Title, 50)
 														:
 														product.Title
 												}
@@ -94,7 +94,7 @@ const CheckoutItem = (props) => {
 													<p className="m-0">Max: {variation.maxQuantity}</p>
 												</div>
 												<div className="col-3 px-0 col-lg-2 text-center ">
-													<p className="m-0 pt-3 pt-lg-0"><strong>{` ${currency + ' ' + variation.price} `}</strong></p>
+													<p className="m-0 pt-2 pt-lg-0"><strong>{` ${currency + ' ' + variation.price} `}</strong></p>
 												</div>
 												<div className="col-3 pl-0 text-right">
 													<p className="m-0 pt-3 pt-lg-0">

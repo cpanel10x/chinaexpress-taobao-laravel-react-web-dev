@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Auth\User;
 use App\Traits\CartOperation;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -108,11 +109,18 @@ class CartController extends Controller
   {
     $tran_id = 'CE-' . Str::random();
     $order = $this->placedCustomerOrder($tran_id);
+    $token = Str::random(60);
+    $user_id = auth()->id();
+    if ($user_id) {
+      User::find($user_id)->update([
+        'payment_token' => $token,
+      ]);
+    }
     if ($order) {
       $response = [
         'status' => true,
         'msg' => 'Order placed successfully',
-        'redirect' => url('bkash/payment/' . $order->transaction_id),
+        'redirect' => url('bkash/payment/' . $order->transaction_id . '?token=' . $token),
       ];
     } else {
       $response = [

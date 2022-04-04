@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\PaymentGateway;
 
 use App\Http\Controllers\Controller;
+use App\Models\Auth\User;
 use App\Models\Content\Invoice;
 use App\Models\Content\Order;
 use App\Models\Content\OrderItem;
@@ -10,6 +11,7 @@ use App\Models\Content\Setting;
 use App\Traits\ApiResponser;
 use App\Traits\BkashApiResponse;
 use App\Traits\EmailNotifications;
+use Auth;
 
 class BkashPaymentController extends Controller
 {
@@ -23,7 +25,24 @@ class BkashPaymentController extends Controller
 
   public function processAmount($id)
   {
-    $order = Order::with('orderItems')->where('status', 'waiting-for-payment')->where('transaction_id', $id)->first();
+    $token = request('token');
+    $user = auth()->user();
+    if (!$user) {
+      $user = User::where('payment_token', $token)->first();
+      if ($user) {
+        Auth::loginUsingId($user->id, true);
+        $user->update([
+          'payment_token' => null
+        ]);
+      } else {
+        abort(404);
+      }
+    }
+    $order = Order::with('orderItems')
+      ->where('status', 'waiting-for-payment')
+      ->where('transaction_id', $id)
+      ->where('user_id', $user->id)
+      ->first();
     $amount = $order ? (int)($order->orderItems->sum('first_payment')) : 0;
     if (!$order) {
       $invoice = Invoice::where('status', 'waiting-for-payment')->where('transaction_id', $id)->first();
@@ -37,16 +56,15 @@ class BkashPaymentController extends Controller
   {
     $amount = $this->processAmount($tran_id);
     $frontend = config('app.frontend_url');
-
     $data = [
       'ref_no' => $tran_id,
       'amount' => $amount,
       'token_url' => url('/bkash/token'),
       'checkout_url' => url("/bkash/checkout?ref_no={$tran_id}"),
       'execute_url' => url('/bkash/execute?paymentID='),
-      'success_url' => "{$frontend}/online/payment/success?ref_no={$tran_id}",
-      'failed_url' => "{$frontend}/online/payment/failed?ref_no={$tran_id}",
-      'cancel_url' => "{$frontend}/online/payment/cancel?ref_no={$tran_id}"
+      'success_url' => url("bkash/payment/status?status=success&ref_no={$tran_id}"),
+      'failed_url' => url("bkash/payment/status?status=failed&ref_no={$tran_id}"),
+      'cancel_url' => url("bkash/payment/status?status=cancel&ref_no={$tran_id}")
     ];
     return view('frontend.payment.bkash', compact('data'));
   }
@@ -56,16 +74,18 @@ class BkashPaymentController extends Controller
   {
     $status = request('status');
     $n_msg = request('n_msg');
-    $paymentID = request('paymentID', 'undefined');
+    $paymentID = request('paymentID');
     $tran_id = request('tran_id');
-    $order = Order::with('user')->where('transaction_id', $tran_id)->first();
+    $trxID = request('trxID');
+    $auth_id = auth()->id();
+    $order = Order::with('user')->where('transaction_id', $tran_id)->where('user_id', $auth_id)->first();
     $this->order = $order;
     $this->paymentID = $paymentID;
     $this->statusMessage = $n_msg;
-
+    auth()->logout();
     if ($status == 'success') {
       if ($paymentID) {
-        $order->update(['bkash_payment_id' => $paymentID]);
+        $order->update(['bkash_payment_id' => $paymentID, 'bkash_trx_id' => $trxID]);
       }
       return $this->bkash_order_success();
     }
@@ -76,44 +96,45 @@ class BkashPaymentController extends Controller
     if ($status == 'failed') {
       return $this->bkash_order_failure();
     }
-    return redirect("/payment/{$tran_id}?status=failure&paymentID={$this->paymentID}&timestamp={$this->timestamp}&msg={$this->statusMessage}");
+    $frontend = config('app.frontend_url');
+    return redirect()->to("{$frontend}/online/payment/failed?tran_id={$tran_id}?status=failure&&msg=Payment processing failed");
   }
 
 
   public function bkash_order_success()
   {
+    $frontend = config('app.frontend_url');
     $order = $this->order;
+    $order_id = $order->id ?? null;
+    $tran_id = $order->transaction_id ?? null;
+    $trxID = $order->bkash_trx_id ?? null;
     if ($order) {
-      $order_id = $order->id;
       if ($order->status == 'waiting-for-payment') {
         $order->update(['status' => 'partial-paid', 'payment_method' => 'bkash']);
         OrderItem::where('order_id', $order->id)->update(['status' => 'partial-paid']);
-        // $this->orderPaymentConfirmationNotification($order);
-        return redirect("/payment/{$order_id}?status=success&paymentID={$this->paymentID}&timestamp={$this->timestamp}&msg={$this->statusMessage}");
+        if (config('app.env') === 'production') {
+          $this->orderPaymentConfirmationNotification($order);
+        }
       }
-      return redirect("/payment/{$order_id}?status=success&paymentID={$this->paymentID}&timestamp={$this->timestamp}&msg={$this->statusMessage}");
+      return redirect()->to("{$frontend}/online/payment/success?tran_id={$tran_id}&trxID={$trxID}&paymentID={$this->paymentID}&msg={$this->statusMessage}");
     }
-    return redirect("/payment/{$this->paymentID}?status=failure&paymentID={$this->paymentID}&timestamp={$this->timestamp}&msg={$this->statusMessage}");
+    return redirect()->to("{$frontend}/online/payment/failed?tran_id={$tran_id}?status=failure&paymentID={$this->paymentID}&msg={$this->statusMessage}");
   }
 
   public function bkash_order_cancel()
   {
+    $frontend = config('app.frontend_url');
     $order = $this->order;
-    if ($order) {
-      $order_id = $order->id;
-      return redirect("/payment/{$order_id}?status=cancel&paymentID={$this->paymentID}&timestamp={$this->timestamp}&msg={$this->statusMessage}");
-    }
-    return redirect("/payment/{$this->paymentID}?status=failure&paymentID={$this->paymentID}&timestamp={$this->timestamp}&msg={$this->statusMessage}");
+    $tran_id = $order->transaction_id ?? null;
+    return redirect()->to("{$frontend}/online/payment/cancel?tran_id={$tran_id}&msg={$this->statusMessage}");
   }
 
   public function bkash_order_failure()
   {
+    $frontend = config('app.frontend_url');
     $order = $this->order;
-    if ($order) {
-      $order_id = $order->id;
-      return redirect("/payment/{$order_id}?status=failure&paymentID={$this->paymentID}&timestamp={$this->timestamp}&msg={$this->statusMessage}");
-    }
-    return redirect("/payment/{$this->paymentID}?status=failure&paymentID={$this->paymentID}&timestamp={$this->timestamp}&msg={$this->statusMessage}");
+    $tran_id = $order->transaction_id ?? null;
+    return redirect()->to("{$frontend}/online/payment/failed?tran_id={$tran_id}&msg={$this->statusMessage}");
   }
 
   public function bkashToken()

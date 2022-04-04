@@ -42,6 +42,15 @@ export const useProductDetails = (product_id) => useQuery(["ProductDetails", pro
    }
 });
 
+export const useNewArrivedProducts = () => useQuery(["useNewArrivedProducts"], async () => {
+   try {
+      const {data} = await instance.post(`new-arrived-products`);
+      return data?.new_arrived ? JSON.parse(data?.new_arrived) : [];
+   } catch (error) {
+      console.log(error);
+   }
+});
+
 
 export const useRecentViewProducts = () => useQuery(["useRecentViewProducts"], async () => {
    const recent_view = recent_view_token();

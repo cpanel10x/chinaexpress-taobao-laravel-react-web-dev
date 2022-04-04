@@ -154,9 +154,7 @@ if (!function_exists('get_category_browsing_items')) {
     if ($existsFile) {
       $browsing = json_decode(Storage::get($path), true);
     }
-
     $browsing = is_array($browsing) ? $browsing : [];
-
     if (!empty($browsing) && is_array($browsing)) {
       $TotalCount = getArrayKeyData($browsing, 'TotalCount', 0);
       $browsingContents = getArrayKeyData($browsing, 'Content', []);
@@ -225,13 +223,13 @@ if (!function_exists('sectionGetCategoryProducts')) {
 }
 
 if (!function_exists('sectionGetSearchProducts')) {
-  function sectionGetSearchProducts($url, $limit = 50, $offset = 0)
+  function sectionGetSearchProducts($url, $limit = 35, $offset = 0)
   {
-    $cat = explode('?', $url);
-    $slug_name = str_replace('/', '', $cat[0]);
+    $cat = explode('&', $url);
+    $slug_name = $cat[0] ?? '';
     $products = [];
     if (count($cat) > 0) {
-      $page = str_replace('page=', '', $cat[1]);
+      $page = isset($cat[1]) ? str_replace('page=', '', $cat[1]) : 0;
       $offset = $offset > 0 ? $page * $limit : 0;
     }
     if ($slug_name) {

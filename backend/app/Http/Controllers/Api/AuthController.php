@@ -215,25 +215,33 @@ class AuthController extends Controller
   public function forgotPassword(Request $request)
   {
     $validator = Validator::make($request->all(), [
-      'phone' => 'required|string|min:10|max:20'
+      'phone' => 'nullable|string|min:10|max:20',
+      'email' => ['nullable', 'string', 'email'],
     ]);
-    if ($validator->fails()) {
-      return response(['status' => false, 'errors' => $validator->errors()]);
-    }
+
     $otpCode = rand(1000, 9999);
-    $phone = request('phone');
-    $user = User::where('phone', $phone)->first();
+    $phone = request('phone', null);
+    $email = request('email', null);
+    if ($validator->fails() || (!$phone && !$email)) {
+      return response(['status' => false, 'errors' => $validator->errors(), 'msg' => 'Type your valid mobile or email']);
+    }
+
+    $user = $phone ? User::where('phone', $phone)->first() : null;
+    $user = $email ? User::where('email', $email)->first() : $user;
 
     if ($user) {
-      $smsResponse = $this->generateAndSendOTP($phone, $otpCode);
-      session(['otp_code' => $otpCode]);
+      $smsResponse = $this->generateAndSendOTP($user, $otpCode);
+      $user->update([
+        'otp_code' => $otpCode
+      ]);
       return response([
         'status' => true,
         'forgot' => true,
         'smsResponse' => $smsResponse,
-        'message' => "OTP send to your phone",
+        'message' => "OTP send to your " . ($phone ? 'Phone' : 'Email'),
         'data' => [
-          "phone" => $phone
+          "phone" => $phone,
+          "email" => $email,
         ]
       ]);
     }
@@ -250,24 +258,27 @@ class AuthController extends Controller
   public function resetPassword(Request $request)
   {
     $validator = Validator::make($request->all(), [
-      'phone' => 'required|string|min:10|max:20',
+      'phone' => 'nullable|string|min:10|max:20',
+      'email' => ['nullable', 'string', 'email'],
       'password' => ['required', 'string', 'confirmed', 'Min:6'],
     ]);
 
-    if ($validator->fails()) {
-      return response(['status' => false, 'errors' => $validator->errors()]);
+    $phone = request('phone', null);
+    $email = request('email', null);
+
+    if ($validator->fails() || (!$phone && !$email)) {
+      return response(['status' => false, 'errors' => $validator->errors(), 'msg' => 'Type your valid mobile or email']);
     }
 
-    $req_code = (int)request('otp', 00);
-    $ses_code = (int)session('otp_code', 11);
+    $req_code = (int)request('otp');
 
-    if ($ses_code !== $req_code) {
+    $user = $phone ? User::where('phone', $phone)->where('otp_code', $req_code)->first() : null;
+    $user = $email ? User::where('email', $email)->where('otp_code', $req_code)->first() : $user;
+
+    if (!$user) {
       return response(['status' => false, 'errors' => ['otp_code' => ['OTP does not match.']]]);
     }
-
-    $phone = request('phone');
     $password = request('password');
-    $user = User::where('phone', $phone)->first();
     if ($user) {
       $user->update(['password' => Hash::make($password)]);
       return response([
@@ -297,7 +308,7 @@ class AuthController extends Controller
     $token = request()->bearerToken();
     return response([
       'user' => $user,
-      'token' => $token,
+      'token' => $user ? $token : null,
     ]);
   }
 

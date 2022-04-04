@@ -45,7 +45,7 @@ const SectionsProducts = (props) => {
                   </div>
                   <div className="col-6 text-right">
                      {query_type === "search_query" ?
-                        <Link to={`/search${query_url}`} className="btn btn-custom-product px-4">View All</Link>
+                        <Link to={`/search?keyword=${query_url}`} className="btn btn-custom-product px-4">View All</Link>
                         :
                         <Link to={`/shop${query_url}`} className="btn btn-custom-product px-4"> View All </Link>
                      }

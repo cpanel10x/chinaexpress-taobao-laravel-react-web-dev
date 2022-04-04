@@ -123,16 +123,28 @@ class HomeController extends Controller
         ->get();
     }
 
-    if (!empty($products)) {
-      $products = Product::where('ItemId', '!=', $item_id)
-        ->select('ItemId', 'ProviderType', 'Title', 'BrandName', 'MainPictureUrl', 'Price', 'Pictures', 'Features', 'MasterQuantity')
-        ->latest()
-        ->limit(20)
-        ->get();
-    }
+    // if (!empty($products)) {
+    //   $products = Product::where('ItemId', '!=', $item_id)
+    //     ->select('ItemId', 'ProviderType', 'Title', 'BrandName', 'MainPictureUrl', 'Price', 'Pictures', 'Features', 'MasterQuantity')
+    //     ->latest()
+    //     ->limit(20)
+    //     ->get();
+    // }
 
     return response([
       'relatedProducts' => json_encode($products)
+    ]);
+  }
+
+  public function newArrivedProducts()
+  {
+    $products = Product::select('ItemId', 'ProviderType', 'Title', 'BrandName', 'MainPictureUrl', 'Price', 'Pictures', 'Features', 'MasterQuantity')
+      ->latest()
+      ->limit(15)
+      ->get();
+
+    return response([
+      'new_arrived' => json_encode($products)
     ]);
   }
 
@@ -142,14 +154,8 @@ class HomeController extends Controller
     $products = Product::where('recent_view_token', $recent_token)
       ->select('ItemId', 'ProviderType', 'Title', 'BrandName', 'MainPictureUrl', 'Price', 'Pictures', 'Features', 'MasterQuantity')
       ->latest()
-      ->limit(20)
+      ->limit(15)
       ->get();
-    if ($products->isEmpty()) {
-      $products = Product::select('ItemId', 'ProviderType', 'Title', 'BrandName', 'MainPictureUrl', 'Price', 'Pictures', 'Features', 'MasterQuantity')
-        ->latest()
-        ->limit(20)
-        ->get();
-    }
 
     return response([
       'recentView' => json_encode($products)

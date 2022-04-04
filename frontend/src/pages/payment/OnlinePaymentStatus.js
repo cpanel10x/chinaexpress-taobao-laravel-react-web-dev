@@ -10,9 +10,8 @@ const OnlinePaymentStatus = () => {
 	const history = useHistory();
 	let {status} = useParams();
 	const query = useQuery();
-	const ref_no = query.get('ref_no');
 	const tran_id = query.get('tran_id');
-	const n_msg = query.get('n_msg');
+	const n_msg = query.get('msg');
 	const paymentID = query.get('paymentID');
 	const trxID = query.get('trxID');
 
@@ -29,13 +28,12 @@ const OnlinePaymentStatus = () => {
 					<div className="card my-4 my-md-5">
 						<div className="card-body px-5">
 							{status === 'success' && <SuccessMessage
-								ref_no={ref_no}
 								tran_id={tran_id}
 								trxID={trxID}
 								n_msg={n_msg}
 								paymentID={paymentID}/>}
-							{status === 'failed' && <FailedMessage ref_no={ref_no} tran_id={tran_id} n_msg={n_msg}/>}
-							{status === 'cancel' && <CancelMessage ref_no={ref_no} tran_id={tran_id} n_msg={n_msg}/>}
+							{status === 'failed' && <FailedMessage tran_id={tran_id} n_msg={n_msg}/>}
+							{status === 'cancel' && <CancelMessage tran_id={tran_id} n_msg={n_msg}/>}
 						</div>
 					</div>
 				</div>

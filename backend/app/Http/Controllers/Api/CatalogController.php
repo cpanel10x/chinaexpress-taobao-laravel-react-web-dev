@@ -43,6 +43,7 @@ class CatalogController extends Controller
         $products = sectionGetSearchProducts($url, $limit);
       }
       return response([
+        '$url' => $url,
         'products' => json_encode($products)
       ]);
     }
@@ -99,7 +100,7 @@ class CatalogController extends Controller
   {
     $keyword = request('keyword');
     $page = request('page', 0);
-    $limit = request('limit', 36);
+    $limit = request('limit', 35);
     $offset = $page > 1 ? ($limit * $page) : 0;
     $products = null;
     if ($keyword) {

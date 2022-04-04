@@ -5,6 +5,8 @@ import ReactPaginate from "react-paginate";
 const PagePaginator = (props) => {
 	const {handlePaginationClick, currentPage, totalPage} = props;
 
+	const maxPage = parseInt(totalPage) > 280 ? 280 : totalPage;
+
 	return (
 		<nav aria-label="Page navigation">
 			<ReactPaginate
@@ -13,7 +15,7 @@ const PagePaginator = (props) => {
 				breakLabel={"..."}
 				breakClassName={"break-me"}
 				forcePage={currentPage - 1}
-				pageCount={totalPage}
+				pageCount={maxPage}
 				marginPagesDisplayed={1}
 				pageRangeDisplayed={2}
 				onPageChange={handlePaginationClick}

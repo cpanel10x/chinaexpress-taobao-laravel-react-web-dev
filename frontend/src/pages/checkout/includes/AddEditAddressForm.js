@@ -51,7 +51,7 @@ const AddEditAddressForm = props => {
 				id: Id,
 				name: name,
 				phone: phone,
-				district: district,
+				city: district,
 				address: address,
 			}, {
 				onSuccess: () => {
