@@ -7,6 +7,7 @@ use App\Models\Auth\User;
 use App\Models\Content\Invoice;
 use App\Models\Content\Order;
 use App\Models\Content\OrderItem;
+use App\Models\Content\PaymentToken;
 use App\Models\Content\Setting;
 use App\Traits\ApiResponser;
 use App\Traits\BkashApiResponse;
@@ -23,29 +24,29 @@ class BkashPaymentController extends Controller
   public $statusMessage = null;
 
 
-  public function processAmount($id)
+  public function PaymentToken($id)
   {
     $token = request('token');
-    $user = auth()->user();
-    if (!$user) {
-      $user = User::where('payment_token', $token)->first();
-      if ($user) {
-        Auth::loginUsingId($user->id, true);
-        $user->update([
-          'payment_token' => null
-        ]);
-      } else {
-        abort(404);
-      }
+    $token = PaymentToken::where('token', $token)
+      ->where('tran_id', $id)
+      ->where('expire_at', '>=', now())
+      ->first();
+    if (!$token) {
+      abort(404);
     }
+    return $token;
+  }
+
+  public function processAmount($token)
+  {
     $order = Order::with('orderItems')
       ->where('status', 'waiting-for-payment')
-      ->where('transaction_id', $id)
-      ->where('user_id', $user->id)
+      ->where('id', $token->order_id)
+      ->where('user_id', $token->user_id)
       ->first();
     $amount = $order ? (int)($order->orderItems->sum('first_payment')) : 0;
     if (!$order) {
-      $invoice = Invoice::where('status', 'waiting-for-payment')->where('transaction_id', $id)->first();
+      $invoice = Invoice::where('status', 'waiting-for-payment')->where('transaction_id', $token->tran_id)->first();
       $amount = $amount ? $amount : ($invoice ? $invoice->total_payable : 0);
     }
     return ceil($amount);
@@ -54,17 +55,19 @@ class BkashPaymentController extends Controller
 
   public function bkashPaymentProcess($tran_id)
   {
-    $amount = $this->processAmount($tran_id);
+    $token = $this->PaymentToken($tran_id);
+    $amount = $this->processAmount($token);
     $frontend = config('app.frontend_url');
+    $token_id = $token->token;
     $data = [
       'ref_no' => $tran_id,
       'amount' => $amount,
       'token_url' => url('/bkash/token'),
-      'checkout_url' => url("/bkash/checkout?ref_no={$tran_id}"),
-      'execute_url' => url('/bkash/execute?paymentID='),
-      'success_url' => url("bkash/payment/status?status=success&ref_no={$tran_id}"),
-      'failed_url' => url("bkash/payment/status?status=failed&ref_no={$tran_id}"),
-      'cancel_url' => url("bkash/payment/status?status=cancel&ref_no={$tran_id}")
+      'checkout_url' => url("bkash/checkout?token={$token_id}&ref_no={$tran_id}"),
+      'execute_url' => url("bkash/execute?token={$token_id}&paymentID="),
+      'success_url' => url("bkash/payment/status?token={$token_id}&status=success&ref_no={$tran_id}"),
+      'failed_url' => url("bkash/payment/status?token={$token_id}&status=failed&ref_no={$tran_id}"),
+      'cancel_url' => url("bkash/payment/status?token={$token_id}&status=cancel&ref_no={$tran_id}")
     ];
     return view('frontend.payment.bkash', compact('data'));
   }
@@ -78,11 +81,12 @@ class BkashPaymentController extends Controller
     $tran_id = request('tran_id');
     $trxID = request('trxID');
     $auth_id = auth()->id();
-    $order = Order::with('user')->where('transaction_id', $tran_id)->where('user_id', $auth_id)->first();
+
+    $token = $this->PaymentToken($tran_id);
+    $order = Order::with('user')->where('id', $token->order_id)->first();
     $this->order = $order;
     $this->paymentID = $paymentID;
     $this->statusMessage = $n_msg;
-    auth()->logout();
     if ($status == 'success') {
       if ($paymentID) {
         $order->update(['bkash_payment_id' => $paymentID, 'bkash_trx_id' => $trxID]);
@@ -141,25 +145,20 @@ class BkashPaymentController extends Controller
   {
     $id_token = $this->initializeBkashToken();
 
-    //        session()->forget('bkash_token');
-    //        $id_token = $this->initializeBkashToken(true);
-    //        Setting::save_settings([
-    //            'bkash_grant_token' => json_encode($id_token)
-    //        ]);
-
     return response(['status' => $id_token ? 'Token generated' : 'Token not generated']);
   }
 
   public function createCheckoutPayment()
   {
-    $ref_no = \request('ref_no'); // must be unique
-    $amount = $this->processAmount($ref_no);
+    $tran_id = \request('ref_no'); // must be unique
+    $token = $this->PaymentToken($tran_id);
+    $amount = $this->processAmount($token);
 
     $body = [
       'amount' => $amount,
       'currency' => "BDT",
       'intent' => "sale",
-      'merchantInvoiceNumber' => $ref_no,
+      'merchantInvoiceNumber' => $tran_id,
     ];
 
     $data = $this->CreatePayment($body);

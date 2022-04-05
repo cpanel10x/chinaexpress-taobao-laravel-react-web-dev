@@ -30,6 +30,8 @@ export const useTabobaoProduct = (itemId) => useQuery(['product', itemId], async
    } catch (error) {
       console.log(error);
    }
+},{
+   refetchOnMount: false,
 });
 
 
@@ -40,6 +42,8 @@ export const useProductDetails = (product_id) => useQuery(["ProductDetails", pro
    } catch (error) {
       console.log(error);
    }
+},{
+   refetchOnMount: false,
 });
 
 export const useNewArrivedProducts = () => useQuery(["useNewArrivedProducts"], async () => {
@@ -49,6 +53,8 @@ export const useNewArrivedProducts = () => useQuery(["useNewArrivedProducts"], a
    } catch (error) {
       console.log(error);
    }
+},{
+   refetchOnMount: false,
 });
 
 
@@ -60,6 +66,8 @@ export const useRecentViewProducts = () => useQuery(["useRecentViewProducts"], a
    } catch (error) {
       console.log(error);
    }
+},{
+   refetchOnMount: false,
 });
 
 
@@ -70,6 +78,8 @@ export const useSectionProducts = (section) => useQuery(['section', section], as
    } catch (error) {
       console.log(error);
    }
+},{
+   refetchOnMount: false,
 });
 
 
@@ -90,6 +100,8 @@ export const useCategoryProducts = (slugKey, page = 1) => useQuery(["search", sl
    } catch (error) {
       throw Error(error.response.statusText);
    }
+},{
+   refetchOnMount: false,
 });
 
 
@@ -100,6 +112,8 @@ export const useSearchKeyword = (keyword, page = 1) => useQuery(["search", keywo
    } catch (error) {
       throw Error(error.response.statusText);
    }
+},{
+   refetchOnMount: false,
 });
 
 
@@ -120,6 +134,8 @@ export const usePictureSearch = (search_id, page = 1) => useQuery(["picture", se
    } catch (error) {
       throw Error(error.response.statusText);
    }
+},{
+   refetchOnMount: false,
 });
 
 

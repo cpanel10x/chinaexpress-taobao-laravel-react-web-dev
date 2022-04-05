@@ -7,6 +7,7 @@ import {useCartMutation, useCart} from "../../api/CartApi";
 import CheckoutItem from "./includes/CheckoutItem";
 import {useMediaQuery} from "react-responsive";
 import {useAuthMutation} from "../../api/Auth";
+import Helmet from "react-helmet";
 
 const Checkout = (props) => {
 	const {data: settings} = useSettings();
@@ -51,6 +52,9 @@ const Checkout = (props) => {
 
 	return (
 		<main className="main">
+			<Helmet>
+				<title>Checkout your cart </title>
+			</Helmet>
 
 			<div className="container">
 				<div className="row">

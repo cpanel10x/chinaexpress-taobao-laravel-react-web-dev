@@ -10,6 +10,7 @@ import {useCartMutation, useCart} from "../../api/CartApi";
 import SmallSpinner from "../../loader/SmallSpinner";
 import PaymentItem from "./includes/PaymentItem";
 import {goPageTop} from "../../utils/Helpers";
+import Helmet from "react-helmet";
 
 const Payment = (props) => {
 
@@ -72,6 +73,10 @@ const Payment = (props) => {
 
 	return (
 		<main className="main">
+			<Helmet>
+				<title>Complete your payment</title>
+			</Helmet>
+
 			<div className="page-content">
 				<div className="cart">
 					<div className="container">

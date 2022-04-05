@@ -1066,12 +1066,18 @@
 
 .previewVideoThumb {
   .videoPlayerIcon {
-    padding: 52% 0;
     font-size: 4rem;
     cursor: pointer;
 
+    i {
+      position: absolute;
+      top: 30%;
+      left: 0;
+      right: 0;
+    }
+
     &:hover {
-      i{
+      i {
         color: #eeeeee;
       }
     }

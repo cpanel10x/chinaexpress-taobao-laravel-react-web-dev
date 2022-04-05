@@ -82,7 +82,7 @@ const ResetForm = (props) => {
 						id="password"
 						value={password}
 						onChange={(e) => setPassword(e.target.value)}
-						autoComplete="password"
+						autoComplete="off"
 						placeholder="Password"
 						required={true}
 					/>
@@ -97,7 +97,7 @@ const ResetForm = (props) => {
 						id="password_confirmation"
 						value={confirmPassword}
 						onChange={(e) => setConfirmPassword(e.target.value)}
-						autoComplete="password_confirmation"
+						autoComplete="off"
 						placeholder="Confirm Password"
 						required={true}
 					/>

@@ -11,6 +11,8 @@ export const useHome = () => {
 		} catch (error) {
 			console.log(error);
 		}
+	},{
+		refetchOnMount: false,
 	});
 
 	const lovingProducts = useQuery(['loving-products'], async () => {
@@ -20,6 +22,8 @@ export const useHome = () => {
 		} catch (error) {
 			console.log(error);
 		}
+	},{
+		refetchOnMount: false,
 	});
 
 	return {
@@ -38,6 +42,8 @@ export const useSettings = (process) => useQuery(["settings"], async (process) =
 	} catch (error) {
 		console.log(error);
 	}
+},{
+	refetchOnMount: false,
 });
 
 
@@ -49,6 +55,8 @@ export const usePageData = (slug) => useQuery(['pageData', slug], async () => {
 	} catch (error) {
 		console.log(error);
 	}
+},{
+	refetchOnMount: false,
 });
 
 
@@ -60,6 +68,8 @@ export const useCustomPageData = (url, Key) => useQuery(['customPageData', Key],
 	} catch (error) {
 		console.log(error);
 	}
+},{
+	refetchOnMount: false,
 });
 
 
@@ -83,6 +93,8 @@ export const useAllCategories = () => useQuery('allCategories', async () => {
 	} catch (error) {
 		throw Error(error.response.statusText);
 	}
+},{
+	refetchOnMount: false,
 });
 
 

@@ -29,3 +29,13 @@ export const useCustomerOrderDetails = (tran_id) => useQuery(['useOrderDetails',
 		console.log(error);
 	}
 });
+
+
+export const useRepaymentOrderByBkash = () => useMutation('useRepaymentOrderByBkash', async (props) => {
+	try {
+		const {data} = await instance.post(`/dashboard/order/payment/generate`, props);
+		return data;
+	} catch (error) {
+		console.log(error);
+	}
+});

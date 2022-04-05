@@ -12,12 +12,21 @@ import {
 } from 'react-query';
 import {useSettings} from "./api/GeneralApi";
 import {useAuthMutation} from "./api/Auth";
-
-
-const queryClient = new QueryClient();
+import {persistQueryClient} from 'react-query/persistQueryClient-experimental'
+import {createWebStoragePersistor} from 'react-query/createWebStoragePersistor-experimental'
 
 
 const Main = () => {
+
+	const queryClient = new QueryClient({
+		defaultOptions: {
+			queries: {
+				refetchOnMount: false,
+				refetchOnWindowFocus: false,
+				// refetchInterval: 15,
+			},
+		},
+	});
 
 	const {data: settings} = useSettings();
 	const {customer: {data: customer}} = useAuthMutation();
@@ -25,26 +34,24 @@ const Main = () => {
 	// console.log('customer', customer);
 
 	return (
-		<BrowserRouter>
-			<HeaderManage settings={settings} customer={customer}/>
-			<div className="page-wrapper">
-				<Routing/>
-			</div>
-			<Footer/>
-		</BrowserRouter>
+		<QueryClientProvider client={queryClient}>
+			<BrowserRouter>
+				<HeaderManage settings={settings} customer={customer}/>
+				<div className="page-wrapper">
+					<Routing/>
+				</div>
+				<Footer/>
+			</BrowserRouter>
+			{/*<ReactQueryDevtools initialIsOpen={true}/>*/}
+		</QueryClientProvider>
 	);
 };
 
 
 if (document.getElementById("app")) {
 	ReactDOM.render(
-		<QueryClientProvider client={queryClient}>
-			<Main/>
-			{/*<ReactQueryDevtools initialIsOpen={false}/>*/}
-		</QueryClientProvider>,
+		<Main/>,
 		document.getElementById("app")
 	);
 }
 
-
-export default Main;

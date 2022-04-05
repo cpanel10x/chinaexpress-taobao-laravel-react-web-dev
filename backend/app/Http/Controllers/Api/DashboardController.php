@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Content\Order;
+use App\Models\Content\PaymentToken;
+use Illuminate\Support\Str;
 
 class DashboardController extends Controller
 {
@@ -63,6 +65,35 @@ class DashboardController extends Controller
       ->first();
     return response([
       'order' => $order
+    ]);
+  }
+
+  public function paymentGenerate()
+  {
+    $tran_id = request('tran_id');
+    $user_id = auth()->id();
+    $order = Order::where('user_id', $user_id)
+      ->where('transaction_id', $tran_id)
+      ->first();
+    $token = Str::random(60);
+    if ($order) {
+      PaymentToken::create([
+        'token' => $token,
+        'tran_id' => $order->transaction_id,
+        'order_id' => $order->id,
+        'expire_at' => now()->addMinutes(5)->toDateTimeString(),
+        'user_id' => $user_id,
+      ]);
+      return response([
+        'status' => true,
+        'msg' => 'Order placed successfully',
+        'redirect' => url('bkash/payment/' . $order->transaction_id . '?token=' . $token),
+      ]);
+    }
+
+    return response([
+      'status' => false,
+      'msg' => 'Payment token generating fail'
     ]);
   }
 }

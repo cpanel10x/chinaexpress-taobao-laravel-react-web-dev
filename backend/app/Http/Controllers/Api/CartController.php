@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Auth\User;
+use App\Models\Content\PaymentToken;
 use App\Traits\CartOperation;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -111,12 +112,14 @@ class CartController extends Controller
     $order = $this->placedCustomerOrder($tran_id);
     $token = Str::random(60);
     $user_id = auth()->id();
-    if ($user_id) {
-      User::find($user_id)->update([
-        'payment_token' => $token,
-      ]);
-    }
     if ($order) {
+      PaymentToken::create([
+        'token' => $token,
+        'tran_id' => $order->transaction_id,
+        'order_id' => $order->id,
+        'expire_at' => now()->addMinutes(5)->toDateTimeString(),
+        'user_id' => $user_id,
+      ]);
       $response = [
         'status' => true,
         'msg' => 'Order placed successfully',

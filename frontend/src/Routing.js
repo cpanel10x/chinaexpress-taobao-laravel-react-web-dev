@@ -25,6 +25,7 @@ import OrderDetails from "./auth/dashboard/orders/OrderDetails";
 import AllOrders from "./auth/dashboard/orders/AllOrders";
 import Profile from "./auth/dashboard/Profile";
 import ManageAddress from "./auth/dashboard/address/ManageAddress";
+import LatestArrivedProduct from "./pages/newArrive/LatestArrivedProduct";
 
 const Routing = () => {
 	return (
@@ -34,6 +35,7 @@ const Routing = () => {
 			<Route path="/forgot-password" exact component={ForgotPassword}/>
 			<Route path="/faq" exact component={Faq}/>
 			<Route path="/contact" exact component={Contact}/>
+			<Route path="/new-arrived" exact component={LatestArrivedProduct}/>
 
 			<Route path="/pages/:slug" exact component={SinglePage}/>
 			<Route path="/product/:item_id" exact component={ProductSingle}/>

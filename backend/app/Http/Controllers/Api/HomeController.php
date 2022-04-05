@@ -123,13 +123,13 @@ class HomeController extends Controller
         ->get();
     }
 
-    // if (!empty($products)) {
-    //   $products = Product::where('ItemId', '!=', $item_id)
-    //     ->select('ItemId', 'ProviderType', 'Title', 'BrandName', 'MainPictureUrl', 'Price', 'Pictures', 'Features', 'MasterQuantity')
-    //     ->latest()
-    //     ->limit(20)
-    //     ->get();
-    // }
+    if (!empty($products)) {
+      $products = Product::where('ItemId', '!=', $item_id)
+        ->select('ItemId', 'ProviderType', 'Title', 'BrandName', 'MainPictureUrl', 'Price', 'Pictures', 'Features', 'MasterQuantity')
+        ->latest()
+        ->limit(20)
+        ->get();
+    }
 
     return response([
       'relatedProducts' => json_encode($products)

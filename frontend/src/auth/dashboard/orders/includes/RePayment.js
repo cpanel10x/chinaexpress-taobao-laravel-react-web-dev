@@ -1,11 +1,15 @@
 import React, {useState} from 'react';
 import {Link} from "react-router-dom";
 import swal from "sweetalert";
+import {useRepaymentOrderByBkash} from "../../../../api/ApiDashboard";
+import SpinnerButtonLoader from "../../../../loader/SpinnerButtonLoader";
 
 const RePayment = ({order}) => {
 
 	const [payMethod, setPayMethod] = useState('bkash');
 	const [accept, setAccept] = useState(false);
+
+	const {mutateAsync, isLoading} = useRepaymentOrderByBkash();
 
 	const confirmPaymentProcess = () => {
 		if (!accept) {
@@ -15,8 +19,19 @@ const RePayment = ({order}) => {
 				buttons: "Ok, Understood",
 			});
 		} else {
-			const base_path = process.env.REACT_APP_ASSET_ENDPOINT;
-			window.location.href = `${base_path}/bkash/payment/${order.transaction_id}`;
+			mutateAsync({tran_id: order?.transaction_id}, {
+				onSuccess: (data) => {
+					if (data.status === true) {
+						window.location.href = data.redirect;
+					} else {
+						swal({
+							text: data.msg,
+							icon: "error",
+							buttons: "Ok, Understood",
+						});
+					}
+				}
+			});
 		}
 	};
 
@@ -94,13 +109,18 @@ const RePayment = ({order}) => {
 					</label>
 				</div>
 			</div>
-			<button
-				type="button"
-				onClick={() => confirmPaymentProcess()}
-				className="btn btn-block btn-default py-2 mt-3"
-			>
-				Pay Now
-			</button>
+			{
+				isLoading ?
+					<SpinnerButtonLoader buttonClass="btn btn-block btn-default py-2 mt-3"/>
+					:
+					<button
+						type="button"
+						onClick={() => confirmPaymentProcess()}
+						className="btn btn-block btn-default py-2 mt-3"
+					>
+						Pay Now
+					</button>
+			}
 		</div>
 	);
 };

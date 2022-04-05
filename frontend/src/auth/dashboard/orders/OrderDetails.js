@@ -9,6 +9,7 @@ import {useSettings} from "../../../api/GeneralApi";
 import OrderSummary from "./includes/OrderSummary";
 import RePayment from "./includes/RePayment";
 import Breadcrumb from "../../../pages/breadcrumb/Breadcrumb";
+import Helmet from "react-helmet";
 
 const OrderDetails = props => {
 	const {tran_id} = useParams();
@@ -35,6 +36,10 @@ const OrderDetails = props => {
 
 	return (
 		<main className="main bg-gray">
+			<Helmet>
+				<title>Order Details</title>
+			</Helmet>
+
 			<div className="page-content">
 				<Breadcrumb
 					current={'Order details'}
