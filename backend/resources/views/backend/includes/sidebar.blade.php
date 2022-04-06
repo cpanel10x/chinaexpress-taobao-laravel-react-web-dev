@@ -148,8 +148,6 @@
             </p>
           </a>
           <ul class="nav nav-treeview">
-
-
             <li class="nav-item">
               <a href="{{ route('admin.front-setting.topNotice.create') }}"
                 class="nav-link {{ active_class(Route::is('admin.front-setting.topNotice.*')) }}">
@@ -231,6 +229,13 @@
                 class="nav-link {{ active_class(Route::is('admin.setting.limit*')) }}">
                 <i class="fa fa-circle nav-icon"></i>
                 <p> Order Limitation </p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="{{ route('admin.setting.message') }}"
+                class="nav-link {{ active_class(Route::is('admin.setting.message*')) }}">
+                <i class="fa fa-circle nav-icon"></i>
+                <p> Block Words </p>
               </a>
             </li>
             <li class="nav-item">

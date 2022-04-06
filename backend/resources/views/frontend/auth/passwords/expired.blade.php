@@ -4,94 +4,84 @@
 
 @section('content')
 
-<div class="main_content">
-  <div class="login_register_wrap section">
-    <div class="container">
-      <div class="row justify-content-center">
-
-        
-      </div> <!-- row -->
-    </div> <!-- container -->
-  </div> <!-- login_register_wrap -->
-</div> <!-- main_content -->
 
 
 
-<div class="row justify-content-center align-items-center">
-  <div class="col col-sm-6 align-self-center">
-    <div class="card">
-      <div class="card-header">
-        <strong>
-          @lang('labels.frontend.passwords.expired_password_box_title')
-        </strong>
-      </div>
-      <!--card-header-->
+<div class="container">
+  <div class="align-items-center justify-content-center row" style="height: 85vh;">
+    <div class=" col-md-6 col-lg-5">
+      <div class="card">
+        <div class="card-body">
+          <h3 class="my-4 text-center">@lang('labels.frontend.passwords.expired_password_box_title')</h3>
 
-      <div class="card-body">
-        {{ html()->form('PATCH', route('frontend.auth.password.expired.update'))->class('form-horizontal')->open() }}
+          {{ html()->form('PATCH', route('frontend.auth.password.expired.update'))->class('form-horizontal')->open() }}
 
-        <div class="row">
-          <div class="col">
-            <div class="form-group">
-              {{ html()->label(__('validation.attributes.frontend.old_password'))->for('old_password') }}
+          <div class="row">
+            <div class="col">
+              <div class="form-group">
+                {{ html()->label(__('validation.attributes.frontend.old_password'))->for('old_password') }}
 
-              {{ html()->password('old_password')
-                                        ->class('form-control')
-                                        ->placeholder(__('validation.attributes.frontend.old_password'))
-                                        ->required() }}
+                {{ html()->password('old_password')
+                ->class('form-control')
+                ->placeholder(__('validation.attributes.frontend.old_password'))
+                ->required() }}
+              </div>
+              <!--form-group-->
             </div>
-            <!--form-group-->
+            <!--col-->
           </div>
-          <!--col-->
-        </div>
-        <!--row-->
+          <!--row-->
 
-        <div class="row">
-          <div class="col">
-            <div class="form-group">
-              {{ html()->label(__('validation.attributes.frontend.password'))->for('password') }}
+          <div class="row">
+            <div class="col">
+              <div class="form-group">
+                {{ html()->label(__('validation.attributes.frontend.password'))->for('password') }}
 
-              {{ html()->password('password')
-                                        ->class('form-control')
-                                        ->placeholder(__('validation.attributes.frontend.password'))
-                                        ->required() }}
+                {{ html()->password('password')
+                ->class('form-control')
+                ->placeholder(__('validation.attributes.frontend.password'))
+                ->required() }}
+              </div>
+              <!--form-group-->
             </div>
-            <!--form-group-->
+            <!--col-->
           </div>
-          <!--col-->
-        </div>
-        <!--row-->
+          <!--row-->
 
-        <div class="row">
-          <div class="col">
-            <div class="form-group">
-              {{ html()->label(__('validation.attributes.frontend.password_confirmation'))->for('password_confirmation') }}
+          <div class="row">
+            <div class="col">
+              <div class="form-group">
+                {{
+                html()->label(__('validation.attributes.frontend.password_confirmation'))->for('password_confirmation')
+                }}
 
-              {{ html()->password('password_confirmation')
-                                        ->class('form-control')
-                                        ->placeholder(__('validation.attributes.frontend.password_confirmation'))
-                                        ->required() }}
+                {{ html()->password('password_confirmation')
+                ->class('form-control')
+                ->placeholder(__('validation.attributes.frontend.password_confirmation'))
+                ->required() }}
+              </div>
+              <!--form-group-->
             </div>
-            <!--form-group-->
+            <!--col-->
           </div>
-          <!--col-->
-        </div>
-        <!--row-->
+          <!--row-->
 
-        <div class="row">
-          <div class="col">
-            <div class="form-group mb-0 clearfix">
-              {{ form_submit(__('labels.frontend.passwords.update_password_button'),'btn btn-fill-out') }}
+          <div class="row">
+            <div class="col">
+              <div class="form-group mb-0 clearfix">
+                {{ form_submit(__('labels.frontend.passwords.update_password_button'),'btn btn-fill-out') }}
+              </div>
+              <!--form-group-->
             </div>
-            <!--form-group-->
+            <!--col-->
           </div>
-          <!--col-->
-        </div>
-        <!--row-->
+          <!--row-->
 
-        {{ html()->form()->close() }}
-      </div><!-- card-body -->
-    </div><!-- card -->
-  </div><!-- col-6 -->
-</div><!-- row -->
+          {{ html()->form()->close() }}
+        </div><!-- card-body -->
+      </div><!-- card -->
+
+    </div> <!-- col-6 -->
+  </div> <!-- row -->
+</div>
 @endsection

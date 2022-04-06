@@ -48,11 +48,12 @@ class AuthController extends Controller
       $txt = "Your {$appUrl} One Time Password(OTP) is {$otp} Validity for OTP is 3 minutes. Helpline 01515234363";
     }
     if ($user->phone) {
-      return send_ware_SMS($txt, $user->phone);
+      $sms = send_ware_SMS($txt, $user->phone);
     }
     if ($user->email) {
       $user->notify(new OTPMail($txt));
     }
+    return true;
   }
 
 

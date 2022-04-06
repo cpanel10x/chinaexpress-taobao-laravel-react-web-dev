@@ -58,6 +58,7 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function () {
 
   // searching products api
   Route::post('/search', [CatalogController::class, 'getSearchResult']);
+  Route::post('/search/suggestion', [CatalogController::class, 'searchSuggestion']);
   Route::post('/search-process', [CatalogController::class, 'searchProcess']);
   Route::post('/get-picture-result/{search_id}', [CatalogController::class, 'getPictureSearchResult']);
   Route::post('/search-picture', [CatalogController::class, 'searchPicture']);

@@ -3,10 +3,12 @@ import {withRouter} from "react-router";
 import {useQuery} from "../../utils/customHooks";
 import {useSearchPictureUpload} from "../../api/ProductApi";
 import swal from "sweetalert";
+import SearchSuggestion from "./SearchSuggestion";
 
 const MobileSearchForm = props => {
 	const query = useQuery();
 	const keyword = query.get("keyword");
+	const [showSuggestion, setShowSuggestion] = useState(false);
 
 	const {mutateAsync, isLoading} = useSearchPictureUpload();
 
@@ -42,6 +44,14 @@ const MobileSearchForm = props => {
 		}
 	};
 
+	const searchQueryInput = (event) => {
+		const inputValue = event.target.value;
+		setSearch(inputValue);
+		if (inputValue.length > 2) {
+			setShowSuggestion(true);
+		}
+	};
+
 	return (
 		<div className="container d-block">
 			<input
@@ -53,15 +63,16 @@ const MobileSearchForm = props => {
 				accept="image/*"
 			/>
 
-			<form onSubmit={e => submitTextSearch(e)} method="get">
+			<form onSubmit={e => submitTextSearch(e)} method="get" autoComplete={'off'}>
 				<div className="input-group">
 					<input
 						type="text"
 						id="search"
 						value={search || ""}
-						onChange={e => setSearch(e.target.value)}
+						onChange={event => searchQueryInput(event)}
 						placeholder="Search million products by keyword or image"
 						className="form-control"
+						autoComplete={'off'}
 					/>
 					<div className="input-group-append">
 						<label
@@ -76,6 +87,10 @@ const MobileSearchForm = props => {
 					</div>
 				</div>
 			</form>
+			{
+				showSuggestion === true &&
+				<SearchSuggestion search={search} setShowSuggestion={setShowSuggestion}/>
+			}
 		</div>
 	);
 };

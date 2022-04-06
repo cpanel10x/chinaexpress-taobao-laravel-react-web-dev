@@ -6,8 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="csrf-token" content="{{ csrf_token() }}">
   @php
-    $metaTitle = get_setting('meta_title',"taobao.com products selling website ");
-    $metaDescription = get_setting('meta_description',"This app developed by sumon4skf@gmail.com");
+  $metaTitle = get_setting('meta_title',"taobao.com products selling website ");
+  $metaDescription = get_setting('meta_description',"This app developed by sumon4skf@gmail.com");
   @endphp
   <title>@yield('title', $metaTitle)</title>
   <meta name="description" content="@yield('meta_description', $metaDescription)">
@@ -37,27 +37,28 @@
 
 <body class="loginPageBody">
 
-@include('includes.partials.fb-chat')
+  @include('includes.partials.fb-chat')
 
-@include('includes.partials.read-only')
-@include('includes.partials.logged-in-as')
+  @include('includes.partials.read-only')
 
-{{-- @include('frontend.includes.nav') --}}
+  @include('includes.partials.logged-in-as')
 
-@include('includes.partials.messages')
+  @include('frontend.includes.nav')
 
-<main>
-  @yield('content')
-</main>
+  @include('includes.partials.messages')
+
+  <main>
+    @yield('content')
+  </main>
 
 
-@stack('before-scripts')
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
-        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
-</script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous">
-</script>
+  @stack('before-scripts')
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous">
+  </script>
 
 
 </body>

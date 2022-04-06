@@ -4,7 +4,7 @@ import CategorySidebar from "./includes/CategorySidebar";
 import {goPageTop} from "../../utils/Helpers";
 import SubCategory from "./includes/SubCategory";
 import {useAllCategories} from "../../api/GeneralApi";
-import Defaul404 from "../404/Defaul404";
+import My404Component from "../404/My404Component";
 
 const LoadCategory = (props) => {
 
@@ -23,7 +23,7 @@ const LoadCategory = (props) => {
 	const siblings = categories?.filter(filter => filter.ParentId === category.ParentId) || [];
 
 	if (!category?.id) {
-		return <Defaul404/>;
+		return <My404Component/>;
 	}
 
 	return (

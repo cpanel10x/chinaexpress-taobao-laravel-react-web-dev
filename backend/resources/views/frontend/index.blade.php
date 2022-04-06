@@ -1,104 +1,55 @@
-<!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" @langrtl dir="rtl" @endlangrtl>
+@extends('frontend.layouts.app')
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="csrf-token" content="{{ csrf_token() }}">
-  @php
-  $metaTitle = get_setting('meta_title',"taobao.com products selling website ");
-  $metaDescription = get_setting('meta_description',"This app developed by avanteca");
-  @endphp
-  <title>@yield('title', $metaTitle)</title>
-  <meta name="description" content="@yield('meta_description', $metaDescription)">
-  <meta name="author" content="@yield('meta_author', 'Avanteca Ltd. Phone-01678077023')">
-
-  @if(config('analytics.facebook-chat') === true)
-  <meta property="fb:pages" content="{{env('FACEBOOK_PAGE_ID', '')}}" />
-  @endif
-  <meta property="fb:app_id" content="" />
-  <meta property="og:local" content="{{ str_replace('_', '-', app()->getLocale()) }}">
-  <meta property="og:type" content="article">
-  <meta property="og:url" content="{{url()->full()}}">
-  <meta property="og:title" content="@yield('meta_title')">
-  <meta property="og:description" content="@yield('meta_description')">
-  <meta property="og:image" content="@yield('meta_image')">
-
-  <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('img/brand/apple-touch-icon.png')}}">
-  <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('img/brand/favicon-32x32.png')}}">
-  <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('img/brand/favicon-16x16.png')}}">
-  <link rel="manifest" href="{{ asset('img/brand/site.webmanifest')}}">
+@section('title', '...')
 
 
-  @yield('meta')
+@section('content')
+<div class="container">
+  <div class="align-items-center justify-content-center row" style="height: 85vh;">
+    <div class=" col-md-6 col-lg-5">
+      <div class="card">
+        <div class="card-body">
 
-  @stack('before-styles')
-  <!-- Google Font -->
-  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900&amp;display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900&amp;display=swap"
-    rel="stylesheet">
+          <h2 class="my-4 text-center">Login</h2>
 
-  <link href="{{ asset('assets/plugins/fontello/css/fontello.css') }}" rel="stylesheet">
+          @include('frontend.auth.includes.socialite')
 
-  {{--
-  <link href="{{ asset('/frontend/css/icons.css') }}" rel="stylesheet">--}}
-  {{--
-  <link href="{{ asset('/frontend/fontIcon/css/fontIcon.css') }}" rel="stylesheet">--}}
+          <div class="loginWithEmail">
+            {{ html()->form('POST', route('frontend.auth.login.post'))->open() }}
+            <div class="form-group">
+              {{html()->label('Email Address')->for('email')}}
+              {{ html()->email('email')
+              ->class('form-control')
+              ->placeholder(__('validation.attributes.frontend.email'))
+              ->attributes(['maxlength'=> 191, 'autocomplete' => 'email'])
+              ->required() }}
+            </div>
+            <div class="form-group">
+              {{html()->label('Password')->for('password')}}
+              {{ html()->password('password')
+              ->class('form-control')
+              ->placeholder(__('validation.attributes.frontend.password'))
+              ->attributes(['maxlength'=> 191, 'autocomplete' => 'password'])
+              ->required() }}
+            </div>
+            <div class="login_footer form-group">
+              {{html()->checkbox('remember')->value(1)->checked(true)}}
+              {{html()->label('Remember me')->for('remember')}}
+            </div>
+            <div class="form-group">
+              <button type="submit" class="btn btn-secondary btn-block" name="login">Login
+              </button>
+            </div>
+            {{ html()->form()->close() }}
+          </div>
 
-  @stack('middle-styles')
-
-  <link rel="stylesheet" href="/css/bootstrap.min.css">
-  {{--
-  <link rel="stylesheet" href="/frontend/css/bootstrap.min.css"> --}}
-  <link rel="stylesheet" href="/frontend/css/skins/skin-demo-26.css">
-  <link rel="stylesheet" href="/frontend/css/demo-13-minimize.css">
-  <link rel="stylesheet" href="/frontend/css/demos/demo-26.css">
-
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretty-checkbox@3.0/dist/pretty-checkbox.min.css">
-
-
-  <link href="{{ mix('css/app.css') }}" rel="stylesheet">
-
-  @stack('after-styles')
-</head>
-
-<body>
-
-  @include('includes.partials.fb-chat')
-
-  @include('includes.partials.read-only')
-  @include('includes.partials.logged-in-as')
-
-  {{-- @include('frontend.includes.nav') --}}
-
-  @include('includes.partials.messages')
-
-
-  <div id="app">
-    {{-- react component will append here --}}
+          <div class="form-note text-center">
+            <a href="{{ route('frontend.auth.password.reset') }}">@lang('labels.frontend.passwords.forgot_password')</a>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
+</div>
 
-
-  {{-- @include('frontend.includes.footer') --}}
-
-  {{-- @include('includes.partials.profile-update-alert') --}}
-
-  @stack('before-scripts')
-  <script src="{{ asset('js/manifest.js') }}"></script>
-  <script src="{{ asset('js/vendor.js') }}"></script>
-  <script src="{{ asset('js/frontend.js') }}"></script>
-
-  {{script('assets/js/plugins/jquery.hoverIntent.min.js')}}
-  {{script('assets/js/plugins/jquery.waypoints.min.js')}}
-  {{script('assets/js/plugins/superfish.min.js')}}
-  {{script('assets/js/plugins/bootstrap-input-spinner.js')}}
-  {{script('assets/js/plugins/jquery.plugin.min.js')}}
-  {{script('assets/js/plugins/main.js')}}
-
-
-  @stack('after-scripts')
-
-
-</body>
-
-</html>
+@endsection

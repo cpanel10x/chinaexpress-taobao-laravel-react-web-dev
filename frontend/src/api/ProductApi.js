@@ -117,6 +117,15 @@ export const useSearchKeyword = (keyword, page = 1) => useQuery(["search", keywo
 });
 
 
+export const useSearchSuggestion = (keyword) => useQuery(["SearchSuggestion", keyword], async () => {
+   try {
+      const {data} = await instance.post(`search/suggestion`, {keyword});
+      return data?.suggestion ? data?.suggestion : [];
+   } catch (error) {
+      throw Error(error.response.statusText);
+   }
+});
+
 export const useSearchPictureUpload = () => useMutation(["search-picture"], async (props) => {
    try {
       const {data} = await instance.post(`search-picture`, props);

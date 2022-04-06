@@ -2,7 +2,7 @@ import React from 'react';
 import {Link} from "react-router-dom";
 import Breadcrumb from "../breadcrumb/Breadcrumb";
 
-const My404Component = () => {
+const TaobaoProduct404 = () => {
 
    return (
       <main className="main">
@@ -11,8 +11,8 @@ const My404Component = () => {
                <div className="card-body">
                   <div className="error-content text-center">
                      <img src={`/assets/img/404.jpg`} className="img-fluid mx-auto" alt="404"/>
-                     <h1 className="error-title">Page not found</h1>
-                     <p>We are sorry, the page you've requested is not available.</p>
+                     <h1 className="error-title">Product not found. </h1>
+                     <p>We are sorry, the product you've requested is not available.</p>
                      <Link
                         to={'/'}
                         className="btn btn-default px-3"
@@ -29,4 +29,4 @@ const My404Component = () => {
    );
 };
 
-export default My404Component;
+export default TaobaoProduct404;

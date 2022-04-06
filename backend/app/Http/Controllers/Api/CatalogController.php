@@ -105,10 +105,34 @@ class CatalogController extends Controller
     $products = null;
     if ($keyword) {
       $products = get_category_browsing_items($keyword, 'text', $offset, $limit);
+      if (!empty($products)) {
+        SearchLog::updateOrInsert(
+          ['query_data' => $keyword, 'user_id' => auth('sanctum')->check() ? auth('sanctum')->id() : null],
+          ['search_id' => Str::random(30), 'search_type' => 'text', 'created_at' => now(), 'updated_at' => now()],
+        );
+      }
     }
 
     return response([
       'products' => json_encode($products)
+    ]);
+  }
+
+  public function searchSuggestion()
+  {
+    $keyword = request('keyword');
+
+    $suggestion = SearchLog::where('search_type', 'text')
+      ->where('query_data', 'like', "%{$keyword}%")
+      ->select('query_data')
+      ->latest();
+    if (auth('sanctum')->check()) {
+      $suggestion = $suggestion->where('user_id', auth('sanctum')->id());
+    }
+    $suggestion = $suggestion->get();
+
+    return response([
+      'suggestion' => $suggestion
     ]);
   }
 

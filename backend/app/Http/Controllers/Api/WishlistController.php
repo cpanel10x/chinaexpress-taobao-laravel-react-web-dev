@@ -20,14 +20,21 @@ class WishlistController extends Controller
     $wishlists = [];
     if ($product && $auth_id) {
       $rate = get_setting('increase_rate', 20);
-
       $img = getArrayKeyData($product, 'img');
+      $img =  $img ? $img : getArrayKeyData($product, 'MainPictureUrl');
+
       $name = getArrayKeyData($product, 'name');
+      $name = $name ? $name : getArrayKeyData($product, 'Title');
+
       $product_code = getArrayKeyData($product, 'product_code');
+      $product_code = $product_code ? $product_code : getArrayKeyData($product, 'ItemId');
+
       $rating = getArrayKeyData($product, 'rating');
       $regular_price = getArrayKeyData($product, 'regular_price');
       $sale_price = getArrayKeyData($product, 'sale_price');
+
       $stock = getArrayKeyData($product, 'stock');
+      $stock = $stock ? $stock : getArrayKeyData($product, 'MasterQuantity');
       $total_sold = getArrayKeyData($product, 'total_sold');
 
       $NewPrice = get_product_regular_price($product, $rate);

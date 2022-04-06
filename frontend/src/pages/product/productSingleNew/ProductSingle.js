@@ -3,13 +3,13 @@ import {withRouter, useParams} from "react-router-dom";
 import ProductBody from "./productBody/ProductBody";
 import ProductDetailsTab from "./includes/ProductDetailsTab";
 import RelatedProduct from "../reletedProduct/RelatedProduct";
-import My404Component from "../../404/My404Component";
 import {goPageTop} from "../../../utils/Helpers";
 import ProductDetailsSkeleton from "../../../skeleton/productSkeleton/ProductDetailsSkeleton";
 import {useMediaQuery} from "react-responsive";
 import {useTabobaoProduct} from "../../../api/ProductApi";
 import RecentViewProduct from "../reletedProduct/RecentViewProduct";
 import {useSettings} from "../../../api/GeneralApi";
+import TaobaoProduct404 from "../../404/TaobaoProduct404";
 
 const ProductSingle = props => {
 	const {item_id} = useParams();
@@ -35,11 +35,7 @@ const ProductSingle = props => {
 	}
 
 	if (!product?.Id) {
-		return <My404Component/>;
-	}
-
-	if (!product?.Id) {
-		return <My404Component/>;
+		return <TaobaoProduct404/>;
 	}
 
 	return (

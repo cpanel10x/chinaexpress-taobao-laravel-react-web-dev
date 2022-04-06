@@ -65,7 +65,6 @@ const ForgotForm = (props) => {
 					<div className="countryPhoneInput">
             <span className="country_logo"
                   style={{backgroundImage: "url('/img/bangladesh.svg')"}}/>
-
 						<input
 							name="phone"
 							id="phone"

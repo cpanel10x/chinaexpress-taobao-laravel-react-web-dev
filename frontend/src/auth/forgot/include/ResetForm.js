@@ -49,7 +49,7 @@ const ResetForm = (props) => {
 		<div>
 			<h1 className="text-center font-weight-bold">Reset Password</h1>
 
-			<form onSubmit={(event) => resetCustomerPassword(event)}>
+			<form onSubmit={(event) => resetCustomerPassword(event)} autoComplete="off">
 
 				<div className="form-group">
 					<label htmlFor="otp_code"> OTP <span className="text-danger"> * </span> </label>
@@ -57,20 +57,20 @@ const ResetForm = (props) => {
 						type="text"
 						className="form-control"
 						id="otp_code"
-						value={otp}
+						value={otp || ''}
 						onChange={(e) => setOtp(e.target.value)}
 						minLength={4}
 						maxLength={4}
 						size="4"
-						autoComplete="off"
 						placeholder="OTP"
 						required={true}
+						autoComplete="off"
 					/>
 					{
 						otpError ?
 							<p className="small m-0 text-danger">{otpError}</p>
 							:
-							<p className="small m-0">We just sent you a SMS with an OTP.</p>
+							<p className="small m-0">We just sent you a SMS and email with an OTP.</p>
 					}
 				</div>
 
