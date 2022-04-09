@@ -10,6 +10,7 @@
       <div class="card">
         <div class="card-body">
 
+          @guest
           <h2 class="my-4 text-center">Login</h2>
 
           @include('frontend.auth.includes.socialite')
@@ -46,6 +47,12 @@
           <div class="form-note text-center">
             <a href="{{ route('frontend.auth.password.reset') }}">@lang('labels.frontend.passwords.forgot_password')</a>
           </div>
+
+          @else
+
+          <h2 class="my-4 text-center">You are logedIn...</h2>
+          @endguest
+
         </div>
       </div>
     </div>

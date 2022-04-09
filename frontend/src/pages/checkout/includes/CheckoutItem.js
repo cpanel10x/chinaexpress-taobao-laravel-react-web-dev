@@ -72,8 +72,9 @@ const CheckoutItem = (props) => {
 											</Link>
 											<div className="row">
 												<div className="col-12">
-													<p className="my-1 small">Weight: <strong>{approxWeight(variation.qty, product)} Kg.</strong> <span
-														className="ml-2">Shipping Rate: <strong>{currency + ' ' + shippingRate}</strong> per Kg.</span>
+													<p className="mb-0 mr-1 small">Weight: <strong>{approxWeight(variation.qty, product)} Kg.</strong>
+														{isMobile && <br/>}
+														<span>Shipping Rate: <strong>{currency + ' ' + shippingRate}</strong> per Kg.</span>
 													</p>
 												</div>
 											</div>
@@ -87,7 +88,7 @@ const CheckoutItem = (props) => {
 											}
 											<div className="row d-lg-none">
 												<div className="col-12">
-													<p className="m-0"><strong>{` ${currency + ' ' + variation.price} `}</strong></p>
+													<p className="m-0 small">Per unit price: <strong>{` ${currency + ' ' + variation.price} `}</strong></p>
 												</div>
 											</div>
 

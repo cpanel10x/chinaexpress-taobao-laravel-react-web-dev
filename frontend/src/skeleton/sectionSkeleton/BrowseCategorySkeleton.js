@@ -15,7 +15,7 @@ const BrowseCategorySkeleton = props => {
         <ul
             className="menu-vertical text-center"
         >
-          <Skeleton height={30} count={12} width={`100%`} className="px-2 mx-auto"/>
+          <Skeleton height={24} count={12} width={`100%`} className="px-2 mx-auto"/>
         </ul>
       </nav>
   );

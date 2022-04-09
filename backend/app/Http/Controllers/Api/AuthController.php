@@ -140,6 +140,11 @@ class AuthController extends Controller
     $user = $email ? User::where('email', $email)->where('otp_code', $otp_code)->first() : $user;
 
     if ($user) {
+      if ($user->email) {
+        $user->update([
+          'email_verified_at' => now()
+        ]);
+      }
       $data['token'] =  $user->createToken('ChinaExpress')->plainTextToken;
       $data['user'] =  $user;
       return response($data);

@@ -7,10 +7,10 @@ const TaobaoProduct404 = () => {
    return (
       <main className="main">
          <div className="container">
-            <div className="card my-5 py-5">
+            <div className="card my-5">
                <div className="card-body">
                   <div className="error-content text-center">
-                     <img src={`/assets/img/404.jpg`} className="img-fluid mx-auto" alt="404"/>
+                     <img src={`/assets/img/404.jpg`} className="img-fluid mx-auto" alt="404" style={{maxWidth:'15rem'}}/>
                      <h1 className="error-title">Product not found. </h1>
                      <p>We are sorry, the product you've requested is not available.</p>
                      <Link

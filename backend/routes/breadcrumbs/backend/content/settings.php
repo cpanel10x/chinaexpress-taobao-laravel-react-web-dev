@@ -26,6 +26,10 @@ Breadcrumbs::for('admin.setting.limit', function ($trail) {
   $trail->push('Order Limitation Settings', route('admin.setting.limit'));
 });
 
+Breadcrumbs::for('admin.setting.block-words', function ($trail) {
+  $trail->push('Block Words Settings', route('admin.setting.block-words'));
+});
+
 Breadcrumbs::for('admin.setting.message', function ($trail) {
   $trail->push('Customer Message Settings', route('admin.setting.message'));
 });

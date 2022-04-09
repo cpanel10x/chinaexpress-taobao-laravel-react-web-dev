@@ -103,9 +103,7 @@ const CheckoutSidebar = (props) => {
 						</table>
 
 					</div>
-
 				</div>
-
 
 				<div className="summary summary-cart">
 					<a

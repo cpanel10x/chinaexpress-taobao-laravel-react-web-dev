@@ -24,10 +24,6 @@
             @can('view backend')
             <a href="{{route('admin.dashboard')}}" class="dropdown-item text-dark">{{__('Administration')}}</a>
             @endcan
-            <a href="{{route('frontend.user.dashboard')}}" class="dropdown-item text-dark">{{__('Dashboard')}}</a>
-            <a class="dropdown-item text-dark" href="{{route('frontend.user.dashboard', ['tab' => 'orders'])}}">{{__('My
-              Orders')}}</a>
-            <a href="{{route('frontend.user.account')}}" class="dropdown-item text-dark">{{__('My Account')}}</a>
             <a href="{{ route('frontend.auth.logout') }}"
               class="dropdown-item text-dark">@lang('navs.general.logout')</a>
           </div>

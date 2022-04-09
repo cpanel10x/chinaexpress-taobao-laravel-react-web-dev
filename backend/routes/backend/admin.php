@@ -82,6 +82,8 @@ Route::namespace('Content')->group(function () {
   Route::group(['prefix' => 'setting', 'as' => 'setting.'], function () {
     Route::get('price', [SettingController::class, 'price'])->name('price');
     Route::get('limit', [SettingController::class, 'limit'])->name('limit');
+    Route::get('block-words', [SettingController::class, 'blockWords'])->name('block-words');
+    Route::post('block-words-store', [SettingController::class, 'blockWordStore'])->name('block-words-store');
     Route::post('limitationStore', [SettingController::class, 'limitationStore'])->name('limitationStore');
 
     Route::get('message', [SettingController::class, 'message'])->name('message');
@@ -89,6 +91,11 @@ Route::namespace('Content')->group(function () {
 
 
     Route::post('airShippingStore', [SettingController::class, 'airShippingStore'])->name('airShippingStore');
+
+    Route::post('popup-message', [SettingController::class, 'popupMessageStore'])->name('popup-message');
+    Route::post('popup-message-aliexpress', [SettingController::class, 'popupMessageAliexpressStore'])->name('popup-message-aliexpress');
+    Route::post('aliexpress-express-button', [SettingController::class, 'aliexpress_express_popup_message'])->name('aliexpress-express-button');
+
     Route::post('logo-store', [SettingController::class, 'logoStore'])->name('logoStore');
     Route::post('social-store', [SettingController::class, 'socialStore'])->name('socialStore');
     Route::get('general', [SettingController::class, 'general'])->name('general');

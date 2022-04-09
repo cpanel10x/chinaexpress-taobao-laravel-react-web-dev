@@ -51,13 +51,15 @@ trait CartOperation
 
     if ($cart->count() > 1) {
       foreach ($cart as $item) {
-        CartItem::where('cart_id', $item->id)->update([
-          'cart_id' => $first->id,
-        ]);
-        CartItemVariation::where('cart_id', $item->id)->update([
-          'cart_id' => $first->id,
-        ]);
-        $item->update(['is_purchase' => 1]);
+        if ($first->id !== $item->id) {
+          CartItem::where('cart_id', $item->id)->update([
+            'cart_id' => $first->id,
+          ]);
+          CartItemVariation::where('cart_id', $item->id)->update([
+            'cart_id' => $first->id,
+          ]);
+          $item->update(['is_purchase' => 1]);
+        }
       }
     }
 
@@ -78,6 +80,14 @@ trait CartOperation
         'shipping' => $shipping,
         'user_id' => $auth_id
       ]);
+    }
+    if ($cart) {
+      if (!$cart->cart_uid || $cart->cart_uid == 'null') {
+        $cart_random_uid = Str::random(60);
+        $cart->update([
+          'cart_uid' => $cart_random_uid
+        ]);
+      }
     }
 
     return $cart;
@@ -168,6 +178,22 @@ trait CartOperation
     }
     return $this->get_customer_cart();
   }
+
+  public function read_popup_message()
+  {
+    $item_id = request('item_id');
+    $cart = $this->get_customer_cart();
+    if (!$cart) {
+      return [];
+    }
+    if ($item_id) {
+      CartItem::where('cart_id', $cart->id)
+        ->where('ItemId', $item_id)
+        ->update(['is_popup_shown' => 1]);
+    }
+    return $this->get_customer_cart();
+  }
+
 
   public function toggle_cart_checkbox()
   {

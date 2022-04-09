@@ -19,3 +19,6 @@ ADD COLUMN `recent_view_token` VARCHAR(191) NULL AFTER `user_id`;
 
 ALTER TABLE `chinaexpress_web`.`users` 
 ADD COLUMN `payment_token` VARCHAR(191) NULL AFTER `api_token`;
+
+ALTER TABLE `chinaexpress_web`.`cart_items` 
+ADD COLUMN `is_popup_shown` TINYINT(1) NULL AFTER `status`;

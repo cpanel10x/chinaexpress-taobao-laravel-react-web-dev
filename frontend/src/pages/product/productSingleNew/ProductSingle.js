@@ -23,7 +23,6 @@ const ProductSingle = props => {
 
 	const isMobile = useMediaQuery({query: '(max-width: 991px)'});
 
-
 	const cartConfigured = {};
 
 	useEffect(() => {

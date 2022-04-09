@@ -13,8 +13,8 @@ return [
 
   'SSLCOMMERZ_LIVE' => env('SSLCOMMERZ_LIVE', 'FALSE'),
 
-  'ISMS_API_TOKEN' => env('ISMS_API_TOKEN', 'CHINABAZAR-3560a951-753c-4cdc-a957-ed49ed42ab4e'),
-  'ISMS_SID' => env('ISMS_SID', 'CBAZARBRAND'),
+  'ISMS_API_TOKEN' => env('ISMS_API_TOKEN', ''),
+  'ISMS_SID' => env('ISMS_SID', ''),
 
   /*
     |--------------------------------------------------------------------------

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend\Content;
 
 use App\Http\Controllers\Controller;
+use App\Models\Backend\BlockWords;
 use App\Models\Content\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -67,6 +68,25 @@ class SettingController extends Controller
   public function limit()
   {
     return view('backend.content.settings.order-limit-setting');
+  }
+
+  public function blockWords()
+  {
+    return view('backend.content.settings.blockWords');
+  }
+
+  public function blockWordStore()
+  {
+    $data = request()->validate([
+      'word' => 'required|string|max:255',
+      'sentence' => 'nullable|string|max:1800',
+    ]);
+
+    $data['user_id'] = auth()->id();
+
+    BlockWords::create($data);
+
+    return redirect()->back()->withFlashSuccess('Word stored Successfully');
   }
 
 
@@ -137,6 +157,42 @@ class SettingController extends Controller
     Cache::forget('settings'); // remove setting cache
 
     return redirect()->back()->withFlashSuccess('Shipping Charges Updated Successfully');
+  }
+
+  public function popupMessageStore()
+  {
+    $data = request()->only('popup_message', 'popup_option');
+    if (\request()->hasFile('popup_image')) {
+      $data['popup_image'] = store_picture(\request()->file('popup_image'), 'setting');
+    }
+    Setting::save_settings(['cart_popup_message' => json_encode($data)]);
+    Cache::forget('settings'); // remove setting cache
+
+    return redirect()->back()->withFlashSuccess('Taoabo product popup messages add successfully Updated Successfully');
+  }
+
+  public function popupMessageAliexpressStore()
+  {
+    $data = request()->only('popup_message', 'popup_option');
+    if (\request()->hasFile('popup_image')) {
+      $data['popup_image'] = store_picture(\request()->file('popup_image'), 'setting');
+    }
+    Setting::save_settings(['cart_aliexpress_popup_message' => json_encode($data)]);
+    Cache::forget('settings'); // remove setting cache
+
+    return redirect()->back()->withFlashSuccess('AliExpress Product popup messages add successfully Updated Successfully');
+  }
+
+  public function aliexpress_express_popup_message()
+  {
+    $data = request()->only('popup_message', 'popup_option');
+    if (\request()->hasFile('popup_image')) {
+      $data['popup_image'] = store_picture(\request()->file('popup_image'), 'setting');
+    }
+    Setting::save_settings(['aliexpress_express_popup_message' => json_encode($data)]);
+    Cache::forget('settings'); // remove setting cache
+
+    return redirect()->back()->withFlashSuccess('AliExpress product Express button popup messages add successfully Updated Successfully');
   }
 
 

@@ -18,7 +18,7 @@ class CartController extends Controller
   public function currentCart()
   {
     $cart = $this->get_customer_cart();
-    $cart_token = $this->cart_uid();
+    $cart_token = $cart->cart_uid ?? NULL;
     return response([
       'cart_token' => $cart_token,
       'cart' => $cart,
@@ -36,6 +36,12 @@ class CartController extends Controller
   {
     $cart = $this->update_cart();
     return response(['status' => true, 'msg' => 'Product add to cart successfully']);
+  }
+
+  public function readPopup()
+  {
+    $cart = $this->read_popup_message();
+    return response(['status' => true, 'cart' => $cart, 'msg' => 'Product add to cart successfully']);
   }
 
 

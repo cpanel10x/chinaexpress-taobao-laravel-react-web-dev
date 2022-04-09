@@ -48,6 +48,7 @@ class User extends BaseUser
     'confirmation_code',
     'confirmed',
     'timezone',
+    'email_verified_at',
     'last_login_at',
     'last_login_ip',
     'to_be_logged_out',

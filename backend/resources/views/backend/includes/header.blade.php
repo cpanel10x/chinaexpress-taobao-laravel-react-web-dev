@@ -4,8 +4,8 @@
     <li class="nav-item">
       <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fa fa-bars"></i></a>
     </li>
-    <li class="nav-item d-none d-sm-inline-block">
-      <a href="{{ route('frontend.index') }}" class="nav-link" target="_blank">Frontend</a>
+    <li class="nav-item">
+      <a href="{{ config('app.frontend_url') }}" class="nav-link" target="_blank">Frontend</a>
     </li>
     <li class="nav-item d-none d-sm-inline-block">
       <a class="nav-link" href="{{ route('admin.dashboard') }}">@lang('navs.frontend.dashboard')</a>
@@ -13,7 +13,7 @@
   </ul>
 
   <!-- Right navbar links -->
-  <ul class="navbar-nav ml-auto">
+  <ul class="navbar-nav ml-auto">  
     <!-- Messages Dropdown Menu -->
     <li class="nav-item dropdown">
       <a class="nav-link" data-toggle="dropdown" href="#">

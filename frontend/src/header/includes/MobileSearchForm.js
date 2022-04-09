@@ -49,6 +49,8 @@ const MobileSearchForm = props => {
 		setSearch(inputValue);
 		if (inputValue.length > 2) {
 			setShowSuggestion(true);
+		}else{
+			setShowSuggestion(false);
 		}
 	};
 

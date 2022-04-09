@@ -1,6 +1,6 @@
 import React from "react";
 import {withRouter} from "react-router-dom";
-import _, {isEmpty} from "lodash";
+import {isEmpty} from "lodash";
 import ProductCart from "./ProductCart";
 import ProductListSkeleton from "../../../skeleton/productSkeleton/ProductListSkeleton";
 import My404Component from "../../404/My404Component";
@@ -18,7 +18,7 @@ const CategoryProductList = (props) => {
 	const {data: products, isLoading} = useCategoryProducts(slugKey, currentPage);
 
 
-	const Content = products?.Content ? products.Content : 0;
+	const Content = products?.Content ? products.Content : [];
 	const TotalCount = products?.TotalCount ? products.TotalCount : 0;
 
 	if (isLoading) {
@@ -31,7 +31,7 @@ const CategoryProductList = (props) => {
 		);
 	}
 
-	if (isEmpty(Content)) {
+	if (!Content?.length) {
 		return <My404Component/>;
 	}
 

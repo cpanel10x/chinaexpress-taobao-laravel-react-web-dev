@@ -232,8 +232,8 @@
               </a>
             </li>
             <li class="nav-item">
-              <a href="{{ route('admin.setting.message') }}"
-                class="nav-link {{ active_class(Route::is('admin.setting.message*')) }}">
+              <a href="{{ route('admin.setting.block-words') }}"
+                class="nav-link {{ active_class(Route::is('admin.setting.block-words*')) }}">
                 <i class="fa fa-circle nav-icon"></i>
                 <p> Block Words </p>
               </a>

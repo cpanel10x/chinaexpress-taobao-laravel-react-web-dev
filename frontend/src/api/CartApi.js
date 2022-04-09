@@ -129,6 +129,20 @@ export const useCartMutation = () => {
 		}
 	});
 
+
+	const popupMessage = useMutation("useReadPopupMessage", async (props) => {
+		try {
+			const {data} = await instance.post(`/cart/read-popup`, {token: token, ...props});
+			return data?.cart ? data.cart : {};
+		} catch (error) {
+			console.log(error);
+		}
+	}, {
+		onSuccess: (cart) => {
+			cache.setQueryData("customer_cart", cart);
+		}
+	});
+
 	return {
 		mainCart,
 		addToCart,
@@ -136,7 +150,8 @@ export const useCartMutation = () => {
 		checkedUnchecked,
 		removeCart,
 		PaymentMethod,
-		confirmOrder
+		confirmOrder,
+		popupMessage
 	}
 };
 
@@ -152,15 +167,6 @@ export const useCart = () => useQuery("customer_cart", async () => {
 });
 
 
-
-export const removeItemFromWishList = async (processData) => {
-	try {
-		const {data} = await instance.post(`/remove-wishlist`, processData);
-		return data;
-	} catch (error) {
-		throw Error(error.response.statusText);
-	}
-};
 
 
 

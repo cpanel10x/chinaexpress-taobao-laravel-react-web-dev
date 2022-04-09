@@ -119,6 +119,7 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function () {
     Route::get('/', [CartController::class, 'currentCart']);
     Route::post('/add', [CartController::class, 'addToCart']);
     Route::post('/update', [CartController::class, 'updateCustomerCart']);
+    Route::post('/read-popup', [CartController::class, 'readPopup']);
     Route::post('/shipping', [CartController::class, 'addShippingAddress'])->middleware('auth:sanctum');
     Route::post('/checkbox', [CartController::class, 'updateCartCheckbox'])->middleware('auth:sanctum');
     Route::post('/remove', [CartController::class, 'removeFromCart']);
