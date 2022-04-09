@@ -7,6 +7,7 @@ use App\Http\Controllers\Backend\Content\OrderController;
 use App\Http\Controllers\Backend\Content\ProductController;
 use App\Http\Controllers\Backend\Content\TaxonomyController;
 use App\Http\Controllers\Backend\Content\BkashApiResponseController;
+use App\Http\Controllers\Backend\Content\BlockWordController;
 
 // All route names are prefixed with 'admin.'.
 Route::redirect('/', '/admin/dashboard', 301);
@@ -80,10 +81,14 @@ Route::namespace('Content')->group(function () {
 
 
   Route::group(['prefix' => 'setting', 'as' => 'setting.'], function () {
+
+    Route::get('block-words', [BlockWordController::class, 'create'])->name('block-words');
+    Route::post('block-words/store', [BlockWordController::class, 'store'])->name('block-words.store');
+    Route::delete('block-words/delete/{id}', [BlockWordController::class, 'destroy'])->name('block-words.delete');
+
+
     Route::get('price', [SettingController::class, 'price'])->name('price');
     Route::get('limit', [SettingController::class, 'limit'])->name('limit');
-    Route::get('block-words', [SettingController::class, 'blockWords'])->name('block-words');
-    Route::post('block-words-store', [SettingController::class, 'blockWordStore'])->name('block-words-store');
     Route::post('limitationStore', [SettingController::class, 'limitationStore'])->name('limitationStore');
 
     Route::get('message', [SettingController::class, 'message'])->name('message');

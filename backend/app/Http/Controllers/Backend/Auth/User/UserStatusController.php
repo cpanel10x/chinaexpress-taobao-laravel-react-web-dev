@@ -78,6 +78,13 @@ class UserStatusController extends Controller
   {
     $this->userRepository->forceDelete($deletedUser);
 
+    return \response([
+      'status' => true,
+      'icon' => 'success',
+      'msg' => 'User Permanently deleted successfully',
+    ]);
+
+
     return redirect()->route('admin.auth.user.deleted')->withFlashSuccess(__('alerts.backend.users.deleted_permanently'));
   }
 

@@ -8,7 +8,6 @@ import QuantityInput from "./quantity/QuantityInput";
 import SocialShare from "./includes/SocialShare";
 import SellerInfo from "./includes/SellerInfo";
 import PriceCard from "./includes/PriceCard";
-import {useSettings} from "../../../../api/GeneralApi";
 import {useCartMutation} from "../../../../api/CartApi";
 import {useMediaQuery} from "react-responsive";
 import ProductWishListButton from "./wishlist/ProductWishListButton";

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Backend\BlockWords;
 use App\Models\Content\Post;
 use App\Models\Content\Product;
 use App\Models\Content\SearchLog;
@@ -99,6 +100,23 @@ class CatalogController extends Controller
   public function getSearchResult()
   {
     $keyword = request('keyword');
+
+    if ($keyword) {
+      $lowerCase = Str::lower($keyword);
+      $block = BlockWords::where('word', $lowerCase)
+        ->orWhere('sentence', 'like', "% {$keyword} %")
+        ->orWhere('sentence', 'like', "% {$keyword}%")
+        ->orWhere('sentence', 'like', "%{$keyword} %")
+        ->first();
+      if ($block) {
+        return response([
+          'block' => true,
+          'products' => json_encode(['block' => true])
+        ]);
+      }
+    }
+
+
     $page = request('page', 0);
     $limit = request('limit', 35);
     $offset = $page > 1 ? ($limit * $page) : 0;

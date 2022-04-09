@@ -70,25 +70,6 @@ class SettingController extends Controller
     return view('backend.content.settings.order-limit-setting');
   }
 
-  public function blockWords()
-  {
-    return view('backend.content.settings.blockWords');
-  }
-
-  public function blockWordStore()
-  {
-    $data = request()->validate([
-      'word' => 'required|string|max:255',
-      'sentence' => 'nullable|string|max:1800',
-    ]);
-
-    $data['user_id'] = auth()->id();
-
-    BlockWords::create($data);
-
-    return redirect()->back()->withFlashSuccess('Word stored Successfully');
-  }
-
 
   public function limitationStore()
   {

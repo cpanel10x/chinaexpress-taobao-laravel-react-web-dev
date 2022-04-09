@@ -4,11 +4,11 @@
     data-placement="top" title="@lang('buttons.backend.access.users.restore_user')">
     <i class="fa fa-recycle"></i>
   </a>
-
-  <a href="{{ route('admin.auth.user.delete-permanently', $user) }}" name="confirm_item" class="btn btn-danger"
-    data-toggle="tooltip" data-placement="top" title="@lang('buttons.backend.access.users.delete_permanently')">
-    <i class="fa fa-trash-o"></i>
-  </a>
+  <a href="{{ route('admin.auth.user.delete-permanently', $user) }}" data-method="delete"
+    data-trans-button-cancel="@lang('buttons.general.cancel')"
+    data-trans-button-confirm="@lang('buttons.general.crud.delete')"
+    data-trans-title="@lang('strings.backend.general.are_you_sure')" name="confirm_item" class="btn btn-danger"><i
+      class="fa fa-trash-o"></i></a>
 </div>
 @else
 <div class="btn-group" role="group" aria-label="@lang('labels.backend.access.users.user_actions')">

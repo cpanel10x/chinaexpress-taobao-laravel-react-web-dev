@@ -146,6 +146,12 @@ class UserController extends Controller
 
     event(new UserDeleted($user));
 
+    return \response([
+      'status' => true,
+      'icon' => 'success',
+      'msg' => 'User moved to trashed successfully',
+    ]);
+
     return redirect()->route('admin.auth.user.deleted')->withFlashSuccess(__('alerts.backend.users.deleted'));
   }
 }

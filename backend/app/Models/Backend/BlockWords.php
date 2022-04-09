@@ -2,6 +2,7 @@
 
 namespace App\Models\Backend;
 
+use App\Models\Auth\User;
 use Illuminate\Database\Eloquent\Model;
 
 class BlockWords extends Model
@@ -13,6 +14,11 @@ class BlockWords extends Model
   public $timestamps = true;
 
   protected $guarded = [];
+
+  protected $dates = [
+    'created_at',
+    'updated_at'
+  ];
 
   public function user()
   {

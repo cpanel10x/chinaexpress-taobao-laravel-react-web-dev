@@ -13,7 +13,7 @@
         <h3 class="card-title">Manage Block Words <small class="ml-2">(update information anytime)</small></h3>
       </div>
       <div class="card-body">
-        {{ html()->form('POST', route('admin.setting.block-words-store'))->open() }}
+        {{ html()->form('POST', route('admin.setting.block-words.store'))->open() }}
         <div class="form-group row">
           <div class="col-md-4">
             {{html()->label('Block Word')->for('word')}}
@@ -35,17 +35,9 @@
         {{ html()->form()->close() }}
         <hr>
 
-        <table class="table table-bordered">
-          <thead>
-            <tr>
-              <th>#ID</th>
-              <th>Word</th>
-              <th class="text-nowrap">Small Sentence</th>
-              <th class="text-nowrap">Block Count</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-        </table>
+        <div class="table-responsive-sm">
+          @livewire('backend.block-words-table')
+        </div>
 
       </div> <!--  .card-body -->
     </div> <!--  .card -->

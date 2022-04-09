@@ -6,6 +6,7 @@ import SearchProductList from "./includes/SearchProductList";
 import My404Component from "../404/My404Component";
 import {useQuery} from "../../utils/customHooks";
 import {useSearchKeyword} from "../../api/ProductApi";
+import SearchBlock from "./includes/SearchBlock";
 
 
 const LoadSearchProducts = (props) => {
@@ -19,9 +20,9 @@ const LoadSearchProducts = (props) => {
 	const offset = currentPage ? Math.ceil(currentPage * limit) : 0;
 	const {data: products, isLoading} = useSearchKeyword(keyword, currentPage);
 
-
 	const Content = products?.Content || [];
 	const TotalCount = products?.TotalCount || 1;
+	const searchBlock = products?.block || false;
 	const totalPage = Math.ceil(TotalCount / limit);
 
 	useEffect(() => {
@@ -48,7 +49,9 @@ const LoadSearchProducts = (props) => {
 		)
 	}
 
-
+	if (searchBlock === true) {
+		return <SearchBlock/>;
+	}
 
 	if (!Content?.length) {
 		return <My404Component/>;
