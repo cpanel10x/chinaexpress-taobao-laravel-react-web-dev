@@ -232,6 +232,13 @@
               </a>
             </li>
             <li class="nav-item">
+              <a href="{{ route('admin.setting.popup') }}"
+              class="nav-link {{ active_class(Route::is('admin.setting.popup*')) }}">
+                <i class="fa fa-circle nav-icon"></i>
+                <p>Popup Message Setup </p>
+              </a>
+            </li>
+            <li class="nav-item">
               <a href="{{ route('admin.setting.block-words') }}"
                 class="nav-link {{ active_class(Route::is('admin.setting.block-words*')) }}">
                 <i class="fa fa-circle nav-icon"></i>

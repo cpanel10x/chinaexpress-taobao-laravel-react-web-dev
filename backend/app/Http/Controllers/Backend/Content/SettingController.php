@@ -67,7 +67,12 @@ class SettingController extends Controller
 
   public function limit()
   {
-    return view('backend.content.settings.order-limit-setting');
+    return view('backend.content.settings.popups.limit');
+  }
+
+  public function popupMessage()
+  {
+    return view('backend.content.settings.popups.popup');
   }
 
 

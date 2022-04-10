@@ -1,11 +1,17 @@
 import React, {useEffect, useState} from 'react';
+import {Link} from "react-router-dom";
 import AliMediaPart from "./AliMediaPart";
 import AliAttributes from './AliAttributes';
 import AliShipmentInfo from "./AliShipmentInfo";
+import AliPriceCard from "./AliPriceCard";
 
 
-const AliProductBody = ({product, general}) => {
+const AliProductBody = (props) => {
+	const {isMobile, product, settings, cartConfigured} = props;
+
 	const [activeImg, setActiveImg] = useState('');
+
+	const currencyIcon = settings?.currency_icon || '৳';
 
 	const productId = product?.commonModule?.productId;
 
@@ -14,7 +20,7 @@ const AliProductBody = ({product, general}) => {
 	const feedbackRating = titleModule?.feedbackRating;
 	const formatTradeCount = titleModule?.formatTradeCount;
 
-	const imagePathList = product?.imageModule?.imagePathList;
+	const imagePathList = product?.imageModule?.imagePathList || [];
 
 	useEffect(() => {
 		let firstImage = imagePathList?.[0];
@@ -28,10 +34,81 @@ const AliProductBody = ({product, general}) => {
 	const priceModule = product?.priceModule;
 	const storeModule = product?.storeModule;
 
+
+	const FeaturedValues = product?.FeaturedValues ? product.FeaturedValues : [];
+	const TaobaoVendorId = FeaturedValues?.find(find => find.Name === 'TaobaoVendorId')?.Value;
+	const SalesInLast30Days = FeaturedValues?.find(find => find.Name === 'SalesInLast30Days')?.Value;
+	const favCount = FeaturedValues?.find(find => find.Name === 'favCount')?.Value;
+	const reviews = FeaturedValues?.find(find => find.Name === 'reviews')?.Value;
+
 	// console.log('productSKUPropertyList', productSKUPropertyList);
 
 	return (
-		<div className="card my-5">
+		<div className="product-details-top">
+
+			{/*{*/}
+			{/*	!isLoading &&*/}
+			{/*	<PopupShown settings={settings} cart={cart} product_id={product_id}/>*/}
+			{/*}*/}
+			{!isMobile && <h1 className="single-product-title">{product_title}</h1>}
+			<div className="row">
+				<div className="col-md-5">
+					<AliMediaPart
+						imagePathList={imagePathList}
+						activeImg={activeImg}
+						setActiveImg={setActiveImg}
+						product={product}
+					/>
+				</div>
+				{/* End .col-md-6 */}
+				<div className="col-md-7">
+
+					{isMobile && <h1 className="single-product-title">{product_title}</h1>}
+
+					<AliPriceCard product={product} settings={settings}/>
+					<p className="mb-0"><b>{favCount}</b> Favorite with <b>{reviews}</b> positive feedback </p>
+					{
+						SalesInLast30Days &&
+						<p>Sales In Last 30 Days - <b>{SalesInLast30Days}</b></p>
+					}
+					<div className="product-details">
+						{/*<LoadAttributes*/}
+						{/*	setActiveImg={setActiveImg}*/}
+						{/*	cartStore={cartStore}*/}
+						{/*	setCartStore={setCartStore}*/}
+						{/*	product={product}*/}
+						{/*/>*/}
+						{/*<QuantityInput cart={cart} product={product} settings={settings} activeConfiguredItems={activeConfiguredItems}/>*/}
+						{/*<ProductSummary*/}
+						{/*	cart={cart}*/}
+						{/*	product={product}*/}
+						{/*	settings={settings}*/}
+						{/*/>*/}
+						<div className="row">
+							<div className="col pr-1">
+								<Link to={"/checkout"}
+								      className="btn btn-custom-product btn-addToCart btn-block"
+								>
+									<span className="cartIcon"><i className="icon-cart"/></span>
+									<span>Buy Now</span>
+								</Link>
+							</div>
+							<div className="col pl-1">
+								{/*<ProductWishListButton product={product}/>*/}
+							</div>
+						</div>
+
+						{/*<SellerInfo product={product}/>*/}
+
+						{/*<SocialShare product={product} settings={settings}/>*/}
+
+					</div>
+					{/* End .product-details */}
+				</div>
+				{/* End .col-md-6 */}
+			</div>
+
+
 			<div className="card-body p-5">
 				<h1 className="product-title">{product_title}</h1>
 				<div className="row">

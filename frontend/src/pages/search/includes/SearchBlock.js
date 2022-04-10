@@ -1,15 +1,8 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {Link} from "react-router-dom";
-import swal from 'sweetalert';
 
 function SearchBlock(props) {
 
-	useEffect(() => {
-		swal({
-			icon:'warning',
-			text: 'Search words are blocked, Search another'
-		})
-	},[]);
 
 	return (
 		<main className="main">

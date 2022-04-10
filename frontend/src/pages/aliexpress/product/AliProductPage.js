@@ -1,66 +1,89 @@
-import React, { useEffect } from 'react';
-import { withRouter } from "react-router-dom";
+import React, {useEffect, useRef} from 'react';
+import { useParams } from "react-router-dom";
 import { goPageTop } from "../../../utils/Helpers";
 import ProductDetailsSkeleton from "../../../skeleton/productSkeleton/ProductDetailsSkeleton";
-import { isEmpty } from "lodash";
-import My404Component from "../../404/My404Component";
 import AliProductDetailsTab from "./includes/AliProductDetailsTab";
 import AliProductBody from "./includes/AliProductBody";
 import AliRelatedProduct from "./includes/AliRelatedProduct";
+import {useMediaQuery} from "react-responsive";
+import {useAliProductDetails} from "../../../api/AliExpressProductApi";
+import {useSettings} from "../../../api/GeneralApi";
+import RecentViewProduct from "../../product/reletedProduct/RecentViewProduct";
+import AliExpressProduct404 from "../../404/AliExpressProduct404";
 
 const AliProductPage = (props) => {
-  const { match } = props;
-  const { productId } = match.params;
-  const general = {};
+  const {productId} = useParams();
+  const {data: settings} = useSettings();
+  const { data: product, isLoading } = useAliProductDetails(productId);
 
-  // const { resData, isLoading } = SwrGetRequest(
-  //   productId ? `/default/aliexpress/product/${productId}` : null
-  // );
+  const cardRef = useRef(null);
 
+  const currencyIcon = settings?.currency_icon || '৳';
 
-  const resData  = {};
-  const isLoading  = true;
+  const isMobile = useMediaQuery({query: '(max-width: 991px)'});
+
+  const cartConfigured = {};
 
   useEffect(() => {
     goPageTop();
   }, [productId]);
 
   if (isLoading) {
-    return <ProductDetailsSkeleton />;
+    return <ProductDetailsSkeleton/>;
   }
 
-  const product = resData?.data?.result;
 
-  if (isEmpty(product)) {
-    return <My404Component />;
+  if (!product?.titleModule?.subject) {
+    return <AliExpressProduct404/>;
   }
 
   return (
-    <div className="bg-gray main">
-      <div className="container">
-        <div className="row">
-          <div className="col-md-9">
-            <AliProductBody
-              product={product}
-              general={general}
-            />
-            <div className="card my-5">
-              <div className="card-body p-5">
-                <AliProductDetailsTab product={product} />
-              </div>
-            </div>
-          </div>
-          <div className="col-md-3 d-none d-lg-block">
-            <div className="card my-5">
-              <div className="card-body">
-                <AliRelatedProduct productId={productId} />
-              </div>
-            </div>
-          </div>
-        </div>
+    <div className="main">
+      <div className="bg-gray main mt-4">
+        <div className="container">
 
-        <div className="col-md-12 d-block d-lg-none">
-          {/*<AliRelatedProduct productId={productId}/>*/}
+          <div className="row" ref={cardRef}>
+            <div className="col-lg-9 col-md-12">
+              <AliProductBody
+                isMobile={isMobile}
+                settings={settings}
+                product={product}
+                cartConfigured={cartConfigured}
+              />
+
+              <div className="card mb-3 mb-lg-4">
+                <div className="card-body">
+                  <AliProductDetailsTab product={product}/>
+                </div>
+              </div>
+
+            </div>
+            {
+              !isMobile &&
+              <div className="col-lg-3 d-none d-lg-block">
+                <AliRelatedProduct productId={productId} cardRef={cardRef}/>
+              </div>
+            }
+          </div>
+
+          {
+            isMobile &&
+            <div className="card mb-3">
+              <div className="card-body">
+                <h4>Related Products</h4>
+                <AliRelatedProduct productId={productId}/>
+              </div>
+            </div>
+          }
+
+
+          <div className="card mb-3">
+            <div className="card-body">
+              <h3>Recent View</h3>
+              <RecentViewProduct currencyIcon={currencyIcon}/>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
@@ -69,5 +92,5 @@ const AliProductPage = (props) => {
 
 
 
-export default withRouter(AliProductPage);
+export default AliProductPage;
 

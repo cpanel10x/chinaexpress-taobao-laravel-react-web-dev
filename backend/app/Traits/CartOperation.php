@@ -20,17 +20,12 @@ trait CartOperation
   public function cart_uid()
   {
     $cart_uid = request('token', null);
-    if (!$cart_uid) {
-      if (!$cart_uid) {
-        $cart_uid = $cart_uid ? $cart_uid : Str::random(60);
-      }
-    }
-    return $cart_uid;
+    return $cart_uid ? $cart_uid : Str::random(60);
   }
 
-  public function get_customer_cart()
+  public function get_customer_cart($cart_uid = null)
   {
-    $cart_uid = $this->cart_uid();
+    $cart_uid = $cart_uid ? $cart_uid : $this->cart_uid();
     $auth_check = auth('sanctum')->check();
     $cart = Cart::whereNull('is_purchase')
       ->where('cart_uid', $cart_uid)
@@ -145,7 +140,7 @@ trait CartOperation
       );
     }
 
-    return $this->get_customer_cart();
+    return $this->get_customer_cart($cart_uid);
   }
 
   public function update_cart()

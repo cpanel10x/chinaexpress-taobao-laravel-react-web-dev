@@ -46,8 +46,8 @@ class AliExpressApiController extends Controller
       cache()->put($product_id, $rapid);
     }
     // $rapid = $this->ApiProductDetails($product_id);
-    return $this->success([
-      'result' => $rapid,
+    return response([
+      'result' => json_encode($rapid)
     ]);
   }
 

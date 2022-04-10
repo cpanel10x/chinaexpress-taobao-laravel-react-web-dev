@@ -16,12 +16,12 @@ export const setGetToken = (token = null) => {
 export const useCartMutation = () => {
 
 	const cache = useQueryClient();
-	const token = setGetToken();
 
 	const mainCart = useQuery("customer_cart", async () => {
+		const token = setGetToken();
 		try {
 			const {data} = await instance.get(`cart?token=${token}`,);
-			setGetToken(data?.cart_token);
+			setGetToken(data?.cart?.cart_uid);
 			return data?.cart ? data?.cart : {};
 		} catch (error) {
 			console.log(error);
@@ -29,8 +29,10 @@ export const useCartMutation = () => {
 	});
 
 	const addToCart = useMutation(["addToCart"], async (props) => {
+		const token = setGetToken();
 		try {
 			const {data} = await instance.post(`/cart/add`, {token: token, ...props});
+			setGetToken(data?.cart?.cart_uid);
 			return data?.cart ? data.cart : {};
 		} catch (error) {
 			console.log(error);
@@ -42,6 +44,7 @@ export const useCartMutation = () => {
 	});
 
 	const updateCart = useMutation(["updateCart"], async (props) => {
+		const token = setGetToken();
 		try {
 			const {data} = await instance.post(`/cart/update`, {token: token, ...props});
 			return data?.cart ? data.cart : {};
@@ -78,6 +81,7 @@ export const useCartMutation = () => {
 	});
 
 	const checkedUnchecked = useMutation(["cartAllCheckedUnchecked"], async (props) => {
+		const token = setGetToken();
 		try {
 			const {data} = await instance.post(`/cart/checkbox`, {token: token, ...props});
 			return data?.cart ? data.cart : {};
@@ -91,6 +95,7 @@ export const useCartMutation = () => {
 	});
 
 	const removeCart = useMutation(["removeCart"], async (props) => {
+		const token = setGetToken();
 		try {
 			const {data} = await instance.post(`/cart/remove`, {token: token, ...props});
 			return data?.cart ? data.cart : {};
@@ -104,6 +109,7 @@ export const useCartMutation = () => {
 	});
 
 	const PaymentMethod = useMutation(["updatePaymentMethod"], async (props) => {
+		const token = setGetToken();
 		try {
 			const {data} = await instance.post(`/cart/payment-method`, {token: token, ...props});
 			return data?.cart ? data.cart : {};
@@ -117,6 +123,7 @@ export const useCartMutation = () => {
 	});
 
 	const confirmOrder = useMutation("confirmOrder", async (props) => {
+		const token = setGetToken();
 		try {
 			const {data} = await instance.post(`/cart/place-order`, {token: token, ...props});
 			return data;
@@ -131,6 +138,7 @@ export const useCartMutation = () => {
 
 
 	const popupMessage = useMutation("useReadPopupMessage", async (props) => {
+		const token = setGetToken();
 		try {
 			const {data} = await instance.post(`/cart/read-popup`, {token: token, ...props});
 			return data?.cart ? data.cart : {};

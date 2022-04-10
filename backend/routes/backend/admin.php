@@ -89,6 +89,7 @@ Route::namespace('Content')->group(function () {
 
     Route::get('price', [SettingController::class, 'price'])->name('price');
     Route::get('limit', [SettingController::class, 'limit'])->name('limit');
+    Route::get('popup', [SettingController::class, 'popupMessage'])->name('popup');
     Route::post('limitationStore', [SettingController::class, 'limitationStore'])->name('limitationStore');
 
     Route::get('message', [SettingController::class, 'message'])->name('message');
