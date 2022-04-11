@@ -4,34 +4,35 @@ import {isEmpty} from "lodash";
 import SectionProductCard from "../../../product/card/SectionProductCard";
 
 const AliRelatedProduct = props => {
-    const productId = props?.productId;
+	const productId = props?.productId;
 
-    // const {resData, isLoading} = SwrGetRequest(
-    //     productId ? `/default/aliexpress/related-products/${productId}` : null
-    // );
-    const resData  = {};
-    const isLoading  = true;
-    if (isLoading) {
-        return <ProductDetailsSkeleton/>;
-    }
+	// const {resData, isLoading} = SwrGetRequest(
+	//     productId ? `/default/aliexpress/related-products/${productId}` : null
+	// );
+	const resData = {};
+	const isLoading = false;
 
-    const products = resData?.data?.result;
+	if (isLoading) {
+		return <ProductDetailsSkeleton/>;
+	}
 
-    if (isEmpty(products)) {
-        return 'Product will be loaded soon';
-    }
+	const products = resData?.data?.result;
 
-    return (
-        <div className="product-sidebar p-0">
+	if (isEmpty(products)) {
+		return 'Product will be loaded soon';
+	}
 
-            <div className="row">
-                {products.map((product, index) => (
-                    <SectionProductCard key={index} product={product}/>
-                ))}
-            </div>
+	return (
+		<div className="product-sidebar p-0">
 
-        </div>
-    );
+			<div className="row">
+				{products.map((product, index) => (
+					<SectionProductCard key={index} product={product}/>
+				))}
+			</div>
+
+		</div>
+	);
 };
 
 

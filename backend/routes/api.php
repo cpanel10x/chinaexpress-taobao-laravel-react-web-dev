@@ -50,11 +50,9 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function () {
   Route::post('/get-section-products', [CatalogController::class, 'getSectionProducts']);
   Route::post('/product/{id}', [CatalogController::class, 'productDetails']);
 
-
   Route::post('/category-products/{slug}', [CatalogController::class, 'categoryProducts']);
   Route::get('/product-description/{id}', [CatalogController::class, 'productDescription']);
   Route::get('/product-seller-information/{id}', [CatalogController::class, 'productSellerInfo']);
-
 
   // searching products api
   Route::post('/search', [CatalogController::class, 'getSearchResult']);

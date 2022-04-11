@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {withRouter} from "react-router";
 import {useQuery} from "../../utils/customHooks";
 import {useSearchPictureUpload} from "../../api/ProductApi";
@@ -13,6 +13,11 @@ const MobileSearchForm = props => {
 	const {mutateAsync, isLoading} = useSearchPictureUpload();
 
 	const [search, setSearch] = useState("");
+
+	useEffect(() => {
+		setSearch(keyword);
+	}, [keyword]);
+
 
 	const submitTextSearch = e => {
 		e.preventDefault();
@@ -49,7 +54,7 @@ const MobileSearchForm = props => {
 		setSearch(inputValue);
 		if (inputValue.length > 2) {
 			setShowSuggestion(true);
-		}else{
+		} else {
 			setShowSuggestion(false);
 		}
 	};

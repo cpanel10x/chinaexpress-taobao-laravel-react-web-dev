@@ -99,15 +99,17 @@ const PaymentItem = (props) => {
 						{activeVariations(product)?.length > 0 && parseInt(product?.DeliveryCost) > 0 && <hr className="my-2"/>}
 						{
 							activeVariations(product)?.length > 0 &&
-							<div className="row">
-								<div className="col-12">
-									<div className="text-right">Item Total: <strong>{currency + ' ' + singleProductTotal(product)}</strong>
+							<>
+								<div className="row">
+									<div className="col-12">
+										<div className="text-right">Item Total: <strong>{currency + ' ' + singleProductTotal(product)}</strong>
+										</div>
 									</div>
 								</div>
-							</div>
+								<hr className="my-2"/>
+							</>
 						}
 
-						<hr className="my-2"/>
 					</div>
 				)
 			}

@@ -5,25 +5,56 @@ const AliPriceCard = (props) => {
 
 
 	const currency = settings?.currency_icon || '৳';
-	const rate = settings?.increase_rate || 15;
+	const aliRate = settings?.ali_increase_rate || 15;
 
-	const priceModule = product?.priceModule;
+	const priceModule = product?.metadata?.priceModule || {};
 
 
-	const discount = 100 - (priceModule?.formatedActivityPrice / priceModule?.formatedPrice * 100);
+	const minActivityAmount = priceModule?.minActivityAmount?.value;
+	const minAmount = priceModule?.minAmount?.value;
+	const maxActivityAmount = priceModule?.maxActivityAmount?.value;
+	const maxAmount = priceModule?.maxAmount?.value;
+	const discount = priceModule?.discount;
+
+	const multiPlyAmount = (Amount) => {
+		return Math.round(Number(Amount) * Number(aliRate));
+	};
+
+
+	const formatedDiscountedPrice = () => {
+		let amount = 0;
+		if (minActivityAmount) {
+			amount = `${currency} ${multiPlyAmount(minActivityAmount)}`;
+		}
+		if (maxActivityAmount) {
+			amount += ` - ${currency} ${multiPlyAmount(maxActivityAmount)}`;
+		}
+		return amount;
+	};
+
+	const formatedRegularMaxPrice = () => {
+		let amount = 0;
+		if (minAmount) {
+			amount = `${currency} ${multiPlyAmount(minAmount)}`;
+		}
+		if (maxAmount) {
+			amount += ` - ${currency} ${multiPlyAmount(maxAmount)}`;
+		}
+		return amount;
+	};
 
 	return (
 		<div className="card mb-3 pricing_card">
 			<div className="card-body">
 				<div>
-					<span>{currency + ' ' + priceModule?.formatedActivityPrice}</span>
+					<span>{formatedDiscountedPrice()}</span>
 					{
-						Number(discount) > 0 &&
-						<del className="ml-3">{currency + ' ' + priceModule?.formatedPrice}</del>
+						parseInt(discount) > 0 &&
+						<del className="ml-3">{formatedRegularMaxPrice()}</del>
 					}
 				</div>
 				{
-					Number(discount) > 0 &&
+					parseInt(discount) > 0 &&
 					<div className="discount_box">
 						{Math.round(discount)}% Discount
 					</div>

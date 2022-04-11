@@ -33,7 +33,7 @@ const AliProductPage = (props) => {
   }
 
 
-  if (!product?.titleModule?.subject) {
+  if (!product?.product_id) {
     return <AliExpressProduct404/>;
   }
 
