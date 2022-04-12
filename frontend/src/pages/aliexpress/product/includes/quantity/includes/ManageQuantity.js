@@ -4,18 +4,15 @@ import swal from 'sweetalert';
 import {getObjectPropertyValue} from "../../../../../../utils/CartHelpers";
 
 const ManageQuantity = (props) => {
-	const {cart, configItem, cartConfiguredItem, Quantity, product} = props;
+	const {cart, configItem, cartConfiguredItem, Quantity} = props;
 
 	const {updateCart: {isLoading, mutateAsync}} = useCartMutation();
 
-	const MasterQuantity = product?.MasterQuantity ? product?.MasterQuantity : 0;
-	let cartItemQty = configItem?.quantity;
+	let cartItemQty = configItem?.quantity || 0;
 	let qty = cartConfiguredItem?.qty ? parseInt(cartConfiguredItem?.qty) : parseInt(cartItemQty);
-	let maxQuantity = cartConfiguredItem?.maxQuantity;
-
 
 	const updateCustomerCartQuantity = (newQty) => {
-		let Max = maxQuantity ? parseInt(maxQuantity) : parseInt(MasterQuantity);
+		let Max = Quantity;
 		let proceed = true;
 		if (parseInt(newQty) < 0) {
 			proceed = false;
@@ -56,9 +53,11 @@ const ManageQuantity = (props) => {
 			<div className="col-6 col-md-4">
 				<div className="input-group express_qty_input">
 					<div className="input-group-prepend">
-						<button type="button"
-						        onClick={() => incrementDecrement('minus')}
-						        className="btn btn-secondary btn-minus">
+						<button
+							type="button"
+							onClick={() => incrementDecrement('minus')}
+							className={`btn btn-secondary btn-minus ${qty === 0 && 'disabled'}`}
+						>
 							<i className="icon-minus"/>
 						</button>
 					</div>
@@ -72,7 +71,7 @@ const ManageQuantity = (props) => {
 				</div>
 			</div>
 			<div className="col">
-				<p className="m-0 py-2">{Quantity ? Quantity : MasterQuantity} pieces available</p>
+				<p className="m-0 py-2">{Quantity} pieces available</p>
 			</div>
 		</div>
 	)

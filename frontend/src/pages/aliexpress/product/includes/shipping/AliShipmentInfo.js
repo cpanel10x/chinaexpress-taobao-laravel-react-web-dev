@@ -1,40 +1,43 @@
 import React from 'react';
+import {useAliProductShippingInfo} from "../../../../../api/AliExpressProductApi";
+import {aliProductConvertionPrice} from "../../../../../utils/AliHelpers";
 
 const AliShipmentInfo = props => {
-    const {product} = props;
-    const productId = product?.commonModule?.productId;
-    // const {resData, isLoading} = SwrGetRequest(
-    //     productId ? `/default/aliexpress/shipment/${productId}` : null
-    // );
+	const {shipment, settings} = props;
 
-    const resData  = {};
-    const isLoading  = true;
+	const {data: shipingInfo, isLoading} = shipment;
 
-    if (isLoading) {
-        return '';
-    }
-    const shipment = resData?.data?.result;
-    const freightResult = shipment?.body?.freightResult;
+	const currency = settings?.currency_icon || '৳';
+	const aliRate = settings?.ali_increase_rate || 88;
 
-    // console.log('shipment', shipment);
-    console.log('freightResult', freightResult);
+	if (shipment.isLoading) {
+		return 'loading shipping...';
+	}
 
+	const freightResult = shipingInfo?.freightResult;
 
-    return (
-        <div className="form-group">
-            <label htmlFor="shipping_method">Shipping Method</label>
-            {
-                freightResult?.length &&
-                <select className="form-control" id="shipping_method">
-                    {
-                        freightResult?.map((freight, key) =>
-                            <option value="1" key={key}>{`${freight.company} | ${freight?.standardFreightAmount?.formatedAmount}`}</option>
-                        )
-                    }
-                </select>
-            }
-        </div>
-    );
+	if (!freightResult?.length) {
+		return '';
+	}
+
+	return (
+		<div className="form-group">
+			<label htmlFor="shipping_method">Shipping Method:</label>
+			{
+				<select className="form-control" id="shipping_method">
+					{
+						freightResult?.map((freight, key) =>
+							<option
+								value="1"
+								key={key}>
+								{`${freight.company} (${freight?.time} Days) | ${currency + ' ' + aliProductConvertionPrice(freight?.freightAmount?.value, aliRate)}`}
+							</option>
+						)
+					}
+				</select>
+			}
+		</div>
+	);
 };
 
 

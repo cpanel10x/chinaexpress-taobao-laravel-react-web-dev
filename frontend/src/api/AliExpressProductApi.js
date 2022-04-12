@@ -9,3 +9,13 @@ export const useAliProductDetails = (productId) => useQuery(["useAliProductDetai
 		console.log(error);
 	}
 });
+
+
+export const useAliProductShippingInfo = (productId) => useQuery(["useAliProductShippingInfo", productId], async () => {
+	try {
+		const {data} = await instance.get(`aliexpress/shipment/${productId}`);
+		return data?.result ? JSON.parse(data?.result) : {};
+	} catch (error) {
+		console.log(error);
+	}
+});

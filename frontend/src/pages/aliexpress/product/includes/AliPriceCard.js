@@ -1,44 +1,30 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
+import {aliActiveConfigurations, aliProductConvertionPrice} from "../../../../utils/AliHelpers";
 
 const AliPriceCard = (props) => {
-	const {product, settings, activeConfiguredItems} = props;
+	const {product, operationalAttributes, settings} = props;
 
+	const priceCard = aliActiveConfigurations(product, operationalAttributes);
 
 	const currency = settings?.currency_icon || '৳';
-	const aliRate = settings?.ali_increase_rate || 15;
+	const aliRate = settings?.ali_increase_rate || 88;
 
-	const priceModule = product?.metadata?.priceModule || {};
-
-
-	const minActivityAmount = priceModule?.minActivityAmount?.value;
-	const minAmount = priceModule?.minAmount?.value;
-	const maxActivityAmount = priceModule?.maxActivityAmount?.value;
-	const maxAmount = priceModule?.maxAmount?.value;
-	const discount = priceModule?.discount;
-
-	const multiPlyAmount = (Amount) => {
-		return Math.round(Number(Amount) * Number(aliRate));
-	};
-
+	const skuActivityAmount = priceCard?.skuVal?.skuActivityAmount?.value;
+	const skuAmount = priceCard?.skuVal?.skuAmount?.value;
+	const discount = priceCard?.skuVal?.discount;
 
 	const formatedDiscountedPrice = () => {
 		let amount = 0;
-		if (minActivityAmount) {
-			amount = `${currency} ${multiPlyAmount(minActivityAmount)}`;
-		}
-		if (maxActivityAmount) {
-			amount += ` - ${currency} ${multiPlyAmount(maxActivityAmount)}`;
+		if (skuActivityAmount) {
+			amount = `${currency} ${aliProductConvertionPrice(skuActivityAmount, aliRate)}`;
 		}
 		return amount;
 	};
 
 	const formatedRegularMaxPrice = () => {
 		let amount = 0;
-		if (minAmount) {
-			amount = `${currency} ${multiPlyAmount(minAmount)}`;
-		}
-		if (maxAmount) {
-			amount += ` - ${currency} ${multiPlyAmount(maxAmount)}`;
+		if (skuAmount) {
+			amount = `${currency} ${aliProductConvertionPrice(skuAmount, aliRate)}`;
 		}
 		return amount;
 	};

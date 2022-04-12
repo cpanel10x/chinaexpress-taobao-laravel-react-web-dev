@@ -20,7 +20,7 @@ trait AliexpressApi
     $this->rapidApiKey = config('rapidapi.x_rapidapi_key');
   }
 
-  public function makeRequest(string $url)
+  public function makeRequest(string $url, $body = null)
   {
     $headers = [
       'x-rapidapi-host' => $this->rapidApiHost,
@@ -29,7 +29,7 @@ trait AliexpressApi
     $client = new Client([
       'headers' => $headers
     ]);
-    // $body = Psr7\Utils::streamFor(json_encode($body));
+    // $body = $body ? Psr7\Utils::streamFor(json_encode($body)) : $body;
     $response = $client->request('GET', $url);
     return json_decode($response->getBody(), true);
   }
@@ -62,7 +62,8 @@ trait AliexpressApi
 
   public function ApiProductShipping($product_id)
   {
-    $url = "{$this->baseUrl}/shipping/{$product_id}?destination_country=BD&min_price=0.00&count=3";
+    $url = "{$this->baseUrl}/shipping/{$product_id}?toCountry=BD";
+    // $url = "{$this->baseUrl}/shipping/{$product_id}";
     return $this->makeRequest($url);
   }
 

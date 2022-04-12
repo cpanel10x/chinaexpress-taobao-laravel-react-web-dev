@@ -59,8 +59,8 @@ class AliExpressApiController extends Controller
       $shipping = $this->ApiProductShipping($product_id);
       cache()->put($key, $shipping);
     }
-    return $this->success([
-      'result' => $shipping,
+    return response([
+      'result' => json_encode($shipping),
     ]);
   }
 

@@ -8,25 +8,23 @@ import {useCartMutation} from "../../../../api/CartApi";
 import AliProductWishListButton from "./wishlist/AliProductWishListButton";
 import AliShipmentInfo from "./shipping/AliShipmentInfo";
 import SocialShare from "../../../product/productSingleNew/productBody/includes/SocialShare";
+import {useAliProductShippingInfo} from "../../../../api/AliExpressProductApi";
+import AliAddToCart from "./addToCart/AliAddToCart";
 
 
 const AliProductBody = (props) => {
 	const {isMobile, product, settings} = props;
+	const [operationalAttributes, setOperationalAttributes] = useState({});
 	const [activeImg, setActiveImg] = useState('');
-
-	const {mainCart: {data: cart, isLoading}} = useCartMutation();
-
-	const currencyIcon = settings?.currency_icon || '৳';
-
-
-	// const activeConfiguredItems = getActiveConfiguredItems(ConfiguredItems, selectAttributes);
-	const activeConfiguredItems = {};
 
 	const productId = product?.product_id;
 	const product_title = product?.product_title;
-	const lastest_volume = product?.lastest_volume;
+
+	const shipment = useAliProductShippingInfo(productId);
+
+	const {mainCart: {data: cart, isLoading}} = useCartMutation();
+
 	const feedback = product?.feedBackRating;
-	const titleModule = product?.titleModule || {};
 	const metadata = product?.metadata;
 	const formatTradeCount = metadata?.titleModule?.formatTradeCount || 0;
 
@@ -37,10 +35,9 @@ const AliProductBody = (props) => {
 	}, [product]);
 
 	const skuModule = product?.metadata?.skuModule;
-	const productSKUPropertyList = skuModule?.productSKUPropertyList;
+	const skuProperties = product?.skuProperties;
 
 	const storeModule = product?.storeModule;
-
 
 	const FeaturedValues = product?.FeaturedValues ? product.FeaturedValues : [];
 	const TaobaoVendorId = FeaturedValues?.find(find => find.Name === 'TaobaoVendorId')?.Value;
@@ -48,7 +45,7 @@ const AliProductBody = (props) => {
 	const favCount = FeaturedValues?.find(find => find.Name === 'favCount')?.Value;
 	const reviews = FeaturedValues?.find(find => find.Name === 'reviews')?.Value;
 
-	// console.log('productSKUPropertyList', productSKUPropertyList);
+	// console.log('operationalAttributes', operationalAttributes);
 
 	return (
 		<div className="product-details-top">
@@ -70,7 +67,10 @@ const AliProductBody = (props) => {
 				{/* End .col-md-6 */}
 				<div className="col-md-7">
 					{isMobile && <h1 className="single-product-title">{product_title}</h1>}
-					<AliPriceCard product={product} settings={settings}/>
+					<AliPriceCard
+						product={product}
+						operationalAttributes={operationalAttributes}
+						settings={settings}/>
 					<p className="mb-2">
 						<b>{feedback?.averageStar}/5</b> Rating with <b>{feedback?.averageStarRage}</b>%
 						positive feedback
@@ -82,55 +82,56 @@ const AliProductBody = (props) => {
 
 					<div className="product-details">
 						{
-							productSKUPropertyList?.length &&
-							productSKUPropertyList.map((property, index) =>
-								<div key={index} className="mb-3">
-									<p>
-										<b>{property?.skuPropertyName} : </b>
-										<span className="seller_info">{property?.skuPropertyName || 'not selected'}</span>
-									</p>
-									<AliAttributes colorSkuPropertyValues={property?.skuPropertyValues} setActiveImg={setActiveImg}/>
-								</div>
-							)}
-
+							skuProperties?.length &&
+							<AliAttributes
+								operationalAttributes={operationalAttributes}
+								setOperationalAttributes={setOperationalAttributes}
+								skuProperties={skuProperties}
+								setActiveImg={setActiveImg}/>
+						}
 
 						<div className="shipment">
-							<AliShipmentInfo product={product}/>
+							<AliShipmentInfo shipment={shipment} settings={settings}/>
 						</div>
 
 						<AliQuantityInput
 							cart={cart}
 							product={product}
 							settings={settings}
-							activeConfiguredItems={activeConfiguredItems}/>
+							operationalAttributes={operationalAttributes}
+						/>
 
 						{/*<ProductSummary*/}
 						{/*	cart={cart}*/}
 						{/*	product={product}*/}
 						{/*	settings={settings}*/}
 						{/*/>*/}
-						<div className="row">
-							<div className="col pr-1">
-								<Link to={"/checkout"}
-								      className="btn btn-custom-product btn-addToCart btn-block"
-								>
-									<span className="cartIcon"><i className="icon-cart"/></span>
-									<span>Buy Now</span>
-								</Link>
-							</div>
-							<div className="col pl-1">
-								<AliProductWishListButton product={product}/>
-							</div>
-						</div>
+
+						<AliAddToCart product={product} shipment={shipment}/>
 
 						{/*<SellerInfo product={product}/>*/}
-
+						<div className="mt-3">
+							<table className="table table-bordered">
+								<tr>
+									<td className="w-50">Product Weight</td>
+									<td className="w-50">0.524kg</td>
+								</tr>
+								<tr>
+									<td className="w-50">China Local Shipping</td>
+									<td className="w-50">232</td>
+								</tr>
+								<tr>
+									<td className="w-50">Weight charge:</td>
+									<td className="w-50">650 Tk per kg</td>
+								</tr>
+							</table>
+						</div>
 
 						<div className="product-details-action mt-3">
 							<a
 								href={"/add-to-express"}
 								onClick={(e) => e.preventDefault()}
-								className="btn btn-block btn-express px-3 py-3"
+								className="btn btn-block btn-express"
 							>
 								<span>Get Express Service</span>
 								<p className="small m-0">15-40 Days Delivery</p>
