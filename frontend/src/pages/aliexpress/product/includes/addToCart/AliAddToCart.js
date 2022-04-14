@@ -2,7 +2,7 @@ import React from 'react';
 import AliProductWishListButton from "../wishlist/AliProductWishListButton";
 
 const AliAddToCart = (props) => {
-	const {shipment, product} = props;
+	const {shipment, product, settings} = props;
 	const {data: shipingInfo, isLoading} = shipment;
 	const isShipping = shipingInfo?.freightResult?.length;
 
@@ -18,7 +18,7 @@ const AliAddToCart = (props) => {
 				</a>
 			</div>
 			<div className="col pl-1">
-				<AliProductWishListButton product={product}/>
+				<AliProductWishListButton product={product} settings={settings}/>
 			</div>
 		</div>
 	);

@@ -15,43 +15,14 @@ class WishlistController extends Controller
 
   public function AddToWishList()
   {
-    $product = request('product', []);
+    $wishlistData = request()->only('img', 'name', 'provider_type', 'rating', 'regular_price', 'sale_price', 'stock', 'total_sold');
+    $ItemId = request('ItemId');
     $auth_id = auth()->id();
     $wishlists = [];
-    if ($product && $auth_id) {
-      $rate = get_setting('increase_rate', 20);
-      $img = getArrayKeyData($product, 'img');
-      $img =  $img ? $img : getArrayKeyData($product, 'MainPictureUrl');
-
-      $name = getArrayKeyData($product, 'name');
-      $name = $name ? $name : getArrayKeyData($product, 'Title');
-
-      $product_code = getArrayKeyData($product, 'product_code');
-      $product_code = $product_code ? $product_code : getArrayKeyData($product, 'ItemId');
-
-      $rating = getArrayKeyData($product, 'rating');
-      $regular_price = getArrayKeyData($product, 'regular_price');
-      $sale_price = getArrayKeyData($product, 'sale_price');
-
-      $stock = getArrayKeyData($product, 'stock');
-      $stock = $stock ? $stock : getArrayKeyData($product, 'MasterQuantity');
-      $total_sold = getArrayKeyData($product, 'total_sold');
-
-      $NewPrice = get_product_regular_price($product, $rate);
-      $SalePrice = get_product_sale_price($product, $rate) ?? $NewPrice;
-      $NewTotalSold = get_features_value($product, 'TotalSales');
-      $ItemId = $product_code ? $product_code : ($product['Id'] ?? '');
+    if ($auth_id) {
       Wishlist::UpdateOrCreate(
         ['user_id' => $auth_id, 'ItemId' => $ItemId],
-        [
-          'img' => $img ? $img : get_product_picture($product),
-          'name' => $name ? $name : ($product['Title'] ?? ''),
-          'rating' => $rating ? $rating : ($product['rating'] ?? ''),
-          'regular_price' => $regular_price ? $regular_price : $NewPrice,
-          'sale_price' => $sale_price ? $sale_price : $SalePrice,
-          'stock' => $product['MasterQuantity'] ?? $stock,
-          'total_sold' => $total_sold ? $total_sold : $NewTotalSold,
-        ]
+        $wishlistData
       );
       $wishlists = Wishlist::where('user_id', $auth_id)->get();
     }

@@ -2,17 +2,15 @@ import {last, replace, split} from "lodash";
 import React, {useState} from "react";
 import {withRouter} from "react-router-dom";
 import swal from "sweetalert";
+import {urlSearchParams} from "../../../../utils/AliHelpers";
 
 function AliExpressSearchBar(props) {
 	const [search, setSearch] = useState("");
 
 	const submitExpressSearch = (event) => {
 		event.preventDefault();
-		let pathname = new URL(search).pathname;
-		let productID = last(split(pathname, '/'));
-		productID = replace(productID, '.html', '');
-		if (productID) {
-			props.history.push(`/aliexpress/product/${productID}`);
+		if (search) {
+			props.history.push(`/aliexpress/search?url=${search}`);
 		} else {
 			swal({
 				text: "Paste a valid link",

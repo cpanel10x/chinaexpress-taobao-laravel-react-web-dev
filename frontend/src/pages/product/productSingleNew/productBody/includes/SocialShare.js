@@ -52,7 +52,7 @@ const SocialShare = (props) => {
                title="Send Messenger"
                target="blank"
             >
-               <i className="icon-comment"/>
+               <i className="icon-messenger"/>
             </a>
             <a
                className="social-icon envelope"

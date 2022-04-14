@@ -3,7 +3,7 @@ import {useCartMutation} from '../../../../../../api/CartApi';
 import swal from 'sweetalert';
 import {getObjectPropertyValue} from "../../../../../../utils/CartHelpers";
 
-const ManageQuantity = (props) => {
+const AliManageQuantity = (props) => {
 	const {cart, configItem, cartConfiguredItem, Quantity} = props;
 
 	const {updateCart: {isLoading, mutateAsync}} = useCartMutation();
@@ -56,7 +56,7 @@ const ManageQuantity = (props) => {
 						<button
 							type="button"
 							onClick={() => incrementDecrement('minus')}
-							className={`btn btn-secondary btn-minus ${qty === 0 && 'disabled'}`}
+							className={`btn btn-secondary btn-minus`}
 						>
 							<i className="icon-minus"/>
 						</button>
@@ -77,4 +77,4 @@ const ManageQuantity = (props) => {
 	)
 }
 
-export default ManageQuantity
+export default AliManageQuantity

@@ -19,7 +19,6 @@ const AliMediaPart = (props) => {
 	return (
 		<div className="product-gallery product-gallery-vertical">
 			<figure className="product-main-image">
-
 				{
 					activeImg === PreviewUrl ?
 						<div className="previewVideoThumb">

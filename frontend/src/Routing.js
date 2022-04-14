@@ -16,8 +16,6 @@ import Dashboard from "./auth/dashboard/Dashboard";
 import AuthRoute from "./AuthRoute";
 import Payment from "./pages/payment/Payment";
 import LoadPictureSearchProduct from "./pages/search/LoadPictureSearchProduct";
-// import OrderDetails from "./auth/dashboard/orders/OrderDetails";
-import AliExpressSearch from "./pages/aliexpress/search/AliExpressSearch";
 import AliProductPage from "./pages/aliexpress/product/AliProductPage";
 import ForgotPassword from "./auth/forgot/ForgotPassword";
 import OnlinePaymentStatus from "./pages/payment/OnlinePaymentStatus";
@@ -52,8 +50,7 @@ const Routing = () => {
 			/>
 
 			{/* start aliexpress route develop */}
-			<Route path="/aliexpress/search" exact={true} component={AliExpressSearch}/>
-			<Route path="/aliexpress/product/:productId" exact={true} component={AliProductPage}/>
+			<Route path="/aliexpress/search" exact={true} component={AliProductPage}/>
 			{/* end aliexpress route develop */}
 
 			<AuthRoute path="/checkout" exact component={Checkout}/>

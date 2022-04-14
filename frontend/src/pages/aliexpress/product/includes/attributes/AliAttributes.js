@@ -4,36 +4,21 @@ import PropertyValues from "./includes/PropertyValues";
 const AliAttributes = (props) => {
 	const {skuProperties, setActiveImg, operationalAttributes, setOperationalAttributes} = props;
 
-	const Properties = skuProperties.filter(findItem => findItem.skuPropertyName !== 'ShipsFrom');
-	const ShipsFrom = skuProperties.find(findItem => findItem.skuPropertyName === 'ShipsFrom');
-	const ShipsFromCountries = ShipsFrom.skuPropertyValues.find(value => value.propertyValueName === 'China');
+	const Properties = skuProperties?.filter(findItem => findItem.skuPropertyName !== 'ShipsFrom');
+	const ShipsFrom = skuProperties?.find(findItem => findItem.skuPropertyName === 'ShipsFrom');
+	const ShipsFromCountries = ShipsFrom?.skuPropertyValues?.find(value => value.propertyValueName === 'China');
 
 	useEffect(() => {
-		if (Properties?.length > 0) {
-			Properties?.map((property, index) => {
-				if (index === 0) {
-					const PropertyName = property?.skuPropertyName;
-					const skuPropertyValues = property?.skuPropertyValues[0];
-					const exists = operationalAttributes?.[PropertyName];
-					if (!exists) {
-						setOperationalAttributes({
-							...operationalAttributes,
-							[PropertyName]: skuPropertyValues
-						});
-					}
-				}
+		if (skuProperties?.length > 0) {
+			let selectedProperties = {};
+			skuProperties?.map((property, index) => {
+				const PropertyName = property?.skuPropertyName;
+				const skuPropertyValues = property?.skuPropertyValues[0];
+				selectedProperties[PropertyName] = skuPropertyValues;
 			});
+			setOperationalAttributes(selectedProperties);
 		}
-
-		const existsShipsFrom = operationalAttributes?.ShipsFrom;
-		if (!existsShipsFrom) {
-			setOperationalAttributes({
-				...operationalAttributes,
-				ShipsFrom: ShipsFromCountries
-			});
-		}
-	}, [Properties, ShipsFromCountries]);
-
+	}, [skuProperties]);
 
 	const selectAttribute = (skuPropertyName, Attribute) => {
 		setOperationalAttributes({
@@ -68,7 +53,7 @@ const AliAttributes = (props) => {
 			}
 			<div>
 				<p>
-					<b>ShipsFrom : </b>
+					<b>Ship From : </b>
 					<span className="seller_info">{ShipsFromCountries?.propertyValueDisplayName || 'Unknown'}</span>
 				</p>
 			</div>

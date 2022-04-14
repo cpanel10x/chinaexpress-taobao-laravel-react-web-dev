@@ -4,48 +4,53 @@ import {useQueryClient} from "react-query";
 import {isAuthenticated} from "../../../../../api/Auth";
 import swal from "sweetalert";
 import SpinnerButtonLoader from "../../../../../loader/SpinnerButtonLoader";
+import {wishListProcessProduct} from "../../../../../utils/AliHelpers";
 
 const AliProductWishListButton = (props) => {
-   const {product} = props;
-   const {data: wishList} = useWishList();
-   const cache = useQueryClient();
-   const {isLoading, mutateAsync} = useAddToWishList();
+	const {product, settings} = props;
+	const {data: wishList} = useWishList();
+	const cache = useQueryClient();
+	const {isLoading, mutateAsync} = useAddToWishList();
 
-   const isAuth = isAuthenticated();
+	const isAuth = isAuthenticated();
+	const aliRate = settings?.ali_increase_rate || 88;
+	const product_id = product?.product_id;
 
-   const addToWishList = (event) => {
-      event.preventDefault();
-      if(isAuth){
-         mutateAsync({product}, {
-            onSuccess: (resData) => {
-               if (resData?.status) {
-                  cache.setQueryData('wishlist', (resData?.wishlists || {}));
-               }
-            }
-         });
-      }else{
-         swal({
-            text: 'Please login your account first',
-            icon: 'warning'
-         })
-      }
-   };
+	const wishListItem = wishListProcessProduct(product, aliRate);
 
-   if(isLoading){
-      return <SpinnerButtonLoader buttonClass={`btn btn-custom-product btn-wishlist btn-block`}/>
-   }
+	const addToWishList = (event) => {
+		event.preventDefault();
+		if (isAuth) {
+			mutateAsync(wishListItem, {
+				onSuccess: (resData) => {
+					if (resData?.status) {
+						cache.setQueryData('wishlist', (resData?.wishlists || {}));
+					}
+				}
+			});
+		} else {
+			swal({
+				text: 'Please login your account first',
+				icon: 'warning'
+			})
+		}
+	};
 
-   const isExists = wishList.find(find=>find.ItemId === product.Id)?.id || false;
+	if (isLoading) {
+		return <SpinnerButtonLoader buttonClass={`btn btn-custom-product btn-wishlist btn-block`}/>
+	}
 
-   return (
-      <a href={"/add-to-wishlist"}
-         onClick={(event) => addToWishList(event)}
-         className={`btn btn-custom-product btn-wishlist btn-block ${isExists && 'disabled'}`}
-      >
-         <span className="cartIcon"><i className="icon-heart-empty"/></span>
-         <span>Wishlist</span>
-      </a>
-   );
+	const isExists = wishList.find(find => find.ItemId === product_id)?.id || false;
+
+	return (
+		<a href={"/add-to-wishlist"}
+		   onClick={(event) => addToWishList(event)}
+		   className={`btn btn-custom-product btn-wishlist btn-block ${isExists && 'disabled'}`}
+		>
+			<span className="cartIcon"><i className="icon-heart-empty"/></span>
+			<span>Wishlist</span>
+		</a>
+	);
 };
 
 export default AliProductWishListButton;

@@ -1,87 +1,65 @@
 import React from "react";
 import {useCartMutation} from "../../../../../api/CartApi";
-import AddToCartButton from "./includes/AddToCartButton";
-import ManageQuantity from "./includes/ManageQuantity";
+import AliManageQuantity from "./includes/AliManageQuantity";
 import swal from 'sweetalert';
-import {
-	getObjectPropertyValue,
-	getProductCurrentPrice,
-	getProductDeliveryCosts,
-	getProductModifiedConfiguredItem, getProductModifiedWithOutConfiguredItem,
-	getProductWeight
-} from "../../../../../utils/CartHelpers";
-import {aliActiveConfigurations} from "../../../../../utils/AliHelpers";
+import {aliActiveConfigurations, aliProductConfiguration, aliProductProcessToCart} from "../../../../../utils/AliHelpers";
+import AliAddToCartButton from "./includes/AliAddToCartButton";
 
 const AliQuantityInput = (props) => {
-	const {product, operationalAttributes, cart, settings} = props;
+	const {cart, product, settings, shipment, selectShipping, operationalAttributes} = props;
 
+	const {data: shipingInfo} = shipment;
 	const priceCard = aliActiveConfigurations(product, operationalAttributes);
 
 	const {addToCart: {mutateAsync, isLoading}} = useCartMutation();
 
-	const rate = settings?.increase_rate || 15;
-	const ConfiguredItems = product?.ConfiguredItems ? product.ConfiguredItems : [];
+	const aliRate = settings?.ali_increase_rate || 88;
+	const weight = shipingInfo?.packageInfo?.weight || 0;
 
-	const MasterQuantity = product?.MasterQuantity ? product.MasterQuantity : 0;
-	const activeConfiguredItem = {}
+	const processProduct = aliProductProcessToCart(product, priceCard, aliRate);
+	processProduct.weight = Number(weight).toFixed(3);
+	processProduct.DeliveryCost = selectShipping;
+	processProduct.Quantity = 1;
+	processProduct.hasConfigurators = true;
+
+	const ConfiguredItems = aliProductConfiguration(product, priceCard, operationalAttributes, aliRate);
+	processProduct.ConfiguredItems = ConfiguredItems;
+
 	const Quantity = priceCard?.skuVal?.availQuantity || 0;
 
 	const addToCartProcess = (e) => {
 		e.preventDefault();
-		return true;
-		let activeProduct = {
-			Id: getObjectPropertyValue(product, 'Id'),
-			ProviderType: getObjectPropertyValue(product, 'ProviderType'),
-			Title: getObjectPropertyValue(product, 'Title'),
-			TaobaoItemUrl: getObjectPropertyValue(product, 'TaobaoItemUrl'),
-			MainPictureUrl: getObjectPropertyValue(product, 'MainPictureUrl'),
-			MasterQuantity: getObjectPropertyValue(product, 'MasterQuantity'),
-			FirstLotQuantity: getObjectPropertyValue(product, 'FirstLotQuantity'),
-			NextLotQuantity: getObjectPropertyValue(product, 'NextLotQuantity'),
-			Price: getProductCurrentPrice(product, rate),
-			weight: getProductWeight(product),
-			DeliveryCost: getProductDeliveryCosts(product, rate),
-			Quantity: 1,
-			hasConfigurators: true,
-			IsCart: false
-		};
-
 		let process = false;
-
-		if (activeConfiguredItem?.Id) {
-			if (activeConfiguredItem?.Quantity > 0) {
+		if (ConfiguredItems?.Id) {
+			if (ConfiguredItems?.qty > 0) {
 				process = true;
-				activeProduct.ConfiguredItems = getProductModifiedConfiguredItem(product, 1, activeConfiguredItem, rate);
 			} else {
 				swal({
 					text: 'This variations stock is not available',
 					icon: 'info'
 				});
 			}
-		} else {
-			if (ConfiguredItems?.length) {
-				swal({
-					text: 'Select your Item variations',
-					icon: 'info'
-				});
-			} else {
-				process = true;
-				activeProduct.ConfiguredItems = getProductModifiedWithOutConfiguredItem(product, rate);
-			}
 		}
-
 		if (process) {
-			mutateAsync({product: activeProduct});
+			mutateAsync({product: processProduct});
 		}
 	};
 
-	const activeConfigId = product?.Id;
+	const activeConfigId = priceCard?.skuPropIds;
 
-	const configItem = cart?.cart_items?.find(findItem => findItem?.variations?.find(find => parseInt(find.configId) === parseInt(activeConfigId)));
-	const cartConfiguredItem = configItem?.variations?.find(find => parseInt(find.configId) === parseInt(activeConfigId));
+	const configItem = cart?.cart_items?.find(findItem => findItem?.variations?.find(find => String(find.configId) === String(activeConfigId)));
+	const cartConfiguredItem = configItem?.variations?.find(find => String(find.configId) === String(activeConfigId));
+
+	if (!configItem || !cartConfiguredItem?.qty) {
+		return (
+			<AliAddToCartButton
+				addToCartProcess={addToCartProcess}
+				isLoading={isLoading}
+				Quantity={Quantity}/>);
+	}
 
 	return (
-		<ManageQuantity
+		<AliManageQuantity
 			cart={cart}
 			configItem={configItem}
 			cartConfiguredItem={cartConfiguredItem}

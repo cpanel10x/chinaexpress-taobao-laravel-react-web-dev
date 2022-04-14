@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Content\Frontend\Address;
 use App\Models\Content\Product;
 use App\Traits\AliexpressApi;
 use App\Traits\ApiResponser;
 use Illuminate\Support\Str;
+use voku\helper\HtmlDomParser;
 
 /**
  * Class HomeController.
@@ -25,15 +25,34 @@ class AliExpressApiController extends Controller
 
   public function searchQuery()
   {
-    $query = request('query');
-    $key = Str::slug($query);
-    $rapid = cache()->get($key, null);
-    if (!$rapid) {
-      $rapid = $this->searchProducts($query);
-      cache()->put($key, $rapid);
+    $query = request('query_url');
+    if (!$query) {
+      return response(['status' => false, 'msg' => 'Search must not empty']);
     }
-    return $this->success([
-      'result' => $rapid,
+    $htmlContents = file_get_contents($query);
+    $htmlTmp = HtmlDomParser::str_get_html($htmlContents);
+    $url = '';
+    foreach ($htmlTmp->find('link') as $meta) {
+      $hasRel = $meta->hasAttribute('rel');
+      if ($hasRel) {
+        $relData = $meta->getAttribute('rel');
+        if ($relData == 'canonical') {
+          $url = $meta->getAttribute('href');
+        }
+      }
+    }
+    $url = explode('/', $url);
+    $url = end($url);
+    $product_id = str_replace('.html', '', $url);
+    $rapid = '';
+    $rapid = cache()->get($product_id, null);
+    if (!$rapid) {
+      $rapid = $this->ApiProductDetails($product_id);
+      cache()->put($product_id, $rapid, 600);
+    }
+
+    return response([
+      'result' => json_encode($rapid),
     ]);
   }
 
@@ -43,7 +62,7 @@ class AliExpressApiController extends Controller
     $rapid = cache()->get($product_id, null);
     if (!$rapid) {
       $rapid = $this->ApiProductDetails($product_id);
-      cache()->put($product_id, $rapid);
+      cache()->put($product_id, $rapid, 600);
     }
     // $rapid = $this->ApiProductDetails($product_id);
     return response([
@@ -57,7 +76,7 @@ class AliExpressApiController extends Controller
     $shipping = cache()->get($key, null);
     if (!$shipping) {
       $shipping = $this->ApiProductShipping($product_id);
-      cache()->put($key, $shipping);
+      cache()->put($key, $shipping, 600);
     }
     return response([
       'result' => json_encode($shipping),

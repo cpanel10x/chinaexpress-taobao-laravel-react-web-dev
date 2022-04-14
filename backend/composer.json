@@ -35,7 +35,8 @@
         "rappasoft/laravel-livewire-tables": "^0.4",
         "spatie/laravel-html": "^2.22",
         "spatie/laravel-permission": "^3.0",
-        "torann/geoip": "^1.0"
+        "torann/geoip": "^1.0",
+        "voku/simple_html_dom": "^4.8"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.2",
