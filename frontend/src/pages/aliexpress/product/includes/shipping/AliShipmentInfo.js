@@ -1,8 +1,10 @@
 import {aliProductConvertionPrice} from "../../../../../utils/AliHelpers";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
+import ShippingModal from "./includes/ShippingModal";
 
 const AliShipmentInfo = props => {
 	const {shipment, settings, selectShipping, setSelectShipping} = props;
+	const [optionEnable, setOptionEnable] = useState(false);
 
 	const {data: shipingInfo, isLoading} = shipment;
 
@@ -12,7 +14,7 @@ const AliShipmentInfo = props => {
 
 	useEffect(() => {
 		if (!selectShipping && freightResult?.length > 0) {
-			shippingRate(freightResult?.[0]?.freightAmount?.value);
+			shippingRate(freightResult?.[0]);
 		}
 	}, [freightResult, selectShipping]);
 
@@ -20,49 +22,53 @@ const AliShipmentInfo = props => {
 		return 'loading shipping...';
 	}
 
-
 	const shippingRate = (amount) => {
-		const calculateAmount = aliProductConvertionPrice(amount, aliRate);
-		if (!selectShipping) {
-			setSelectShipping(calculateAmount);
-		}
-		return calculateAmount;
+		return aliProductConvertionPrice(amount, aliRate);
 	};
+
+	const toggleChoseOption = (event, option = true) => {
+		event.preventDefault();
+		setOptionEnable(option)
+	};
+
 
 	return (
 		<div className="mb-3">
+
+			{
+				optionEnable &&
+				<ShippingModal
+					currency={currency}
+					freightResult={freightResult}
+					shippingRate={shippingRate}
+					selectShipping={selectShipping}
+					setSelectShipping={setSelectShipping}
+					setOptionEnable={setOptionEnable}
+				/>
+			}
+
 			<div className="row align-items-center">
 				<div className="col-md-2 col-3">
 					<p className="m-0">Shipping:</p>
 				</div>
 				<div className="col-md-7 col-5">
-					<p className="m-0">Chose a Shipping</p>
+					{
+						selectShipping ?
+							<div>
+								<p className="m-0">{selectShipping.company + ` | ${currency} ` + shippingRate(selectShipping?.freightAmount?.value)}</p>
+								<p className="m-0">{`${selectShipping?.time} Days`}</p>
+							</div>
+							:
+							<p className="m-0">Chose your shipping</p>
+					}
 				</div>
-				<div className="col-md-3 col-3">
-					<a href="#" className="text-primary">
-						Change <i className="icon-pencil"/>
+				<div className="col-md-3 col-4">
+					<a href="#"
+					   onClick={event => toggleChoseOption(event)}
+					   className="small">
+						More Option <i className="icon-down-open"/>
 					</a>
 				</div>
-			</div>
-			<div className="form-group d-none">
-				<label htmlFor="shipping_method">Shipping Method:</label>
-				{
-					<select
-						className="form-control"
-						onChange={e => setSelectShipping(e.target.value)}
-						value={selectShipping}
-						id="shipping_method">
-						{
-							freightResult?.map((freight, key) =>
-								<option
-									key={key}
-									value={shippingRate(freight?.freightAmount?.value)}>
-									{`${freight.company} (${freight?.time} Days) | ${currency + ' ' + shippingRate(freight?.freightAmount?.value)}`}
-								</option>
-							)
-						}
-					</select>
-				}
 			</div>
 		</div>
 	);

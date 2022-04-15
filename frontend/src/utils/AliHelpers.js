@@ -98,3 +98,8 @@ export const aliProductConfiguration = (product, priceCard, operationalAttribute
 export const sumCartItemTotal = (cartItem) =>{
 	return cartItem.reduce((sum, { price, qty }) => sum + parseInt(price) * parseInt(qty), 0)
 }
+
+
+export const sumCartItemTotalQuantity = (cartItem) =>{
+	return cartItem.reduce((sum, { price, qty }) => sum + parseInt(qty), 0)
+}

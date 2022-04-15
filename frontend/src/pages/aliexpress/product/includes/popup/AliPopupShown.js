@@ -36,6 +36,7 @@ const AliPopupShown = (props) => {
 			     id="staticBackdrop"
 			     data-backdrop="static"
 			     data-keyboard="false"
+			     onClick={() => closeModal()}
 			     style={{display: 'block'}}>
 				<div className="modal-dialog modal-dialog-centered">
 					<div className="modal-content">
@@ -66,7 +67,7 @@ const AliPopupShown = (props) => {
 					</div>
 				</div>
 			</div>
-			<div className="modal-backdrop fade show" onClick={() => closeModal()}/>
+			<div className="modal-backdrop fade show"/>
 		</>
 	);
 };
