@@ -4,11 +4,11 @@ import swal from 'sweetalert';
 import {getObjectPropertyValue} from "../../../../../../utils/CartHelpers";
 
 const AliManageQuantity = (props) => {
-	const {cart, configItem, cartConfiguredItem, Quantity} = props;
+	const {cartItem, cartConfiguredItem, Quantity} = props;
 
 	const {updateCart: {isLoading, mutateAsync}} = useCartMutation();
 
-	let cartItemQty = configItem?.quantity || 0;
+	let cartItemQty = cartItem?.quantity || 0;
 	let qty = cartConfiguredItem?.qty ? parseInt(cartConfiguredItem?.qty) : parseInt(cartItemQty);
 
 	const updateCustomerCartQuantity = (newQty) => {
@@ -30,8 +30,8 @@ const AliManageQuantity = (props) => {
 		}
 		if (proceed) {
 			const updateData = {
-				cart_id: getObjectPropertyValue(cart, 'id'),
-				item_id: getObjectPropertyValue(configItem, 'id'),
+				cart_id: cartItem?.cart_id,
+				item_id: cartItem?.id,
 				variation_id: getObjectPropertyValue(cartConfiguredItem, 'id'),
 				qty: parseInt(newQty),
 			};

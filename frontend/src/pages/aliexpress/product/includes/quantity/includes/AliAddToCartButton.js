@@ -4,7 +4,6 @@ import SpinnerButtonLoader from "../../../../../../loader/SpinnerButtonLoader";
 const AliAddToCartButton = props => {
 	const {addToCartProcess, isLoading, Quantity} = props;
 
-
 	return (
 		<div className="row">
 			<div className="col-6 col-md-4">

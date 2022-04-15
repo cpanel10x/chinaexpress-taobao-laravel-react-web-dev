@@ -6,8 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Content\Product;
 use App\Traits\AliexpressApi;
 use App\Traits\ApiResponser;
-use Illuminate\Support\Str;
-use voku\helper\HtmlDomParser;
+use PHPHtmlParser\Dom;
 
 /**
  * Class HomeController.
@@ -25,22 +24,19 @@ class AliExpressApiController extends Controller
 
   public function searchQuery()
   {
-    $query = request('query_url');
-    if (!$query) {
-      return response(['status' => false, 'msg' => 'Search must not empty']);
+    $req_query = request('query_url');
+    if (!$req_query) {
+      return response(['status' => false, 'result' => '', 'msg' => 'Search must not empty']);
     }
+
+    $query = explode(" ", $req_query);
+    $query = count($query) > 3 ? end($query) : $req_query;
+
     $htmlContents = file_get_contents($query);
-    $htmlTmp = HtmlDomParser::str_get_html($htmlContents);
-    $url = '';
-    foreach ($htmlTmp->find('link') as $meta) {
-      $hasRel = $meta->hasAttribute('rel');
-      if ($hasRel) {
-        $relData = $meta->getAttribute('rel');
-        if ($relData == 'canonical') {
-          $url = $meta->getAttribute('href');
-        }
-      }
-    }
+    $dom = new Dom;
+    $dom = $dom->loadStr($htmlContents);
+    $html = $dom->find("link[rel=canonical]");
+    $url = $html->getAttribute('href');
     $url = explode('/', $url);
     $url = end($url);
     $product_id = str_replace('.html', '', $url);
@@ -64,7 +60,6 @@ class AliExpressApiController extends Controller
       $rapid = $this->ApiProductDetails($product_id);
       cache()->put($product_id, $rapid, 600);
     }
-    // $rapid = $this->ApiProductDetails($product_id);
     return response([
       'result' => json_encode($rapid)
     ]);
@@ -86,8 +81,8 @@ class AliExpressApiController extends Controller
   public function relatedProducts($product_id)
   {
     $products = Product::latest()->limit(20)->get();
-    return $this->success([
-      'result' => $products
+    return response([
+      'result' => json_encode($products)
     ]);
   }
 }

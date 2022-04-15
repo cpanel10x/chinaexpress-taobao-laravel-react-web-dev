@@ -24,10 +24,10 @@ ALTER TABLE `chinaexpress_web`.`cart_items`
 ADD COLUMN `is_popup_shown` TINYINT(1) NULL AFTER `status`;
 
 
-ALTER TABLE `chinaexpress_web`.`wishlists` 
+ALTER TABLE `wishlists` 
 ADD COLUMN `provider_type` VARCHAR(191) NULL AFTER `total_sold`;
 
-ALTER TABLE `chinaexpress_web`.`cart_items` 
+ALTER TABLE `cart_items` 
 ADD COLUMN `shipping_type` VARCHAR(191) NULL AFTER `status`,
 ADD COLUMN `IsCart` TINYINT(1) NULL AFTER `shipping_type`,
 ADD COLUMN `is_express_popup_shown` TINYINT(1) NULL AFTER `IsCart`;

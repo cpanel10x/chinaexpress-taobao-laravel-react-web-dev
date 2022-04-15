@@ -1,25 +1,24 @@
 import React, {useEffect, useState} from 'react';
-import {loadAsset} from "../../../../../utils/Helpers";
 import {usePopupMessage} from "../../../../../api/CartApi";
+import {loadAsset} from "../../../../../utils/Helpers";
 
-const PopupShown = (props) => {
-	const {settings, cart, product_id} = props;
+const AliPopupShown = (props) => {
+	const {settings, cartItem, product_id} = props;
 
 	const [showModal, setShowModal] = useState(false);
 
 	const {mutateAsync, isLoading} = usePopupMessage();
 
-	let messages = settings?.cart_popup_message || null;
+	let messages = settings?.cart_aliexpress_popup_message || null;
 	messages = messages ? JSON.parse(messages) : {};
 
 	useEffect(() => {
-		const cartItem = cart?.cart_items?.find(item => item.ItemId === product_id) || {};
-		if (cartItem?.is_popup_shown === null && cartItem?.id !== undefined) {
+		if (cartItem?.is_popup_shown === null && cartItem?.IsCart === 1) {
 			setShowModal(true);
 		} else {
 			setShowModal(false);
 		}
-	}, [cart]);
+	}, [cartItem]);
 
 	if (!showModal) {
 		return '';
@@ -62,7 +61,7 @@ const PopupShown = (props) => {
 
 						</div>
 						<div className="justify-content-center modal-footer">
-							<button type="button" className="btn btn-default" onClick={() => closeModal()}>Understood</button>
+							<button type="button" className="btn btn-default" onClick={() => closeModal()}>Read & Agree</button>
 						</div>
 					</div>
 				</div>
@@ -72,4 +71,4 @@ const PopupShown = (props) => {
 	);
 };
 
-export default PopupShown;
+export default AliPopupShown;

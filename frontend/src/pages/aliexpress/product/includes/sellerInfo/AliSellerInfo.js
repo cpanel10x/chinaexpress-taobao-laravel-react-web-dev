@@ -3,6 +3,7 @@ import React from 'react';
 const AliSellerInfo = (props) => {
 	const {product} = props;
 
+	const productId = product?.product_id;
 	const feedBackRating = product?.feedBackRating;
 	const category_id = product?.first_level_category_id;
 	const productCategoriesBreadcrumb = product?.productCategoriesBreadcrumb?.find(find => find.cateId === category_id);
@@ -11,6 +12,7 @@ const AliSellerInfo = (props) => {
 
 	return (
 		<div className="product-details-action mt-5">
+			<p className="mb-1"><b>Product ID:</b> <span className="text-danger">{productId}</span></p>
 			<p className="mb-1"><b>Source:</b> <span className="text-danger">AliExpress</span></p>
 			<p className="mb-1"><b>Seller Name:</b> <span className="text-danger">{storeModule?.storeName}</span></p>
 			<p className="mb-1"><b>Category:</b> <span className="text-danger">{productCategoriesBreadcrumb?.name || 'Unknown'}</span></p>

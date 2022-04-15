@@ -2,28 +2,25 @@ import React from 'react';
 import ProductDetailsSkeleton from "../../../../skeleton/productSkeleton/ProductDetailsSkeleton";
 import {isEmpty} from "lodash";
 import SectionProductCard from "../../../product/card/SectionProductCard";
+import {useAliRelatedProduct} from "../../../../api/AliExpressProductApi";
 
 const AliRelatedProduct = props => {
-	const productId = props?.productId;
+	const {productId, cardRef} = props;
 
-	// const {resData, isLoading} = SwrGetRequest(
-	//     productId ? `/default/aliexpress/related-products/${productId}` : null
-	// );
-	const resData = {};
-	const isLoading = false;
+	const {data: products, isLoading} = useAliRelatedProduct(productId);
 
 	if (isLoading) {
 		return <ProductDetailsSkeleton/>;
 	}
 
-	const products = resData?.data?.result;
-
 	if (isEmpty(products)) {
 		return 'Product will be loaded soon';
 	}
 
+	const height = cardRef?.current?.clientHeight || 0;
+
 	return (
-		<div className="product-sidebar p-0">
+		<div className="product-sidebar card mb-3" style={height ? {height: `${height - 24}px`} : {display: `block`,maxHeight: `875px`}}>
 
 			<div className="row">
 				{products.map((product, index) => (

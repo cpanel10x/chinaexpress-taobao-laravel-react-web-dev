@@ -14,7 +14,6 @@ export const setGetToken = (token = null) => {
 
 
 export const useCartMutation = () => {
-
 	const cache = useQueryClient();
 
 	const mainCart = useQuery("customer_cart", async () => {
@@ -76,7 +75,7 @@ export const useCartMutation = () => {
 			cache.setQueryData('customer_cart', context.previousCart)
 		},
 		onSettled: () => {
-			// cache.invalidateQueries('customer_cart')
+			cache.invalidateQueries('customer_cart')
 		},
 	});
 
@@ -137,20 +136,6 @@ export const useCartMutation = () => {
 	});
 
 
-	const popupMessage = useMutation("useReadPopupMessage", async (props) => {
-		const token = setGetToken();
-		try {
-			const {data} = await instance.post(`/cart/read-popup`, {token: token, ...props});
-			return data?.cart ? data.cart : {};
-		} catch (error) {
-			console.log(error);
-		}
-	}, {
-		onSuccess: (cart) => {
-			cache.setQueryData("customer_cart", cart);
-		}
-	});
-
 	return {
 		mainCart,
 		addToCart,
@@ -158,8 +143,7 @@ export const useCartMutation = () => {
 		checkedUnchecked,
 		removeCart,
 		PaymentMethod,
-		confirmOrder,
-		popupMessage
+		confirmOrder
 	}
 };
 
@@ -173,6 +157,41 @@ export const useCart = () => useQuery("customer_cart", async () => {
 		throw Error(error.response.statusText);
 	}
 });
+
+export const useCheckoutCart = () => useQuery("useCheckoutCart", async () => {
+	const token = setGetToken();
+	try {
+		const {data} = await instance.get(`cart/checkout?token=${token}`);
+		setGetToken(data?.cart_token);
+		return data?.cart ? data?.cart : {};
+	} catch (error) {
+		throw Error(error.response.statusText);
+	}
+});
+
+
+export const useItemMarkAsCart = () => useMutation(["useItemMarkAsCart"], async (props) => {
+	const token = setGetToken();
+	try {
+		const {data} = await instance.post(`/cart/mark-as-cart`, {token, ...props});
+		setGetToken(data?.cart?.cart_uid);
+		return data?.cart ? data.cart : {};
+	} catch (error) {
+		console.log(error);
+	}
+});
+
+
+export const usePopupMessage = () => useMutation(["useReadPopupMessage"], async (props) => {
+	const token = setGetToken();
+	try {
+		const {data} = await instance.post(`/cart/read-popup`, {token: token, ...props});
+		return data?.cart ? data.cart : {};
+	} catch (error) {
+		console.log(error);
+	}
+});
+
 
 
 

@@ -1,5 +1,4 @@
 import React, {useEffect, useRef} from 'react';
-import {useParams} from "react-router-dom";
 import {goPageTop} from "../../../utils/Helpers";
 import ProductDetailsSkeleton from "../../../skeleton/productSkeleton/ProductDetailsSkeleton";
 import AliProductBody from "./includes/AliProductBody";
@@ -16,7 +15,6 @@ const AliProductPage = (props) => {
 	const query = useQuery();
 	const query_url = query.get('url');
 
-	const {productId} = useParams();
 	const {data: settings} = useSettings();
 	const {data: product, isLoading} = useAliProductDetails(query_url);
 
@@ -30,15 +28,18 @@ const AliProductPage = (props) => {
 
 	useEffect(() => {
 		goPageTop();
-	}, [productId]);
+	}, [query_url]);
 
 	if (isLoading) {
 		return <ProductDetailsSkeleton/>;
 	}
 
-	if (!product?.product_id) {
+	const productId = product?.product_id;
+
+	if (!productId) {
 		return <AliExpressProduct404/>;
 	}
+
 
 	return (
 		<div className="main">

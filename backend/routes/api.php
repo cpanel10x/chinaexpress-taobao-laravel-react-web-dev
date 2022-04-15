@@ -115,7 +115,14 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function () {
   // cart system
   Route::group(['prefix' => 'cart', 'as' => 'cart.'], function () {
     Route::get('/', [CartController::class, 'currentCart']);
+    Route::get('/checkout', [CartController::class, 'checkoutCart']);
+
+
     Route::post('/add', [CartController::class, 'addToCart']);
+    Route::post('/mark-as-cart', [CartController::class, 'markAsCart']);
+    Route::post('/process-express', [CartController::class, 'processExpressService']);
+
+
     Route::post('/update', [CartController::class, 'updateCustomerCart']);
     Route::post('/read-popup', [CartController::class, 'readPopup']);
     Route::post('/shipping', [CartController::class, 'addShippingAddress'])->middleware('auth:sanctum');

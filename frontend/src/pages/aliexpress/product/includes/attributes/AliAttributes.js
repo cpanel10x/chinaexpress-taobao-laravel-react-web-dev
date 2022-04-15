@@ -51,12 +51,15 @@ const AliAttributes = (props) => {
 					</div>
 				)
 			}
-			<div>
-				<p>
-					<b>Ship From : </b>
-					<span className="seller_info">{ShipsFromCountries?.propertyValueDisplayName || 'Unknown'}</span>
-				</p>
-			</div>
+			{
+				ShipsFromCountries?.propertyValueDisplayName &&
+				<div>
+					<p>
+						<b>Ship From : </b>
+						<span className="seller_info">{ShipsFromCountries?.propertyValueDisplayName || 'Unknown'}</span>
+					</p>
+				</div>
+			}
 		</div>
 	)
 }

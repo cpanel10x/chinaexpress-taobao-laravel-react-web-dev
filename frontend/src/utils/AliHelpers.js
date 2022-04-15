@@ -1,4 +1,3 @@
-import {calculatePrice, getObjectPropertyValue, getProductCurrentPrice, getProductDeliveryCosts, getProductWeight} from "./CartHelpers";
 
 
 export const wishListProcessProduct = (product, aliRate) => {
@@ -83,6 +82,7 @@ export const aliProductConfiguration = (product, priceCard, operationalAttribute
 	for(let attribute in operationalAttributes){
 		const item = operationalAttributes[attribute];
 		attributes.push({
+			Id: item?.propertyValueId,
 			Pid: item?.propertyValueIdLong,
 			PropertyName: attribute,
 			Value: item?.propertyValueName,
@@ -92,3 +92,9 @@ export const aliProductConfiguration = (product, priceCard, operationalAttribute
 	configItem.Attributes = attributes;
 	return configItem;
 };
+
+
+
+export const sumCartItemTotal = (cartItem) =>{
+	return cartItem.reduce((sum, { price, qty }) => sum + parseInt(price) * parseInt(qty), 0)
+}

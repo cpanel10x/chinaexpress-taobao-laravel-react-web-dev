@@ -2,7 +2,7 @@ import React from 'react';
 import {aliActiveConfigurations, aliProductConvertionPrice} from "../../../../../utils/AliHelpers";
 
 const AliProductSummary = (props) => {
-	const {cart, product, selectShipping, settings, operationalAttributes} = props;
+	const {cartItem, product, selectShipping, settings, operationalAttributes} = props;
 	const priceCard = aliActiveConfigurations(product, operationalAttributes);
 	const skuActivityAmount = priceCard?.skuVal?.skuActivityAmount?.value || 0;
 

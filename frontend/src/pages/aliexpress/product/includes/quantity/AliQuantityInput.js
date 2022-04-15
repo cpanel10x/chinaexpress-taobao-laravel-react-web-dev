@@ -6,7 +6,7 @@ import {aliActiveConfigurations, aliProductConfiguration, aliProductProcessToCar
 import AliAddToCartButton from "./includes/AliAddToCartButton";
 
 const AliQuantityInput = (props) => {
-	const {cart, product, settings, shipment, selectShipping, operationalAttributes} = props;
+	const {cartItem, product, settings, shipment, selectShipping, operationalAttributes} = props;
 
 	const {data: shipingInfo} = shipment;
 	const priceCard = aliActiveConfigurations(product, operationalAttributes);
@@ -31,7 +31,7 @@ const AliQuantityInput = (props) => {
 		e.preventDefault();
 		let process = false;
 		if (ConfiguredItems?.Id) {
-			if (ConfiguredItems?.qty > 0) {
+			if (Quantity> 0) {
 				process = true;
 			} else {
 				swal({
@@ -47,10 +47,9 @@ const AliQuantityInput = (props) => {
 
 	const activeConfigId = priceCard?.skuPropIds;
 
-	const configItem = cart?.cart_items?.find(findItem => findItem?.variations?.find(find => String(find.configId) === String(activeConfigId)));
-	const cartConfiguredItem = configItem?.variations?.find(find => String(find.configId) === String(activeConfigId));
+	const cartConfiguredItem = cartItem?.variations?.find(find => String(find.configId) === String(activeConfigId));
 
-	if (!configItem || !cartConfiguredItem?.qty) {
+	if (!cartItem || !cartConfiguredItem?.qty) {
 		return (
 			<AliAddToCartButton
 				addToCartProcess={addToCartProcess}
@@ -60,8 +59,7 @@ const AliQuantityInput = (props) => {
 
 	return (
 		<AliManageQuantity
-			cart={cart}
-			configItem={configItem}
+			cartItem={cartItem}
 			cartConfiguredItem={cartConfiguredItem}
 			Quantity={Quantity}
 			product={product}

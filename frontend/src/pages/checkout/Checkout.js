@@ -3,15 +3,16 @@ import {goPageTop} from "../../utils/Helpers";
 import CheckoutSidebar from "./includes/CheckoutSidebar";
 import swal from "sweetalert";
 import {useSettings} from "../../api/GeneralApi";
-import {useCartMutation, useCart} from "../../api/CartApi";
+import {useCartMutation, useCheckoutCart} from "../../api/CartApi";
 import CheckoutItem from "./includes/CheckoutItem";
 import {useMediaQuery} from "react-responsive";
-import {useAuthMutation} from "../../api/Auth";
 import Helmet from "react-helmet";
 
 const Checkout = (props) => {
 	const {data: settings} = useSettings();
-	const {data: cart} = useCart();
+
+	const {data: cart} = useCheckoutCart();
+
 	const cartItems = cart?.cart_items || [];
 
 	const {removeCart} = useCartMutation();

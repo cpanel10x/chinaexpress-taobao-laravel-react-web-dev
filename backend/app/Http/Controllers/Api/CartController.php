@@ -25,11 +25,33 @@ class CartController extends Controller
     ]);
   }
 
+  public function checkoutCart()
+  {
+    $cart = $this->get_checkout_cart();
+    $cart_token = $cart->cart_uid ?? NULL;
+    return response([
+      'cart_token' => $cart_token,
+      'cart' => $cart,
+    ]);
+  }
+
   public function addToCart()
   {
     $product = request('product');
     $cart = $this->add_to_cart($product);
     return response(['status' => true, 'cart' => $cart, 'msg' => 'Product add to cart successfully']);
+  }
+
+  public function markAsCart()
+  {
+    $cart = $this->product_mark_as_cart();
+    return response(['status' => true, 'cart' => $cart, 'msg' => 'Product marked successfully']);
+  }
+
+  public function processExpressService()
+  {
+    $cart = $this->ali_product_express_service();
+    return response(['status' => true, 'cart' => $cart, 'msg' => 'Product add to express service successfully']);
   }
 
   public function updateCustomerCart()

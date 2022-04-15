@@ -736,7 +736,8 @@
   box-shadow: none;
 
   &:hover,
-  &:focus {
+  &:focus,
+  &.active {
     color: #fff;
     background-color: #791e90e7;
     border-color: #791e90e7;

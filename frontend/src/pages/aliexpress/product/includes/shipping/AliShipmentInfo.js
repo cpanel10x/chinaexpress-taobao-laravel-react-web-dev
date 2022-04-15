@@ -1,4 +1,5 @@
 import {aliProductConvertionPrice} from "../../../../../utils/AliHelpers";
+import {useEffect} from "react";
 
 const AliShipmentInfo = props => {
 	const {shipment, settings, selectShipping, setSelectShipping} = props;
@@ -7,12 +8,20 @@ const AliShipmentInfo = props => {
 
 	const currency = settings?.currency_icon || '৳';
 	const aliRate = settings?.ali_increase_rate || 88;
+	const freightResult = shipingInfo?.freightResult;
+
+	useEffect(() => {
+		if (!selectShipping && freightResult?.length > 0) {
+			const amount = shippingRate(freightResult?.[0]?.freightAmount?.value);
+			setSelectShipping(amount);
+		}
+
+	}, [freightResult, selectShipping]);
 
 	if (shipment.isLoading) {
 		return 'loading shipping...';
 	}
 
-	const freightResult = shipingInfo?.freightResult;
 
 	if (!freightResult?.length) {
 		return '';

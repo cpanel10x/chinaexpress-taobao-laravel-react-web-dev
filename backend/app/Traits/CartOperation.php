@@ -88,6 +88,22 @@ trait CartOperation
     return $cart;
   }
 
+  public function get_checkout_cart()
+  {
+    $cart = $this->get_customer_cart();
+    if ($cart) {
+      $cartItems = $cart->cartItems;
+      foreach ($cartItems as $item) {
+        if (!$item->IsCart) {
+          $variations = $item->variations->pluck('id');
+          CartItemVariation::whereIn('id', $variations)->delete();
+          CartItem::where('id', $item->id)->delete();
+        }
+      }
+    }
+    return $this->get_customer_cart();
+  }
+
   public function add_to_cart($product)
   {
     $cart_uid = $this->cart_uid();
@@ -174,7 +190,25 @@ trait CartOperation
     return $this->get_customer_cart();
   }
 
-  public function read_popup_message()
+
+
+  public function product_mark_as_cart()
+  {
+    $item_id = request('item_id');
+    $shipping_type = request('shipping_type');
+    $cart = $this->get_customer_cart();
+    if (!$cart) {
+      return [];
+    }
+    if ($item_id) {
+      CartItem::where('cart_id', $cart->id)
+        ->where('ItemId', $item_id)
+        ->update(['IsCart' => 1, 'shipping_type' => $shipping_type]);
+    }
+    return $this->get_customer_cart();
+  }
+
+  public function ali_product_express_service()
   {
     $item_id = request('item_id');
     $cart = $this->get_customer_cart();
@@ -184,7 +218,23 @@ trait CartOperation
     if ($item_id) {
       CartItem::where('cart_id', $cart->id)
         ->where('ItemId', $item_id)
-        ->update(['is_popup_shown' => 1]);
+        ->update(['is_express_popup_shown' => 1, 'IsCart' => 1, 'shipping_type' => 'express']);
+    }
+    return $this->get_customer_cart();
+  }
+
+  public function read_popup_message()
+  {
+    $item_id = request('item_id');
+    $is_express_popup_shown = request('is_express_popup_shown');
+    $cart = $this->get_customer_cart();
+    if (!$cart) {
+      return [];
+    }
+    if ($item_id) {
+      CartItem::where('cart_id', $cart->id)
+        ->where('ItemId', $item_id)
+        ->update(['is_popup_shown' => 1, 'is_express_popup_shown' => $is_express_popup_shown]);
     }
     return $this->get_customer_cart();
   }
@@ -196,16 +246,17 @@ trait CartOperation
     $variation_id = request('variation_id', null);
     $is_checked = request('checked', null);
     if ($cart) {
+      $is_checked = $is_checked ? 1 : null;
       if (!$variation_id) {
         CartItemVariation::where('cart_id', $cart->id)
-          ->update(['is_checked' => (int)$is_checked]);
+          ->update(['is_checked' => $is_checked]);
       } else if ($variation_id) {
         CartItemVariation::where('id', $variation_id)
           ->where('cart_id', $cart->id)
-          ->update(['is_checked' => (int)$is_checked]);
+          ->update(['is_checked' => $is_checked]);
       }
     }
-    return $this->get_customer_cart();;
+    return $this->get_customer_cart();
   }
 
 

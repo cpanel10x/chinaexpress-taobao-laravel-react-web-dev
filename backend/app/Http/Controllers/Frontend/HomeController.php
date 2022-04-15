@@ -3,9 +3,7 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
-use GuzzleHttp\Client;
-use GuzzleHttp\Psr7\Request;
-use voku\helper\HtmlDomParser;
+use PHPHtmlParser\Dom;
 
 /**
  * Class HomeController.
@@ -18,25 +16,15 @@ class HomeController extends Controller
   public function index()
   {
     // $url = "https://www.aliexpress.com/item/1005003429438833.html";
-    // $url = "https://a.aliexpress.com/_mq8QLFM";
-    // $abcd = file_get_contents($url);
-    // $htmlTmp = HtmlDomParser::str_get_html($abcd);
-    // $url = '';
-    // foreach ($htmlTmp->find('link') as $meta) {
-    //   $hasRel = $meta->hasAttribute('rel');
-    //   if ($hasRel) {
-    //     $relData = $meta->getAttribute('rel');
-    //     if ($relData == 'canonical') {
-    //       $url = $meta->getAttribute('href');
-    //     }
-    //   }
-    // }
-    // $url = explode('/', $url);
-    // $url = end($url);
-    // $url = str_replace('.html', '', $url);
+    // $url2 = "https://a.aliexpress.com/_mq8QLFM";
 
-    // dd($url);
+    // $string = file_get_contents($url2);
+    // $dom = new Dom;
+    // $dom = $dom->loadStr($string);
+    // $html = $dom->find("link[rel=canonical]");
+    // $full_url = $html->getAttribute('href');
 
+    // dd($full_url);
 
     return view('frontend.index');
   }

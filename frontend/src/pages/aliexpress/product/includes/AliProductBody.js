@@ -3,13 +3,15 @@ import AliMediaPart from "./media/AliMediaPart";
 import AliAttributes from './attributes/AliAttributes';
 import AliPriceCard from "./AliPriceCard";
 import AliQuantityInput from "./quantity/AliQuantityInput";
-import {useCartMutation} from "../../../../api/CartApi";
+import {useCart} from "../../../../api/CartApi";
 import AliShipmentInfo from "./shipping/AliShipmentInfo";
 import {useAliProductShippingInfo} from "../../../../api/AliExpressProductApi";
 import AliAddToCart from "./addToCart/AliAddToCart";
 import AliProductSummary from "./summary/AliProductSummary";
 import AliSellerInfo from "./sellerInfo/AliSellerInfo";
 import AliSocialShare from "./AliSocialShare";
+import AliPopupShown from "./popup/AliPopupShown";
+import ExpressOption from "./express/ExpressOption";
 
 
 const AliProductBody = (props) => {
@@ -20,9 +22,9 @@ const AliProductBody = (props) => {
 
 	const productId = product?.product_id;
 
+	const {data: cart, isLoading} = useCart();
+	const cartItem = cart?.cart_items?.find(item => item.ItemId === productId) || {};
 	const shipment = useAliProductShippingInfo(productId);
-
-	const {mainCart: {data: cart, isLoading}} = useCartMutation();
 
 	const feedback = product?.feedBackRating;
 	const metadata = product?.metadata;
@@ -42,10 +44,10 @@ const AliProductBody = (props) => {
 	return (
 		<div className="product-details-top">
 
-			{/*{*/}
-			{/*	!isLoading &&*/}
-			{/*	<PopupShown settings={settings} cart={cart} product_id={product_id}/>*/}
-			{/*}*/}
+			{
+				!isLoading &&
+				<AliPopupShown settings={settings} cartItem={cartItem} product_id={productId}/>
+			}
 			{!isMobile && <h1 className="single-product-title">{product_title}</h1>}
 			<div className="row">
 				<div className="col-md-5">
@@ -91,7 +93,7 @@ const AliProductBody = (props) => {
 						</div>
 
 						<AliQuantityInput
-							cart={cart}
+							cartItem={cartItem}
 							product={product}
 							settings={settings}
 							shipment={shipment}
@@ -100,7 +102,7 @@ const AliProductBody = (props) => {
 						/>
 
 						<AliProductSummary
-							cart={cart}
+							cartItem={cartItem}
 							product={product}
 							selectShipping={selectShipping}
 							settings={settings}
@@ -108,20 +110,16 @@ const AliProductBody = (props) => {
 						/>
 
 						<AliAddToCart
+							cartItem={cartItem}
 							product={product}
 							shipment={shipment}
 							settings={settings}/>
 
-						<div className="product-details-action mt-3">
-							<a
-								href={"/add-to-express"}
-								onClick={(e) => e.preventDefault()}
-								className="btn btn-block btn-express"
-							>
-								<span>Get Express Service</span>
-								<p className="small m-0">15-40 Days Delivery</p>
-							</a>
-						</div>
+
+						<ExpressOption
+							cartItem={cartItem}
+							product={product}
+							settings={settings}/>
 
 						<AliSellerInfo product={product}/>
 
