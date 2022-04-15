@@ -115,12 +115,12 @@ class CatalogController extends Controller
         ]);
       }
     }
-
-    $page = request('page', 0);
+    $page = request('page', 1);
     $limit = request('limit', 35);
-    $offset = $page > 1 ? ($limit * $page) : 0;
+    $offset = $page > 0 ? $limit * ($page - 1) : 0;
     $products = null;
     if ($keyword) {
+      $keyword = str_replace('&page=0', '', $keyword);
       $products = get_category_browsing_items($keyword, 'text', $offset, $limit);
       if (!empty($products)) {
         SearchLog::updateOrInsert(
@@ -154,7 +154,7 @@ class CatalogController extends Controller
     if (auth('sanctum')->check()) {
       $suggestion = $suggestion->where('user_id', auth('sanctum')->id());
     }
-    $suggestion = $suggestion->get();
+    $suggestion = $suggestion->limit(5)->get();
 
     return response([
       'suggestion' => $suggestion

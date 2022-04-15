@@ -102,10 +102,8 @@ export const useQueryValueByKey = (key) => {
 };
 
 
-
-
-export const checkIsEmail = (input) =>
-{
+export const checkIsEmail = (input) => {
 	const format = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 	return !!input.match(format);
 };
+

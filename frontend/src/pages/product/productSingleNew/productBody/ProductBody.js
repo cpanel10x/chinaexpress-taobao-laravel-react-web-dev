@@ -88,7 +88,7 @@ const ProductBody = (props) => {
 								</Link>
 							</div>
 							<div className="col pl-1">
-								<ProductWishListButton product={product}/>
+								<ProductWishListButton product={product}  settings={settings}/>
 							</div>
 						</div>
 

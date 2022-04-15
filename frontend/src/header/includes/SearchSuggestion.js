@@ -1,5 +1,5 @@
 import React from 'react';
-import { useHistory } from "react-router-dom";
+import {useHistory} from "react-router-dom";
 import {useSearchSuggestion} from "../../api/ProductApi";
 
 const SearchSuggestion = (props) => {
@@ -14,19 +14,26 @@ const SearchSuggestion = (props) => {
 		setShowSuggestion(false);
 	};
 
+	const closeSuggestion = (event) => {
+		event.preventDefault();
+		setShowSuggestion(false);
+	};
+
 	if (isLoading) {
 		return (
-			<div className="SearchSuggestion">
-				<ul className="list-group">
-					<li className="list-group-item">
-						<div className="text-center">
-							<div className="spinner-border spinner-border-sm" role="status">
-								<span className="sr-only">Loading...</span>
+			<>
+				<div className="SearchSuggestion">
+					<ul className="list-group">
+						<li className="list-group-item">
+							<div className="text-center">
+								<div className="spinner-border spinner-border-sm" role="status">
+									<span className="sr-only">Loading...</span>
+								</div>
 							</div>
-						</div>
-					</li>
-				</ul>
-			</div>
+						</li>
+					</ul>
+				</div>
+			</>
 		);
 	}
 

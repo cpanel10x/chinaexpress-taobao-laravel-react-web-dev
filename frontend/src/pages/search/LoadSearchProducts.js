@@ -11,23 +11,20 @@ import SearchBlock from "./includes/SearchBlock";
 
 const LoadSearchProducts = (props) => {
 	const history = useHistory();
-	const query = useQuery();
-	const keyword = query.get("keyword");
-	const page = query.get("page");
+	const {keyword, page} = useQuery();
 	const currentPage = page ? page : 0;
 
 	const limit = 35;
-	const offset = currentPage ? Math.ceil(currentPage * limit) : 0;
 	const {data: products, isLoading} = useSearchKeyword(keyword, currentPage);
 
 	const Content = products?.Content || [];
-	const TotalCount = products?.TotalCount || 1;
+	const TotalCount = products?.TotalCount || 0;
 	const searchBlock = products?.block || false;
 	const totalPage = Math.ceil(TotalCount / limit);
 
 	useEffect(() => {
 		goPageTop();
-		if (Content?.length === 1) {
+		if (TotalCount === 1) {
 			let product = Content?.[0];
 			const product_code = product?.product_code ? product?.product_code : product?.ItemId;
 			if(product_code){
@@ -53,7 +50,7 @@ const LoadSearchProducts = (props) => {
 		return <SearchBlock/>;
 	}
 
-	if (!Content?.length) {
+	if (!TotalCount) {
 		return <My404Component/>;
 	}
 

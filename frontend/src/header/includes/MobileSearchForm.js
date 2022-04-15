@@ -4,10 +4,10 @@ import {useQuery} from "../../utils/customHooks";
 import {useSearchPictureUpload} from "../../api/ProductApi";
 import swal from "sweetalert";
 import SearchSuggestion from "./SearchSuggestion";
+import queryString from "query-string";
 
 const MobileSearchForm = props => {
-	const query = useQuery();
-	const keyword = query.get("keyword");
+	const {keyword} = useQuery();
 	const [showSuggestion, setShowSuggestion] = useState(false);
 
 	const {mutateAsync, isLoading} = useSearchPictureUpload();
@@ -21,8 +21,13 @@ const MobileSearchForm = props => {
 
 	const submitTextSearch = e => {
 		e.preventDefault();
+		const {id: product_id} = queryString.parse(search);
+		let query = search;
+		if (product_id) {
+			query = `https://item.taobao.com/item.htm?id=${product_id}`
+		}
 		if (search) {
-			props.history.push(`/search?keyword=${search}`);
+			props.history.push(`/search?keyword=${query}`);
 		} else {
 			swal({
 				text: 'Type your keyword first',
@@ -96,7 +101,9 @@ const MobileSearchForm = props => {
 			</form>
 			{
 				showSuggestion === true &&
-				<SearchSuggestion search={search} setShowSuggestion={setShowSuggestion}/>
+				<SearchSuggestion
+					search={search}
+					setShowSuggestion={setShowSuggestion}/>
 			}
 		</div>
 	);

@@ -1,8 +1,9 @@
 import React, {useEffect} from "react";
-import {useLocation} from "react-router-dom";
+import queryString from 'query-string'
 
 
 export const useQuery = () => {
-	const {search} = useLocation();
-	return React.useMemo(() => new URLSearchParams(search), [search]);
+	const query = queryString.parse(window.location.search);
+	// console.log('query', query)
+	return query;
 };

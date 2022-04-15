@@ -85,13 +85,11 @@ if (!function_exists('otc_search_items')) {
     parse_str(parse_url($search, PHP_URL_QUERY), $search_array);
     $data_id = key_exists('id', $search_array) ? $search_array['id'] : null;
     $search = $data_id ? "https://item.taobao.com/item.htm?id={$data_id}" : $search;
-
     $query = setOtcParams();
     $query['type'] = $type;
     $query['search'] = $search;
     $query['framePosition'] = $offset;
     $query['frameSize'] = $limit;
-
     $response = load_otc_api()->request('GET', 'SearchItemsFrame', ['query' => $query]);
 
     $statusCode = $response->getStatusCode();

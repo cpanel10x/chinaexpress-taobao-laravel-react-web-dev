@@ -107,7 +107,7 @@ export const useCategoryProducts = (slugKey, page = 1) => useQuery(["search", sl
 
 export const useSearchKeyword = (keyword, page = 1) => useQuery(["search", keyword, page], async () => {
    try {
-      const {data} = await instance.post(`search`, {keyword, page});
+      const {data} = await instance.get(`search?keyword=${keyword}&page=${page}`);
       return data?.products ? JSON.parse(data?.products) : {};
    } catch (error) {
       throw Error(error.response.statusText);

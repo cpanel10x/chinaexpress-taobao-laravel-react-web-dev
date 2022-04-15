@@ -3,8 +3,7 @@ import {useQuery} from "../../../../utils/customHooks";
 
 const AliSocialShare = (props) => {
 	const {product, settings} = props;
-	const query = useQuery();
-	const query_url = query.get('url');
+	const {url: query_url} = useQuery();
 
 	const meta_title = settings?.meta_title || '';
 	const site_url = settings?.site_url || '';

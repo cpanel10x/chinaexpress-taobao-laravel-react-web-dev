@@ -596,4 +596,41 @@ export const orderSummaryCalculation = (order_items) => {
 };
 
 
+export const taobaoProductPrepareForLove = (product, rate) => {
+	const FeaturedValues = product?.FeaturedValues;
+	const TotalSales = FeaturedValues?.find(find => find.Name === "TotalSales")?.Value;
+	const averageStar = FeaturedValues?.find(find => find.Name === "favCount")?.Value;
+	const promoPrice = product?.Promotions?.[0].Price || {};
+	const regularPrice = product?.Price;
+	const sale_price = parseInt(promoPrice?.OriginalPrice) || 0;
+	const regular_price = parseInt(regularPrice?.OriginalPrice) || 0;
+	return {
+		name: product?.Title,
+		ItemId: product?.Id || product?.ItemId,
+		provider_type: "Taobao",
+		img: product?.MainPictureUrl,
+		rating: averageStar,
+		sale_price: sale_price ? sale_price * parseInt(rate) : regular_price * parseInt(rate),
+		regular_price: regular_price * parseInt(rate),
+		stock: product?.MasterQuantity,
+		total_sold: TotalSales,
+	}
+};
 
+export const taobaoCardProductPrepareForLove = (product, rate) => {
+	const FeaturedValues = product?.FeaturedValues;
+	const Price = JSON.parse(product?.Price);
+	const sale_price = parseInt(Price?.OriginalPrice) || 0;
+	const regular_price = parseInt(Price?.MarginPrice) || 0;
+	return {
+		name: product?.Title,
+		ItemId: product?.ItemId,
+		provider_type: "Taobao",
+		img: product?.MainPictureUrl,
+		rating: null,
+		sale_price: sale_price ? sale_price * parseInt(rate) : regular_price * parseInt(rate),
+		regular_price: regular_price * parseInt(rate),
+		stock: product?.MasterQuantity,
+		total_sold: null,
+	}
+};

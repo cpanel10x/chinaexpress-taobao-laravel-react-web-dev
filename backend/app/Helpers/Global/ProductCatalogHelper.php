@@ -146,28 +146,6 @@ if (!function_exists('store_browsing_data')) {
 if (!function_exists('get_category_browsing_items')) {
   function get_category_browsing_items($keyword, $type, $offset, $limit)
   {
-    $key = generate_browsing_key($keyword);
-    $path = "browsing/{$key}.json";
-    $existsFile = Storage::exists($path);
-    $browsing = [];
-    $browsingContents = [];
-    if ($existsFile) {
-      $browsing = json_decode(Storage::get($path), true);
-    }
-    $browsing = is_array($browsing) ? $browsing : [];
-    if (!empty($browsing) && is_array($browsing)) {
-      $TotalCount = getArrayKeyData($browsing, 'TotalCount', 0);
-      $browsingContents = getArrayKeyData($browsing, 'Content', []);
-      $Contents = array_slice($browsingContents, $offset, $limit);
-      if (!empty($Contents) && is_array($Contents)) {
-        return [
-          'TotalCount' => $TotalCount,
-          'Content' => $Contents
-        ];
-      }
-    }
-    // otc_search_items('bag', "text",  0, 5)
-
     if ($type == 'category') {
       $products = otc_category_items($keyword, $offset, $limit);
     } elseif ($type == 'text') {
@@ -175,15 +153,12 @@ if (!function_exists('get_category_browsing_items')) {
     } elseif ($type == 'picture') {
       $products = otc_search_items($keyword, "picture", $offset, $limit);
     }
-
     if (!empty($products) && is_array($products)) {
       $TotalCount = getArrayKeyData($products, 'TotalCount', 0);
       $Contents = getArrayKeyData($products, 'Content', []);
       if (!empty($Contents) && is_array($Contents)) {
         $Contents = generate_common_params($Contents);
         if (!empty($Contents) && is_array($Contents)) {
-          $products['Content'] = array_merge($browsingContents, $Contents);
-          store_browsing_data($key, $products);
           return [
             'TotalCount' => $TotalCount,
             'Content' => $Contents
@@ -192,7 +167,7 @@ if (!function_exists('get_category_browsing_items')) {
       }
     }
 
-    return ['Content' => [], 'TotalCount' => 34];
+    return ['Content' => [], 'TotalCount' => 0];
   }
 }
 

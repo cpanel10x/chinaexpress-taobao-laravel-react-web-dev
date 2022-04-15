@@ -43,12 +43,14 @@ const AliProductBody = (props) => {
 
 	return (
 		<div className="product-details-top">
-
 			{
 				!isLoading &&
 				<AliPopupShown settings={settings} cartItem={cartItem} product_id={productId}/>
 			}
+
 			{!isMobile && <h1 className="single-product-title">{product_title}</h1>}
+
+
 			<div className="row">
 				<div className="col-md-5">
 					<AliMediaPart

@@ -12,8 +12,7 @@ import AliProductDetailsTab from "./includes/detailsTab/AliProductDetailsTab";
 import {useQuery} from "../../../utils/customHooks";
 
 const AliProductPage = (props) => {
-	const query = useQuery();
-	const query_url = query.get('url');
+	const {url: query_url} = useQuery();
 
 	const {data: settings} = useSettings();
 	const {data: product, isLoading} = useAliProductDetails(query_url);
