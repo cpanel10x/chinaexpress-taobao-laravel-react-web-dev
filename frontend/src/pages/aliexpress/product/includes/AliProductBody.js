@@ -11,7 +11,6 @@ import AliProductSummary from "./summary/AliProductSummary";
 import AliSellerInfo from "./sellerInfo/AliSellerInfo";
 import AliSocialShare from "./AliSocialShare";
 import AliPopupShown from "./popup/AliPopupShown";
-import ExpressOption from "./express/ExpressOption";
 
 
 const AliProductBody = (props) => {
@@ -88,6 +87,8 @@ const AliProductBody = (props) => {
 
 						<div className="shipment">
 							<AliShipmentInfo
+								cartItem={cartItem}
+								product={product}
 								selectShipping={selectShipping}
 								setSelectShipping={setSelectShipping}
 								shipment={shipment}
@@ -115,12 +116,6 @@ const AliProductBody = (props) => {
 							cartItem={cartItem}
 							product={product}
 							shipment={shipment}
-							settings={settings}/>
-
-
-						<ExpressOption
-							cartItem={cartItem}
-							product={product}
 							settings={settings}/>
 
 						<AliSellerInfo product={product}/>

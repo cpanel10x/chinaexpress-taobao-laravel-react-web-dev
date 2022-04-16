@@ -1,5 +1,4 @@
 import React from 'react';
-import {getSetting} from "../../../../../utils/Helpers";
 
 const SocialShare = (props) => {
    const {product, settings} = props;
@@ -27,15 +26,6 @@ const SocialShare = (props) => {
                <i className="icon-facebook"/>
             </a>
             <a
-               href={`https://twitter.com/intent/tweet?url=${link_url}&text=${title}&hashtags=chinaexpressbd`}
-               className="social-icon twitter"
-               rel="noopener noreferrer"
-               title="Twitter"
-               target="_blank"
-            >
-               <i className="icon-twitter"/>
-            </a>
-            <a
                href={`whatsapp://send?text=${link_url}`}
                className="social-icon whatsapp"
                rel="noopener noreferrer"
@@ -56,7 +46,7 @@ const SocialShare = (props) => {
             </a>
             <a
                className="social-icon envelope"
-               href={`mailto:?subject=chinaexpress.com.bd product url$body=Check out this site ${link_url}`}
+               href={`mailto:?subject=chinaexpress.com.bd product url&body=Check out this site ${link_url}`}
                data-action="share/messenger/share"
                rel="noopener noreferrer"
                title="Email"

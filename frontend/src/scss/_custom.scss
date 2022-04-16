@@ -1095,7 +1095,23 @@
   padding: 0 15px;
 }
 
-
+.btn-gradient {
+  padding: 8px 10px;
+  max-width: 100%;
+  color: #7a1e90;
+  border-radius: 4px;
+  background: transparent;
+  box-shadow: none;
+  font-size: 14px;
+  transition: ease-in-out 300ms;
+  border: 1px solid #7a1e90;
+  font-weight: 600;
+  &.active, &:hover{
+    border: 1px solid #c735ea;
+    color: #fff;
+    background: linear-gradient(90deg, #7a1e90, #d93aff);
+  }
+}
 
 
 

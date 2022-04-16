@@ -1,5 +1,3 @@
-
-
 export const wishListProcessProduct = (product, aliRate) => {
 	const metadata = product?.metadata;
 	const titleModule = metadata?.titleModule;
@@ -47,7 +45,8 @@ export const aliActiveConfigurations = (product, operationalAttributes) => {
 const aliProductPriceCardToPrice = (priceCard, aliRate) => {
 	const minPrice = priceCard?.skuVal?.skuActivityAmount?.value || 0;
 	const maxPrice = priceCard?.skuVal?.skuAmount?.value || 0;
-	return minPrice ? Math.round(parseInt(minPrice) * parseInt(aliRate)) : Math.round(parseInt(maxPrice) * parseInt(aliRate));
+	const price = minPrice ? Math.round(Number(minPrice) * Number(aliRate)) : Math.round(Number(maxPrice) * Number(aliRate));
+	return price;
 }
 
 
@@ -79,7 +78,7 @@ export const aliProductConfiguration = (product, priceCard, operationalAttribute
 	configItem.maxQuantity = priceCard?.skuVal?.availQuantity;
 	configItem.price = aliProductPriceCardToPrice(priceCard, aliRate);
 	let attributes = [];
-	for(let attribute in operationalAttributes){
+	for (let attribute in operationalAttributes) {
 		const item = operationalAttributes[attribute];
 		attributes.push({
 			Id: item?.propertyValueId,
@@ -94,12 +93,11 @@ export const aliProductConfiguration = (product, priceCard, operationalAttribute
 };
 
 
-
-export const sumCartItemTotal = (cartItem) =>{
-	return cartItem.reduce((sum, { price, qty }) => sum + parseInt(price) * parseInt(qty), 0)
+export const sumCartItemTotal = (cartItem) => {
+	return cartItem.reduce((sum, {price, qty}) => sum + parseInt(price) * parseInt(qty), 0)
 }
 
 
-export const sumCartItemTotalQuantity = (cartItem) =>{
-	return cartItem.reduce((sum, { price, qty }) => sum + parseInt(qty), 0)
+export const sumCartItemTotalQuantity = (cartItem) => {
+	return cartItem.reduce((sum, {price, qty}) => sum + parseInt(qty), 0)
 }

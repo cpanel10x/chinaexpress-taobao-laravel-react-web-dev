@@ -1,26 +1,24 @@
 import React from 'react';
 import {Link} from "react-router-dom";
-import AliProductWishListButton from "../wishlist/AliProductWishListButton";
 import {sumCartItemTotal} from "../../../../../utils/AliHelpers";
 import Swal from 'sweetalert2'
 import {useItemMarkAsCart} from "../../../../../api/CartApi";
 import {useQueryClient} from "react-query";
+import ProductWishListButton from "../wishlist/ProductWishListButton";
 
-const AliAddToCart = (props) => {
-	const {cartItem, product, shipment, settings} = props;
-	const {data: shipingInfo} = shipment;
+const AddToCartButtons = (props) => {
+	const {cartItem, product, settings} = props;
 
-	const item_id = product?.product_id;
+	const item_id = product?.Id ? product.Id : 'na';
 
 	const cache = useQueryClient();
 	const {mutateAsync, isLoading} = useItemMarkAsCart();
 
-	const itemTotal = sumCartItemTotal(cartItem?.variations || []);
 	const isExistsOnCart = cartItem?.IsCart || 0;
 
 	const processAddToCart = (event) => {
 		event.preventDefault();
-		if (itemTotal) {
+		if (cartItem?.Quantity > 0) {
 			mutateAsync({item_id}, {
 				onSuccess: () => {
 					cache.invalidateQueries("customer_cart");
@@ -56,10 +54,10 @@ const AliAddToCart = (props) => {
 				}
 			</div>
 			<div className="col pl-1">
-				<AliProductWishListButton product={product} settings={settings}/>
+				<ProductWishListButton product={product} settings={settings}/>
 			</div>
 		</div>
 	);
 };
 
-export default AliAddToCart;
+export default AddToCartButtons;

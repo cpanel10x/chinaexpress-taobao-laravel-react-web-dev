@@ -82,7 +82,8 @@ const CheckoutItem = (props) => {
 												JSON.parse(variation?.attributes).length > 0 &&
 												<div className="row">
 													<div className="col-12">
-														<div className="mb-lg-2 small">Variations: <strong><AttrConfigs attributes={variation?.attributes}/></strong></div>
+														<div className="mb-lg-2 small">Variations: <strong><AttrConfigs attributes={variation?.attributes}/></strong>
+														</div>
 													</div>
 												</div>
 											}

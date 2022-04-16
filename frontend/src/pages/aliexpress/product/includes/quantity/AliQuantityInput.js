@@ -2,7 +2,12 @@ import React from "react";
 import {useCartMutation} from "../../../../../api/CartApi";
 import AliManageQuantity from "./includes/AliManageQuantity";
 import swal from 'sweetalert';
-import {aliActiveConfigurations, aliProductConfiguration, aliProductProcessToCart} from "../../../../../utils/AliHelpers";
+import {
+	aliActiveConfigurations,
+	aliProductConfiguration,
+	aliProductConvertionPrice,
+	aliProductProcessToCart
+} from "../../../../../utils/AliHelpers";
 import AliAddToCartButton from "./includes/AliAddToCartButton";
 
 const AliQuantityInput = (props) => {
@@ -16,22 +21,30 @@ const AliQuantityInput = (props) => {
 	const aliRate = settings?.ali_increase_rate || 88;
 	const weight = shipingInfo?.packageInfo?.weight || 0;
 
-	const processProduct = aliProductProcessToCart(product, priceCard, aliRate);
-	processProduct.weight = Number(weight).toFixed(3);
-	processProduct.DeliveryCost = selectShipping;
-	processProduct.Quantity = 1;
-	processProduct.hasConfigurators = true;
+	const DeliveryCost = () => {
+		const amount = selectShipping?.freightAmount?.value || 0;
+		return aliProductConvertionPrice(amount, aliRate);
+	};
 
-	const ConfiguredItems = aliProductConfiguration(product, priceCard, operationalAttributes, aliRate);
-	processProduct.ConfiguredItems = ConfiguredItems;
+	const processProductData = () => {
+		const processProduct = aliProductProcessToCart(product, priceCard, aliRate);
+		processProduct.weight = Number(weight).toFixed(3);
+		processProduct.DeliveryCost = DeliveryCost();
+		processProduct.Quantity = 1;
+		processProduct.hasConfigurators = true;
+		processProduct.ConfiguredItems = aliProductConfiguration(product, priceCard, operationalAttributes, aliRate);
+		return processProduct;
+	};
 
 	const Quantity = priceCard?.skuVal?.availQuantity || 0;
 
 	const addToCartProcess = (e) => {
 		e.preventDefault();
+		const processProduct = processProductData();
+
 		let process = false;
-		if (ConfiguredItems?.Id) {
-			if (Quantity> 0) {
+		if (processProduct?.ConfiguredItems?.Id) {
+			if (Quantity > 0) {
 				process = true;
 			} else {
 				swal({

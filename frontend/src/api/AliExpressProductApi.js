@@ -33,10 +33,21 @@ export const useAliProductDescription = (descriptionUrl) => useQuery(["useAliPro
 });
 
 
+export const useChooseShipping = () => useMutation(["useChooseShipping"], async (props) => {
+	const token = setGetToken();
+	try {
+		const {data} = await instance.post(`/cart/choose-shipping`, {token, ...props});
+		setGetToken(data?.cart?.cart_uid);
+		return data?.cart ? data.cart : {};
+	} catch (error) {
+		console.log(error);
+	}
+});
+
 export const useExpressService = () => useMutation(["useExpressService"], async (props) => {
 	const token = setGetToken();
 	try {
-		const {data} = await instance.post(`/cart/process-express`, {token, ...props});
+		const {data} = await instance.post(`/cart/choose-shipping`, {token, ...props});
 		setGetToken(data?.cart?.cart_uid);
 		return data?.cart ? data.cart : {};
 	} catch (error) {

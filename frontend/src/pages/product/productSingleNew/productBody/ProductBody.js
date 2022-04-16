@@ -3,33 +3,32 @@ import LoadAttributes from "./includes/attribute/LoadAttributes";
 import ProductSummary from "./includes/ProductSummary";
 import MediaPart from "./includes/MediaPart";
 import {getActiveConfiguredItems} from "../../../../utils/CartHelpers";
-import {withRouter, Link} from "react-router-dom";
+import {withRouter} from "react-router-dom";
 import QuantityInput from "./quantity/QuantityInput";
 import SocialShare from "./includes/SocialShare";
 import SellerInfo from "./includes/SellerInfo";
 import PriceCard from "./includes/PriceCard";
 import {useCartMutation} from "../../../../api/CartApi";
 import {useMediaQuery} from "react-responsive";
-import ProductWishListButton from "./wishlist/ProductWishListButton";
 import PopupShown from "./oneTimePopup/PopupShown";
+import AddToCartButtons from "./addToCart/AddToCartButtons";
 
 const ProductBody = (props) => {
 	const {product, settings} = props;
 	const [cartStore, setCartStore] = useState({});
+	const [activeImg, setActiveImg] = useState("");
 
 	const {mainCart: {data: cart, isLoading}} = useCartMutation();
 
-	const [activeImg, setActiveImg] = useState("");
-
 	const product_id = product?.Id ? product.Id : 'na';
 	const Title = product?.Title ? product.Title : 'No Title';
+	const cartItem = cart?.cart_items?.find(item => item.ItemId === product_id) || {};
 
 	const ConfiguredItems = product?.ConfiguredItems ? product.ConfiguredItems : [];
 	const selectAttributes = cartStore?.Attributes || [];
 	const activeConfiguredItems = getActiveConfiguredItems(ConfiguredItems, selectAttributes);
 
 	const FeaturedValues = product?.FeaturedValues ? product.FeaturedValues : [];
-	const TaobaoVendorId = FeaturedValues?.find(find => find.Name === 'TaobaoVendorId')?.Value;
 	const SalesInLast30Days = FeaturedValues?.find(find => find.Name === 'SalesInLast30Days')?.Value;
 	const favCount = FeaturedValues?.find(find => find.Name === 'favCount')?.Value;
 	const reviews = FeaturedValues?.find(find => find.Name === 'reviews')?.Value;
@@ -78,19 +77,8 @@ const ProductBody = (props) => {
 							product={product}
 							settings={settings}
 						/>
-						<div className="row">
-							<div className="col pr-1">
-								<Link to={"/checkout"}
-								      className="btn btn-custom-product btn-addToCart btn-block"
-								>
-									<span className="cartIcon"><i className="icon-cart"/></span>
-									<span>Buy Now</span>
-								</Link>
-							</div>
-							<div className="col pl-1">
-								<ProductWishListButton product={product}  settings={settings}/>
-							</div>
-						</div>
+
+						<AddToCartButtons cartItem={cartItem}  product={product}  settings={settings} />
 
 						<SellerInfo product={product}/>
 

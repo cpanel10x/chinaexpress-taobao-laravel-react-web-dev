@@ -4,13 +4,8 @@ import {loadAsset} from "../../../../../utils/Helpers";
 
 const AliPopupShown = (props) => {
 	const {settings, cartItem, product_id} = props;
-
 	const [showModal, setShowModal] = useState(false);
-
 	const {mutateAsync, isLoading} = usePopupMessage();
-
-	let messages = settings?.cart_aliexpress_popup_message || null;
-	messages = messages ? JSON.parse(messages) : {};
 
 	useEffect(() => {
 		if (cartItem?.is_popup_shown === null && cartItem?.IsCart === 1) {
@@ -24,6 +19,12 @@ const AliPopupShown = (props) => {
 		return '';
 	}
 
+	let messages = settings?.cart_aliexpress_popup_message || null;
+	messages = messages ? JSON.parse(messages) : {};
+	let expressMessages = settings?.aliexpress_express_popup_message || null;
+	expressMessages = expressMessages ? JSON.parse(expressMessages) : {};
+	messages = cartItem?.shipping_type === 'express' ? expressMessages : messages;
+
 	const closeModal = () => {
 		mutateAsync({item_id: product_id});
 		setShowModal(false);
@@ -36,7 +37,6 @@ const AliPopupShown = (props) => {
 			     id="staticBackdrop"
 			     data-backdrop="static"
 			     data-keyboard="false"
-			     onClick={() => closeModal()}
 			     style={{display: 'block'}}>
 				<div className="modal-dialog modal-dialog-centered">
 					<div className="modal-content">

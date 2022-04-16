@@ -1,22 +1,33 @@
-import {aliProductConvertionPrice} from "../../../../../utils/AliHelpers";
+import {aliProductConvertionPrice, sumCartItemTotal} from "../../../../../utils/AliHelpers";
 import {useEffect, useState} from "react";
-import ShippingModal from "./includes/ShippingModal";
+import {useChooseShipping} from "../../../../../api/AliExpressProductApi";
+import Swal from "sweetalert2";
+import {useQueryClient} from "react-query";
 
 const AliShipmentInfo = props => {
-	const {shipment, settings, selectShipping, setSelectShipping} = props;
-	const [optionEnable, setOptionEnable] = useState(false);
+	const {cartItem, product, shipment, settings, selectShipping, setSelectShipping} = props;
+	const [activeShipping, setActiveShipping] = useState('regular');
 
-	const {data: shipingInfo, isLoading} = shipment;
+	const {data: shipingInfo} = shipment;
 
+	const cache = useQueryClient();
+	const {mutateAsync, isLoading} = useChooseShipping();
+
+	const itemTotal = sumCartItemTotal(cartItem?.variations || []);
 	const currency = settings?.currency_icon || '৳';
-	const aliRate = settings?.ali_increase_rate || 88;
+
+	let aliRate = settings?.ali_increase_rate || 0;
+	aliRate = aliRate ? parseInt(aliRate) : 90;
+	let minOrder = settings?.express_shipping_min_value || 0;
+	minOrder = minOrder ? parseInt(minOrder) : 300;
+
 	const freightResult = shipingInfo?.freightResult;
 
 	useEffect(() => {
 		if (!selectShipping && freightResult?.length > 0) {
-			shippingRate(freightResult?.[0]);
+			setSelectShipping(freightResult?.[0]);
 		}
-	}, [freightResult, selectShipping]);
+	}, [freightResult, setSelectShipping]);
 
 	if (shipment.isLoading) {
 		return 'loading shipping...';
@@ -26,50 +37,92 @@ const AliShipmentInfo = props => {
 		return aliProductConvertionPrice(amount, aliRate);
 	};
 
-	const toggleChoseOption = (event, option = true) => {
-		event.preventDefault();
-		setOptionEnable(option)
+	const selectShippingMethod = (event) => {
+		const value = event.target.value;
+		if (value === 'regular') {
+			setActiveShipping(value);
+			mutateAsync(
+				{item_id: product?.product_id, shipping_type: value},
+				{
+					onSuccess: () => {
+						cache.invalidateQueries("customer_cart");
+					}
+				});
+		} else if (value === 'express') {
+			if (itemTotal > minOrder) {
+				setActiveShipping(value);
+				mutateAsync(
+					{item_id: product?.product_id, shipping_type: value},
+					{
+						onSuccess: () => {
+							cache.invalidateQueries("customer_cart");
+						}
+					});
+			} else {
+				Swal.fire({
+					text: `Your product minimum order value ${currency} ${minOrder}`,
+					icon: 'warning',
+					confirmButtonText: 'Ok, Dismiss'
+				});
+				setActiveShipping('regular');
+			}
+		}
+		return '';
 	};
 
+	const updateDeliveryCharge = (event) => {
+		const shippingValue = event.target.value;
+	};
 
 	return (
 		<div className="mb-3">
-
-			{
-				optionEnable &&
-				<ShippingModal
-					currency={currency}
-					freightResult={freightResult}
-					shippingRate={shippingRate}
-					selectShipping={selectShipping}
-					setSelectShipping={setSelectShipping}
-					setOptionEnable={setOptionEnable}
-				/>
-			}
-
-			<div className="row align-items-center">
-				<div className="col-md-2 col-3">
-					<p className="m-0">Shipping:</p>
-				</div>
-				<div className="col-md-7 col-5">
-					{
-						selectShipping ?
-							<div>
-								<p className="m-0">{selectShipping.company + ` | ${currency} ` + shippingRate(selectShipping?.freightAmount?.value)}</p>
-								<p className="m-0">{`${selectShipping?.time} Days`}</p>
-							</div>
-							:
-							<p className="m-0">Chose your shipping</p>
-					}
-				</div>
-				<div className="col-md-3 col-4">
-					<a href="#"
-					   onClick={event => toggleChoseOption(event)}
-					   className="small">
-						More Option <i className="icon-down-open"/>
-					</a>
+			<div className="mb-2">
+				{
+					freightResult?.length > 0 &&
+					<div className="form-check form-check-inline">
+						<input className="form-check-input"
+						       type="radio"
+						       onChange={event => selectShippingMethod(event)}
+						       checked={activeShipping === 'regular'}
+						       name="shipping"
+						       id="regular"
+						       value="regular"/>
+						<label className="form-check-label" htmlFor="regular">Regular Shipping</label>
+					</div>
+				}
+				<div className="form-check form-check-inline">
+					<input className="form-check-input"
+					       type="radio"
+					       onChange={event => selectShippingMethod(event)}
+					       checked={activeShipping === 'express'}
+					       name="shipping"
+					       id="express"
+					       value="express"/>
+					<label className="form-check-label" htmlFor="express">Express Shipping</label>
 				</div>
 			</div>
+			{
+				activeShipping === 'regular' && freightResult?.length > 0 &&
+				<div>
+					{
+						<select
+							className="form-control"
+							onChange={event => updateDeliveryCharge(event)}
+							value={selectShipping}
+							id="shipping_method">
+							{
+								freightResult?.map((freight, key) =>
+									<option
+										key={key}
+										value={shippingRate(freight?.freightAmount?.value)}>
+										{`${freight.company} (${freight?.time} Days) | ${currency + ' ' + shippingRate(freight?.freightAmount?.value)}`}
+									</option>
+								)
+							}
+						</select>
+					}
+				</div>
+			}
 		</div>
 	);
 };

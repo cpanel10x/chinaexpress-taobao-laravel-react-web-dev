@@ -2,41 +2,40 @@ import React from 'react';
 import {aliProductConvertionPrice, sumCartItemTotal, sumCartItemTotalQuantity} from "../../../../../utils/AliHelpers";
 
 const AliProductSummary = (props) => {
-	const {cartItem, product, selectShipping, settings, operationalAttributes} = props;
+	const {cartItem, product, settings, operationalAttributes} = props;
 
 	const currency = settings?.currency_icon || '৳';
-	const aliRate = settings?.ali_increase_rate || 88;
 	const isExpress = false;
-
-	const shippingRate = () => {
-		const amount = selectShipping.freightAmount?.value ?? 0;
-		return aliProductConvertionPrice(amount, aliRate);
-	};
+	const DeliveryCost = cartItem?.DeliveryCost || 0;
 
 	const itemTotal = sumCartItemTotal(cartItem?.variations || []);
 	const quantity = sumCartItemTotalQuantity(cartItem?.variations || []);
-	const totalActivePrice = parseInt(itemTotal) + shippingRate();
+	const totalActivePrice = parseInt(itemTotal) + parseInt(DeliveryCost);
 
-	if (isExpress) {
+	if (cartItem?.shipping_type === 'express') {
 		return (
 			<div>
 				<table className="table table-bordered">
 					<tbody>
 					<tr>
+						<td className="w-50">Total Quantity</td>
+						<td className="w-50">{`${quantity}`}</td>
+					</tr>
+					<tr>
 						<td className="w-50">Weight</td>
-						<td className="w-50">0.524kg</td>
+						<td className="w-50">{(Number(cartItem.weight) * Number(quantity)).toFixed(3)}kg</td>
 					</tr>
 					<tr>
 						<td className="w-50">China Delivery charge</td>
-						<td className="w-50">0.524kg</td>
+						<td className="w-50">{`${currency} ${DeliveryCost}`}</td>
 					</tr>
 					<tr>
 						<td className="w-50">Express Shipping rate</td>
-						<td className="w-50">232</td>
+						<td className="w-50">{`${currency} ${cartItem?.shipping_rate ? cartItem.shipping_rate : 0}`}</td>
 					</tr>
 					<tr>
 						<td className="w-50">Total Product Price:</td>
-						<td className="w-50">650 Tk per kg</td>
+						<td className="w-50">{`${currency} ${totalActivePrice}`}</td>
 					</tr>
 					</tbody>
 				</table>
@@ -59,7 +58,7 @@ const AliProductSummary = (props) => {
 				</tr>
 				<tr>
 					<td className="w-50">Shipping charge</td>
-					<td className="w-50">{`${currency} ${shippingRate()}`}</td>
+					<td className="w-50">{`${currency} ${DeliveryCost}`}</td>
 				</tr>
 				<tr>
 					<td className="w-50">Total Product Price:</td>
