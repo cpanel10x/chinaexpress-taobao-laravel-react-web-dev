@@ -87,6 +87,18 @@ class SettingController extends Controller
     return redirect()->back()->withFlashSuccess('Setting Updated Successfully');
   }
 
+  public function aliexpressLimitation()
+  {
+    $data = request()->all();
+    unset($data['_token'], $data['ali_shipping']);
+    $shipping = request('ali_shipping', []);
+    $data['ali_air_shipping_charges'] = json_encode($shipping);
+    Setting::save_settings($data);
+    Cache::forget('settings'); // remove setting cache
+
+    return redirect()->back()->withFlashSuccess('Setting Updated Successfully');
+  }
+
 
   public function message()
   {

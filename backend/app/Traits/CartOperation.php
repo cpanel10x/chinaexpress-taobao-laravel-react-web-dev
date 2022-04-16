@@ -124,6 +124,7 @@ trait CartOperation
     }
     $cart_id = $cart->id;
     $ItemId = $product['Id'] ?? null;
+    $ProviderType = $product['ProviderType'] ?? null;
     $CartItem = null;
     if ($cart_id) {
       $data['Title'] = $product['Title'] ?? null;
@@ -177,16 +178,27 @@ trait CartOperation
         CartItemVariation::where('id', $variation_id)->delete();
       }
     }
-    if ($item_id) {
+    $item = CartItem::with('variations')->where('id', $item_id)->first();
+    if ($item) {
       $variationQty = CartItemVariation::where('cart_item_id', $item_id)->sum('qty');
       if ($variationQty > 0) {
-        CartItem::where('id', $item_id)
-          ->update(['Quantity' => $variationQty]);
+        $item->update(['Quantity' => $variationQty]);
       } else {
-        CartItem::where('id', $item_id)
-          ->delete();
+        $item->delete();
       }
+      $variations = $item->variations;
+      $process = [];
+      if ($item->ProviderType == 'aliexpress' && $item->shipping_type == 'express') {
+        $totalQty = $variations->sum('qty');
+        $weight = $totalQty * $item->weight;
+        $process['DeliveryCost'] = get_aliExpress_shipping($weight);
+        $process['shipping_rate'] = get_aliExpress_air_shipping_rate($variations);
+      } else {
+        $process['shipping_rate'] = get_aliExpress_air_shipping_rate($variations, 'taobao');
+      }
+      $item->update($process);
     }
+
     return $this->get_customer_cart();
   }
 
@@ -208,9 +220,10 @@ trait CartOperation
     return $this->get_customer_cart();
   }
 
-  public function ali_product_express_service()
+  public function ali_product_choose_shipping()
   {
     $item_id = request('item_id');
+    $shipping = request('shipping_type');
     $cart = $this->get_customer_cart();
     if (!$cart) {
       return [];
@@ -218,7 +231,12 @@ trait CartOperation
     if ($item_id) {
       CartItem::where('cart_id', $cart->id)
         ->where('ItemId', $item_id)
-        ->update(['is_express_popup_shown' => 1, 'IsCart' => 1, 'shipping_type' => 'express']);
+        ->update([
+          'is_express_popup_shown' => null,
+          'is_popup_shown' => null,
+          'IsCart' => null,
+          'shipping_type' => $shipping
+        ]);
     }
     return $this->get_customer_cart();
   }

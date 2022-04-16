@@ -91,6 +91,7 @@ Route::namespace('Content')->group(function () {
     Route::get('limit', [SettingController::class, 'limit'])->name('limit');
     Route::get('popup', [SettingController::class, 'popupMessage'])->name('popup');
     Route::post('limitationStore', [SettingController::class, 'limitationStore'])->name('limitationStore');
+    Route::post('aliexpress/limitation', [SettingController::class, 'aliexpressLimitation'])->name('aliexpress.limitation.store');
 
     Route::get('message', [SettingController::class, 'message'])->name('message');
     Route::post('message-store', [SettingController::class, 'messageStore'])->name('message.store');

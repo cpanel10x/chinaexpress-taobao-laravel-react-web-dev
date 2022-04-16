@@ -5,8 +5,7 @@
 
 @section('content')
 
-<div class="row justify-content-center">
-
+<div class="row">
   <div class="col-md-6">
     {{ html()->form('POST', route('admin.setting.limitationStore'))->class('form-horizontal')->open() }}
     <div class="card mb-3">
@@ -81,7 +80,6 @@
     </div> <!--  .card -->
     {{ html()->form()->close() }}
   </div> <!-- .col-md-6 -->
-
   <div class="col-md-6">
     {{ html()->form('POST', route('admin.setting.airShippingStore'))->class('form-horizontal')->open() }}
     <div class="card mb-3">
@@ -89,7 +87,6 @@
         <h3 class="card-title">Shipping Limitation <small class="ml-2">(Air Shipping Rate)</small></h3>
       </div>
       <div class="card-body">
-
         <table class="table-bordered table-sm table-striped text-center">
           <tr>
             <th style="width: 25%">Minimum</th>
@@ -97,7 +94,7 @@
             <th style="width: 25%">Rate</th>
             <th style="width: 25%">Option</th>
           </tr>
-          <tbody id="shippLimitBody">
+          <tbody class="shippLimitBody">
             @php
             $shipping_charges = json_decode(get_setting('air_shipping_charges')) ?? collect([]);
             @endphp
@@ -142,7 +139,7 @@
           <tfoot>
             <td colspan="3"></td>
             <td>
-              <button type="button" class="btn btn-sm btn-primary addField">Add New</button>
+              <button type="button" class="btn btn-sm btn-primary addField" data-name="shipping">Add New</button>
             </td>
           </tfoot>
         </table>
@@ -155,7 +152,144 @@
     </div> <!--  .card -->
     {{ html()->form()->close() }}
   </div> <!-- .col-md-6 -->
+</div> <!-- .row -->
+
+<div class="row">
+  <div class="col-md-6">
+    {{ html()->form('POST', route('admin.setting.aliexpress.limitation.store'))->open() }}
+    <div class="card mb-3">
+      <div class="card-header with-border">
+        <h3 class="card-title">AliExpress Order Limitation <small class="ml-2">(update information anytime)</small></h3>
+      </div>
+      <div class="card-body">
+
+        <div class="form-group row">
+          <div class="col-md-6">
+            {{html()->label('AliExpress minimum order (BDT.)')->for('ali_min_order_value')}}
+            {{html()->number('ali_min_order_value', get_setting('ali_min_order_value'))
+            ->class('form-control')
+            ->placeholder('AliExpress minimum order')}}
+          </div>
+          <div class="col-md-6">
+            {{html()->label('Express shipping minimum order (BDT.)')->for('express_shipping_min_value')}}
+            {{html()->number('express_shipping_min_value', get_setting('express_shipping_min_value'))
+            ->class('form-control')
+            ->placeholder('Express shipping Minimum Order Amount')}}
+          </div>
+        </div> <!-- form-group-->
+        <div class="form-group row">
+          <div class="col-md-6">
+            {{html()->label('Express Shipping Weight Rate (per kg)')->for('express_shipping_weight_rate')}}
+            {{html()->number('express_shipping_weight_rate', get_setting('express_shipping_weight_rate'))
+            ->class('form-control')
+            ->placeholder('Weight Rate')}}
+          </div> <!-- col-md-6 -->
+          <div class="col-md-6">
+            {{html()->label('Express Shipping Weight Minimum Charges')->for('express_shipping_weight_min_charge')}}
+            {{html()->number('express_shipping_weight_min_charge', get_setting('express_shipping_weight_min_charge'))
+            ->class('form-control')
+            ->placeholder('Weight Minimum Charges')}}
+          </div> <!-- col-md-6 -->
+        </div> <!-- form-group-->
+        <div class="form-group">
+          <label for="weight_charges">Express Shipping Weight charges</label>
+          <table class="table-bordered table-sm table-striped text-center w-100">
+            <tr>
+              <th style="width: 25%">Minimum</th>
+              <th style="width: 25%">Maximum</th>
+              <th style="width: 25%">Rate</th>
+              <th style="width: 25%">Option</th>
+            </tr>
+            <tbody class="shippLimitBody">
+              @php
+              $shipping_charges = json_decode(get_setting('ali_air_shipping_charges')) ?? collect([]);
+              @endphp
+              @forelse($shipping_charges as $key => $charges)
+              <tr>
+                <td>
+                  {{html()->number('ali_shipping['.$key.'][minimum]', $charges->minimum)->class('form-control
+                  form-control-sm')->attribute('min',0)->placeholder('Minimum')}}
+                </td>
+                <td>
+                  {{html()->number('ali_shipping['.$key.'][maximum]',$charges->maximum)->class('form-control
+                  form-control-sm')->attribute('min',0)->placeholder('Maximum')}}
+                </td>
+                <td>
+                  {{html()->number('ali_shipping['.$key.'][rate]', $charges->rate)->class('form-control
+                  form-control-sm')->attribute('min',0)->placeholder('Rate')}}
+                </td>
+                <td>
+                  <button type="button" class="btn btn-sm btn-danger removeField">Remove</button>
+                </td>
+              </tr>
+              @empty
+              <tr class="blank_field">
+                <td>
+                  {{html()->number('ali_shipping[0][minimum]')->class('form-control
+                  form-control-sm')->attribute('min',0)->placeholder('Minimum')}}
+                </td>
+                <td>
+                  {{html()->number('ali_shipping[0][maximum]')->class('form-control
+                  form-control-sm')->attribute('min',0)->placeholder('Maximum')}}
+                </td>
+                <td>
+                  {{html()->number('ali_shipping[0][rate]')->class('form-control
+                  form-control-sm')->attribute('min',0)->placeholder('Rate')}}
+                </td>
+                <td>
+                  <button type="button" class="btn btn-sm btn-danger removeField">Remove</button>
+                </td>
+              </tr>
+              @endforelse
+            </tbody>
+            <tfoot>
+              <td colspan="3"></td>
+              <td>
+                <button type="button" class="btn btn-sm btn-primary addField" data-name="ali_shipping">Add New</button>
+              </td>
+            </tfoot>
+          </table>
+        </div> <!-- form-group-->
+
+        <div class="form-group">
+          {{html()->button('Update')->class('btn btn-block btn-success')}}
+        </div> <!-- form-group-->
+      </div> <!--  .card-body -->
+    </div> <!--  .card -->
+    {{ html()->form()->close() }}
+  </div> <!-- .col-md-6 -->
 
 </div> <!-- .row -->
 
 @endsection
+
+@push('after-scripts')
+<script>
+  function limitationField(name, length){
+  return `<tr><td><input class="form-control form-control-sm" type="number" name="${name}[${length}][minimum]" id="minimum" placeholder="Minimum"></td><td>
+                <input class="form-control form-control-sm" type="number" name="${name}[${length}][maximum]" id="maximum" placeholder="Maximum"></td><td><input class="form-control form-control-sm" type="number" name="${name}[${length}][rate]" id="rate" placeholder="Rate"></td><td><button type="button" class="btn btn-sm btn-danger removeField">Remove</button>
+              </td></tr>`;
+}
+
+
+     $(document).on('click', '.removeField', function () {
+        var tbody = $(this).closest('table').find('.shippLimitBody').find('tr');
+        if (tbody.length > 1) {
+           $(this).closest('tr').remove();
+        } else if (tbody.length === 1) {
+           $(this).addClass('disabled');
+        }
+     });
+
+     $(document).on('click', '.addField', function () {
+        var shippLimitBody = $(this).closest('table').find('.shippLimitBody');
+        var dataFieldName = $(this).attr('data-name')
+        var rowLength = shippLimitBody.find('tr').length;
+        var tableRow = limitationField(dataFieldName, rowLength);
+        if (rowLength < 10) {
+           shippLimitBody.append(tableRow);
+        }
+     });
+
+</script>
+@endpush

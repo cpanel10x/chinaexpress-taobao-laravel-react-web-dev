@@ -378,6 +378,62 @@ if (!function_exists('generate_transaction_id')) {
    */
   function generate_transaction_id()
   {
-    return uniqid("U");
+    return uniqid("CH");
+  }
+}
+
+if (!function_exists('get_aliExpress_shipping')) {
+  /**
+   * @param $status
+   * @return string
+   */
+  function get_aliExpress_shipping($weight)
+  {
+    $rate = get_setting('express_shipping_weight_rate', 0);
+    $min_charge = get_setting('express_shipping_weight_min_charge', 0);
+    $total = $rate * $weight;
+    return $total >= $min_charge ? $total : $min_charge;
+  }
+}
+
+if (!function_exists('get_aliExpress_air_shipping_rate')) {
+  /**
+   * @param $status
+   * @return string
+   */
+  function get_aliExpress_air_shipping_rate($variations, $type = 'express')
+  {
+    $total = 0;
+    foreach ($variations as $variation) {
+      $qty = $variation->qty;
+      $price = $variation->price;
+      $total = $qty * $price;
+    }
+    $charges = $type == 'express' ? get_setting('ali_air_shipping_charges') : get_setting('air_shipping_charges');
+    $charges = $charges ? json_decode($charges, true) : [];
+    return calculate_air_shipping_rate($charges, $total);
+  }
+}
+
+
+if (!function_exists('calculate_air_shipping_rate')) {
+  /**
+   * @param $status
+   * @return string
+   */
+  function calculate_air_shipping_rate($conditions, $amount)
+  {
+    $shipping_rate = 0;
+    for ($x = 0; $x < count($conditions); $x++) {
+      $condition = $conditions[$x];
+      $minimum = $condition['minimum'] ?? 0;
+      $maximum = $condition['maximum'] ?? 0;
+      $rate = $condition['rate'] ?? 0;
+      if ($amount >= $minimum && $amount <= $maximum) {
+        $shipping_rate = $rate;
+        break;
+      }
+    }
+    return $shipping_rate;
   }
 }

@@ -2,48 +2,48 @@
 @langrtl
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" dir="rtl">
 @else
-  <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-  @endlangrtl
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+@endlangrtl
 
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', app_name()) - {{app_name()}}</title>
-    <meta name="description" content="@yield('meta_description', 'avanteca.com.bd')">
-    <meta name="author" content="@yield('meta_author', 'Avanteca Web Apps Ltd.')">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+  <title>@yield('title', app_name()) - {{app_name()}}</title>
+  <meta name="description" content="@yield('meta_description', 'avanteca.com.bd')">
+  <meta name="author" content="@yield('meta_author', 'Avanteca Web Apps Ltd.')">
 
-    <link rel="shortcut icon" href="{{asset('img/brand/favicon.ico')}}" type="image/x-icon">
-    <link rel="apple-touch-icon" sizes="180x180" href="{{asset('img/brand/apple-touch-icon.png')}}">
-    <link rel="icon" type="image/png" sizes="192x192" href="{{asset('img/brand/favicon192.png')}}">
-    <link rel="icon" type="image/png" sizes="32x32" href="{{asset('img/brand/favicon32.png')}}">
-    <link rel="icon" type="image/png" sizes="16x16" href="{{asset('img/brand/favicon16.png')}}">
-    <link rel="manifest" href="{{asset('img/brand/site.webmanifest')}}">
+  <link rel="shortcut icon" href="{{asset('img/brand/favicon.ico')}}" type="image/x-icon">
+  <link rel="apple-touch-icon" sizes="180x180" href="{{asset('img/brand/apple-touch-icon.png')}}">
+  <link rel="icon" type="image/png" sizes="192x192" href="{{asset('img/brand/favicon192.png')}}">
+  <link rel="icon" type="image/png" sizes="32x32" href="{{asset('img/brand/favicon32.png')}}">
+  <link rel="icon" type="image/png" sizes="16x16" href="{{asset('img/brand/favicon16.png')}}">
+  <link rel="manifest" href="{{asset('img/brand/site.webmanifest')}}">
 
-    @yield('meta')
+  @yield('meta')
 
-    @stack('before-styles')
+  @stack('before-styles')
 
-    {{ style('https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700') }}
-    {{ style('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css') }}
-    {{ style('backend/plugins/overlayScrollbars/css/OverlayScrollbars.min.css') }}
-    {{ style('backend/dist/css/adminlte.min.css') }}
+  {{ style('https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700') }}
+  {{ style('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css') }}
+  {{ style('backend/plugins/overlayScrollbars/css/OverlayScrollbars.min.css') }}
+  {{ style('backend/dist/css/adminlte.min.css') }}
 
-    @stack('middle-styles')
-    {{ style(mix('css/backend.css')) }}
+  @stack('middle-styles')
+  {{ style(mix('css/backend.css')) }}
 
-    @stack('after-styles')
-  </head>
+  @stack('after-styles')
+</head>
 
-  <body class="layout-fixed sidebar-mini text-sm sidebar-collapse">
+<body class="layout-fixed sidebar-mini text-sm sidebar-collapse">
   <!-- Site wrapper -->
   <div class="wrapper">
 
-  @include('backend.includes.header')
+    @include('backend.includes.header')
 
-  @include('backend.includes.sidebar')
+    @include('backend.includes.sidebar')
 
-  <!-- Content Wrapper. Contains page content -->
+    <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
       <!-- Content Header (Page header) -->
       <section class="content-header">
@@ -71,7 +71,8 @@
 
 
   <!-- Details loading Modal -->
-  <div class="modal fade" id="details_loading" tabindex="-1" role="dialog" aria-labelledby="details_loading_title" aria-hidden="true">
+  <div class="modal fade" id="details_loading" tabindex="-1" role="dialog" aria-labelledby="details_loading_title"
+    aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -81,7 +82,7 @@
           </button>
         </div>
         <div class="modal-body">
-          {{--     details loading here by ajax     --}}
+          {{-- details loading here by ajax --}}
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -103,6 +104,6 @@
   @stack('after-scripts')
 
 
-  </body>
+</body>
 
-  </html>
+</html>
