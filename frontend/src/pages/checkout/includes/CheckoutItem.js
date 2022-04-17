@@ -21,6 +21,12 @@ const CheckoutItem = (props) => {
 		return Number(itemWeight).toFixed(3);
 	};
 
+	const productPageLink = (product) => {
+		const ItemId = product?.ItemId;
+		const ProviderType = product?.ProviderType;
+		return ProviderType === 'aliexpress' ? `/aliexpress/search?url=https://www.aliexpress.com/item/${ItemId}.html` : `/product/${ItemId}`;
+	};
+
 
 	return (
 		<div className="checkout_grid">
@@ -59,15 +65,18 @@ const CheckoutItem = (props) => {
 											<ItemCheck product={product} variation={variation}/>
 										</div>
 										<div className="col-3 pr-0 pr-lg-0">
-											<AttributeImage product={product} attributes={variation?.attributes}/>
+											<AttributeImage
+												product={product}
+												productPageLink={productPageLink(product)}
+												attributes={variation?.attributes}/>
 										</div>
 										<div className="col-8">
-											<Link to={`/product/${product.ItemId}`} title={product.Title}>
+											<Link to={productPageLink(product)} title={product.Title}>
 												{
 													isMobile ?
 														characterLimiter(product.Title, 45)
 														:
-														product.Title
+														characterLimiter(product.Title, 115)
 												}
 											</Link>
 											<div className="row">

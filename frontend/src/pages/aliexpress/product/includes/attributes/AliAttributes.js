@@ -15,7 +15,11 @@ const AliAttributes = (props) => {
 				const PropertyName = property?.skuPropertyName;
 				selectedProperties[PropertyName] = property?.skuPropertyValues[0];
 			});
-			setOperationalAttributes(selectedProperties);
+			if (ShipsFromCountries) {
+				setOperationalAttributes({...selectedProperties, ShipsFrom: ShipsFromCountries});
+			} else {
+				setOperationalAttributes(selectedProperties);
+			}
 		}
 	}, [skuProperties]);
 
@@ -30,6 +34,8 @@ const AliAttributes = (props) => {
 		const skuPropertyName = property?.skuPropertyName;
 		return operationalAttributes?.[skuPropertyName];
 	};
+
+	// console.log('operationalAttributes', operationalAttributes);
 
 	return (
 		<div className="mb-3">
@@ -55,7 +61,7 @@ const AliAttributes = (props) => {
 				<div>
 					<p>
 						<b>Ship From : </b>
-						<span className="seller_info">{ShipsFromCountries?.propertyValueDisplayName || 'Unknown'}</span>
+						<span className="seller_info">{selectProperty(ShipsFrom)?.propertyValueName || 'Unknown'}</span>
 					</p>
 				</div>
 			}

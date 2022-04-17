@@ -1,33 +1,24 @@
 import React, {useEffect, useState} from 'react';
 import {loadAsset} from "../../../../../utils/Helpers";
 import {usePopupMessage} from "../../../../../api/CartApi";
+import SpinnerButtonLoader from "../../../../../loader/SpinnerButtonLoader";
 
 const PopupShown = (props) => {
-	const {settings, cart, product_id} = props;
-
-	const [showModal, setShowModal] = useState(false);
+	const {cartItem, item_id, processAddToCart, settings} = props;
 
 	const {mutateAsync, isLoading} = usePopupMessage();
 
 	let messages = settings?.cart_popup_message || null;
 	messages = messages ? JSON.parse(messages) : {};
 
-	useEffect(() => {
-		const cartItem = cart?.cart_items?.find(item => item.ItemId === product_id) || {};
-		if (cartItem?.is_popup_shown === null && cartItem?.id !== undefined) {
-			setShowModal(true);
-		} else {
-			setShowModal(false);
-		}
-	}, [cart]);
-
-	if (!showModal) {
-		return '';
-	}
-
 	const closeModal = () => {
-		mutateAsync({item_id: product_id});
-		setShowModal(false);
+		mutateAsync({item_id},
+			{
+				onSuccess: () => {
+					processAddToCart();
+				}
+			}
+		);
 	};
 
 
@@ -38,7 +29,7 @@ const PopupShown = (props) => {
 			     data-backdrop="static"
 			     data-keyboard="false"
 			     style={{display: 'block'}}>
-				<div className="modal-dialog modal-dialog-centered">
+				<div className="modal-dialog modal-dialog-scrollable">
 					<div className="modal-content">
 						<div className="modal-header">
 							<h5 className="modal-title" id="staticBackdropLabel">Must be Read</h5>
@@ -62,7 +53,12 @@ const PopupShown = (props) => {
 
 						</div>
 						<div className="justify-content-center modal-footer">
-							<button type="button" className="btn btn-default" onClick={() => closeModal()}>Understood</button>
+							{
+								isLoading ?
+									<SpinnerButtonLoader buttonClass={'btn btn-default'}/>
+									:
+									<button type="button" className="btn btn-default" onClick={() => closeModal()}>Read & Agree</button>
+							}
 						</div>
 					</div>
 				</div>

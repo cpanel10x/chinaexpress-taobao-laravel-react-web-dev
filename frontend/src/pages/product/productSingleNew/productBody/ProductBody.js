@@ -10,7 +10,6 @@ import SellerInfo from "./includes/SellerInfo";
 import PriceCard from "./includes/PriceCard";
 import {useCartMutation} from "../../../../api/CartApi";
 import {useMediaQuery} from "react-responsive";
-import PopupShown from "./oneTimePopup/PopupShown";
 import AddToCartButtons from "./addToCart/AddToCartButtons";
 
 const ProductBody = (props) => {
@@ -38,11 +37,6 @@ const ProductBody = (props) => {
 
 	return (
 		<div className="product-details-top">
-
-			{
-				!isLoading &&
-				<PopupShown settings={settings} cart={cart} product_id={product_id}/>
-			}
 
 			{!isMobile && <h1 className="single-product-title">{Title}</h1>}
 			<div className="row">
@@ -72,13 +66,14 @@ const ProductBody = (props) => {
 							product={product}
 						/>
 						<QuantityInput cart={cart} product={product} settings={settings} activeConfiguredItems={activeConfiguredItems}/>
+
 						<ProductSummary
 							cart={cart}
 							product={product}
 							settings={settings}
 						/>
 
-						<AddToCartButtons cartItem={cartItem}  product={product}  settings={settings} />
+						<AddToCartButtons cartItem={cartItem} product={product} settings={settings}/>
 
 						<SellerInfo product={product}/>
 
