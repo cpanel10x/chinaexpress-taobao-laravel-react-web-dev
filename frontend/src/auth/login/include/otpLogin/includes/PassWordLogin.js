@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {useAuthMutation} from "../../../../../api/Auth";
 import SpinnerButtonLoader from "../../../../../loader/SpinnerButtonLoader";
-import swal from "sweetalert";
+import Swal from "sweetalert2";
 import {withRouter} from "react-router-dom";
 
 const PassWordLogin = (props) => {
@@ -25,7 +25,7 @@ const PassWordLogin = (props) => {
                const err = res.errors;
                const pwdError = err?.password ? err.password[0] : null;
                if (pwdError) {
-                  swal({
+                  Swal.fire({
                      text: pwdError,
                      icon: "error",
                      buttons: "Ok",

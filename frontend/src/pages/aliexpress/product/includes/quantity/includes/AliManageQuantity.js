@@ -1,6 +1,6 @@
 import React from 'react'
 import {useCartMutation} from '../../../../../../api/CartApi';
-import swal from 'sweetalert';
+import Swal from "sweetalert2";
 import {getObjectPropertyValue} from "../../../../../../utils/CartHelpers";
 
 const AliManageQuantity = (props) => {
@@ -16,14 +16,14 @@ const AliManageQuantity = (props) => {
 		let proceed = true;
 		if (parseInt(newQty) < 0) {
 			proceed = false;
-			swal({
+			Swal.fire({
 				text: 'You can not down the minimum quantity',
 				icon: 'info'
 			});
 		}
 		if (parseInt(newQty) > Max) {
 			proceed = false;
-			swal({
+			Swal.fire({
 				text: 'Maximum quantity already selected',
 				icon: 'info'
 			});

@@ -1,7 +1,6 @@
 import {instance, instanceSetToken} from "../utils/AxiosInstance";
 import {useMutation, useQuery, useQueryClient} from "react-query";
 import {useHistory} from "react-router-dom";
-import swal from "sweetalert";
 
 
 export const isAuthenticated = () => {

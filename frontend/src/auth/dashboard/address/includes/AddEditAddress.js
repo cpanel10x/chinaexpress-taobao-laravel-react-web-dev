@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
-import swal from "sweetalert";
 import SpinnerButtonLoader from "../../../../loader/SpinnerButtonLoader";
 import {useSaveAddress} from "../../../../api/AddressApi";
 import {useQueryClient} from "react-query";
+import Swal from "sweetalert2";
 
 const AddEditAddress = (props) => {
 
@@ -33,10 +33,10 @@ const AddEditAddress = (props) => {
 		mutateAsync({id, name, phone, city, address}, {
 			onSuccess: (res) => {
 				if (res?.status === true) {
-					swal({
+					Swal.fire({
 						text: res?.message,
-						icon: "success",
-						buttons: "Ok",
+						icon: 'success',
+						confirmButtonText: 'Ok, Understood'
 					});
 					setEdit(false);
 				} else {

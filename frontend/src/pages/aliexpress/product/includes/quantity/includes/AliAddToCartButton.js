@@ -20,7 +20,9 @@ const AliAddToCartButton = props => {
 									<i className="icon-minus"/>
 								</button>
 							</div>
-							<input type="text" className="form-control qty_input_field" value={0}
+							<input type="text" className="form-control qty_input_field"
+							       value={0}
+							       readOnly={true}
 							       onChange={e => addToCartProcess(e)}/>
 							<div className="input-group-append">
 								<button type="button"

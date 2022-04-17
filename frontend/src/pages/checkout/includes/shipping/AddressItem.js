@@ -1,5 +1,5 @@
 import React from 'react';
-import swal from "sweetalert";
+import Swal from "sweetalert2";
 import {useQueryClient} from "react-query";
 import {useDeleteAddress, useSaveAddress} from "../../../../api/AddressApi";
 
@@ -35,12 +35,14 @@ const AddressItem = (props) => {
 
 	const deleteAddress = (e, address) => {
 		e.preventDefault();
-		swal({
+		Swal.fire({
 			text: "Are you want to delete?",
 			icon: "warning",
-			buttons: true,
-		}).then((willDelete) => {
-			if (willDelete) {
+			showCancelButton: true,
+			confirmButtonText: 'Delete',
+			denyButtonText: `Don't Delete`,
+		}).then((result) => {
+			if (result.isConfirmed) {
 				deleteShippingAddress(address, {
 					onSuccess: () => {
 						cache.invalidateQueries("address");

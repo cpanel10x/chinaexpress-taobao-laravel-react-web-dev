@@ -1,6 +1,6 @@
 {
   "name": "chinaexpress_frontend",
-  "version": "v1.0.7",
+  "version": "v1.0.8",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.3",
@@ -32,7 +32,6 @@
     "react-scripts": "5.0.0",
     "sass": "^1.49.9",
     "sass-loader": "^12.6.0",
-    "sweetalert": "^2.1.2",
     "sweetalert2": "^11.4.8",
     "tiny-slider-react": "^0.5.4",
     "web-vitals": "^2.1.4"

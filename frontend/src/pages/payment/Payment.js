@@ -3,7 +3,7 @@ import {withRouter} from "react-router-dom";
 import {
 	CartProductSummary,
 } from "../../utils/CartHelpers";
-import swal from "sweetalert";
+import Swal from "sweetalert2";
 import BkashPayment from "./includes/BkashPayment";
 import {useSettings} from "../../api/GeneralApi";
 import {useCartMutation, useCart} from "../../api/CartApi";
@@ -43,7 +43,7 @@ const Payment = (props) => {
 	const paymentConfirm = (e) => {
 		e.preventDefault();
 		if (!payment_method) {
-			swal({
+			Swal.fire({
 				title: "Select your payment method",
 				icon: "warning",
 				buttons: "Ok, Understood",
@@ -51,7 +51,7 @@ const Payment = (props) => {
 			return '';
 		}
 		if (!shipping?.phone) {
-			swal({
+			Swal.fire({
 				title: "Select your payment method",
 				icon: "warning",
 				buttons: "Ok, Understood",

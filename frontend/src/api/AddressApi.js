@@ -1,6 +1,5 @@
 import {instance} from "../utils/AxiosInstance";
 import {useMutation, useQuery} from "react-query";
-import swal from "sweetalert";
 import {setGetToken} from "./CartApi";
 
 

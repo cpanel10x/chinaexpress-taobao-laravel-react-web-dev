@@ -1,5 +1,5 @@
 import React from 'react';
-import swal from "sweetalert";
+import Swal from "sweetalert2";
 import {useCartMutation} from "../../../../api/CartApi";
 
 const CheckoutQuantity = (props) => {
@@ -16,7 +16,7 @@ const CheckoutQuantity = (props) => {
 		let proceed = true;
 		if (parseInt(newQty) > Max) {
 			proceed = false;
-			swal({
+			Swal.fire({
 				text: 'Maximum quantity already selected',
 				icon: "warning",
 				buttons: "Ok, Understood",

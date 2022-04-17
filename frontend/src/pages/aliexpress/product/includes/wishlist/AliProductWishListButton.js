@@ -2,7 +2,7 @@ import React from 'react';
 import {useAddToWishList, useWishList} from "../../../../../api/WishListApi";
 import {useQueryClient} from "react-query";
 import {isAuthenticated} from "../../../../../api/Auth";
-import swal from "sweetalert";
+import Swal from "sweetalert2";
 import SpinnerButtonLoader from "../../../../../loader/SpinnerButtonLoader";
 import {wishListProcessProduct} from "../../../../../utils/AliHelpers";
 
@@ -29,7 +29,7 @@ const AliProductWishListButton = (props) => {
 				}
 			});
 		} else {
-			swal({
+			Swal.fire({
 				text: 'Please login your account first',
 				icon: 'warning'
 			})

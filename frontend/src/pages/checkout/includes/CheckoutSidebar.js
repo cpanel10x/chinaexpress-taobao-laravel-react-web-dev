@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import {CartProductSummary} from "../../../utils/CartHelpers";
 import ShippingAddress from "./shipping/ShippingAddress";
-import swal from "sweetalert";
+import Swal from "sweetalert2";
 import {withRouter} from "react-router-dom";
 
 const CheckoutSidebar = (props) => {
@@ -27,14 +27,14 @@ const CheckoutSidebar = (props) => {
 			if (shipping?.phone) {
 				props.history.push("/payment");
 			} else {
-				swal({
+				Swal.fire({
 					title: "Set your shipping address",
 					icon: "warning",
 					buttons: "Ok, Understood",
 				});
 			}
 		} else {
-			swal({
+			Swal.fire({
 				title: "Select your product first",
 				icon: "warning",
 				buttons: "Ok, Understood",

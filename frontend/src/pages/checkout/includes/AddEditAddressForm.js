@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import swal from "sweetalert";
+import Swal from "sweetalert2";
 import SpinnerButtonLoader from "../../../loader/SpinnerButtonLoader";
 import {useSaveAddress} from "../../../api/AddressApi";
 
@@ -39,7 +39,7 @@ const AddEditAddressForm = props => {
 		let proceed = true;
 		if (!name && !phone && !district && !address) {
 			proceed = false;
-			swal({
+			Swal.fire({
 				text: "Address fields is are required",
 				icon: "warning",
 				buttons: "Ok, Understood"

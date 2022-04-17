@@ -1,6 +1,6 @@
 import React from "react";
 import {Link} from "react-router-dom";
-import swal from "sweetalert";
+import Swal from "sweetalert2";
 import {useQueryClient} from "react-query";
 import SpinnerButtonLoader from "../../../loader/SpinnerButtonLoader";
 import {useRemoveFromWishList} from "../../../api/WishListApi";
@@ -19,15 +19,21 @@ const WishlistPage = (props) => {
 
 
 	const removeItemFromWishlist = (ItemId) => {
-		swal({
-			icon: "warning",
+		Swal.fire({
 			text: "Are sure to remove from wishList!",
-			buttons: true
-		}).then(willDelete => {
-			if (willDelete) {
+			icon: "warning",
+			showCancelButton: true,
+			confirmButtonText: 'Remove',
+			denyButtonText: `Don't Remove`,
+		}).then(result => {
+			if (result.isConfirmed) {
 				mutateAsync({ItemId: ItemId}, {
 					onSuccess: (responseData) => {
 						if (responseData?.status) {
+							Swal.fire({
+								text: "WishList remove successfully.",
+								icon: "Success"
+							})
 							cache.setQueryData('wishlist', (responseData?.wishlists || {}));
 						}
 					}

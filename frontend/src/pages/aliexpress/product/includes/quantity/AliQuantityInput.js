@@ -1,7 +1,7 @@
 import React from "react";
 import {useCartMutation} from "../../../../../api/CartApi";
 import AliManageQuantity from "./includes/AliManageQuantity";
-import swal from 'sweetalert';
+import Swal from "sweetalert2";
 import {
 	aliActiveConfigurations,
 	aliProductConfiguration,
@@ -13,13 +13,12 @@ import AliAddToCartButton from "./includes/AliAddToCartButton";
 const AliQuantityInput = (props) => {
 	const {cartItem, product, settings, shipment, selectShipping, operationalAttributes} = props;
 
-	const {data: shipingInfo} = shipment;
 	const priceCard = aliActiveConfigurations(product, operationalAttributes);
 
 	const {addToCart: {mutateAsync, isLoading}} = useCartMutation();
 
 	const aliRate = settings?.ali_increase_rate || 88;
-	const weight = shipingInfo?.packageInfo?.weight || 0;
+	const weight = shipment?.packageInfo?.weight || 0;
 
 	const DeliveryCost = () => {
 		const amount = selectShipping?.freightAmount?.value || 0;
@@ -47,7 +46,7 @@ const AliQuantityInput = (props) => {
 			if (Quantity > 0) {
 				process = true;
 			} else {
-				swal({
+				Swal.fire({
 					text: 'This variations stock is not available',
 					icon: 'info'
 				});

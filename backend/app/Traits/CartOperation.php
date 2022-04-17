@@ -160,6 +160,24 @@ trait CartOperation
     return $this->get_customer_cart($cart_uid);
   }
 
+
+  private function shippingCalculate($item, $process = [])
+  {
+    $variations = $item->variations;
+    if ($item->ProviderType == 'aliexpress' && $item->shipping_type == 'express') {
+      $totalQty = $variations->sum('qty');
+      $weight = $totalQty * $item->weight;
+      $process['DeliveryCost'] = get_aliExpress_shipping($weight);
+      $process['shipping_rate'] = get_aliExpress_air_shipping_rate($variations);
+    } else {
+      $process['shipping_rate'] = get_aliExpress_air_shipping_rate($variations, 'taobao');
+    }
+    if (!empty($process)) {
+      $item->update($process);
+    }
+    return $process;
+  }
+
   public function update_cart()
   {
     $item_id = request('item_id');
@@ -186,17 +204,7 @@ trait CartOperation
       } else {
         $item->delete();
       }
-      $variations = $item->variations;
-      $process = [];
-      if ($item->ProviderType == 'aliexpress' && $item->shipping_type == 'express') {
-        $totalQty = $variations->sum('qty');
-        $weight = $totalQty * $item->weight;
-        $process['DeliveryCost'] = get_aliExpress_shipping($weight);
-        $process['shipping_rate'] = get_aliExpress_air_shipping_rate($variations);
-      } else {
-        $process['shipping_rate'] = get_aliExpress_air_shipping_rate($variations, 'taobao');
-      }
-      $item->update($process);
+      $this->shippingCalculate($item);
     }
 
     return $this->get_customer_cart();
@@ -224,19 +232,24 @@ trait CartOperation
   {
     $item_id = request('item_id');
     $shipping = request('shipping_type');
+    $DeliveryCost = request('shipping_cost');
     $cart = $this->get_customer_cart();
     if (!$cart) {
       return [];
     }
     if ($item_id) {
-      CartItem::where('cart_id', $cart->id)
-        ->where('ItemId', $item_id)
-        ->update([
-          'is_express_popup_shown' => null,
-          'is_popup_shown' => null,
-          'IsCart' => null,
-          'shipping_type' => $shipping
-        ]);
+      $data = [
+        'is_express_popup_shown' => null,
+        'is_popup_shown' => null,
+        'IsCart' => null,
+        'shipping_type' => $shipping
+      ];
+      if ($DeliveryCost) {
+        $data['DeliveryCost'] = $DeliveryCost;
+      }
+      $item = CartItem::where('cart_id', $cart->id)
+        ->where('ItemId', $item_id)->first();
+      $this->shippingCalculate($item, $data);
     }
     return $this->get_customer_cart();
   }

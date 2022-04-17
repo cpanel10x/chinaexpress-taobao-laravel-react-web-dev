@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {Link} from "react-router-dom";
-import swal from "sweetalert";
+import Swal from "sweetalert2";
 import {useRepaymentOrderByBkash} from "../../../../api/ApiDashboard";
 import SpinnerButtonLoader from "../../../../loader/SpinnerButtonLoader";
 
@@ -13,7 +13,7 @@ const RePayment = ({order}) => {
 
 	const confirmPaymentProcess = () => {
 		if (!accept) {
-			swal({
+			Swal.fire({
 				text: "Please accept terms and conditions!",
 				icon: "warning",
 				buttons: "Ok, Understood",
@@ -24,7 +24,7 @@ const RePayment = ({order}) => {
 					if (data.status === true) {
 						window.location.href = data.redirect;
 					} else {
-						swal({
+						Swal.fire({
 							text: data.msg,
 							icon: "error",
 							buttons: "Ok, Understood",

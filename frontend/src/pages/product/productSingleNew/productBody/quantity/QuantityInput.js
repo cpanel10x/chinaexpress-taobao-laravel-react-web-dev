@@ -2,7 +2,7 @@ import React from "react";
 import {useCartMutation} from "../../../../../api/CartApi";
 import AddToCartButton from "./includes/AddToCartButton";
 import ManageQuantity from "./includes/ManageQuantity";
-import swal from 'sweetalert';
+import Swal from "sweetalert2";
 import {
 	getObjectPropertyValue,
 	getProductCurrentPrice,
@@ -50,14 +50,14 @@ const QuantityInput = props => {
 				process = true;
 				activeProduct.ConfiguredItems = getProductModifiedConfiguredItem(product, 1, activeConfiguredItem, rate);
 			} else {
-				swal({
+				Swal.fire({
 					text: 'This variations stock is not available',
 					icon: 'info'
 				});
 			}
 		} else {
 			if (ConfiguredItems?.length) {
-				swal({
+				Swal.fire({
 					text: 'Select your Item variations',
 					icon: 'info'
 				});

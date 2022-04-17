@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
-import swal from "sweetalert";
 import {useAuthMutation} from "../api/Auth";
 import SpinnerButtonLoader from "../loader/SpinnerButtonLoader";
+import Swal from "sweetalert2";
 
 const ProfileUpdateDialogues = (props) => {
 	const {customer: {data: user, isLoading}} = useAuthMutation();
@@ -22,10 +22,10 @@ const ProfileUpdateDialogues = (props) => {
 		update.mutateAsync({name, phone, email, password, password_confirmation: confirmPassword})
 			.then(res => {
 				if (res?.update === true) {
-					swal({
+					Swal.fire({
 						text: res?.message,
-						icon: "success",
-						buttons: "Ok",
+						icon: 'warning',
+						confirmButtonText: 'Ok, Understood'
 					});
 					setClose(true);
 				} else {

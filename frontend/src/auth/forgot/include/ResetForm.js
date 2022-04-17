@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {useAuthMutation} from "../../../api/Auth";
 import SpinnerButtonLoader from "../../../loader/SpinnerButtonLoader";
-import swal from "sweetalert";
+import Swal from "sweetalert2";
 import {withRouter} from "react-router-dom";
 
 const ResetForm = (props) => {
@@ -22,7 +22,7 @@ const ResetForm = (props) => {
 			.then(res => {
 				if (res?.login === true) {
 					props.history.push("/login");
-					swal({
+					Swal.fire({
 						text: res.message,
 						icon: "success",
 						buttons: "Dismiss",
@@ -31,7 +31,7 @@ const ResetForm = (props) => {
 					let err = res.errors;
 					const otpError = err?.otp_code ? err.otp_code[0] : null;
 					if (otpError) {
-						swal({
+						Swal.fire({
 							text: res.message,
 							icon: "error",
 							buttons: "Dismiss",

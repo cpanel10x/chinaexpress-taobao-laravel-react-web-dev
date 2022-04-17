@@ -1,23 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {usePopupMessage} from "../../../../../api/CartApi";
 import {loadAsset} from "../../../../../utils/Helpers";
+import SpinnerButtonLoader from "../../../../../loader/SpinnerButtonLoader";
 
 const AliPopupShown = (props) => {
-	const {settings, cartItem, product_id} = props;
-	const [showModal, setShowModal] = useState(false);
+	const {settings, cartItem, processAddToCart, product_id} = props;
 	const {mutateAsync, isLoading} = usePopupMessage();
-
-	useEffect(() => {
-		if (cartItem?.is_popup_shown === null && cartItem?.IsCart === 1) {
-			setShowModal(true);
-		} else {
-			setShowModal(false);
-		}
-	}, [cartItem]);
-
-	if (!showModal) {
-		return '';
-	}
 
 	let messages = settings?.cart_aliexpress_popup_message || null;
 	messages = messages ? JSON.parse(messages) : {};
@@ -26,10 +14,15 @@ const AliPopupShown = (props) => {
 	messages = cartItem?.shipping_type === 'express' ? expressMessages : messages;
 
 	const closeModal = () => {
-		mutateAsync({item_id: product_id});
-		setShowModal(false);
+		mutateAsync(
+			{item_id: product_id},
+			{
+				onSuccess: () => {
+					processAddToCart();
+				}
+			}
+		);
 	};
-
 
 	return (
 		<>
@@ -38,7 +31,7 @@ const AliPopupShown = (props) => {
 			     data-backdrop="static"
 			     data-keyboard="false"
 			     style={{display: 'block'}}>
-				<div className="modal-dialog modal-dialog-centered">
+				<div className="modal-dialog modal-dialog-scrollable">
 					<div className="modal-content">
 						<div className="modal-header">
 							<h5 className="modal-title" id="staticBackdropLabel">Must be Read</h5>
@@ -62,7 +55,12 @@ const AliPopupShown = (props) => {
 
 						</div>
 						<div className="justify-content-center modal-footer">
-							<button type="button" className="btn btn-default" onClick={() => closeModal()}>Read & Agree</button>
+							{
+								isLoading ?
+								<SpinnerButtonLoader buttonClass={'btn btn-default'}/>
+								:
+								<button type="button" className="btn btn-default" onClick={() => closeModal()}>Read & Agree</button>
+							}
 						</div>
 					</div>
 				</div>

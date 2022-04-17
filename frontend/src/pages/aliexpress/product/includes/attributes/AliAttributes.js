@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect} from 'react'
 import PropertyValues from "./includes/PropertyValues";
 
 const AliAttributes = (props) => {
@@ -13,8 +13,7 @@ const AliAttributes = (props) => {
 			let selectedProperties = {};
 			skuProperties?.map((property, index) => {
 				const PropertyName = property?.skuPropertyName;
-				const skuPropertyValues = property?.skuPropertyValues[0];
-				selectedProperties[PropertyName] = skuPropertyValues;
+				selectedProperties[PropertyName] = property?.skuPropertyValues[0];
 			});
 			setOperationalAttributes(selectedProperties);
 		}

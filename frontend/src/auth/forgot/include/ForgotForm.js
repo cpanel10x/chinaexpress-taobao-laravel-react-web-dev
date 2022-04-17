@@ -3,8 +3,8 @@ import {isValidPhoneNumber, parsePhoneNumber} from "react-phone-number-input";
 import SpinnerButtonLoader from '../../../loader/SpinnerButtonLoader';
 import {useAuthMutation} from "../../../api/Auth";
 import ResetForm from "./ResetForm";
-import swal from "sweetalert";
 import {checkIsEmail} from "../../../utils/Helpers";
+import Swal from "sweetalert2";
 
 const ForgotForm = (props) => {
 	const [input, setInput] = useState("");
@@ -19,7 +19,7 @@ const ForgotForm = (props) => {
 		let isPhone = isValidPhoneNumber(phone);
 		let isEmail = checkIsEmail(input);
 		if (!isEmail && !isPhone) {
-			swal({
+			Swal.fire({
 				text: "Type your valid mobile or email",
 				icon: "warning",
 				buttons: "Dismiss",
@@ -35,7 +35,7 @@ const ForgotForm = (props) => {
 				if (res.status === true) {
 					setResponse(res);
 				} else {
-					swal({
+					Swal.fire({
 						text: res.message,
 						icon: "error",
 						buttons: "Dismiss",

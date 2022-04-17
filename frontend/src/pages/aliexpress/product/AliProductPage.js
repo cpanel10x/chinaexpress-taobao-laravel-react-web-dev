@@ -15,7 +15,7 @@ const AliProductPage = (props) => {
 	const {url: query_url} = useQuery();
 
 	const {data: settings} = useSettings();
-	const {data: product, isLoading} = useAliProductDetails(query_url);
+	const {data: product, isLoading} = useAliProductDetails(encodeURIComponent(query_url));
 
 	const cardRef = useRef(null);
 

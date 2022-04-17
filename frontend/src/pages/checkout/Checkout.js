@@ -1,11 +1,10 @@
 import React, {useEffect} from "react";
 import {goPageTop} from "../../utils/Helpers";
 import CheckoutSidebar from "./includes/CheckoutSidebar";
-import swal from "sweetalert";
+import Swal from "sweetalert2";
 import {useSettings} from "../../api/GeneralApi";
 import {useCartMutation, useCheckoutCart} from "../../api/CartApi";
 import CheckoutItem from "./includes/CheckoutItem";
-import {useMediaQuery} from "react-responsive";
 import Helmet from "react-helmet";
 
 const Checkout = (props) => {
@@ -17,34 +16,30 @@ const Checkout = (props) => {
 
 	const {removeCart} = useCartMutation();
 
-	const ShippingCharges = settings?.air_shipping_charges;
 	const currency = settings?.currency_icon;
 
-	const shippingRate = 650;
 
 	useEffect(() => {
 		goPageTop();
 	}, []);
 
-
-	const isMobile = useMediaQuery({query: '(max-width: 991px)'});
-
 	const removeItemFromCart = (e) => {
 		e.preventDefault();
 		const checkedItem = cartItems?.filter(item => item.variations.find(find => find.is_checked > 0));
 		if (checkedItem?.length > 0) {
-			swal({
+			Swal.fire({
 				title: "Are you want to remove?",
 				icon: "warning",
-				buttons: true,
-				dangerMode: true,
-			}).then((willDelete) => {
-				if (willDelete) {
+				showCancelButton: true,
+				confirmButtonText: 'Remove',
+				denyButtonText: `Don't remove`,
+			}).then((result) => {
+				if (result.isConfirmed) {
 					removeCart.mutateAsync();
 				}
 			});
 		} else {
-			swal({
+			Swal.fire({
 				title: "Please select your item first!",
 				icon: "warning"
 			});
@@ -69,7 +64,6 @@ const Checkout = (props) => {
 										currency={currency}
 										cart={cart}
 										cartItems={cartItems}
-										shippingRate={shippingRate}
 										removeCart={removeCart}
 										removeItemFromCart={removeItemFromCart}/>
 								</div>

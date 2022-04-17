@@ -11,7 +11,7 @@ const AliSellerInfo = (props) => {
 	const storeModule = metadata?.storeModule;
 
 	return (
-		<div className="product-details-action mt-5">
+		<div className="product-details-action mt-3">
 			<p className="mb-1"><b>Product ID:</b> <span className="text-danger">{productId}</span></p>
 			<p className="mb-1"><b>Source:</b> <span className="text-danger">AliExpress</span></p>
 			<p className="mb-1"><b>Seller Name:</b> <span className="text-danger">{storeModule?.storeName}</span></p>

@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {withRouter} from "react-router";
 import {useQuery} from "../../utils/customHooks";
 import {useSearchPictureUpload} from "../../api/ProductApi";
-import swal from "sweetalert";
+import Swal from "sweetalert2";
 import SearchSuggestion from "./SearchSuggestion";
 import queryString from "query-string";
 
@@ -29,7 +29,7 @@ const MobileSearchForm = props => {
 		if (search) {
 			props.history.push(`/search?keyword=${query}`);
 		} else {
-			swal({
+			Swal.fire({
 				text: 'Type your keyword first',
 				icon: 'info',
 				button: 'Dismiss'

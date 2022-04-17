@@ -1,8 +1,6 @@
-import {last, replace, split} from "lodash";
 import React, {useState} from "react";
 import {withRouter} from "react-router-dom";
-import swal from "sweetalert";
-import {urlSearchParams} from "../../../../utils/AliHelpers";
+import Swal from "sweetalert2";
 
 function AliExpressSearchBar(props) {
 	const [search, setSearch] = useState("");
@@ -12,7 +10,7 @@ function AliExpressSearchBar(props) {
 		if (search) {
 			props.history.push(`/aliexpress/search?url=${search}`);
 		} else {
-			swal({
+			Swal.fire({
 				text: "Paste a valid link",
 				icon: "warning",
 			});

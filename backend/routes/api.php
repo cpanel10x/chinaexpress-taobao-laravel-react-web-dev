@@ -71,7 +71,6 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function () {
   Route::get('/aliexpress/shipment/{product_id}', [AliExpressApiController::class, 'productShipmentInfo']);
   Route::get('/aliexpress/related-products/{product_id}', [AliExpressApiController::class, 'relatedProducts']);
 
-
   Route::post('/email/verify/{id}', [HomeController::class, 'verify'])->name('verificationapi.verify');
   Route::post('/email/resend', [HomeController::class, 'resend'])->name('verificationapi.resend');
 
@@ -126,6 +125,7 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function () {
     Route::post('/process-express', [CartController::class, 'processExpressService']);
 
     Route::post('/update', [CartController::class, 'updateCustomerCart']);
+    
     Route::post('/read-popup', [CartController::class, 'readPopup']);
     Route::post('/shipping', [CartController::class, 'addShippingAddress'])->middleware('auth:sanctum');
     Route::post('/checkbox', [CartController::class, 'updateCartCheckbox'])->middleware('auth:sanctum');

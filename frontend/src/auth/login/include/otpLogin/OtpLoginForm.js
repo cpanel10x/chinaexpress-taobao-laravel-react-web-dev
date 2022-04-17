@@ -4,7 +4,7 @@ import SpinnerButtonLoader from '../../../../loader/SpinnerButtonLoader';
 import {useAuthMutation} from "../../../../api/Auth";
 import PassWordLogin from "./includes/PassWordLogin";
 import VerifyOtpCode from "./includes/VerifyOtpCode";
-import swal from "sweetalert";
+import Swal from "sweetalert2";
 import {checkIsEmail} from "../../../../utils/Helpers";
 
 const OtpLoginForm = (props) => {
@@ -23,7 +23,7 @@ const OtpLoginForm = (props) => {
 		let isPhone = isValidPhoneNumber(phone);
 		let isEmail = checkIsEmail(input);
 		if (!isEmail && !isPhone) {
-			swal({
+			Swal.fire({
 				text: "Type your valid mobile or email",
 				icon: "warning",
 				buttons: "Dismiss",

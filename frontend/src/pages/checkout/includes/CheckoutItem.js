@@ -11,7 +11,7 @@ import {singleProductTotal} from "../../../utils/CartHelpers";
 
 const CheckoutItem = (props) => {
 
-	const {cart, cartItems, currency, shippingRate, removeCart, removeItemFromCart} = props;
+	const {cart, cartItems, currency, removeCart, removeItemFromCart} = props;
 
 	const isMobile = useMediaQuery({query: '(max-width: 991px)'});
 
@@ -74,7 +74,7 @@ const CheckoutItem = (props) => {
 												<div className="col-12">
 													<p className="mb-0 mr-1 small">Weight: <strong>{approxWeight(variation.qty, product)} Kg.</strong>
 														{isMobile && <br/>}
-														<span>Shipping Rate: <strong>{currency + ' ' + shippingRate}</strong> per Kg.</span>
+														<span>Shipping Rate: <strong>{currency + ' ' + product?.shipping_rate}</strong> per Kg.</span>
 													</p>
 												</div>
 											</div>

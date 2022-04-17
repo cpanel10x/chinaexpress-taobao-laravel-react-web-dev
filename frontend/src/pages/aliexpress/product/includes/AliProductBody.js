@@ -10,7 +10,6 @@ import AliAddToCart from "./addToCart/AliAddToCart";
 import AliProductSummary from "./summary/AliProductSummary";
 import AliSellerInfo from "./sellerInfo/AliSellerInfo";
 import AliSocialShare from "./AliSocialShare";
-import AliPopupShown from "./popup/AliPopupShown";
 
 
 const AliProductBody = (props) => {
@@ -23,7 +22,7 @@ const AliProductBody = (props) => {
 
 	const {data: cart, isLoading} = useCart();
 	const cartItem = cart?.cart_items?.find(item => item.ItemId === productId) || {};
-	const shipment = useAliProductShippingInfo(productId);
+	const {data: shipment} = useAliProductShippingInfo(productId);
 
 	const feedback = product?.feedBackRating;
 	const metadata = product?.metadata;
@@ -39,17 +38,14 @@ const AliProductBody = (props) => {
 	}, [product]);
 
 	const skuProperties = product?.skuProperties;
+	const ShipsFrom = skuProperties?.find(find => find.skuPropertyName === 'ShipsFrom');
+	let hasShipFromChina = ShipsFrom?.skuPropertyValues?.find(value => value.propertyValueName === 'China');
+	hasShipFromChina = hasShipFromChina ? hasShipFromChina : (!ShipsFrom?.skuPropertyValues?.length);
+	const hasBDShipment = shipment?.length > 0;
 
 	return (
 		<div className="product-details-top">
-			{
-				!isLoading &&
-				<AliPopupShown settings={settings} cartItem={cartItem} product_id={productId}/>
-			}
-
 			{!isMobile && <h1 className="single-product-title">{product_title}</h1>}
-
-
 			<div className="row">
 				<div className="col-md-5">
 					<AliMediaPart
@@ -84,39 +80,42 @@ const AliProductBody = (props) => {
 								skuProperties={skuProperties}
 								setActiveImg={setActiveImg}/>
 						}
+						{
+							(hasShipFromChina || hasBDShipment) ?
+								<div className="shipment">
+									<AliShipmentInfo
+										cartItem={cartItem}
+										product={product}
+										selectShipping={selectShipping}
+										setSelectShipping={setSelectShipping}
+										shipment={shipment}
+										settings={settings}/>
 
-						<div className="shipment">
-							<AliShipmentInfo
-								cartItem={cartItem}
-								product={product}
-								selectShipping={selectShipping}
-								setSelectShipping={setSelectShipping}
-								shipment={shipment}
-								settings={settings}/>
-						</div>
+									<AliQuantityInput
+										cartItem={cartItem}
+										product={product}
+										settings={settings}
+										shipment={shipment}
+										selectShipping={selectShipping}
+										operationalAttributes={operationalAttributes}
+									/>
 
-						<AliQuantityInput
-							cartItem={cartItem}
-							product={product}
-							settings={settings}
-							shipment={shipment}
-							selectShipping={selectShipping}
-							operationalAttributes={operationalAttributes}
-						/>
+									<AliProductSummary
+										cartItem={cartItem}
+										product={product}
+										selectShipping={selectShipping}
+										settings={settings}
+										operationalAttributes={operationalAttributes}
+									/>
 
-						<AliProductSummary
-							cartItem={cartItem}
-							product={product}
-							selectShipping={selectShipping}
-							settings={settings}
-							operationalAttributes={operationalAttributes}
-						/>
-
-						<AliAddToCart
-							cartItem={cartItem}
-							product={product}
-							shipment={shipment}
-							settings={settings}/>
+									<AliAddToCart
+										cartItem={cartItem}
+										product={product}
+										settings={settings}/>
+								</div>
+								:
+								<h3 className="text-danger my-3">"This product not possible to Ship Bangladesh"</h3>
+						}
 
 						<AliSellerInfo product={product}/>
 
