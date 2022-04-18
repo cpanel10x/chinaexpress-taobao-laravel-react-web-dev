@@ -28,16 +28,16 @@ const CheckoutSidebar = (props) => {
 				props.history.push("/payment");
 			} else {
 				Swal.fire({
-					title: "Set your shipping address",
+					text: "Set your shipping address",
 					icon: "warning",
-					buttons: "Ok, Understood",
+					confirmButtonText: "Ok, Understood",
 				});
 			}
 		} else {
 			Swal.fire({
-				title: "Select your product first",
+				text: "Select your product first",
 				icon: "warning",
-				buttons: "Ok, Understood",
+				confirmButtonText: "Ok, Understood",
 			});
 		}
 	};

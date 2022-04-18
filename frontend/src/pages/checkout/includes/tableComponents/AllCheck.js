@@ -1,16 +1,18 @@
 import React from 'react';
-import {useCartMutation} from "../../../../api/CartApi";
+import {useCheckedUnchecked} from "../../../../api/CartApi";
 import SmallSpinner from "../../../../loader/SmallSpinner";
+import {useQueryClient} from "react-query";
 
 const AllCheck = (props) => {
 	const {cart, cartItems} = props;
 
-	const {checkedUnchecked} = useCartMutation();
+	const cache = useQueryClient();
+	const {mutateAsync, isLoading} = useCheckedUnchecked();
 
 	const variations_count = cart?.variations_count || 0;
 	const checkedItems = () => {
 		let totalChecked = 0;
-		cartItems?.filter(item => {
+		cartItems?.map(item => {
 			item.variations.map(variation => {
 				if (variation?.is_checked > 0) {
 					totalChecked += 1;
@@ -24,13 +26,19 @@ const AllCheck = (props) => {
 
 	const checkedAllItem = () => {
 		const checked = isAllChecked ? '0' : '1';
-		return checkedUnchecked.mutateAsync({checked: checked});
+		return mutateAsync(
+			{checked},
+			{
+				onSuccess: (cart) => {
+					cache.setQueryData("useCheckoutCart", cart);
+				}
+			});
 	};
 
 	return (
 		<div className="d-inline">
 			{
-				checkedUnchecked.isLoading ?
+				isLoading ?
 					<SmallSpinner/>
 					:
 					<div className=" m-0 pretty p-default p-round">

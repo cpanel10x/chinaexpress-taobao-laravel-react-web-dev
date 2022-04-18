@@ -22,7 +22,7 @@ const AliShipmentInfo = props => {
 	let minOrder = settings?.express_shipping_min_value || 0;
 	minOrder = minOrder ? parseInt(minOrder) : 300;
 
-	const isExpressEnable = itemTotal > minOrder;
+	const isExpressEnable = itemTotal >= minOrder;
 
 	const freightResult = shipment?.freightResult;
 
@@ -49,7 +49,7 @@ const AliShipmentInfo = props => {
 	useEffect(() => {
 		if (!isExpressEnable) {
 			const shipping_cost = shippingRate(selectShipping?.freightAmount?.value || 0);
-			updateShippingInformation({shipping_cost, shipping_type: 'regular'});
+			updateShippingInformation({shipping_cost, shipping_type: activeShipping});
 			setActiveShipping('regular');
 		}
 	}, [isExpressEnable]);
@@ -72,6 +72,8 @@ const AliShipmentInfo = props => {
 				});
 				setActiveShipping('regular');
 			}
+		}else{
+			setActiveShipping(null);
 		}
 		return '';
 	};
@@ -84,7 +86,7 @@ const AliShipmentInfo = props => {
 	const updateDeliveryCharge = (shipping) => {
 		setSelectShipping(shipping);
 		const shipping_cost = shippingRate(shipping?.freightAmount?.value || 0);
-		updateShippingInformation({shipping_cost, shipping_type: 'regular'});
+		updateShippingInformation({shipping_cost, shipping_type: activeShipping});
 	};
 
 	return (

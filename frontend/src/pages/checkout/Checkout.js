@@ -18,7 +18,6 @@ const Checkout = (props) => {
 
 	const currency = settings?.currency_icon;
 
-
 	useEffect(() => {
 		goPageTop();
 	}, []);

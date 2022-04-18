@@ -22,6 +22,15 @@ export const useAliProductShippingInfo = (productId) => useQuery(["useAliProduct
 	}
 });
 
+export const useAliProductWeight = () => useMutation("useAliProductWeight", async (props) => {
+	try {
+		const {data} = await instance.post(`/aliexpress/shipping-weight`, props);
+		return data?.result ? JSON.parse(data?.result) : [];
+	} catch (error) {
+		console.log(error);
+	}
+});
+
 
 export const useAliProductDescription = (descriptionUrl) => useQuery(["useAliProductDescription", descriptionUrl], async () => {
 	try {

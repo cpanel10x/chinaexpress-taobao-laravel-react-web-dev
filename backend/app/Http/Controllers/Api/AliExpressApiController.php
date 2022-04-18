@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Backend\AliExpressSearchLog;
+use App\Models\Content\CartItem;
 use App\Models\Content\Product;
 use App\Traits\AliexpressApi;
 use App\Traits\ApiResponser;
@@ -108,10 +109,33 @@ class AliExpressApiController extends Controller
   public function productShipmentInfo($product_id)
   {
     $key = 'shipment-' . $product_id;
-    $shipping = cache()->get($key, null);
+    // $shipping = cache()->get($key, null);
+    $shipping = null;
     if (!$shipping) {
       $shipping = $this->ApiProductShipping($product_id);
       cache()->put($key, $shipping, 600);
+    }
+    return response([
+      'result' => json_encode($shipping),
+    ]);
+  }
+
+  public function productShipmentWeightInfo()
+  {
+    $product_id = request('ItemId');
+    $cart_item_id = request('cart_item_id');
+    $key = 'weight-' . $product_id;
+    $shipping = cache()->get($key, null);
+    $shipping = null;
+    if (!$shipping) {
+      $shipping = $this->ApiProductShipping($product_id, null);
+      cache()->put($key, $shipping, 600);
+    }
+    $weight = $shipping['packageInfo']['weight'] ?? 0;
+    if ($weight) {
+      CartItem::where('id', $cart_item_id)
+        ->where('ItemId', $product_id)
+        ->update(['weight' => $weight]);
     }
     return response([
       'result' => json_encode($shipping),

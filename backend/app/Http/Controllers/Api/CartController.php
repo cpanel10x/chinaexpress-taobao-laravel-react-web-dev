@@ -57,7 +57,7 @@ class CartController extends Controller
   public function updateCustomerCart()
   {
     $cart = $this->update_cart();
-    return response(['status' => true, 'msg' => 'Product add to cart successfully']);
+    return response(['status' => true, 'cart' => $cart, 'msg' => 'Product add to cart successfully']);
   }
 
   public function readPopup()

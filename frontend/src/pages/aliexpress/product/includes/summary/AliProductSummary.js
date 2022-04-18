@@ -1,12 +1,30 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {aliProductConvertionPrice, sumCartItemTotal, sumCartItemTotalQuantity} from "../../../../../utils/AliHelpers";
+import {useAliProductWeight} from "../../../../../api/AliExpressProductApi";
+import {useQueryClient} from "react-query";
 
 const AliProductSummary = (props) => {
 	const {cartItem, product, settings, operationalAttributes} = props;
 
+	const cache = useQueryClient();
+	const {mutateAsync, isLoading} = useAliProductWeight();
+
 	const currency = settings?.currency_icon || '৳';
 	const isExpress = false;
 	const DeliveryCost = cartItem?.DeliveryCost || 0;
+
+	useEffect(() => {
+		if (cartItem?.shipping_type === 'express' && !Number(cartItem.weight)) {
+			mutateAsync(
+				{cart_item_id: cartItem?.id, ItemId: cartItem?.ItemId},
+				{
+					onSuccess: () => {
+						cache.invalidateQueries("customer_cart");
+					}
+				}
+				);
+		}
+	}, [cartItem]);
 
 	const itemTotal = sumCartItemTotal(cartItem?.variations || []);
 	const quantity = sumCartItemTotalQuantity(cartItem?.variations || []);
@@ -31,7 +49,7 @@ const AliProductSummary = (props) => {
 					</tr>
 					<tr>
 						<td className="w-50">Express Shipping rate</td>
-						<td className="w-50">{`${currency} ${cartItem?.shipping_rate ? cartItem.shipping_rate : 0}`}</td>
+						<td className="w-50">{`${currency} ${cartItem?.shipping_rate ? cartItem.shipping_rate : 0} per kg`}</td>
 					</tr>
 					<tr>
 						<td className="w-50">Total Product Price:</td>

@@ -63,8 +63,7 @@ const AliProductBody = (props) => {
 						operationalAttributes={operationalAttributes}
 						settings={settings}/>
 					<p className="mb-2">
-						<b>{feedback?.averageStar}/5</b> Rating with <b>{feedback?.averageStarRage}</b>%
-						positive feedback
+						<b>{feedback?.averageStar}/5</b> Rating with <b>{feedback?.averageStarRage}</b>% positive feedback
 						<br/>
 						Total Loved - <b>{product?.wishedCount}</b>
 						<br/>

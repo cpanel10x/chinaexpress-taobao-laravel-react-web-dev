@@ -60,10 +60,12 @@ trait AliexpressApi
   }
 
 
-  public function ApiProductShipping($product_id)
+  public function ApiProductShipping($product_id, $toCountry = 'BD')
   {
-    $url = "{$this->baseUrl}/shipping/{$product_id}?toCountry=BD";
-    // $url = "{$this->baseUrl}/shipping/{$product_id}";
+    $url = "{$this->baseUrl}/shipping/{$product_id}";
+    if ($toCountry) {
+      $url = "{$this->baseUrl}/shipping/{$product_id}?toCountry={$toCountry}";
+    }
     return $this->makeRequest($url);
   }
 

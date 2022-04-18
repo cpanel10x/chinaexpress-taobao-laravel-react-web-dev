@@ -74,24 +74,12 @@ export const useCartMutation = () => {
 		onError: (err, newTodo, context) => {
 			cache.setQueryData('customer_cart', context.previousCart)
 		},
-		onSettled: () => {
-			cache.invalidateQueries('customer_cart')
+		onSettled: (cart) => {
+			cache.setQueryData('customer_cart', cart);
+			cache.setQueryData('useCheckoutCart', cart);
 		},
 	});
 
-	const checkedUnchecked = useMutation(["cartAllCheckedUnchecked"], async (props) => {
-		const token = setGetToken();
-		try {
-			const {data} = await instance.post(`/cart/checkbox`, {token: token, ...props});
-			return data?.cart ? data.cart : {};
-		} catch (error) {
-			console.log(error);
-		}
-	}, {
-		onSuccess: (cart) => {
-			cache.setQueryData("customer_cart", cart);
-		}
-	});
 
 	const removeCart = useMutation(["removeCart"], async (props) => {
 		const token = setGetToken();
@@ -103,7 +91,7 @@ export const useCartMutation = () => {
 		}
 	}, {
 		onSuccess: (cart) => {
-			cache.setQueryData("customer_cart", cart);
+			cache.setQueryData("useCheckoutCart", cart);
 		}
 	});
 
@@ -118,6 +106,7 @@ export const useCartMutation = () => {
 	}, {
 		onSuccess: (cart) => {
 			cache.setQueryData("customer_cart", cart);
+			cache.setQueryData("useCheckoutCart", cart);
 		}
 	});
 
@@ -132,6 +121,7 @@ export const useCartMutation = () => {
 	}, {
 		onSuccess: (cart) => {
 			cache.setQueryData("customer_cart", cart);
+			cache.setQueryData("useCheckoutCart", cart);
 		}
 	});
 
@@ -140,7 +130,6 @@ export const useCartMutation = () => {
 		mainCart,
 		addToCart,
 		updateCart,
-		checkedUnchecked,
 		removeCart,
 		PaymentMethod,
 		confirmOrder
@@ -174,6 +163,18 @@ export const useItemMarkAsCart = () => useMutation(["useItemMarkAsCart"], async 
 	const token = setGetToken();
 	try {
 		const {data} = await instance.post(`/cart/mark-as-cart`, {token, ...props});
+		setGetToken(data?.cart?.cart_uid);
+		return data?.cart ? data.cart : {};
+	} catch (error) {
+		console.log(error);
+	}
+});
+
+
+export const useCheckedUnchecked = () => useMutation("useCheckedUnchecked", async (props) => {
+	const token = setGetToken();
+	try {
+		const {data} = await instance.post(`/cart/checkbox`, {token: token, ...props});
 		setGetToken(data?.cart?.cart_uid);
 		return data?.cart ? data.cart : {};
 	} catch (error) {

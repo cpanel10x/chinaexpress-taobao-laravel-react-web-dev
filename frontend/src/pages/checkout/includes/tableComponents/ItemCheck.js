@@ -1,32 +1,44 @@
 import React from 'react';
-import {useCartMutation} from "../../../../api/CartApi";
+import {useCheckedUnchecked} from "../../../../api/CartApi";
 import SmallSpinner from "../../../../loader/SmallSpinner";
+import {useQueryClient} from "react-query";
 
 const ItemCheck = (props) => {
-	const {product, variation} = props;
+	const {variation} = props;
 
-	const {checkedUnchecked: checkbox} = useCartMutation();
+	const cache = useQueryClient();
+	const {mutateAsync, isLoading} = useCheckedUnchecked();
 
 	const isChecked = variation?.is_checked > 0;
 
 	const checkedItem = async (e) => {
 		const checked = isChecked ? '0' : '1';
 		const variation_id = variation?.id || null;
-		return checkbox.mutateAsync({variation_id: variation_id, checked: checked});
+		return mutateAsync(
+			{variation_id, checked},
+			{
+				onSuccess: (cart) => {
+					cache.setQueryData("useCheckoutCart", cart);
+				}
+			}
+		);
 	};
+
+	// console.log('isChecked', variation)
 
 	return (
 		<div>
 			{
-				checkbox.isLoading ?
+				isLoading ?
 					<SmallSpinner/>
 					: (
 						<div className="pretty p-default p-round">
 							<input type="checkbox"
+							       id={`variation_${variation.configId}`}
 							       checked={isChecked}
 							       onChange={(e) => checkedItem(e)}/>
 							<div className="state">
-								<label htmlFor={`product_${product.id}`}/>
+								<label htmlFor={`variation_${variation.configId}`}/>
 							</div>
 						</div>
 					)

@@ -62,7 +62,7 @@ const CheckoutItem = (props) => {
 								<div className="variation" key={variation.id}>
 									<div className="row align-items-center">
 										<div className="col-1">
-											<ItemCheck product={product} variation={variation}/>
+											<ItemCheck variation={variation}/>
 										</div>
 										<div className="col-3 pr-0 pr-lg-0">
 											<AttributeImage

@@ -33,9 +33,18 @@ const AliAddToCart = (props) => {
 	const ensurePopupRead = (event) => {
 		event.preventDefault();
 		if (itemTotal) {
-			if(parseInt(itemTotal) >= parseInt(aliMinOrder)){
-				setShowPopup(true);
-			}else{
+			if (parseInt(itemTotal) >= parseInt(aliMinOrder)) {
+				if (cartItem?.shipping_type) {
+					setShowPopup(true);
+				} else {
+					Swal.fire({
+						text: `Select your shipping method`,
+						icon: 'warning',
+						confirmButtonText: 'Ok, Dismiss'
+					});
+				}
+
+			} else {
 				Swal.fire({
 					text: `Minimum product value ${currency} ${aliMinOrder}`,
 					icon: 'warning',

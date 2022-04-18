@@ -23,6 +23,17 @@ trait CartOperation
     return $cart_uid ? $cart_uid : Str::random(60);
   }
 
+  public function get_pure_cart($cart_id)
+  {
+    return Cart::with(['cartItems' => function ($query) {
+      $query->with('variations');
+    }])
+      ->withCount('variations')
+      ->whereNull('is_purchase')
+      ->where('id', $cart_id)
+      ->first();
+  }
+
   public function get_customer_cart($cart_uid = null)
   {
     $cart_uid = $cart_uid ? $cart_uid : $this->cart_uid();
@@ -47,24 +58,20 @@ trait CartOperation
     if ($cart->count() > 1) {
       foreach ($cart as $item) {
         if ($first->id !== $item->id) {
-          CartItem::where('cart_id', $item->id)->update([
-            'cart_id' => $first->id,
-          ]);
-          CartItemVariation::where('cart_id', $item->id)->update([
-            'cart_id' => $first->id,
-          ]);
+          CartItem::where('cart_id', $item->id)
+            ->update([
+              'cart_id' => $first->id,
+            ]);
+          CartItemVariation::where('cart_id', $item->id)
+            ->update([
+              'cart_id' => $first->id,
+            ]);
           $item->update(['is_purchase' => 1]);
         }
       }
     }
 
-    $cart = Cart::with(['cartItems' => function ($query) {
-      $query->with('variations');
-    }])
-      ->withCount('variations')
-      ->whereNull('is_purchase')
-      ->where('id', $first->id)
-      ->first();
+    $cart = $this->get_pure_cart($first->id);
 
     if ($auth_check) {
       $auth_id = auth('sanctum')->id();
@@ -101,7 +108,7 @@ trait CartOperation
         }
       }
     }
-    return $this->get_customer_cart();
+    return  $this->get_pure_cart($cart->id);
   }
 
   public function add_to_cart($product)
@@ -157,16 +164,27 @@ trait CartOperation
       );
     }
 
-    return $this->get_customer_cart($cart_uid);
+    return  $this->get_pure_cart($cart->id);
   }
 
 
   private function shippingCalculate($item, $process = [])
   {
     $variations = $item->variations;
+    $totalQty = 0;
+    $totalPrice = 0;
+    foreach ($variations as $variation) {
+      $totalQty += $variation->qty;
+      $totalPrice += $variation->qty * $variation->price;
+    }
+
     if ($item->ProviderType == 'aliexpress' && $item->shipping_type == 'express') {
       $totalQty = $variations->sum('qty');
       $weight = $totalQty * $item->weight;
+      $aliTotal = get_setting('express_shipping_min_value');
+      if ($totalPrice < $aliTotal) {
+        $process['shipping_type'] = null;
+      }
       $process['DeliveryCost'] = get_aliExpress_shipping($weight);
       $process['shipping_rate'] = get_aliExpress_air_shipping_rate($variations);
     } else {
@@ -207,7 +225,7 @@ trait CartOperation
       $this->shippingCalculate($item);
     }
 
-    return $this->get_customer_cart();
+    return  $this->get_pure_cart($cart->id);
   }
 
 
@@ -225,7 +243,7 @@ trait CartOperation
         ->where('ItemId', $item_id)
         ->update(['IsCart' => 1, 'shipping_type' => $shipping_type]);
     }
-    return $this->get_customer_cart();
+    return  $this->get_pure_cart($cart->id);
   }
 
   public function ali_product_choose_shipping()
@@ -251,7 +269,7 @@ trait CartOperation
         ->where('ItemId', $item_id)->first();
       $this->shippingCalculate($item, $data);
     }
-    return $this->get_customer_cart();
+    return  $this->get_pure_cart($cart->id);
   }
 
   public function read_popup_message()
@@ -267,7 +285,7 @@ trait CartOperation
         ->where('ItemId', $item_id)
         ->update(['is_popup_shown' => 1, 'is_express_popup_shown' => $is_express_popup_shown]);
     }
-    return $this->get_customer_cart();
+    return  $this->get_pure_cart($cart->id);
   }
 
 
@@ -277,17 +295,17 @@ trait CartOperation
     $variation_id = request('variation_id', null);
     $is_checked = request('checked', null);
     if ($cart) {
-      $is_checked = $is_checked ? 1 : null;
+      // $is_checked = $is_checked ? 1 : null;
       if (!$variation_id) {
         CartItemVariation::where('cart_id', $cart->id)
-          ->update(['is_checked' => $is_checked]);
+          ->update(['is_checked' => (int) $is_checked]);
       } else if ($variation_id) {
         CartItemVariation::where('id', $variation_id)
           ->where('cart_id', $cart->id)
-          ->update(['is_checked' => $is_checked]);
+          ->update(['is_checked' => (int) $is_checked]);
       }
     }
-    return $this->get_customer_cart();
+    return  $this->get_pure_cart($cart->id);
   }
 
 
@@ -317,7 +335,7 @@ trait CartOperation
       }
     }
 
-    return $this->get_customer_cart();
+    return  $this->get_pure_cart($cart->id);
   }
 
   public function remove_from_cart()
@@ -334,7 +352,7 @@ trait CartOperation
         }
       }
     }
-    return $this->get_customer_cart();
+    return  $this->get_pure_cart($cart->id);
   }
 
   public function add_payment_information($pmt)
@@ -345,7 +363,7 @@ trait CartOperation
         'payment_method' => $pmt
       ]);
     }
-    return $this->get_customer_cart();
+    return  $this->get_pure_cart($cart->id);
   }
 
 

@@ -33,7 +33,7 @@ const WishlistPage = (props) => {
 							Swal.fire({
 								text: "WishList remove successfully.",
 								icon: "Success"
-							})
+							});
 							cache.setQueryData('wishlist', (responseData?.wishlists || {}));
 						}
 					}
@@ -42,14 +42,18 @@ const WishlistPage = (props) => {
 		});
 	};
 
+	const productPageLink = (wishList) => {
+		const ItemId = wishList?.ItemId;
+		const ProviderType = wishList?.provider_type;
+		return ProviderType === 'aliexpress' ? `/aliexpress/search?url=https://www.aliexpress.com/item/${ItemId}.html` : `/product/${ItemId}`;
+	};
+
 	return (
 		<>
 			<div className="row align-items-center">
 				<div className="col-md-2 text-center d-none d-md-block">{indexItem + 1}</div>
 				<div className="col-md-2 col-3">
-					<Link
-						to={`/product/${wishList.ItemId}`}
-					>
+					<Link to={productPageLink(wishList)}>
 						<img
 							className="w-100"
 							src={wishList.img}
@@ -58,9 +62,7 @@ const WishlistPage = (props) => {
 					</Link>
 				</div>
 				<div className="col-md-6 col-7 align-self-start">
-					<Link
-						to={`/product/${wishList.ItemId}`}
-					>
+					<Link to={productPageLink(wishList)}>
 						{
 							isMobile ?
 								characterLimiter(wishList.name, 55)
