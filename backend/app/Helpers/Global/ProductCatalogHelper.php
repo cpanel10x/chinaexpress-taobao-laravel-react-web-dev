@@ -175,6 +175,10 @@ if (!function_exists('get_category_browsing_items')) {
 if (!function_exists('sectionGetCategoryProducts')) {
   function sectionGetCategoryProducts($url, $limit = 50, $offset = 0)
   {
+    $hasData = cache()->get($url, null);
+    if ($hasData) {
+      return $hasData;
+    }
     $cat = explode('?', $url);
     $slug_name = str_replace('/', '', $cat[0]);
     $products = [];
@@ -193,6 +197,9 @@ if (!function_exists('sectionGetCategoryProducts')) {
         }
       }
     }
+
+    cache()->put($url, $products, 21600); // 21600 seconds as 6 hours
+
     return $products;
   }
 }
@@ -200,6 +207,7 @@ if (!function_exists('sectionGetCategoryProducts')) {
 if (!function_exists('sectionGetSearchProducts')) {
   function sectionGetSearchProducts($url, $limit = 35, $offset = 0)
   {
+
     $cat = explode('&', $url);
     $slug_name = $cat[0] ?? '';
     $products = [];

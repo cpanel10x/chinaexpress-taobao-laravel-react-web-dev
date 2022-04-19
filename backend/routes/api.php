@@ -117,14 +117,11 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function () {
     Route::get('/', [CartController::class, 'currentCart']);
     Route::get('/checkout', [CartController::class, 'checkoutCart']);
 
-
     Route::post('/add', [CartController::class, 'addToCart']);
     Route::post('/mark-as-cart', [CartController::class, 'markAsCart']);
 
     Route::post('/choose-shipping', [CartController::class, 'choose_shipping']);
-
     Route::post('/process-express', [CartController::class, 'processExpressService']);
-
     Route::post('/update', [CartController::class, 'updateCustomerCart']);
 
     Route::post('/read-popup', [CartController::class, 'readPopup']);

@@ -59,7 +59,8 @@ const AliShipmentInfo = props => {
 		const value = event.target.value;
 		if (value === 'regular') {
 			setActiveShipping(value);
-			updateShippingInformation({shipping_type: value});
+			const shipping_cost = shippingRate(selectShipping?.freightAmount?.value || 0);
+			updateShippingInformation({shipping_cost, shipping_type: value});
 		} else if (value === 'express') {
 			if (isExpressEnable) {
 				setActiveShipping(value);

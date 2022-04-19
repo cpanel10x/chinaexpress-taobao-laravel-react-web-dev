@@ -8,6 +8,8 @@ import CheckoutQuantity from "./tableComponents/CheckoutQuantity";
 import {characterLimiter} from "../../../utils/Helpers";
 import {useMediaQuery} from "react-responsive";
 import {singleProductTotal} from "../../../utils/CartHelpers";
+import TaobaoItemDescription from "./itemDescription/TaobaoItemDescription";
+import AliExpressItemDescription from "./itemDescription/AliExpressItemDescription";
 
 const CheckoutItem = (props) => {
 
@@ -71,53 +73,22 @@ const CheckoutItem = (props) => {
 												attributes={variation?.attributes}/>
 										</div>
 										<div className="col-8">
-											<Link to={productPageLink(product)} title={product.Title}>
-												{
-													isMobile ?
-														characterLimiter(product.Title, 45)
-														:
-														characterLimiter(product.Title, 115)
-												}
-											</Link>
-											<div className="row">
-												<div className="col-12">
-													<p className="mb-0 mr-1 small">Weight: <strong>{approxWeight(variation.qty, product)} Kg.</strong>
-														{isMobile && <br/>}
-														<span>Shipping Rate: <strong>{currency + ' ' + product?.shipping_rate}</strong> per Kg.</span>
-													</p>
-												</div>
-											</div>
 											{
-												JSON.parse(variation?.attributes).length > 0 &&
-												<div className="row">
-													<div className="col-12">
-														<div className="mb-lg-2 small">Variations: <strong><AttrConfigs attributes={variation?.attributes}/></strong>
-														</div>
-													</div>
-												</div>
+												product?.ProviderType === "aliexpress" ?
+													<AliExpressItemDescription
+														currency={currency}
+														productPageLink={productPageLink(product)}
+														product={product}
+														variation={variation}
+													/>
+													:
+													<TaobaoItemDescription
+														currency={currency}
+														productPageLink={productPageLink(product)}
+														product={product}
+														variation={variation}
+													/>
 											}
-											<div className="row d-lg-none">
-												<div className="col-12">
-													<p className="m-0 small">Per unit price: <strong>{` ${currency + ' ' + variation.price} `}</strong></p>
-												</div>
-											</div>
-
-											<div className="row align-items-center">
-												<div className="col-7 pr-0 col-lg-4">
-													<p className="m-0 small d-block d-lg-none">Max: {variation.maxQuantity}</p>
-													<CheckoutQuantity product={product} variation={variation}/>
-												</div>
-												<div className="col-3 d-none d-lg-block">
-													<p className="m-0">Max: {variation.maxQuantity}</p>
-												</div>
-												<div className="col-3 px-0 col-lg-2 text-center d-none d-lg-block ">
-													<p className="m-0 pt-2 pt-lg-0"><strong>{` ${currency + ' ' + variation.price} `}</strong></p>
-												</div>
-												<div className="col-5 col-lg-3 pl-0 text-right">
-													<p className="m-0 pt-3 pt-lg-0">
-														<strong>{`${currency + ' ' + Math.round(Number(variation.qty) * Number(variation.price))}`}</strong></p>
-												</div>
-											</div>
 
 										</div>
 									</div>
@@ -127,7 +98,16 @@ const CheckoutItem = (props) => {
 						}
 
 						{
-							parseInt(product?.DeliveryCost) > 0 &&
+							product?.ProviderType === "aliexpress" && parseInt(product?.DeliveryCost) > 0 &&
+							<div className="row">
+								<div className="col-12">
+									<div className="text-right">China to BD Shipping Charge: <strong>{currency + ' ' + product?.DeliveryCost}</strong>
+									</div>
+								</div>
+							</div>
+						}
+						{
+							product?.ProviderType !== "aliexpress" && parseInt(product?.DeliveryCost) > 0 &&
 							<div className="row">
 								<div className="col-12">
 									<div className="text-right">China Local Shipping cost: <strong>{currency + ' ' + product?.DeliveryCost}</strong>
@@ -135,10 +115,11 @@ const CheckoutItem = (props) => {
 								</div>
 							</div>
 						}
+
 						{parseInt(product?.DeliveryCost) > 0 && <hr className="my-2"/>}
 						<div className="row">
 							<div className="col-12">
-								<div className="text-right">Item Total: <strong>{currency + ' ' + singleProductTotal(product)}</strong>
+								<div className="text-right">Subtotal: <strong>{currency + ' ' + singleProductTotal(product)}</strong>
 								</div>
 							</div>
 						</div>

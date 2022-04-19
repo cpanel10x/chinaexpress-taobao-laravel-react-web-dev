@@ -170,22 +170,24 @@ trait CartOperation
 
   private function shippingCalculate($item, $process = [])
   {
-    $variations = $item->variations;
+    $variations = $item->variations ?? [];
     $totalQty = 0;
     $totalPrice = 0;
     foreach ($variations as $variation) {
       $totalQty += $variation->qty;
       $totalPrice += $variation->qty * $variation->price;
     }
+    $shipping_type = getArrayKeyData($process, 'shipping_type', $item->shipping_type);
 
-    if ($item->ProviderType == 'aliexpress' && $item->shipping_type == 'express') {
+    if ($item->ProviderType == 'aliexpress' && $shipping_type == 'express') {
       $totalQty = $variations->sum('qty');
       $weight = $totalQty * $item->weight;
       $aliTotal = get_setting('express_shipping_min_value');
+      $process['DeliveryCost'] = get_aliExpress_shipping($weight);
       if ($totalPrice < $aliTotal) {
         $process['shipping_type'] = null;
+        $process['DeliveryCost'] = 0;
       }
-      $process['DeliveryCost'] = get_aliExpress_shipping($weight);
       $process['shipping_rate'] = get_aliExpress_air_shipping_rate($variations);
     } else {
       $process['shipping_rate'] = get_aliExpress_air_shipping_rate($variations, 'taobao');
@@ -239,9 +241,13 @@ trait CartOperation
       return [];
     }
     if ($item_id) {
+      $data['IsCart'] = 1;
+      if ($shipping_type) {
+        $data['shipping_type'] = $shipping_type;
+      }
       CartItem::where('cart_id', $cart->id)
         ->where('ItemId', $item_id)
-        ->update(['IsCart' => 1, 'shipping_type' => $shipping_type]);
+        ->update($data);
     }
     return  $this->get_pure_cart($cart->id);
   }

@@ -23,6 +23,12 @@ const PaymentItem = (props) => {
 		return product?.variations.filter(filter => parseInt(filter.is_checked) === 1);
 	};
 
+	const productPageLink = (product) => {
+		const ItemId = product?.ItemId;
+		const ProviderType = product?.ProviderType;
+		return ProviderType === 'aliexpress' ? `/aliexpress/search?url=https://www.aliexpress.com/item/${ItemId}.html` : `/product/${ItemId}`;
+	};
+
 	return (
 		<div className="checkout_grid">
 			<div className="row">
@@ -40,10 +46,10 @@ const PaymentItem = (props) => {
 								<div className="variation" key={index}>
 									<div className="row align-items-center">
 										<div className="col-3 p-0">
-											<AttributeImage product={product} attributes={variation?.attributes}/>
+											<AttributeImage product={product} productPageLink={productPageLink(product)} attributes={variation?.attributes}/>
 										</div>
 										<div className="col-9">
-											<Link to={`/product/${product.ItemId}`} title={product.Title}>
+											<Link to={productPageLink(product)} title={product.Title}>
 												{
 													isMobile ?
 														characterLimiter(product.Title, 55)

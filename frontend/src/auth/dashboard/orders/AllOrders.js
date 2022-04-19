@@ -8,8 +8,7 @@ import OrderItemRow from "./includes/OrderItemRow";
 import {useSettings} from "../../../api/GeneralApi";
 
 const AllOrders = () => {
-	const query = useQuery();
-	let page = query.get("page");
+	const {page} = useQuery();
 	let limit = 10;
 
 	const {data: orders, isLoading} = useCustomerOrders(page, limit);

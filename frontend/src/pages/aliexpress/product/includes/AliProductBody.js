@@ -41,7 +41,7 @@ const AliProductBody = (props) => {
 	const ShipsFrom = skuProperties?.find(find => find.skuPropertyName === 'ShipsFrom');
 	let hasShipFromChina = ShipsFrom?.skuPropertyValues?.find(value => value.propertyValueName === 'China');
 	hasShipFromChina = hasShipFromChina ? hasShipFromChina : (!ShipsFrom?.skuPropertyValues?.length);
-	const hasBDShipment = shipment?.length > 0;
+	const hasBDShipment = shipment?.freightResult?.length > 0;
 
 	return (
 		<div className="product-details-top">

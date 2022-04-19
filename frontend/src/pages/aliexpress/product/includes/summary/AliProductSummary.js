@@ -37,23 +37,23 @@ const AliProductSummary = (props) => {
 					<tbody>
 					<tr>
 						<td className="w-50">Total Quantity</td>
-						<td className="w-50">{`${quantity}`}</td>
+						<td>{`${quantity}`}</td>
 					</tr>
 					<tr>
-						<td className="w-50">Weight</td>
-						<td className="w-50">{(Number(cartItem.weight) * Number(quantity)).toFixed(3)}kg</td>
+						<td>Weight</td>
+						<td>{(Number(cartItem.weight) * Number(quantity)).toFixed(3)}kg</td>
 					</tr>
 					<tr>
-						<td className="w-50">China Delivery charge</td>
-						<td className="w-50">{`${currency} ${DeliveryCost}`}</td>
+						<td className="text-nowrap">China Delivery charge</td>
+						<td>{`${currency} ${DeliveryCost}`}</td>
 					</tr>
 					<tr>
-						<td className="w-50">Express Shipping rate</td>
-						<td className="w-50">{`${currency} ${cartItem?.shipping_rate ? cartItem.shipping_rate : 0} per kg`}</td>
+						<td className="text-nowrap">Express Shipping rate</td>
+						<td>{`${currency} ${cartItem?.shipping_rate ? cartItem.shipping_rate : 0} per kg`}</td>
 					</tr>
 					<tr>
-						<td className="w-50">Total Product Price:</td>
-						<td className="w-50">{`${currency} ${totalActivePrice}`}</td>
+						<td className="text-nowrap">Total Product Price:</td>
+						<td>{`${currency} ${totalActivePrice}`}</td>
 					</tr>
 					</tbody>
 				</table>
@@ -68,19 +68,19 @@ const AliProductSummary = (props) => {
 				<tbody>
 				<tr>
 					<td className="w-50">Total Quantity</td>
-					<td className="w-50">{`${quantity}`}</td>
+					<td>{`${quantity}`}</td>
 				</tr>
 				<tr>
-					<td className="w-50">Products Price</td>
-					<td className="w-50">{`${currency} ${itemTotal}`}</td>
+					<td className="text-nowrap">Products Price</td>
+					<td>{`${currency} ${itemTotal}`}</td>
 				</tr>
 				<tr>
-					<td className="w-50">Shipping charge</td>
-					<td className="w-50">{`${currency} ${DeliveryCost}`}</td>
+					<td className="text-nowrap">Shipping charge</td>
+					<td>{`${currency} ${DeliveryCost}`}</td>
 				</tr>
 				<tr>
-					<td className="w-50">Total Product Price:</td>
-					<td className="w-50">{`${currency} ${totalActivePrice}`}</td>
+					<td className="text-nowrap">Total Product Price:</td>
+					<td>{`${currency} ${totalActivePrice}`}</td>
 				</tr>
 				</tbody>
 			</table>
