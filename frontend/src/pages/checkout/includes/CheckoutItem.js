@@ -15,13 +15,6 @@ const CheckoutItem = (props) => {
 
 	const {cart, cartItems, currency, removeCart, removeItemFromCart} = props;
 
-	const isMobile = useMediaQuery({query: '(max-width: 991px)'});
-
-	const approxWeight = (qty, product) => {
-		const weight = product?.weight || 0;
-		const itemWeight = Number(weight) * Number(qty);
-		return Number(itemWeight).toFixed(3);
-	};
 
 	const productPageLink = (product) => {
 		const ItemId = product?.ItemId;
@@ -101,29 +94,40 @@ const CheckoutItem = (props) => {
 							product?.ProviderType === "aliexpress" && parseInt(product?.DeliveryCost) > 0 &&
 							<div className="row">
 								<div className="col-12">
-									<div className="text-right">China to BD Shipping Charge: <strong>{currency + ' ' + product?.DeliveryCost}</strong>
+									<div className="text-right">
+										{
+											product?.shipping_type === 'express' ?
+												`China Local Delivery Charge:`
+												:
+												`China to BD Shipping Charge:`
+										}
+										<strong>{currency + ' ' + product?.DeliveryCost}</strong>
 									</div>
 								</div>
 							</div>
 						}
 						{
-							product?.ProviderType !== "aliexpress" && parseInt(product?.DeliveryCost) > 0 &&
+							product?.ProviderType !== "aliexpress" && parseInt(product?.variations_count) > 0 &&
 							<div className="row">
 								<div className="col-12">
-									<div className="text-right">China Local Shipping cost: <strong>{currency + ' ' + product?.DeliveryCost}</strong>
+									<div className="text-right">
+										China Local Shipping cost: <strong>{currency + ' ' + product?.DeliveryCost}</strong>
 									</div>
 								</div>
 							</div>
 						}
 
-						{parseInt(product?.DeliveryCost) > 0 && <hr className="my-2"/>}
+						{parseInt(product?.variations_count) > 0 && <hr className="my-2"/>}
+
+						{parseInt(product?.variations_count) > 0 &&
 						<div className="row">
 							<div className="col-12">
 								<div className="text-right">Subtotal: <strong>{currency + ' ' + singleProductTotal(product)}</strong>
 								</div>
 							</div>
 						</div>
-						<hr className="my-2"/>
+						}
+						{parseInt(product?.variations_count) > 0 && <hr className="my-2"/>}
 					</div>
 				)
 			}

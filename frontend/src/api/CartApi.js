@@ -193,6 +193,16 @@ export const usePopupMessage = () => useMutation(["useReadPopupMessage"], async 
 	}
 });
 
+export const useCheckoutUpdate= () => useMutation(["useCheckoutUpdate"], async (props) => {
+	const token = setGetToken();
+	try {
+		const {data} = await instance.post(`/cart/update/checkout`, {token: token, ...props});
+		return data?.cart ? data.cart : {};
+	} catch (error) {
+		console.log(error);
+	}
+});
+
 
 
 

@@ -124,6 +124,8 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function () {
     Route::post('/process-express', [CartController::class, 'processExpressService']);
     Route::post('/update', [CartController::class, 'updateCustomerCart']);
 
+    Route::post('/update/checkout', [CartController::class, 'updateCustomerCheckoutCart']);
+
     Route::post('/read-popup', [CartController::class, 'readPopup']);
     Route::post('/shipping', [CartController::class, 'addShippingAddress'])->middleware('auth:sanctum');
     Route::post('/checkbox', [CartController::class, 'updateCartCheckbox'])->middleware('auth:sanctum');

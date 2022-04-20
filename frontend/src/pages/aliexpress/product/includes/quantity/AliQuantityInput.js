@@ -11,7 +11,7 @@ import {
 import AliAddToCartButton from "./includes/AliAddToCartButton";
 
 const AliQuantityInput = (props) => {
-	const {cartItem, product, settings, shipment, selectShipping, operationalAttributes} = props;
+	const {cartItem, product, settings, shipment, activeShipping, selectShipping, operationalAttributes} = props;
 
 	const priceCard = aliActiveConfigurations(product, operationalAttributes);
 
@@ -30,6 +30,7 @@ const AliQuantityInput = (props) => {
 		processProduct.weight = Number(weight).toFixed(3);
 		processProduct.DeliveryCost = DeliveryCost();
 		processProduct.Quantity = 1;
+		processProduct.shipping_type = activeShipping;
 		processProduct.hasConfigurators = true;
 		processProduct.ConfiguredItems = aliProductConfiguration(product, priceCard, operationalAttributes, aliRate);
 		return processProduct;

@@ -6,8 +6,7 @@ import {useQueryClient} from "react-query";
 import ShippingModal from "./includes/ShippingModal";
 
 const AliShipmentInfo = props => {
-	const {cartItem, product, shipment, settings, selectShipping, setSelectShipping} = props;
-	const [activeShipping, setActiveShipping] = useState('regular');
+	const {cartItem, product, shipment, settings,activeShipping, setActiveShipping, selectShipping, setSelectShipping} = props;
 	const [optionEnable, setOptionEnable] = useState(false);
 
 	const cache = useQueryClient();
@@ -30,7 +29,11 @@ const AliShipmentInfo = props => {
 		if (!selectShipping && freightResult?.length > 0) {
 			setSelectShipping(freightResult?.[0]);
 		}
-	}, [freightResult, setSelectShipping]);
+		if(cartItem?.shipping_type){
+			setActiveShipping(cartItem?.shipping_type);
+		}
+
+	}, [freightResult, setSelectShipping, cartItem]);
 
 	const shippingRate = (amount) => {
 		return aliProductConvertionPrice(amount, aliRate);
@@ -49,8 +52,10 @@ const AliShipmentInfo = props => {
 	useEffect(() => {
 		if (!isExpressEnable) {
 			const shipping_cost = shippingRate(selectShipping?.freightAmount?.value || 0);
-			updateShippingInformation({shipping_cost, shipping_type: activeShipping});
-			setActiveShipping('regular');
+			updateShippingInformation({shipping_cost, shipping_type: null});
+			if(freightResult?.length > 0){
+				setActiveShipping('regular');
+			}
 		}
 	}, [isExpressEnable]);
 

@@ -26,9 +26,8 @@ trait CartOperation
   public function get_pure_cart($cart_id)
   {
     return Cart::with(['cartItems' => function ($query) {
-      $query->with('variations');
+      $query->with('variations')->withCount('variations');
     }])
-      ->withCount('variations')
       ->whereNull('is_purchase')
       ->where('id', $cart_id)
       ->first();
@@ -143,6 +142,7 @@ trait CartOperation
       $data['NextLotQuantity'] = $product['NextLotQuantity'] ?? null;
       $data['ProductPrice'] = $product['Price'] ?? null;
       $data['weight'] = $product['weight'] ?? null;
+      $data['shipping_type'] = $product['shipping_type'] ?? null;
       $data['DeliveryCost'] = $product['DeliveryCost'] ?? null;
       $data['Quantity'] = $product['Quantity'] ?? null;
       $data['hasConfigurators'] = $product['hasConfigurators'] ?? null;
@@ -177,9 +177,11 @@ trait CartOperation
       $totalQty += $variation->qty;
       $totalPrice += $variation->qty * $variation->price;
     }
-    $shipping_type = getArrayKeyData($process, 'shipping_type', $item->shipping_type);
+    $ship_type = $item ? $item->shipping_type : null;
+    $ProviderType = $item ? $item->ProviderType : null;
+    $shipping_type = getArrayKeyData($process, 'shipping_type', $ship_type);
 
-    if ($item->ProviderType == 'aliexpress' && $shipping_type == 'express') {
+    if ($ProviderType == 'aliexpress' && $shipping_type == 'express') {
       $totalQty = $variations->sum('qty');
       $weight = $totalQty * $item->weight;
       $aliTotal = get_setting('express_shipping_min_value');
@@ -192,7 +194,7 @@ trait CartOperation
     } else {
       $process['shipping_rate'] = get_aliExpress_air_shipping_rate($variations, 'taobao');
     }
-    if (!empty($process)) {
+    if (!empty($process) && $item) {
       $item->update($process);
     }
     return $process;
@@ -231,6 +233,46 @@ trait CartOperation
   }
 
 
+  public function update_checkout_cart()
+  {
+    $item_id = request('item_id');
+    $variation_id = request('variation_id');
+    $qty = request('qty');
+    $cart = $this->get_customer_cart();
+    if (!$cart) {
+      return [];
+    }
+    if ($variation_id) {
+      if ($qty > 0) {
+        CartItemVariation::where('id', $variation_id)->update(['qty' => $qty]);
+      } else {
+        CartItemVariation::where('id', $variation_id)->delete();
+      }
+    }
+    $item = CartItem::with('variations')->where('id', $item_id)->first();
+    if ($item) {
+      $variations = CartItemVariation::where('cart_item_id', $item_id)->get();
+      if ($variations->isEmpty()) {
+        $process['DeliveryCost'] = null;
+        $process['shipping_rate'] = null;
+      } else {
+        $totalQty = $variations->sum('qty');
+        if ($item->ProviderType == 'aliexpress' && $item->shipping_type == 'express') {
+          $weight = $totalQty * $item->weight;
+          $process['DeliveryCost'] = get_aliExpress_shipping($weight);
+          $process['shipping_rate'] = get_aliExpress_air_shipping_rate($variations);
+        } else {
+          $process['shipping_rate'] = get_aliExpress_air_shipping_rate($variations, 'taobao');
+        }
+      }
+      if (!empty($process) && $item) {
+        $item->update($process);
+      }
+    }
+
+    return  $this->get_pure_cart($cart->id);
+  }
+
 
   public function product_mark_as_cart()
   {
@@ -255,8 +297,8 @@ trait CartOperation
   public function ali_product_choose_shipping()
   {
     $item_id = request('item_id');
-    $shipping = request('shipping_type');
-    $DeliveryCost = request('shipping_cost');
+    $shipping = request('shipping_type', null);
+    $DeliveryCost = request('shipping_cost', 0);
     $cart = $this->get_customer_cart();
     if (!$cart) {
       return [];

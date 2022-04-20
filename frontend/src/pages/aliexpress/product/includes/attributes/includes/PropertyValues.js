@@ -17,14 +17,14 @@ const PropertyValues = (props) => {
 						key={key}
 						onClick={() => selectAttribute(skuPropertyName, Attribute)}
 						className={`attrItem text-center ${isExistOnSelectAttr(Attribute)}`}
-						title={Attribute?.propertyValueName}
+						title={Attribute?.propertyValueDisplayName}
 					>
 						{Attribute?.skuPropertyImagePath ?
 							<img src={Attribute?.skuPropertyImagePath}
 							     onClick={() => setActiveImg(Attribute?.skuPropertyImagePath)}
 							     alt={Attribute?.propertyValueName}
 							     style={{width: '2.5rem', height: '2.5rem'}}/>
-							: Attribute?.propertyValueName
+							: Attribute?.propertyValueDisplayName
 						}
 					</div>
 				)}

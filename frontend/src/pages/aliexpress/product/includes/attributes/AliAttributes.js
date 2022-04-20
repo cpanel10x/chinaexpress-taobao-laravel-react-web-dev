@@ -44,7 +44,7 @@ const AliAttributes = (props) => {
 					<div key={index} className="mb-3">
 						<p>
 							<b>{property?.skuPropertyName} : </b>
-							<span className="seller_info">{selectProperty(property)?.propertyValueName || 'Unknown'}</span>
+							<span className="seller_info">{selectProperty(property)?.propertyValueDisplayName || 'Unknown'}</span>
 						</p>
 						<PropertyValues
 							skuPropertyName={property?.skuPropertyName}
@@ -61,7 +61,7 @@ const AliAttributes = (props) => {
 				<div>
 					<p>
 						<b>Ship From : </b>
-						<span className="seller_info">{selectProperty(ShipsFrom)?.propertyValueName || 'Unknown'}</span>
+						<span className="seller_info">{selectProperty(ShipsFrom)?.propertyValueDisplayName || 'Unknown'}</span>
 					</p>
 				</div>
 			}

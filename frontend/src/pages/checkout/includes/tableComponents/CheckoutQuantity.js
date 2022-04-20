@@ -1,13 +1,13 @@
 import React from 'react';
 import Swal from "sweetalert2";
-import {useCartMutation} from "../../../../api/CartApi";
+import {useCheckoutUpdate} from "../../../../api/CartApi";
+import {useQueryClient} from "react-query";
 
 const CheckoutQuantity = (props) => {
 	const {product, variation} = props;
 
-
-	const {updateCart: {isLoading, mutateAsync}} = useCartMutation();
-
+	const cache = useQueryClient();
+	const {mutateAsync, isLoading} = useCheckoutUpdate();
 
 	let maxQuantity = variation?.maxQuantity;
 
@@ -23,13 +23,16 @@ const CheckoutQuantity = (props) => {
 			});
 		}
 		if (proceed) {
-			const updateData = {
+			mutateAsync({
 				cart_id: product?.cart_id,
 				item_id: product?.id,
 				variation_id: variation?.id,
 				qty: parseInt(newQty),
-			};
-			mutateAsync(updateData);
+			}, {
+				onSuccess: (cart) => {
+					cache.setQueryData("useCheckoutCart", cart);
+				}
+			});
 		}
 	};
 

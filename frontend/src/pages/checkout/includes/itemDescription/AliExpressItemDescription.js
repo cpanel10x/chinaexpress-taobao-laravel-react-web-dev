@@ -34,7 +34,7 @@ const AliExpressItemDescription = (props) => {
 				</div>
 			}
 			<p className="mb-0 text-capitalize small">
-				Shipping method: <strong>{product?.shipping_type === 'regular' ? `Regular (25-90 Days)` : `Express service (15-40 Days)`}</strong>
+				Shipping method: <strong>{product?.shipping_type === 'regular' ? `Regular Shipping (25-90 Days)` : `Express Shipping (15-40 Days)`}</strong>
 			</p>
 			{
 				product?.shipping_type === 'express' &&

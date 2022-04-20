@@ -87,7 +87,7 @@ const SectionProductCard = (props) => {
                   <span className="float-left">{`${currency_icon}`} <span
 	                  className="price_span">{getDBProductPrice(product, rate)}</span></span>
 						{
-							product?.total_sold && <span className="sold_item_text">SOLD: {product.total_sold}</span>
+							product?.total_sold > 0 && <span className="sold_item_text">SOLD: {product.total_sold}</span>
 						}
 					</div>
 

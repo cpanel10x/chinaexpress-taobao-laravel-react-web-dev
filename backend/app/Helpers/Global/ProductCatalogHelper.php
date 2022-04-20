@@ -207,7 +207,6 @@ if (!function_exists('sectionGetCategoryProducts')) {
 if (!function_exists('sectionGetSearchProducts')) {
   function sectionGetSearchProducts($url, $limit = 35, $offset = 0)
   {
-
     $cat = explode('&', $url);
     $slug_name = $cat[0] ?? '';
     $products = [];

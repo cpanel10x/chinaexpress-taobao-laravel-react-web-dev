@@ -60,6 +60,12 @@ class CartController extends Controller
     return response(['status' => true, 'cart' => $cart, 'msg' => 'Product add to cart successfully']);
   }
 
+  public function updateCustomerCheckoutCart()
+  {
+    $cart = $this->update_checkout_cart();
+    return response(['status' => true, 'cart' => $cart, 'msg' => 'Product add to cart successfully']);
+  }
+
   public function readPopup()
   {
     $cart = $this->read_popup_message();
