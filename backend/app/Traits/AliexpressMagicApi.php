@@ -7,7 +7,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Psr7;
 
 
-trait AliexpressApi
+trait AliexpressMagicApi
 {
   public $baseUrl = null;
   public $rapidApiHost = null;

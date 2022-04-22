@@ -50,7 +50,7 @@ const Routing = () => {
 			/>
 
 			{/* start aliexpress route develop */}
-			<Route path="/aliexpress/search" exact={true} component={AliProductPage}/>
+			<Route path="/aliexpress/product/:product_id" exact={true} component={AliProductPage}/>
 			{/* end aliexpress route develop */}
 
 			<AuthRoute path="/checkout" exact component={Checkout}/>

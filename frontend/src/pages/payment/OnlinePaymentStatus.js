@@ -1,5 +1,5 @@
 import React from 'react';
-import {useHistory, useParams} from "react-router-dom";
+import {useParams} from "react-router-dom";
 import {useQuery} from "../../utils/customHooks";
 import SuccessMessage from "./includes/SuccessMessage";
 import FailedMessage from "./includes/FailedMessage";
@@ -7,13 +7,8 @@ import CancelMessage from "./includes/CancelMessage";
 import My404Component from "../404/My404Component";
 
 const OnlinePaymentStatus = () => {
-	const history = useHistory();
 	let {status} = useParams();
-	const query = useQuery();
-	const tran_id = query.get('tran_id');
-	const n_msg = query.get('msg');
-	const paymentID = query.get('paymentID');
-	const trxID = query.get('trxID');
+	const {tran_id, n_msg, paymentID, trxID} = useQuery();
 
 	const allStatus = ['success', 'failed', 'cancel'];
 

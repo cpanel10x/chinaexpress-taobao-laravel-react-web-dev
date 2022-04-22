@@ -30,7 +30,7 @@ export const aliProductConvertionPrice = (Amount, aliRate) => {
 
 
 export const aliActiveConfigurations = (product, operationalAttributes) => {
-	const skuList = product?.skuList || [];
+	const skuList = product?.skuModule?.skuPriceList || [];
 	let query = '';
 	for (const operation in operationalAttributes) {
 		const item = operationalAttributes[operation];
@@ -51,17 +51,14 @@ const aliProductPriceCardToPrice = (priceCard, aliRate) => {
 
 
 export const aliProductProcessToCart = (product, priceCard, aliRate) => {
-	const metadata = product?.metadata;
-	const titleModule = metadata?.titleModule;
 	const price = aliProductPriceCardToPrice(priceCard, aliRate);
-
 	return {
-		Id: product?.product_id,
+		Id: product?.actionModule?.productId,
 		ProviderType: 'aliexpress',
-		Title: titleModule?.product_title,
-		TaobaoItemUrl: product?.product_detail_url,
-		MainPictureUrl: product?.product_small_image_urls?.string?.[0],
-		MasterQuantity: product?.quantityObject?.totalAvailQuantity,
+		Title: product?.titleModule?.subject,
+		TaobaoItemUrl: product?.pageModule?.itemDetailUrl,
+		MainPictureUrl: product?.imageModule?.imagePathList?.[0] || '',
+		MasterQuantity: product?.quantityModule?.totalAvailQuantity,
 		FirstLotQuantity: null,
 		NextLotQuantity: null,
 		Price: price,
@@ -73,7 +70,7 @@ export const aliProductProcessToCart = (product, priceCard, aliRate) => {
 
 export const aliProductConfiguration = (product, priceCard, operationalAttributes, aliRate) => {
 	let configItem = {};
-	configItem.Id = priceCard?.skuPropIds;
+	configItem.Id = priceCard?.skuPropIds || product?.actionModule?.productId;
 	configItem.qty = 1;
 	configItem.maxQuantity = priceCard?.skuVal?.availQuantity;
 	configItem.price = aliProductPriceCardToPrice(priceCard, aliRate);

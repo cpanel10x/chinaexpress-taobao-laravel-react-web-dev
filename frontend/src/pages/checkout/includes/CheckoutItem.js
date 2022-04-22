@@ -19,7 +19,7 @@ const CheckoutItem = (props) => {
 	const productPageLink = (product) => {
 		const ItemId = product?.ItemId;
 		const ProviderType = product?.ProviderType;
-		return ProviderType === 'aliexpress' ? `/aliexpress/search?url=https://www.aliexpress.com/item/${ItemId}.html` : `/product/${ItemId}`;
+		return ProviderType === 'aliexpress' ? `/aliexpress/product/${ItemId}` : `/product/${ItemId}`;
 	};
 
 

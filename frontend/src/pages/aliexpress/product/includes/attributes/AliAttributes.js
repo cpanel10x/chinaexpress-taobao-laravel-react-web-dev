@@ -4,8 +4,8 @@ import PropertyValues from "./includes/PropertyValues";
 const AliAttributes = (props) => {
 	const {skuProperties, setActiveImg, operationalAttributes, setOperationalAttributes} = props;
 
-	const Properties = skuProperties?.filter(findItem => findItem.skuPropertyName !== 'ShipsFrom');
-	const ShipsFrom = skuProperties?.find(findItem => findItem.skuPropertyName === 'ShipsFrom');
+	const Properties = skuProperties?.filter(findItem => findItem.skuPropertyName !== 'Ships From');
+	const ShipsFrom = skuProperties?.find(findItem => findItem.skuPropertyName === 'Ships From');
 	const ShipsFromCountries = ShipsFrom?.skuPropertyValues?.find(value => value.propertyValueName === 'China');
 
 	useEffect(() => {
@@ -16,7 +16,7 @@ const AliAttributes = (props) => {
 				selectedProperties[PropertyName] = property?.skuPropertyValues[0];
 			});
 			if (ShipsFromCountries) {
-				setOperationalAttributes({...selectedProperties, ShipsFrom: ShipsFromCountries});
+				setOperationalAttributes({...selectedProperties, ['Ships From']: ShipsFromCountries});
 			} else {
 				setOperationalAttributes(selectedProperties);
 			}

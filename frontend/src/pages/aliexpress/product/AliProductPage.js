@@ -1,4 +1,5 @@
 import React, {useEffect, useRef} from 'react';
+import {useParams} from "react-router-dom";
 import {goPageTop} from "../../../utils/Helpers";
 import ProductDetailsSkeleton from "../../../skeleton/productSkeleton/ProductDetailsSkeleton";
 import AliProductBody from "./includes/AliProductBody";
@@ -12,28 +13,23 @@ import AliProductDetailsTab from "./includes/detailsTab/AliProductDetailsTab";
 import {useQuery} from "../../../utils/customHooks";
 
 const AliProductPage = (props) => {
-	const {url: query_url} = useQuery();
-
+	const {product_id} = useParams();
 	const {data: settings} = useSettings();
-	const {data: product, isLoading} = useAliProductDetails(encodeURIComponent(query_url));
+	const {data: product, isLoading} = useAliProductDetails(product_id);
 
 	const cardRef = useRef(null);
-
-	const currencyIcon = settings?.currency_icon || '৳';
-
 	const isMobile = useMediaQuery({query: '(max-width: 991px)'});
-
-	const cartConfigured = {};
 
 	useEffect(() => {
 		goPageTop();
-	}, [query_url]);
+	}, [product_id]);
 
 	if (isLoading) {
 		return <ProductDetailsSkeleton/>;
 	}
 
-	const productId = product?.product_id;
+	const currencyIcon = settings?.currency_icon || '৳';
+	const productId = product?.actionModule?.productId;
 
 	if (!productId) {
 		return <AliExpressProduct404/>;
@@ -51,7 +47,6 @@ const AliProductPage = (props) => {
 								isMobile={isMobile}
 								settings={settings}
 								product={product}
-								cartConfigured={cartConfigured}
 							/>
 
 							<div className="card mb-3 mb-lg-4">

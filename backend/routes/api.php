@@ -66,7 +66,7 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function () {
   Route::post('/social-login', [AuthController::class, 'socialLogin']);
 
   //  aliexpress routes
-  Route::get('/aliexpress/search', [AliExpressApiController::class, 'searchQuery']);
+  Route::post('/aliexpress/search', [AliExpressApiController::class, 'searchQuery']);
   Route::get('/aliexpress/product/{product_id}', [AliExpressApiController::class, 'productInfo']);
   Route::get('/aliexpress/shipment/{product_id}', [AliExpressApiController::class, 'productShipmentInfo']);
   Route::post('/aliexpress/shipping-weight', [AliExpressApiController::class, 'productShipmentWeightInfo']); // if necessary

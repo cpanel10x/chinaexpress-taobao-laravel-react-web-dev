@@ -28,6 +28,7 @@ trait CartOperation
     return Cart::with(['cartItems' => function ($query) {
       $query->with('variations')->withCount('variations');
     }])
+      ->withCount('variations')
       ->whereNull('is_purchase')
       ->where('id', $cart_id)
       ->first();
@@ -255,6 +256,7 @@ trait CartOperation
       if ($variations->isEmpty()) {
         $process['DeliveryCost'] = null;
         $process['shipping_rate'] = null;
+        $item->delete();
       } else {
         $totalQty = $variations->sum('qty');
         if ($item->ProviderType == 'aliexpress' && $item->shipping_type == 'express') {
@@ -264,8 +266,6 @@ trait CartOperation
         } else {
           $process['shipping_rate'] = get_aliExpress_air_shipping_rate($variations, 'taobao');
         }
-      }
-      if (!empty($process) && $item) {
         $item->update($process);
       }
     }
@@ -426,8 +426,8 @@ trait CartOperation
         'name' => $user->name,
         'phone' => $user->phone,
         'user_id' => $user->id,
-        'shipping' => $user->phone ?? '',
-        'billing' => $user->phone ?? '',
+        'shipping' => $cart->shipping ?? '',
+        'billing' => $user->billing ?? '',
         'coupon_code' => $cart->coupon_code,
         'coupon_discount' => $cart->coupon_discount,
         'status' => $status,
@@ -443,16 +443,15 @@ trait CartOperation
 
       $order_id = $order->id;
       $cartItems = CartItem::where('cart_id', $cart->id)
-        ->with(['variations' => function ($variations) {
-          $variations->where('is_checked', 1);
-        }])
+        ->with('variations')
         ->whereHas('variations', function ($variation) {
           $variation->where('is_checked', 1);
-        })->get();
+        })
+        ->where('IsCart', 1)
+        ->get();
       $advanced_rate = get_setting('payment_advanched_rate', 60);
       foreach ($cartItems as $product) {
         $orderItem = OrderItem::create([
-          'item_number' => null,
           'order_id' => $order_id,
           'user_id' => $user->id,
           'ItemId' => $product->ItemId,
@@ -470,18 +469,8 @@ trait CartOperation
           'shipping_from' => $product->shipping_from,
           'status' => $status,
           'tracking_number' => null,
-          'product_value' => null,
-          'first_payment' => null,
-          'coupon_contribution' => null,
-          'bd_shipping_charge' => null,
-          'courier_bill' => null,
-          'out_of_stock' => null,
-          'missing' => null,
-          'adjustment' => null,
-          'refunded' => null,
-          'last_payment' => null,
-          'due_payment' => null,
-          'invoice_no' => null,
+          'shipping_type' => $product->shipping_type,
+          'shipped_by' => 'Air',
         ]);
 
         if ($orderItem) {

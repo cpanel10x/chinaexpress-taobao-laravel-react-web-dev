@@ -9,6 +9,15 @@ const OrderBody = (props) => {
 
 	const {product, currency} = props;
 
+
+
+	const productPageLink = (product) => {
+		const ItemId = product?.ItemId;
+		const ProviderType = product?.ProviderType;
+		return ProviderType === 'aliexpress' ? `/aliexpress/product/${ItemId}` : `/product/${ItemId}`;
+	};
+
+
 	return (
 		<div className="cartItem">
 			{
@@ -16,10 +25,10 @@ const OrderBody = (props) => {
 					<div className="variation" key={index}>
 						<div className="row align-items-center">
 							<div className="col-2">
-								<AttributeImage product={product} attributes={variation?.attributes}/>
+								<AttributeImage product={product} productPageLink={productPageLink(product)} attributes={variation?.attributes}/>
 							</div>
 							<div className="col-10">
-								<Link to={`/product/${product.ItemId}`} title={product.Title}>
+								<Link to={productPageLink(product)} title={product.Title}>
 									{characterLimiter(product.Title, 130)}
 								</Link>
 								<div className="row">

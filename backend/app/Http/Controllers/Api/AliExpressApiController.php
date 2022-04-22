@@ -59,9 +59,9 @@ class AliExpressApiController extends Controller
 
   public function searchQuery()
   {
-    $req_query = request('query_url');
+    $req_query = request('search');
     if (!$req_query) {
-      return response(['status' => false, 'result' => '', 'msg' => 'Search must not empty']);
+      return response(['status' => false, 'result' => '', 'msg' => 'Search result not found']);
     }
     $product_id = $this->search_log_product_id($req_query);
     if (!$product_id) {
@@ -76,21 +76,9 @@ class AliExpressApiController extends Controller
         $link = $html->getAttribute('href') ?? '';
         $product_id = $this->checkIdInLink($link);
       }
-      if ($product_id) {
-        $this->store_product_id_to_search_log($req_query, $product_id);
-      }
     }
 
-    $rapid = '';
-    $rapid = cache()->get($product_id, null);
-    if (!$rapid) {
-      $rapid = $this->ApiProductDetails($product_id);
-      cache()->put($product_id, $rapid, 600);
-    }
-
-    return response([
-      'result' => json_encode($rapid),
-    ]);
+    return response(['status' =>  $product_id ? true : false, 'product_id' => $product_id, 'msg' => 'Search must not empty']);
   }
 
 
@@ -99,7 +87,7 @@ class AliExpressApiController extends Controller
     $rapid = cache()->get($product_id, null);
     if (!$rapid) {
       $rapid = $this->ApiProductDetails($product_id);
-      cache()->put($product_id, $rapid, 600);
+      cache()->put($product_id, $rapid, now()->addMinutes(10));
     }
     return response([
       'result' => json_encode($rapid)
@@ -109,8 +97,7 @@ class AliExpressApiController extends Controller
   public function productShipmentInfo($product_id)
   {
     $key = 'shipment-' . $product_id;
-    // $shipping = cache()->get($key, null);
-    $shipping = null;
+    $shipping = cache()->get($key, null);
     if (!$shipping) {
       $shipping = $this->ApiProductShipping($product_id);
       cache()->put($key, $shipping, 600);
@@ -128,7 +115,7 @@ class AliExpressApiController extends Controller
     $shipping = cache()->get($key, null);
     $shipping = null;
     if (!$shipping) {
-      $shipping = $this->ApiProductShipping($product_id, null);
+      $shipping = $this->productWeightInfoFromMagicApi($product_id);
       cache()->put($key, $shipping, 600);
     }
     $weight = $shipping['packageInfo']['weight'] ?? 0;

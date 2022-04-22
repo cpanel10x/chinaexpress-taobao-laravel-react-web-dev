@@ -41,7 +41,6 @@ const AliQuantityInput = (props) => {
 	const addToCartProcess = (e) => {
 		e.preventDefault();
 		const processProduct = processProductData();
-
 		let process = false;
 		if (processProduct?.ConfiguredItems?.Id) {
 			if (Quantity > 0) {
@@ -58,8 +57,7 @@ const AliQuantityInput = (props) => {
 		}
 	};
 
-	const activeConfigId = priceCard?.skuPropIds;
-
+	const activeConfigId = priceCard?.skuPropIds || product?.actionModule?.productId;
 	const cartConfiguredItem = cartItem?.variations?.find(find => String(find.configId) === String(activeConfigId));
 
 	if (!cartItem || !cartConfiguredItem?.qty) {

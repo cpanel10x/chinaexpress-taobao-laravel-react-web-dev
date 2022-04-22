@@ -14,7 +14,7 @@ const AliShipmentInfo = props => {
 
 	const itemTotal = sumCartItemTotal(cartItem?.variations || []);
 	const currency = settings?.currency_icon || '৳';
-	const item_id = product?.product_id;
+	const item_id = product?.actionModule?.productId;
 
 	let aliRate = settings?.ali_increase_rate || 0;
 	aliRate = aliRate ? parseInt(aliRate) : 90;
@@ -23,7 +23,7 @@ const AliShipmentInfo = props => {
 
 	const isExpressEnable = itemTotal >= minOrder;
 
-	const freightResult = shipment?.freightResult;
+	const freightResult = shipment?.body?.freightResult;
 
 	useEffect(() => {
 		if (!selectShipping && freightResult?.length > 0) {

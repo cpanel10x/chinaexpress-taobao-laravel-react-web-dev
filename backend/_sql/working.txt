@@ -31,3 +31,8 @@ ALTER TABLE `cart_items`
 ADD COLUMN `shipping_type` VARCHAR(191) NULL AFTER `status`,
 ADD COLUMN `IsCart` TINYINT(1) NULL AFTER `shipping_type`,
 ADD COLUMN `is_express_popup_shown` TINYINT(1) NULL AFTER `IsCart`;
+
+
+
+ALTER TABLE `chinaexpress_web`.`order_items` 
+ADD COLUMN `shipping_type` VARCHAR(191) NULL AFTER `shipping_from`;

@@ -6,15 +6,15 @@ import ReactPlayer from "react-player";
 const AliMediaPart = (props) => {
 	const {product, imagePathList, activeImg, setActiveImg} = props;
 
-	const Videos = product?.Videos?.length > 0 ? product?.Videos[0] : {};
-	const PreviewUrl = Videos?.PreviewUrl || null;
-	const Url = Videos?.Url || null;
+	const firstImage = imagePathList?.length > 0 ? imagePathList[0] : '';
+	const PreviewUrl =  '';
+	const Url = '';
 
 	useEffect(() => {
-		if (Url && PreviewUrl) {
-			setActiveImg(PreviewUrl);
+		if (firstImage) {
+			setActiveImg(firstImage);
 		}
-	}, [PreviewUrl, Url]);
+	}, [firstImage]);
 
 	return (
 		<div className="product-gallery product-gallery-vertical">

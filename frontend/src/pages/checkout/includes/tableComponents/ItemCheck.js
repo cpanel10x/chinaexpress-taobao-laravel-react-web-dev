@@ -11,10 +11,11 @@ const ItemCheck = (props) => {
 
 	const isChecked = variation?.is_checked > 0;
 
-	const checkedItem = async (e) => {
+	const checkedItem = () => {
+
 		const checked = isChecked ? '0' : '1';
 		const variation_id = variation?.id || null;
-		return mutateAsync(
+		mutateAsync(
 			{variation_id, checked},
 			{
 				onSuccess: (cart) => {
@@ -36,7 +37,7 @@ const ItemCheck = (props) => {
 							<input type="checkbox"
 							       id={`variation_${variation.configId}`}
 							       checked={isChecked}
-							       onChange={(e) => checkedItem(e)}/>
+							       onChange={() => checkedItem()}/>
 							<div className="state">
 								<label htmlFor={`variation_${variation.configId}`}/>
 							</div>

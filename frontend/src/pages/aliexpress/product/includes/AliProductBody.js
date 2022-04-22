@@ -20,31 +20,32 @@ const AliProductBody = (props) => {
 	const [activeShipping, setActiveShipping] = useState();
 	const [selectShipping, setSelectShipping] = useState('');
 
-	const productId = product?.product_id;
+	const productId = product?.actionModule?.productId;
 
 	const {data: cart} = useCart();
-	const cartItem = cart?.cart_items?.find(item => item.ItemId === productId) || {};
+	const cartItem = cart?.cart_items?.find(item => String(item.ItemId) === String(productId)) || {};
 
 	const {data: shipment, isLoading: shippingLoading} = useAliProductShippingInfo(productId);
 
-	const feedback = product?.feedBackRating;
-	const metadata = product?.metadata;
-	const product_title = product?.metadata?.titleModule?.product_title;
-	const formatTradeCount = metadata?.titleModule?.formatTradeCount || 0;
+	const titleModule = product?.titleModule || {};
+	const feedback = titleModule?.feedbackRating;
+	const product_title = titleModule?.subject;
+	const tradeCount = titleModule?.tradeCount || 0;
 
-	const imagePathList = product?.product_small_image_urls?.string || [];
+	const imagePathList = product?.imageModule?.imagePathList || [];
 
 	useEffect(() => {
-		let mainImg = product?.product_main_image_url;
-		mainImg = mainImg ? mainImg : product?.product_small_image_urls?.string?.[0];
-		setActiveImg(mainImg);
-	}, [product]);
+		const mainImg = imagePathList?.length > 0 ? imagePathList[0] : '';
+		if (mainImg) {
+			setActiveImg(mainImg);
+		}
+	}, [imagePathList]);
 
-	const skuProperties = product?.skuProperties;
-	const ShipsFrom = skuProperties?.find(find => find.skuPropertyName === 'ShipsFrom');
+	const skuProperties = product?.skuModule?.productSKUPropertyList ?? [];
+	const ShipsFrom = skuProperties?.find(find => find.skuPropertyName === 'Ships From');
 	let hasShipFromChina = ShipsFrom?.skuPropertyValues?.find(value => value.propertyValueName === 'China');
 	hasShipFromChina = hasShipFromChina ? hasShipFromChina : (!ShipsFrom?.skuPropertyValues?.length);
-	const hasBDShipment = shipment?.freightResult?.length > 0;
+	const hasBDShipment = shipment?.body?.freightResult?.length > 0;
 
 	return (
 		<div className="product-details-top">
@@ -52,10 +53,10 @@ const AliProductBody = (props) => {
 			<div className="row">
 				<div className="col-md-5">
 					<AliMediaPart
+						product={product}
 						imagePathList={imagePathList}
 						activeImg={activeImg}
 						setActiveImg={setActiveImg}
-						product={product}
 					/>
 				</div>
 				{/* End .col-md-6 */}
@@ -68,9 +69,7 @@ const AliProductBody = (props) => {
 					<p className="mb-2">
 						<b>{feedback?.averageStar}/5</b> Rating with <b>{feedback?.averageStarRage}</b>% positive feedback
 						<br/>
-						Total Loved - <b>{product?.wishedCount}</b>
-						<br/>
-						Total Sold - <b>{formatTradeCount}</b>
+						Total Sold - <b>{tradeCount}</b>
 					</p>
 
 					<div className="product-details">

@@ -2,10 +2,7 @@ import React from 'react';
 
 const AliAdditionalInformation = (props) => {
 	const {product} = props;
-	const Attributes = product?.Attributes ? product.Attributes : [];
-	const groupItems = [];
-
-	const specsModule = product?.metadata?.specsModule?.props || [];
+	const specsModule = product?.specsModule?.props || [];
 
 
 	return (

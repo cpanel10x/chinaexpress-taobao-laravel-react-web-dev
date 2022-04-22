@@ -48,12 +48,14 @@
 .icon-edit:before { content: '\e82b'; } /* '' */
 .icon-headset:before { content: '\e82c'; } /* '' */
 .icon-messenger:before { content: '\e82d'; } /* '' */
+.icon-shop-window:before { content: '\e82e'; } /* '' */
 .icon-up-open-mini:before { content: '\e82f'; } /* '' */
 .icon-down-open:before { content: '\e830'; } /* '' */
 .icon-left-open-1:before { content: '\e831'; } /* '' */
 .icon-right-open-1:before { content: '\e832'; } /* '' */
 .icon-up-open-1:before { content: '\e833'; } /* '' */
 .icon-spin4:before { content: '\e834'; } /* '' */
+.icon-shop:before { content: '\e834'; } /* '' */
 .icon-spin6:before { content: '\e839'; } /* '' */
 .icon-down-open-1:before { content: '\f004'; } /* '' */
 .icon-up-open:before { content: '\f005'; } /* '' */

@@ -1,14 +1,31 @@
 import React, {useState} from "react";
 import {withRouter} from "react-router-dom";
 import Swal from "sweetalert2";
+import {useAliSearchProduct} from "../../../../api/AliExpressProductApi";
+import SpinnerButtonLoader from "../../../../loader/SpinnerButtonLoader";
 
 function AliExpressSearchBar(props) {
 	const [search, setSearch] = useState("");
 
+	const {mutateAsync, isLoading} = useAliSearchProduct();
+
 	const submitExpressSearch = (event) => {
 		event.preventDefault();
 		if (search) {
-			props.history.push(`/aliexpress/search?url=${search}`);
+			mutateAsync({search},
+				{
+					onSuccess: (response) => {
+						if (response?.status === true) {
+							props.history.push(`/aliexpress/product/${response?.product_id}`);
+						} else {
+							Swal.fire({
+								text: response?.msg,
+								icon: "warning",
+							});
+						}
+					}
+				});
+
 		} else {
 			Swal.fire({
 				text: "Paste a valid link",
@@ -43,12 +60,17 @@ function AliExpressSearchBar(props) {
 										placeholder="Search By Aliexpress Link"
 									/>
 									<div className="input-group-append">
-										<button
-											type="submit"
-											className="btn btn-search"
-										>
-											<i className="icon-search"/>
-										</button>
+										{
+											isLoading ?
+												<SpinnerButtonLoader buttonClass={'btn-search'}/>
+												:
+												<button
+													type="submit"
+													className="btn btn-search"
+												>
+													<i className="icon-search"/>
+												</button>
+										}
 									</div>
 								</div>
 							</form>

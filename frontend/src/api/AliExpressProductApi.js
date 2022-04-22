@@ -3,9 +3,18 @@ import {instance} from "../utils/AxiosInstance";
 import axios from "axios";
 import {setGetToken} from "./CartApi";
 
-export const useAliProductDetails = (query_url) => useQuery(["useAliProductDetails", query_url], async () => {
+export const useAliSearchProduct = () => useMutation("useAliSearchProduct", async (props) => {
 	try {
-		const {data} = await instance.get(`aliexpress/search?query_url=${query_url}`);
+		const {data} = await instance.post(`aliexpress/search`, props);
+		return data;
+	} catch (error) {
+		console.log(error);
+	}
+});
+
+export const useAliProductDetails = (product_id) => useQuery(["useAliProductDetails", product_id], async () => {
+	try {
+		const {data} = await instance.get(`aliexpress/product/${product_id}`);
 		return data?.result ? JSON.parse(data?.result) : {};
 	} catch (error) {
 		console.log(error);
@@ -63,7 +72,6 @@ export const useExpressService = () => useMutation(["useExpressService"], async 
 		console.log(error);
 	}
 });
-
 
 
 export const useAliRelatedProduct = (product_id) => useQuery(["useAliRelatedProduct", product_id], async () => {

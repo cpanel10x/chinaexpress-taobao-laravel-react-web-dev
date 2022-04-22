@@ -46,6 +46,40 @@ const CheckoutQuantity = (props) => {
 		updateCustomerCartQuantity(calculateQty);
 	};
 
+	if (parseInt(variation?.is_checked) === 1) {
+		return (
+			<div className="input-group input-group-sm">
+				<div className="input-group-prepend">
+					<button
+						type="button"
+						className="btn btn-default disabled"
+					>
+						<i className="icon-minus"/>
+					</button>
+				</div>
+				<input
+					type="text"
+					className="form-control text-center disabled"
+					value={variation.qty}
+					readOnly={true}
+					onChange={e => e.preventDefault()}
+					min={1}
+					max={variation.maxQuantity}
+					step={1}
+					required={true}
+				/>
+				<div className="input-group-append">
+					<button
+						type="button"
+						className="btn btn-default disabled"
+					>
+						<i className="icon-plus"/>
+					</button>
+				</div>
+			</div>
+		);
+	}
+
 	return (
 		<div className="input-group input-group-sm">
 			<div className="input-group-prepend">

@@ -1,16 +1,16 @@
 import React from 'react';
-import {useQuery} from "../../../../utils/customHooks";
+import {useParams} from "react-router-dom";
 
 const AliSocialShare = (props) => {
 	const {product, settings} = props;
-	const {url: query_url} = useQuery();
+	const {product_id} = useParams();
 
 	const meta_title = settings?.meta_title || '';
 	const site_url = settings?.site_url || '';
-	const titleModule = product?.metadata?.titleModule;
+	const titleModule = product?.titleModule;
 
-	const title = titleModule?.product_title ? titleModule.product_title : meta_title;
-	const link_url = product?.product_id ? `${site_url}/aliexpress/search?url=${query_url}` : site_url;
+	const title = titleModule?.subject ? titleModule.subject : meta_title;
+	const link_url = product?.actionModule?.productId ? `${site_url}/aliexpress/product/${product_id}` : site_url;
 
 	const copyLink = (e, link) => {
 		e.preventDefault();
