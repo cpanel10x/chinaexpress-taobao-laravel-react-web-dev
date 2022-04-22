@@ -1,3 +1,5 @@
+import Swal from "sweetalert2";
+
 export const wishListProcessProduct = (product, aliRate) => {
 	const metadata = product?.metadata;
 	const titleModule = metadata?.titleModule;
@@ -30,21 +32,30 @@ export const aliProductConvertionPrice = (Amount, aliRate) => {
 
 
 export const aliActiveConfigurations = (product, operationalAttributes) => {
-	const skuList = product?.skuModule?.skuPriceList || [];
+	const skuList = product?.item?.skus?.skuMap || {};
+	const skuProps = product?.item?.skus?.props || [];
 	let query = '';
-	for (const operation in operationalAttributes) {
-		const item = operationalAttributes[operation];
-		query += `${item.propertyValueIdLong},`;
-	}
+	skuProps.map((prop) => {
+		const item = operationalAttributes[prop.name];
+		query += `${prop?.pid}:${item?.vid};`;
+	});
 	query = query.substring(0, query.length - 1);
-	const cardPrice = skuList.find(find => find.skuPropIds === query);
-	return cardPrice?.skuVal ? cardPrice : {};
+	let cardPrice = skuList?.[query];
+	if (!cardPrice) {
+		cardPrice = {
+			stock: product?.item?.stock,
+			price: product?.item?.price,
+			promotion_price: product?.item?.promotion_price,
+		}
+	}
+	cardPrice.skuPropIds = query;
+	return cardPrice;
 };
 
 
 const aliProductPriceCardToPrice = (priceCard, aliRate) => {
-	const minPrice = priceCard?.skuVal?.skuActivityAmount?.value || 0;
-	const maxPrice = priceCard?.skuVal?.skuAmount?.value || 0;
+	const minPrice = priceCard?.promotion_price || 0;
+	const maxPrice = priceCard?.price || 0;
 	const price = minPrice ? Math.round(Number(minPrice) * Number(aliRate)) : Math.round(Number(maxPrice) * Number(aliRate));
 	return price;
 }
@@ -53,12 +64,12 @@ const aliProductPriceCardToPrice = (priceCard, aliRate) => {
 export const aliProductProcessToCart = (product, priceCard, aliRate) => {
 	const price = aliProductPriceCardToPrice(priceCard, aliRate);
 	return {
-		Id: product?.actionModule?.productId,
+		Id: product?.item?.num_iid,
 		ProviderType: 'aliexpress',
-		Title: product?.titleModule?.subject,
-		TaobaoItemUrl: product?.pageModule?.itemDetailUrl,
-		MainPictureUrl: product?.imageModule?.imagePathList?.[0] || '',
-		MasterQuantity: product?.quantityModule?.totalAvailQuantity,
+		Title: product?.item?.title,
+		TaobaoItemUrl: product?.item?.product_url,
+		MainPictureUrl: product?.item?.images?.[0] || '',
+		MasterQuantity: product?.item?.stock,
 		FirstLotQuantity: null,
 		NextLotQuantity: null,
 		Price: price,
@@ -69,32 +80,60 @@ export const aliProductProcessToCart = (product, priceCard, aliRate) => {
 
 
 export const aliProductConfiguration = (product, priceCard, operationalAttributes, aliRate) => {
+	const attributesProps = product?.item?.skus?.props || [];
 	let configItem = {};
-	configItem.Id = priceCard?.skuPropIds || product?.actionModule?.productId;
+	configItem.Id = priceCard?.skuPropIds || product?.item?.num_iid;
 	configItem.qty = 1;
-	configItem.maxQuantity = priceCard?.skuVal?.availQuantity;
+	configItem.maxQuantity = priceCard?.stock;
 	configItem.price = aliProductPriceCardToPrice(priceCard, aliRate);
+
 	let attributes = [];
-	for (let attribute in operationalAttributes) {
-		const item = operationalAttributes[attribute];
+	attributesProps?.map(item => {
+		const attribute = operationalAttributes[item?.name];
 		attributes.push({
-			Id: item?.propertyValueId,
-			Pid: item?.propertyValueIdLong,
-			PropertyName: attribute,
-			Value: item?.propertyValueName,
-			ImageUrl: item?.skuPropertyImagePath || null,
+			Id: item?.pid,
+			Pid: attribute?.vid,
+			PropertyName: item?.name,
+			Value: attribute?.name,
+			ImageUrl: attribute?.image || null,
 		});
-	}
+	});
 	configItem.Attributes = attributes;
 	return configItem;
 };
 
 
-export const sumCartItemTotal = (cartItem) => {
-	return cartItem.reduce((sum, {price, qty}) => sum + parseInt(price) * parseInt(qty), 0)
+export const sumCartItemTotal = (variations) => {
+	return variations.reduce((sum, {price, qty}) => sum + parseInt(price) * parseInt(qty), 0)
 }
 
 
-export const sumCartItemTotalQuantity = (cartItem) => {
-	return cartItem.reduce((sum, {price, qty}) => sum + parseInt(qty), 0)
+export const sumCartItemTotalQuantity = (variations) => {
+	return variations.reduce((sum, {price, qty}) => sum + parseInt(qty), 0)
 }
+
+
+export const itemIsCheckWillProcess = (cartItem, settings) => {
+	const min_order_amount = settings?.min_order_amount || 0;
+	const ali_min_order_value = settings?.ali_min_order_value || 0;
+	const express_shipping_min_value = settings?.express_shipping_min_value || 0;
+	let process = true;
+	let minOrder = min_order_amount;
+	if (cartItem?.ProviderType === 'aliexpress') {
+		minOrder = ali_min_order_value;
+		if (cartItem?.shipping_type === 'express') {
+			minOrder = express_shipping_min_value;
+		}
+	}
+	const itemTotal = sumCartItemTotal(cartItem?.variations);
+	if (Number(itemTotal) < Number(minOrder)) {
+		process = false;
+	}
+
+	return {process, minOrder};
+};
+
+
+
+
+

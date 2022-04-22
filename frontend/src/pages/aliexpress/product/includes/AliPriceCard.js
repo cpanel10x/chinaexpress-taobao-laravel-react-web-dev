@@ -7,11 +7,17 @@ const AliPriceCard = (props) => {
 	const priceCard = aliActiveConfigurations(product, operationalAttributes);
 
 	const currency = settings?.currency_icon || '৳';
-	const aliRate = settings?.ali_increase_rate || 88;
+	const aliRate = settings?.ali_increase_rate || 90;
 
-	const skuActivityAmount = priceCard?.skuVal?.skuActivityAmount?.value;
-	const skuAmount = priceCard?.skuVal?.skuAmount?.value;
-	const discount = priceCard?.skuVal?.discount;
+	const skuActivityAmount = priceCard?.promotion_price;
+	const skuAmount = priceCard?.price;
+	const discount = () => {
+		let percent = 0;
+		if (skuAmount > skuActivityAmount) {
+			percent = 100 - (skuActivityAmount / skuAmount) * 100;
+		}
+		return parseInt(percent);
+	};
 
 	const formatedDiscountedPrice = () => {
 		let amount = 0;
@@ -35,14 +41,14 @@ const AliPriceCard = (props) => {
 				<div>
 					<span>{formatedDiscountedPrice()}</span>
 					{
-						parseInt(discount) > 0 &&
+						discount() > 0 &&
 						<del className="ml-3">{formatedRegularMaxPrice()}</del>
 					}
 				</div>
 				{
-					parseInt(discount) > 0 &&
+					discount() > 0 &&
 					<div className="discount_box">
-						{Math.round(discount)}% Discount
+						{Math.round(discount())}% Discount
 					</div>
 				}
 			</div>

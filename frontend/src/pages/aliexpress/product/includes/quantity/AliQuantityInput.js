@@ -1,5 +1,5 @@
 import React from "react";
-import {useCartMutation} from "../../../../../api/CartApi";
+import {useAddToCart, useCartMutation} from "../../../../../api/CartApi";
 import AliManageQuantity from "./includes/AliManageQuantity";
 import Swal from "sweetalert2";
 import {
@@ -9,19 +9,21 @@ import {
 	aliProductProcessToCart
 } from "../../../../../utils/AliHelpers";
 import AliAddToCartButton from "./includes/AliAddToCartButton";
+import {useQueryClient} from "react-query";
 
 const AliQuantityInput = (props) => {
 	const {cartItem, product, settings, shipment, activeShipping, selectShipping, operationalAttributes} = props;
 
 	const priceCard = aliActiveConfigurations(product, operationalAttributes);
 
-	const {addToCart: {mutateAsync, isLoading}} = useCartMutation();
+	const cache = useQueryClient();
+	const {mutateAsync, isLoading} = useAddToCart();
 
 	const aliRate = settings?.ali_increase_rate || 88;
-	const weight = shipment?.packageInfo?.weight || 0;
+	const weight = product?.delivery?.packageDetail?.weight || 0;
 
 	const DeliveryCost = () => {
-		const amount = selectShipping?.freightAmount?.value || 0;
+		const amount = selectShipping?.delivery_fee || 0;
 		return aliProductConvertionPrice(amount, aliRate);
 	};
 
@@ -36,7 +38,7 @@ const AliQuantityInput = (props) => {
 		return processProduct;
 	};
 
-	const Quantity = priceCard?.skuVal?.availQuantity || 0;
+	const Quantity = priceCard?.stock || 0;
 
 	const addToCartProcess = (e) => {
 		e.preventDefault();
@@ -53,11 +55,15 @@ const AliQuantityInput = (props) => {
 			}
 		}
 		if (process) {
-			mutateAsync({product: processProduct});
+			mutateAsync({product: processProduct},{
+				onSuccess: (cart)=>{
+					cache.setQueryData("customer_cart", cart);
+				}
+			});
 		}
 	};
 
-	const activeConfigId = priceCard?.skuPropIds || product?.actionModule?.productId;
+	const activeConfigId = priceCard?.skuPropIds || product?.item?.num_iid;
 	const cartConfiguredItem = cartItem?.variations?.find(find => String(find.configId) === String(activeConfigId));
 
 	if (!cartItem || !cartConfiguredItem?.qty) {

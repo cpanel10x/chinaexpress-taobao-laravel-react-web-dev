@@ -8,6 +8,7 @@ use App\Models\Content\CartItem;
 use App\Models\Content\Product;
 use App\Traits\AliexpressApi;
 use App\Traits\ApiResponser;
+use Exception;
 use PHPHtmlParser\Dom;
 
 /**
@@ -61,24 +62,32 @@ class AliExpressApiController extends Controller
   {
     $req_query = request('search');
     if (!$req_query) {
-      return response(['status' => false, 'result' => '', 'msg' => 'Search result not found']);
+      return response(['status' => false, 'product_id' => '', 'msg' => 'Search result not found']);
     }
     $product_id = $this->search_log_product_id($req_query);
     if (!$product_id) {
       $product_id = $this->checkIdInLink($req_query);
       if (!$product_id) {
-        $query = explode(" ", $req_query);
-        $query = count($query) > 3 ? end($query) : $req_query;
-        $htmlContents = file_get_contents($query);
-        $dom = new Dom;
-        $dom = $dom->loadStr($htmlContents);
-        $html = $dom->find("link[rel=canonical]");
-        $link = $html->getAttribute('href') ?? '';
-        $product_id = $this->checkIdInLink($link);
+        try {
+          $query = explode(" ", $req_query);
+          $query = count($query) > 3 ? end($query) : $req_query;
+          $htmlContents = file_get_contents($query);
+          $dom = new Dom;
+          $dom = $dom->loadStr($htmlContents);
+          $html = $dom->find("link[rel=canonical]");
+          $link = $html->getAttribute('href') ?? '';
+          $product_id = $this->checkIdInLink($link);
+        } catch (Exception $ex) {
+          $product_id = null;
+        }
       }
     }
 
-    return response(['status' =>  $product_id ? true : false, 'product_id' => $product_id, 'msg' => 'Search must not empty']);
+    return response([
+      'status' =>  $product_id ? true : false,
+      'product_id' => $product_id,
+      'msg' => !$product_id ? 'Your searching is not valid more' : ''
+    ]);
   }
 
 
@@ -89,8 +98,11 @@ class AliExpressApiController extends Controller
       $rapid = $this->ApiProductDetails($product_id);
       cache()->put($product_id, $rapid, now()->addMinutes(10));
     }
+    $item['item'] = $rapid['result']['item'] ?? [];
+    $item['delivery'] = $rapid['result']['delivery'] ?? [];
+    $item['seller'] = $rapid['result']['seller'] ?? [];
     return response([
-      'result' => json_encode($rapid)
+      'result' => json_encode($item)
     ]);
   }
 

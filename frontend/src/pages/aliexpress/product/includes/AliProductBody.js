@@ -20,19 +20,18 @@ const AliProductBody = (props) => {
 	const [activeShipping, setActiveShipping] = useState();
 	const [selectShipping, setSelectShipping] = useState('');
 
-	const productId = product?.actionModule?.productId;
+	const productItem = product?.item || {};
+	const productId = productItem?.num_iid;
 
 	const {data: cart} = useCart();
 	const cartItem = cart?.cart_items?.find(item => String(item.ItemId) === String(productId)) || {};
 
-	const {data: shipment, isLoading: shippingLoading} = useAliProductShippingInfo(productId);
+	// const {data: shipment, isLoading: shippingLoading} = useAliProductShippingInfo(productId);
+	const {shipment, shippingLoading} = {shipment: {}, shippingLoading: false};
 
-	const titleModule = product?.titleModule || {};
-	const feedback = titleModule?.feedbackRating;
-	const product_title = titleModule?.subject;
-	const tradeCount = titleModule?.tradeCount || 0;
+	const product_title = productItem?.title;
 
-	const imagePathList = product?.imageModule?.imagePathList || [];
+	const imagePathList = productItem?.images || [];
 
 	useEffect(() => {
 		const mainImg = imagePathList?.length > 0 ? imagePathList[0] : '';
@@ -41,10 +40,10 @@ const AliProductBody = (props) => {
 		}
 	}, [imagePathList]);
 
-	const skuProperties = product?.skuModule?.productSKUPropertyList ?? [];
-	const ShipsFrom = skuProperties?.find(find => find.skuPropertyName === 'Ships From');
-	let hasShipFromChina = ShipsFrom?.skuPropertyValues?.find(value => value.propertyValueName === 'China');
-	hasShipFromChina = hasShipFromChina ? hasShipFromChina : (!ShipsFrom?.skuPropertyValues?.length);
+	const skuProperties = product?.item?.skus?.props || [];
+	const ShipsFrom = skuProperties?.find(find => find.name === 'Ships From');
+	let hasShipFromChina = ShipsFrom?.values?.find(value => value.name === 'China');
+	hasShipFromChina = hasShipFromChina ? hasShipFromChina : (!ShipsFrom?.values?.length);
 	const hasBDShipment = shipment?.body?.freightResult?.length > 0;
 
 	return (
@@ -67,9 +66,7 @@ const AliProductBody = (props) => {
 						operationalAttributes={operationalAttributes}
 						settings={settings}/>
 					<p className="mb-2">
-						<b>{feedback?.averageStar}/5</b> Rating with <b>{feedback?.averageStarRage}</b>% positive feedback
-						<br/>
-						Total Sold - <b>{tradeCount}</b>
+						<b>{productItem?.wish_count}</b> Loved | <b>{productItem?.sales}</b> Orders
 					</p>
 
 					<div className="product-details">

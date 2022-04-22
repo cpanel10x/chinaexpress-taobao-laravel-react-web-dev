@@ -5,7 +5,7 @@ import {useAliProductDescription} from "../../../../../../api/AliExpressProductA
 const AliProductDescription = (props) => {
 	const {product} = props;
 
-	const descriptionModule = product?.descriptionModule?.descriptionUrl;
+	const descriptionModule = product?.item?.desc?.url;
 
 	const {data: description, isLoading} = useAliProductDescription(descriptionModule);
 

@@ -63,7 +63,6 @@ const Routing = () => {
 			<AuthRoute path="/dashboard/profile" exact component={Profile} />
 			<AuthRoute path="/dashboard/orders/:tran_id" exact component={OrderDetails}/>
 
-
 			<Route
 				path="/:category_slug/:sub_slug?"
 				exact

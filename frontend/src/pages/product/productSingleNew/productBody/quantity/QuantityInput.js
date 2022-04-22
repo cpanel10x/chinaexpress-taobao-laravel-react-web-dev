@@ -1,5 +1,5 @@
 import React from "react";
-import {useCartMutation} from "../../../../../api/CartApi";
+import {useAddToCart, useCartMutation} from "../../../../../api/CartApi";
 import AddToCartButton from "./includes/AddToCartButton";
 import ManageQuantity from "./includes/ManageQuantity";
 import Swal from "sweetalert2";
@@ -10,11 +10,13 @@ import {
 	getProductModifiedConfiguredItem, getProductModifiedWithOutConfiguredItem,
 	getProductWeight
 } from "../../../../../utils/CartHelpers";
+import {useQueryClient} from "react-query";
 
 const QuantityInput = props => {
 	const {cart, product, activeConfiguredItems, settings} = props;
 
-	const {addToCart: {mutateAsync, isLoading}} = useCartMutation();
+	const cache = useQueryClient();
+	const {mutateAsync, isLoading} = useAddToCart();
 
 	let activeConfiguredItem = activeConfiguredItems?.length === 1 ? activeConfiguredItems[0] : {};
 
@@ -68,7 +70,11 @@ const QuantityInput = props => {
 		}
 
 		if (process) {
-			mutateAsync({product: activeProduct});
+			mutateAsync({product: activeProduct},{
+				onSuccess: (cart)=>{
+					cache.setQueryData("customer_cart", cart);
+				}
+			});
 		}
 	};
 

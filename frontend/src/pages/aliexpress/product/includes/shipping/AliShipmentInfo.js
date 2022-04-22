@@ -14,7 +14,8 @@ const AliShipmentInfo = props => {
 
 	const itemTotal = sumCartItemTotal(cartItem?.variations || []);
 	const currency = settings?.currency_icon || '৳';
-	const item_id = product?.actionModule?.productId;
+	const item_id = product?.item?.num_iid;
+	const freightList = product?.delivery?.freightList;
 
 	let aliRate = settings?.ali_increase_rate || 0;
 	aliRate = aliRate ? parseInt(aliRate) : 90;
@@ -23,17 +24,16 @@ const AliShipmentInfo = props => {
 
 	const isExpressEnable = itemTotal >= minOrder;
 
-	const freightResult = shipment?.body?.freightResult;
 
 	useEffect(() => {
-		if (!selectShipping && freightResult?.length > 0) {
-			setSelectShipping(freightResult?.[0]);
+		if (!selectShipping && freightList?.length > 0) {
+			setSelectShipping(freightList?.[0]);
 		}
 		if(cartItem?.shipping_type){
 			setActiveShipping(cartItem?.shipping_type);
 		}
 
-	}, [freightResult, setSelectShipping, cartItem]);
+	}, [freightList, setSelectShipping, cartItem]);
 
 	const shippingRate = (amount) => {
 		return aliProductConvertionPrice(amount, aliRate);
@@ -53,7 +53,7 @@ const AliShipmentInfo = props => {
 		if (!isExpressEnable) {
 			const shipping_cost = shippingRate(selectShipping?.freightAmount?.value || 0);
 			updateShippingInformation({shipping_cost, shipping_type: null});
-			if(freightResult?.length > 0){
+			if(freightList?.length > 0){
 				setActiveShipping('regular');
 			}
 		}
@@ -100,7 +100,7 @@ const AliShipmentInfo = props => {
 
 			<div className="mb-2">
 				{
-					freightResult?.length > 0 &&
+					freightList?.length > 0 &&
 					<div className="form-check form-check-inline">
 						<input className="form-check-input"
 						       type="radio"
@@ -124,13 +124,13 @@ const AliShipmentInfo = props => {
 				</div>
 			</div>
 			{
-				activeShipping === 'regular' && freightResult?.length > 0 &&
+				activeShipping === 'regular' && freightList?.length > 0 &&
 				<div>
 					{
 						optionEnable &&
 						<ShippingModal
 							currency={currency}
-							freightResult={freightResult}
+							freightList={freightList}
 							shippingRate={shippingRate}
 							selectShipping={selectShipping}
 							updateDeliveryCharge={updateDeliveryCharge}
@@ -139,11 +139,11 @@ const AliShipmentInfo = props => {
 					}
 
 					<div className="list-group-item list-group-item-action p-2 rounded">
-						<h5 className="mb-1">{`${selectShipping.company}`}</h5>
+						<h5 className="mb-1">{`${selectShipping.delivery_company}`}</h5>
 						<div className="d-flex w-100 justify-content-between">
 							<div>
-								<p className="mb-1">Shipping Rate: {`${currency} ` + shippingRate(selectShipping?.freightAmount?.value)}</p>
-								<small>{`Estimated duration: ${selectShipping?.time} Days`}</small>
+								<p className="mb-1">Shipping Rate: {`${currency} ` + shippingRate(selectShipping?.delivery_fee)}</p>
+								<small>{`Estimated duration: ${selectShipping?.delivery_time} Days`}</small>
 							</div>
 							<div>
 								<a href="#"

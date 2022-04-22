@@ -2,27 +2,49 @@ import React from 'react';
 import {useCheckedUnchecked} from "../../../../api/CartApi";
 import SmallSpinner from "../../../../loader/SmallSpinner";
 import {useQueryClient} from "react-query";
+import {itemIsCheckWillProcess, sumCartItemTotal} from "../../../../utils/AliHelpers";
+import Swal from "sweetalert2";
 
 const ItemCheck = (props) => {
-	const {variation} = props;
+	const {product, variation, settings} = props;
 
 	const cache = useQueryClient();
 	const {mutateAsync, isLoading} = useCheckedUnchecked();
 
+	const currency = settings?.currency_icon;
+
 	const isChecked = variation?.is_checked > 0;
 
-	const checkedItem = () => {
+	const willProcess = () => {
+		let {process, minOrder} = itemIsCheckWillProcess(product, settings);
+		const Title = product?.Title;
+		if (!process) {
+			Swal.fire({
+				icon: 'info',
+				html:
+					`<b>Product total must be greater than ${currency} ${minOrder}</b> </br>` +
+					`<p class="text-danger mb-0">${Title}</p>`,
+				confirmButtonText: 'Ok, Understood',
+			});
+		}
+		return process;
+	};
 
-		const checked = isChecked ? '0' : '1';
-		const variation_id = variation?.id || null;
-		mutateAsync(
-			{variation_id, checked},
-			{
-				onSuccess: (cart) => {
-					cache.setQueryData("useCheckoutCart", cart);
+
+	const checkedItem = () => {
+		const process = willProcess();
+		if (process) {
+			const checked = isChecked ? '0' : '1';
+			const variation_id = variation?.id || null;
+			mutateAsync(
+				{variation_id, checked},
+				{
+					onSuccess: (cart) => {
+						cache.setQueryData("useCheckoutCart", cart);
+					}
 				}
-			}
-		);
+			);
+		}
 	};
 
 	// console.log('isChecked', variation)

@@ -1,20 +1,14 @@
 import React from 'react';
 import AllCheck from "./tableComponents/AllCheck";
 import ItemCheck from "./tableComponents/ItemCheck";
-import {Link} from "react-router-dom";
 import AttributeImage from "./attributes/AttributeImage";
-import AttrConfigs from "./attributes/AttrConfigs";
-import CheckoutQuantity from "./tableComponents/CheckoutQuantity";
-import {characterLimiter} from "../../../utils/Helpers";
-import {useMediaQuery} from "react-responsive";
 import {singleProductTotal} from "../../../utils/CartHelpers";
 import TaobaoItemDescription from "./itemDescription/TaobaoItemDescription";
 import AliExpressItemDescription from "./itemDescription/AliExpressItemDescription";
 
 const CheckoutItem = (props) => {
 
-	const {cart, cartItems, currency, removeCart, removeItemFromCart} = props;
-
+	const {cart, cartItems, settings, currency, removeCart, removeItemFromCart} = props;
 
 	const productPageLink = (product) => {
 		const ItemId = product?.ItemId;
@@ -22,12 +16,14 @@ const CheckoutItem = (props) => {
 		return ProviderType === 'aliexpress' ? `/aliexpress/product/${ItemId}` : `/product/${ItemId}`;
 	};
 
-
 	return (
 		<div className="checkout_grid">
 			<div className="row">
 				<div className="col-8">
-					<AllCheck cart={cart} cartItems={cartItems}/>
+					<AllCheck
+						cart={cart}
+						cartItems={cartItems}
+						settings={settings}/>
 					<div className="removeBtn mx-3 text-center d-inline-block">
 						{
 							removeCart.isLoading ?
@@ -57,7 +53,7 @@ const CheckoutItem = (props) => {
 								<div className="variation" key={variation.id}>
 									<div className="row align-items-center">
 										<div className="col-1">
-											<ItemCheck variation={variation}/>
+											<ItemCheck product={product} variation={variation}  settings={settings}/>
 										</div>
 										<div className="col-3 pr-0 pr-lg-0">
 											<AttributeImage
@@ -73,6 +69,7 @@ const CheckoutItem = (props) => {
 														productPageLink={productPageLink(product)}
 														product={product}
 														variation={variation}
+														settings={settings}
 													/>
 													:
 													<TaobaoItemDescription
@@ -80,6 +77,7 @@ const CheckoutItem = (props) => {
 														productPageLink={productPageLink(product)}
 														product={product}
 														variation={variation}
+														settings={settings}
 													/>
 											}
 

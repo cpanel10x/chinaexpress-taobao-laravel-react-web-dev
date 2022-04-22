@@ -57,9 +57,9 @@ const Checkout = (props) => {
 						<div className="card my-3 my-lg-5">
 							<div className="card-body table-responsive-sm">
 								<h3>Checked Your Products</h3>
-
 								<div className="my-3">
 									<CheckoutItem
+										settings={settings}
 										currency={currency}
 										cart={cart}
 										cartItems={cartItems}

@@ -29,7 +29,7 @@ const AliProductPage = (props) => {
 	}
 
 	const currencyIcon = settings?.currency_icon || '৳';
-	const productId = product?.actionModule?.productId;
+	const productId = product?.item?.num_iid;
 
 	if (!productId) {
 		return <AliExpressProduct404/>;

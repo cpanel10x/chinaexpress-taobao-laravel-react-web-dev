@@ -27,7 +27,8 @@ const MobileSearchForm = props => {
 			query = `https://item.taobao.com/item.htm?id=${product_id}`
 		}
 		if (search) {
-			props.history.push(`/search?keyword=${query}`);
+			// props.history.push(`/search?keyword=${query}`);
+			window.location.href = `/search?keyword=${query}`;
 		} else {
 			Swal.fire({
 				text: 'Type your keyword first',

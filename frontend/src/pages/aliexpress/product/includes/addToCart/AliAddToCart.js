@@ -11,7 +11,7 @@ const AliAddToCart = (props) => {
 	const {cartItem, product, settings} = props;
 	const [showPopup, setShowPopup] = useState(false);
 
-	const item_id = product?.actionModule?.productId;
+	const item_id = product?.item?.num_iid;
 
 	const cache = useQueryClient();
 	const {mutateAsync, isLoading} = useItemMarkAsCart();

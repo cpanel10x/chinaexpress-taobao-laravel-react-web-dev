@@ -4,21 +4,18 @@ import {characterLimiter} from "../../../../utils/Helpers";
 import AttrConfigs from "../attributes/AttrConfigs";
 import CheckoutQuantity from "../tableComponents/CheckoutQuantity";
 import {useMediaQuery} from "react-responsive";
+import {itemIsCheckWillProcess} from "../../../../utils/AliHelpers";
 
 const AliExpressItemDescription = (props) => {
-	const {productPageLink, product, variation, currency} = props;
+	const {productPageLink, product, variation, currency, settings} = props;
+
+	const {process} = itemIsCheckWillProcess(product, settings);
 
 	const isMobile = useMediaQuery({query: '(max-width: 991px)'});
 
-	const approxWeight = (qty, product) => {
-		const weight = product?.weight || 0;
-		const itemWeight = Number(weight) * Number(qty);
-		return Number(itemWeight).toFixed(3);
-	};
-
 	return (
 		<div>
-			<Link to={productPageLink} title={product.Title}>
+			<Link to={productPageLink} title={product.Title} className={process === false && 'text-danger'}>
 				{
 					isMobile ?
 						characterLimiter(product.Title, 45)
@@ -34,7 +31,8 @@ const AliExpressItemDescription = (props) => {
 				</div>
 			}
 			<p className="mb-0 text-capitalize small">
-				Shipping method: <strong>{product?.shipping_type === 'regular' ? `Regular Shipping (25-90 Days)` : `Express Shipping (15-40 Days)`}</strong>
+				Shipping
+				method: <strong>{product?.shipping_type === 'regular' ? `Regular Shipping (25-90 Days)` : `Express Shipping (15-40 Days)`}</strong>
 			</p>
 			{
 				product?.shipping_type === 'express' &&

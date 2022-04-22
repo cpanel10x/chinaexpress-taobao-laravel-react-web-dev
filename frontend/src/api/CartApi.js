@@ -27,21 +27,6 @@ export const useCartMutation = () => {
 		}
 	});
 
-	const addToCart = useMutation(["addToCart"], async (props) => {
-		const token = setGetToken();
-		try {
-			const {data} = await instance.post(`/cart/add`, {token: token, ...props});
-			setGetToken(data?.cart?.cart_uid);
-			return data?.cart ? data.cart : {};
-		} catch (error) {
-			console.log(error);
-		}
-	}, {
-		onSuccess: () => {
-			cache.invalidateQueries("customer_cart");
-		}
-	});
-
 	const updateCart = useMutation(["updateCart"], async (props) => {
 		const token = setGetToken();
 		try {
@@ -128,7 +113,6 @@ export const useCartMutation = () => {
 
 	return {
 		mainCart,
-		addToCart,
 		updateCart,
 		removeCart,
 		PaymentMethod,
@@ -144,6 +128,18 @@ export const useCart = () => useQuery("customer_cart", async () => {
 		return data?.cart ? data?.cart : {};
 	} catch (error) {
 		throw Error(error.response.statusText);
+	}
+});
+
+
+export const useAddToCart = () => useMutation("useAddToCart", async (props) => {
+	const token = setGetToken();
+	try {
+		const {data} = await instance.post(`/cart/add`, {token: token, ...props});
+		setGetToken(data?.cart?.cart_uid);
+		return data?.cart ? data.cart : {};
+	} catch (error) {
+		console.log(error);
 	}
 });
 
@@ -193,7 +189,7 @@ export const usePopupMessage = () => useMutation(["useReadPopupMessage"], async 
 	}
 });
 
-export const useCheckoutUpdate= () => useMutation(["useCheckoutUpdate"], async (props) => {
+export const useCheckoutUpdate = () => useMutation(["useCheckoutUpdate"], async (props) => {
 	const token = setGetToken();
 	try {
 		const {data} = await instance.post(`/cart/update/checkout`, {token: token, ...props});

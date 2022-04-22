@@ -7,10 +7,10 @@ const AliSocialShare = (props) => {
 
 	const meta_title = settings?.meta_title || '';
 	const site_url = settings?.site_url || '';
-	const titleModule = product?.titleModule;
+	const titleModule = product?.item;
 
-	const title = titleModule?.subject ? titleModule.subject : meta_title;
-	const link_url = product?.actionModule?.productId ? `${site_url}/aliexpress/product/${product_id}` : site_url;
+	const title = titleModule?.title ? titleModule?.title : meta_title;
+	const link_url = titleModule.num_iid ? `${site_url}/aliexpress/product/${product_id}` : site_url;
 
 	const copyLink = (e, link) => {
 		e.preventDefault();

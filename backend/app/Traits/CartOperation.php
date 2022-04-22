@@ -298,7 +298,7 @@ trait CartOperation
   {
     $item_id = request('item_id');
     $shipping = request('shipping_type', null);
-    $DeliveryCost = request('shipping_cost', 0);
+    $DeliveryCost = request('shipping_cost', null);
     $cart = $this->get_customer_cart();
     if (!$cart) {
       return [];
@@ -310,7 +310,7 @@ trait CartOperation
         'IsCart' => null,
         'shipping_type' => $shipping
       ];
-      if ($DeliveryCost) {
+      if ($DeliveryCost !== null) {
         $data['DeliveryCost'] = $DeliveryCost;
       }
       $item = CartItem::where('cart_id', $cart->id)

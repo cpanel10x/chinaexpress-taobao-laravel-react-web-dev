@@ -1,4 +1,4 @@
-import _, {isArray, isEmpty, isObject} from "lodash";
+import _, {isEmpty, isObject} from "lodash";
 
 
 export const getProductKeyItem = (product, keyName, returnDefault = null) => {
