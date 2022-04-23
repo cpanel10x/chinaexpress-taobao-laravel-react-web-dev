@@ -6,7 +6,7 @@ import {useQueryClient} from "react-query";
 import ShippingModal from "./includes/ShippingModal";
 
 const AliShipmentInfo = props => {
-	const {cartItem, product, shipment, settings,activeShipping, setActiveShipping, selectShipping, setSelectShipping} = props;
+	const {cartItem, product, shipment, settings, activeShipping, setActiveShipping, selectShipping, setSelectShipping} = props;
 	const [optionEnable, setOptionEnable] = useState(false);
 
 	const cache = useQueryClient();
@@ -24,15 +24,13 @@ const AliShipmentInfo = props => {
 
 	const isExpressEnable = itemTotal >= minOrder;
 
-
 	useEffect(() => {
 		if (!selectShipping && freightList?.length > 0) {
 			setSelectShipping(freightList?.[0]);
 		}
-		if(cartItem?.shipping_type){
+		if (cartItem?.shipping_type) {
 			setActiveShipping(cartItem?.shipping_type);
 		}
-
 	}, [freightList, setSelectShipping, cartItem]);
 
 	const shippingRate = (amount) => {
@@ -51,10 +49,13 @@ const AliShipmentInfo = props => {
 
 	useEffect(() => {
 		if (!isExpressEnable) {
-			const shipping_cost = shippingRate(selectShipping?.freightAmount?.value || 0);
-			updateShippingInformation({shipping_cost, shipping_type: null});
-			if(freightList?.length > 0){
+			const shipping_cost = shippingRate(selectShipping?.delivery_fee || 0);
+			if (freightList?.length > 0) {
 				setActiveShipping('regular');
+				updateShippingInformation({shipping_cost, shipping_type: 'regular'});
+			}else{
+				setActiveShipping();
+				updateShippingInformation({shipping_cost, shipping_type: null});
 			}
 		}
 	}, [isExpressEnable]);
@@ -64,7 +65,7 @@ const AliShipmentInfo = props => {
 		const value = event.target.value;
 		if (value === 'regular') {
 			setActiveShipping(value);
-			const shipping_cost = shippingRate(selectShipping?.freightAmount?.value || 0);
+			const shipping_cost = shippingRate(selectShipping?.delivery_fee || 0);
 			updateShippingInformation({shipping_cost, shipping_type: value});
 		} else if (value === 'express') {
 			if (isExpressEnable) {
@@ -78,7 +79,7 @@ const AliShipmentInfo = props => {
 				});
 				setActiveShipping('regular');
 			}
-		}else{
+		} else {
 			setActiveShipping(null);
 		}
 		return '';
@@ -91,7 +92,7 @@ const AliShipmentInfo = props => {
 
 	const updateDeliveryCharge = (shipping) => {
 		setSelectShipping(shipping);
-		const shipping_cost = shippingRate(shipping?.freightAmount?.value || 0);
+		const shipping_cost = shippingRate(shipping?.delivery_fee || 0);
 		updateShippingInformation({shipping_cost, shipping_type: activeShipping});
 	};
 

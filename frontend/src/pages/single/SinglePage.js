@@ -1,14 +1,13 @@
 import React, {useEffect} from "react";
-import {withRouter} from "react-router-dom";
+import {useParams, withRouter} from "react-router-dom";
 import {goPageTop} from "../../utils/Helpers";
 import parser from "html-react-parser";
 import My404Component from "../404/My404Component";
-import Breadcrumb from "../breadcrumb/Breadcrumb";
 import PageSkeleton from "../../skeleton/PageSkeleton";
 import {usePageData} from "../../api/GeneralApi";
 
-const SinglePage = ({match}) => {
-	const {slug} = match.params;
+const SinglePage = (props) => {
+	const {slug} = useParams();
 
 	const {data: page, isLoading} = usePageData(slug);
 

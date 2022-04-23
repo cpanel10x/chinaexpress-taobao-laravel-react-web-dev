@@ -24,6 +24,7 @@ import AllOrders from "./auth/dashboard/orders/AllOrders";
 import Profile from "./auth/dashboard/Profile";
 import ManageAddress from "./auth/dashboard/address/ManageAddress";
 import LatestArrivedProduct from "./pages/newArrive/LatestArrivedProduct";
+import AliSellerPage from "./pages/aliexpress/aliSeller/AliSellerPage";
 
 const Routing = () => {
 	return (
@@ -51,6 +52,7 @@ const Routing = () => {
 
 			{/* start aliexpress route develop */}
 			<Route path="/aliexpress/product/:product_id" exact={true} component={AliProductPage}/>
+			<Route path="/aliexpress/seller/:shop_id/:seller_id?" exact={true} component={AliSellerPage}/>
 			{/* end aliexpress route develop */}
 
 			<AuthRoute path="/checkout" exact component={Checkout}/>

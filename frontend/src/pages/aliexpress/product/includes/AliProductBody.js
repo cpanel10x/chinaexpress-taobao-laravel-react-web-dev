@@ -26,7 +26,6 @@ const AliProductBody = (props) => {
 	const {data: cart} = useCart();
 	const cartItem = cart?.cart_items?.find(item => String(item.ItemId) === String(productId)) || {};
 
-	// const {data: shipment, isLoading: shippingLoading} = useAliProductShippingInfo(productId);
 	const {shipment, shippingLoading} = {shipment: {}, shippingLoading: false};
 
 	const product_title = productItem?.title;
@@ -41,10 +40,8 @@ const AliProductBody = (props) => {
 	}, [imagePathList]);
 
 	const skuProperties = product?.item?.skus?.props || [];
-	const ShipsFrom = skuProperties?.find(find => find.name === 'Ships From');
-	let hasShipFromChina = ShipsFrom?.values?.find(value => value.name === 'China');
-	hasShipFromChina = hasShipFromChina ? hasShipFromChina : (!ShipsFrom?.values?.length);
-	const hasBDShipment = shipment?.body?.freightResult?.length > 0;
+	const hasShipFromChina = product?.delivery?.freightList?.find(freight => freight.fromCode === 'CN');
+	const hasBDShipment = product?.delivery?.freightList?.find(freight => freight.toCode === 'BD');
 
 	return (
 		<div className="product-details-top">

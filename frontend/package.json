@@ -1,6 +1,6 @@
 {
   "name": "chinaexpress_frontend",
-  "version": "v1.1.2",
+  "version": "v1.1.3",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.3",

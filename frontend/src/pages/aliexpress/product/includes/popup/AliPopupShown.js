@@ -31,7 +31,7 @@ const AliPopupShown = (props) => {
 			     data-backdrop="static"
 			     data-keyboard="false"
 			     style={{display: 'block'}}>
-				<div className="modal-dialog modal-dialog-scrollable">
+				<div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
 					<div className="modal-content">
 						<div className="modal-header">
 							<h5 className="modal-title" id="staticBackdropLabel">Must be Read</h5>
@@ -57,9 +57,9 @@ const AliPopupShown = (props) => {
 						<div className="justify-content-center modal-footer">
 							{
 								isLoading ?
-								<SpinnerButtonLoader buttonClass={'btn btn-default'}/>
-								:
-								<button type="button" className="btn btn-default" onClick={() => closeModal()}>Read & Agree</button>
+									<SpinnerButtonLoader buttonClass={'btn btn-default'}/>
+									:
+									<button type="button" className="btn btn-default" onClick={() => closeModal()}>Read & Agree</button>
 							}
 						</div>
 					</div>

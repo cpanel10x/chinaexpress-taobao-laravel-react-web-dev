@@ -1,22 +1,24 @@
 import React from 'react';
 import {Link} from "react-router-dom";
-import Intro from "../home/includes/intro/Intro";
-import AliExpressSearchBar from "../home/includes/searchBar/AliExpressSearchBar";
+import AliSearchForm from "../home/includes/searchBar/includes/AliSearchForm";
+import {useMediaQuery} from "react-responsive";
 
 const AliExpressProduct404 = () => {
+	const isMobile = useMediaQuery({query: '(max-width: 991px)'});
 
 	return (
 		<main className="main">
 			<div className="container">
-				<div className="card my-5">
+				<div className="card mt-2 my-lg-5">
 					<div className="card-body">
 						<div className="error-content text-center">
-							<img src={`/assets/img/404.jpg`} className="img-fluid mx-auto" alt="404" style={{maxWidth: '15rem'}}/>
-							<h1 className="error-title">Product not found. </h1>
-							<p>We are sorry, the product you've requested is not available.</p>
+							<img src={`/assets/img/404.jpg`} className="img-fluid mx-auto" alt="404" style={{maxWidth: isMobile ? '10rem' : '12rem'}}/>
+							<h3 className="error-title">Product not found. </h3>
+							<p>We are sorry! The product you are search is not available.</p>
 
-
-							<AliExpressSearchBar/>
+							<div className="controlAliSearchForm">
+								<AliSearchForm/>
+							</div>
 
 							<div className="pb-5 my-5">
 								<Link

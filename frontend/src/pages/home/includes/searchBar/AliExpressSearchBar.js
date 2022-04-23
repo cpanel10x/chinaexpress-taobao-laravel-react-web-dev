@@ -1,38 +1,6 @@
-import React, {useState} from "react";
-import {withRouter} from "react-router-dom";
-import Swal from "sweetalert2";
-import {useAliSearchProduct} from "../../../../api/AliExpressProductApi";
-import SpinnerButtonLoader from "../../../../loader/SpinnerButtonLoader";
+import AliSearchForm from "./includes/AliSearchForm";
 
-function AliExpressSearchBar(props) {
-	const [search, setSearch] = useState("");
-
-	const {mutateAsync, isLoading} = useAliSearchProduct();
-
-	const submitExpressSearch = (event) => {
-		event.preventDefault();
-		if (search) {
-			mutateAsync({search},
-				{
-					onSuccess: (response) => {
-						if (response?.status === true) {
-							props.history.push(`/aliexpress/product/${response?.product_id}`);
-						} else {
-							Swal.fire({
-								text: response?.msg,
-								icon: "warning",
-							});
-						}
-					}
-				});
-
-		} else {
-			Swal.fire({
-				text: "Paste a valid link",
-				icon: "warning",
-			});
-		}
-	};
+function AliExpressSearchBar() {
 
 	return (
 		<div className="section my-3">
@@ -43,37 +11,7 @@ function AliExpressSearchBar(props) {
 							<img src={`/assets/img/aliExpress.gif`} className="img-fluid aliExpressLogo" alt="aliExpress"/>
 						</div>
 						<div className="col-md-9 aliSearchFormCol">
-							<img src={`/assets/img/paste-aliExpress-link.gif`} className="img-fluid aliExpressText" alt="aliExpressText"/>
-							<form
-								className="ali_express_search_form"
-								method="get"
-								onSubmit={(event) => submitExpressSearch(event)}>
-								<div className="input-group">
-									<input
-										type="text"
-										className="form-control"
-										onChange={(event) =>
-											setSearch(
-												event.target.value
-											)
-										}
-										placeholder="Search By Aliexpress Link"
-									/>
-									<div className="input-group-append">
-										{
-											isLoading ?
-												<SpinnerButtonLoader buttonClass={'btn-search'}/>
-												:
-												<button
-													type="submit"
-													className="btn btn-search"
-												>
-													<i className="icon-search"/>
-												</button>
-										}
-									</div>
-								</div>
-							</form>
+							<AliSearchForm/>
 						</div>
 					</div>
 				</div>
@@ -82,4 +20,4 @@ function AliExpressSearchBar(props) {
 	);
 }
 
-export default withRouter(AliExpressSearchBar);
+export default AliExpressSearchBar;

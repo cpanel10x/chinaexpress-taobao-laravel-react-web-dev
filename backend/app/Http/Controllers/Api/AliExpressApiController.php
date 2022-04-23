@@ -94,6 +94,7 @@ class AliExpressApiController extends Controller
   public function productInfo($product_id)
   {
     $rapid = cache()->get($product_id, null);
+    // $rapid = null;
     if (!$rapid) {
       $rapid = $this->ApiProductDetails($product_id);
       cache()->put($product_id, $rapid, now()->addMinutes(10));

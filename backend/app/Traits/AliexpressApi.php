@@ -55,7 +55,7 @@ trait AliexpressApi
 
   public function ApiProductDetails($product_id)
   {
-    $url = "{$this->baseUrl}?api=item_detail&num_iid={$product_id}";
+    $url = "{$this->baseUrl}?api=item_detail&num_iid={$product_id}&currency=USD&region=BD&locale=EN";
     return $this->makeRequest($url);
   }
 
