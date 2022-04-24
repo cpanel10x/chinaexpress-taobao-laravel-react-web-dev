@@ -36,7 +36,7 @@ const AliSellerInfo = (props) => {
 							</p>
 						</div>
 						<div className="col-md-4">
-							<Link to={`/aliexpress/seller/${seller?.shop_id}/${seller?.seller_id}`} className="btn btn-block btn-default">Visit Store</Link>
+							<Link to={`/aliexpress/seller/${seller?.seller_id}?seller=${seller?.shop_title}`} className="btn btn-block btn-default">Visit Store</Link>
 						</div>
 					</div>
 				</div>

@@ -1,72 +1,97 @@
 import React from "react";
 import {Link} from "react-router-dom";
+import SmallSpinnerButtonLoader from "../../../loader/SmallSpinnerButtonLoader";
+import {useQueryClient} from "react-query";
+import {useAddToWishList} from "../../../api/WishListApi";
 
-const AliProductCard = ({product}) => {
-    const currency_icon = "$";
-    const metadata = product?.metadata || '';
-    const image = metadata?.image || '';
-    const productId = metadata?.productId || '';
+const AliProductCard = ({product, currency, aliRate, productClass}) => {
 
-    const addToWishlist = (e, product) => {
-        e.preventDefault();
-    };
+	const productId = product?.num_iid || '';
+	const title = product?.title || '';
+	const image = product?.image || '';
 
-    return (
-        <div className="col">
-            <div className="product shadow product-7">
-                <figure className="product-media">
-                    <Link to={`/aliexpress/product/${productId}`}>
-                        <img
-                            src={image.imgUrl}
-                            className="product-image"
-                        />
-                    </Link>
-                    <div className="product-action-vertical">
-                        <a
-                            href={`/add-to-wishlist`}
-                            onClick={(e) => addToWishlist(e, product)}
-                            className="btn-product-icon btn-wishlist btn-expandable"
-                        >
-                            <span>add to wishlist</span>
-                        </a>
-                        <Link
-                            to={`/aliexpress/product/${productId}`}
-                            className="btn-product-icon btn-quickview"
-                            title="Quick view"
-                        >
-                            <span>Quick view</span>
-                        </Link>
-                    </div>
-                </figure>
-                <div className="product-body">
-                    <h3
-                        className="product-title"
-                        style={{
-                            whiteSpace: "nowrap",
-                            textOverflow: "ellipsis",
-                            overflow: "hidden",
-                        }}
-                        title={product.product_title}
-                    >
-                        <Link to={`/aliexpress/product/${productId}`}>
-                            {product.product_title}
-                        </Link>
-                    </h3>
-                    <div className="clearfix d-block product-price">
+	let price = product?.price || 0;
+	price = Number(price) * Number(aliRate);
+	let promotion_price = product?.promotion_price || '';
+	promotion_price = Number(promotion_price) * Number(aliRate);
+
+	const sales = product?.sales || '';
+
+	const cache = useQueryClient();
+	const {isLoading, mutateAsync} = useAddToWishList();
+
+	const addToWishlist = (event) => {
+		event.preventDefault();
+		alert('process will be done');
+		// mutateAsync({product: product}, {
+		// 	onSuccess: (responseData) => {
+		// 		if (responseData?.status) {
+		// 			cache.setQueryData('wishlist', (responseData?.wishlists || {}));
+		// 		}
+		// 	}
+		// });
+	};
+
+	return (
+		<div className={productClass ? productClass : 'col-6 col-sm-4 col-lg-4 col-xl-3'}>
+			<div className="product">
+				<figure className="product-media">
+					<Link to={`/aliexpress/product/${productId}`}>
+						<img
+							src={image}
+							className="product-image"
+						/>
+					</Link>
+
+					<div className="product-action-vertical">
+						{
+							isLoading ?
+								<SmallSpinnerButtonLoader buttonClass="btn-product-icon btn-wishlist btn-expandable" textClass="text-white"/>
+								:
+								<a
+									href={`/add-to-wishlist`}
+									onClick={event => addToWishlist(event)}
+									title="Add Wishlist"
+									className="btn-product-icon btn-wishlist btn-expandable"
+								>
+									<i className="icon-heart-empty"/> <span>add to wishlist</span>
+								</a>
+						}
+						<Link
+							to={`/aliexpress/product/${productId}`}
+							className="btn-product-icon btn-quickview"
+							title="Quick view"
+						>
+							<span>Quick view</span>
+						</Link>
+					</div>
+				</figure>
+				<div className="product-body">
+					<h3
+						className="product-title"
+						style={{
+							whiteSpace: "nowrap",
+							textOverflow: "ellipsis",
+							overflow: "hidden",
+						}}
+						title={title}
+					>
+						<Link to={`/aliexpress/product/${productId}`}>
+							{title}
+						</Link>
+					</h3>
+					<div className="clearfix d-block product-price">
                         <span className="float-left">
-                            {`${currency_icon}`}{" "}
-                            <span className="price_span">
-                            {product.app_sale_price}
-                            </span>
+                            {currency}<span className="price_span">{Math.round(promotion_price)}</span>
                         </span>
-                        <del className="sold_item_text">
-                            {product.discount_rate}
-                        </del>
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
+						<del className="sold_item_text">
+							{Math.round(price)}
+						</del>
+					</div>
+				</div>
+			</div>
+		</div>
+	);
 };
 
 export default AliProductCard;

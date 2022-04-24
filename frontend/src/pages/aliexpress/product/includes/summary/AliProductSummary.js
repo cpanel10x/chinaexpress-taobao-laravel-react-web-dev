@@ -1,30 +1,11 @@
 import React, {useEffect} from 'react';
-import {aliProductConvertionPrice, sumCartItemTotal, sumCartItemTotalQuantity} from "../../../../../utils/AliHelpers";
-import {useAliProductWeight} from "../../../../../api/AliExpressProductApi";
-import {useQueryClient} from "react-query";
+import {sumCartItemTotal, sumCartItemTotalQuantity} from "../../../../../utils/AliHelpers";
 
 const AliProductSummary = (props) => {
-	const {cartItem, product, settings, operationalAttributes} = props;
-
-	const cache = useQueryClient();
-	const {mutateAsync, isLoading} = useAliProductWeight();
+	const {cartItem, settings} = props;
 
 	const currency = settings?.currency_icon || '৳';
-	const isExpress = false;
 	const DeliveryCost = cartItem?.DeliveryCost || 0;
-
-	useEffect(() => {
-		if (cartItem?.shipping_type === 'express' && !Number(cartItem.weight)) {
-			mutateAsync(
-				{cart_item_id: cartItem?.id, ItemId: cartItem?.ItemId},
-				{
-					onSuccess: () => {
-						cache.invalidateQueries("customer_cart");
-					}
-				}
-				);
-		}
-	}, [cartItem]);
 
 	const itemTotal = sumCartItemTotal(cartItem?.variations || []);
 	const quantity = sumCartItemTotalQuantity(cartItem?.variations || []);

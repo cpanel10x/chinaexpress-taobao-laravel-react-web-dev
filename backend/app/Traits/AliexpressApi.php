@@ -64,23 +64,4 @@ trait AliexpressApi
     $url = "{$this->baseUrl}?api=shop_items&seller_id={$seller_id}&page={$page}&page_size={$limit}&currency=USD&region=BD&locale=EN";
     return $this->makeRequest($url);
   }
-
-
-  public function ApiProductShipping($product_id, $toCountry = 'BD')
-  {
-    $url = "{$this->baseUrl}/shipping/{$product_id}";
-    if ($toCountry) {
-      $url = "{$this->baseUrl}/shipping/{$product_id}?destination_country={$toCountry}";
-    }
-    return $this->makeRequest($url);
-  }
-
-
-  public function productWeightInfoFromMagicApi($product_id)
-  {
-    // $url = "{$this->baseUrl}/shipping/{$product_id}";
-    // return $this->makeRequest($url);
-
-    return [];
-  }
 }

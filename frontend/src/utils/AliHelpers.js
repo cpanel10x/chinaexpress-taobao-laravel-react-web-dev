@@ -1,22 +1,24 @@
 import Swal from "sweetalert2";
 
+
+export const aliItemPriceFromString = (price) => {
+	const priceArray = isNaN(Number(price)) ? price.split(" - ") : [];
+	return priceArray?.length > 0 ? Math.round(Number(priceArray[0])) : Math.round(Number(price));
+};
+
 export const wishListProcessProduct = (product, aliRate) => {
-	const metadata = product?.metadata;
-	const titleModule = metadata?.titleModule;
-	const averageStar = titleModule?.feedbackRating?.averageStar || 0;
-	const priceModule = metadata?.priceModule;
-	const minActivityAmount = priceModule?.minActivityAmount?.value || 0;
-	const minAmount = priceModule?.minAmount?.value || 0;
+	let price = aliItemPriceFromString(product?.item?.price || '');
+	let promotion_price = aliItemPriceFromString(product?.item?.promotion_price || '');
 	return {
-		name: titleModule?.product_title,
-		ItemId: product?.product_id,
+		name: product?.item?.title,
+		ItemId: product?.item?.num_iid,
 		provider_type: 'aliexpress',
-		img: product?.product_small_image_urls?.string?.[0],
-		rating: averageStar,
-		sale_price: parseInt(minActivityAmount) * parseInt(aliRate),
-		regular_price: parseInt(minAmount) * parseInt(aliRate),
-		stock: product?.quantityObject?.totalAvailQuantity,
-		total_sold: titleModule?.tradeCount,
+		img: product?.item?.images?.[0],
+		rating: null,
+		sale_price: price * parseInt(aliRate),
+		regular_price: promotion_price * parseInt(aliRate),
+		stock: product?.item?.stock,
+		total_sold: product?.item?.sales,
 	}
 };
 

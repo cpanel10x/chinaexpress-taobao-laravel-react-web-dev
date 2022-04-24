@@ -5,12 +5,10 @@ import AliPriceCard from "./AliPriceCard";
 import AliQuantityInput from "./quantity/AliQuantityInput";
 import {useCart} from "../../../../api/CartApi";
 import AliShipmentInfo from "./shipping/AliShipmentInfo";
-import {useAliProductShippingInfo} from "../../../../api/AliExpressProductApi";
 import AliAddToCart from "./addToCart/AliAddToCart";
 import AliProductSummary from "./summary/AliProductSummary";
 import AliSellerInfo from "./sellerInfo/AliSellerInfo";
 import AliSocialShare from "./AliSocialShare";
-import MediumSpinner from "../../../../loader/MediumSpinner";
 
 
 const AliProductBody = (props) => {

@@ -71,9 +71,6 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function () {
   Route::get('/aliexpress/seller-products', [AliExpressApiController::class, 'sellerProducts']);
   Route::get('/aliexpress/related-products/{product_id}', [AliExpressApiController::class, 'relatedProducts']);
 
-  Route::get('/aliexpress/shipment/{product_id}', [AliExpressApiController::class, 'productShipmentInfo']);
-  Route::post('/aliexpress/shipping-weight', [AliExpressApiController::class, 'productShipmentWeightInfo']); // if necessary
-
   Route::post('/email/verify/{id}', [HomeController::class, 'verify'])->name('verificationapi.verify');
   Route::post('/email/resend', [HomeController::class, 'resend'])->name('verificationapi.resend');
 

@@ -22,24 +22,6 @@ export const useAliProductDetails = (product_id) => useQuery(["useAliProductDeta
 });
 
 
-export const useAliProductShippingInfo = (productId) => useQuery(["useAliProductShippingInfo", productId], async () => {
-	try {
-		const {data} = await instance.get(`aliexpress/shipment/${productId}`);
-		return data?.result ? JSON.parse(data?.result) : {};
-	} catch (error) {
-		console.log(error);
-	}
-});
-
-export const useAliProductWeight = () => useMutation("useAliProductWeight", async (props) => {
-	try {
-		const {data} = await instance.post(`/aliexpress/shipping-weight`, props);
-		return data?.result ? JSON.parse(data?.result) : [];
-	} catch (error) {
-		console.log(error);
-	}
-});
-
 
 export const useAliProductDescription = (descriptionUrl) => useQuery(["useAliProductDescription", descriptionUrl], async () => {
 	try {
@@ -85,9 +67,9 @@ export const useAliRelatedProduct = (product_id) => useQuery(["useAliRelatedProd
 
 
 
-export const useAliSellerProducts = (seller_id) => useQuery(["useAliSellerProducts", seller_id], async () => {
+export const useAliSellerProducts = (seller_id, page=1) => useQuery(["useAliSellerProducts", seller_id, page], async () => {
 	try {
-		const {data} = await instance.get(`/aliexpress/seller-products?seller_id=${seller_id}`);
+		const {data} = await instance.get(`/aliexpress/seller-products?seller_id=${seller_id}&page=${page}`);
 		return data?.result ? JSON.parse(data?.result) : [];
 	} catch (error) {
 		console.log(error);

@@ -113,49 +113,23 @@ class AliExpressApiController extends Controller
     $seller_id = request('seller_id');
     $page = request('page', 1);
     $limit = request('limit', 35);
-    $rapid = $this->ApiSellerProducts($seller_id, $page, $limit);
+
+    $rapid = cache()->get($seller_id, null);
+    // $rapid = null;
+    if (!$rapid) {
+      $rapid = $this->ApiSellerProducts($seller_id, $page, $limit);
+      cache()->put($seller_id, $rapid, now()->addMinutes(10));
+    }
+    $item['item'] = $rapid['result']['items'] ?? [];
+    $item['base'] = $rapid['result']['base'] ?? [];
+
     return response([
-      'result' => json_encode($rapid)
+      'result' => json_encode($item)
     ]);
   }
 
 
 
-
-  public function productShipmentInfo($product_id)
-  {
-    $key = 'shipment-' . $product_id;
-    $shipping = cache()->get($key, null);
-    if (!$shipping) {
-      $shipping = $this->ApiProductShipping($product_id);
-      cache()->put($key, $shipping, 600);
-    }
-    return response([
-      'result' => json_encode($shipping),
-    ]);
-  }
-
-  public function productShipmentWeightInfo()
-  {
-    $product_id = request('ItemId');
-    $cart_item_id = request('cart_item_id');
-    $key = 'weight-' . $product_id;
-    $shipping = cache()->get($key, null);
-    $shipping = null;
-    if (!$shipping) {
-      $shipping = $this->productWeightInfoFromMagicApi($product_id);
-      cache()->put($key, $shipping, 600);
-    }
-    $weight = $shipping['packageInfo']['weight'] ?? 0;
-    if ($weight) {
-      CartItem::where('id', $cart_item_id)
-        ->where('ItemId', $product_id)
-        ->update(['weight' => $weight]);
-    }
-    return response([
-      'result' => json_encode($shipping),
-    ]);
-  }
 
   public function relatedProducts($product_id)
   {

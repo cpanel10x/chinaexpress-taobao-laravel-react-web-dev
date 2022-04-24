@@ -10,7 +10,6 @@ import {useSettings} from "../../../api/GeneralApi";
 import RecentViewProduct from "../../product/reletedProduct/RecentViewProduct";
 import AliExpressProduct404 from "../../404/AliExpressProduct404";
 import AliProductDetailsTab from "./includes/detailsTab/AliProductDetailsTab";
-import {useQuery} from "../../../utils/customHooks";
 
 const AliProductPage = (props) => {
 	const {product_id} = useParams();
