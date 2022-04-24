@@ -15,7 +15,7 @@ const AliShipmentInfo = props => {
 	const itemTotal = sumCartItemTotal(cartItem?.variations || []);
 	const currency = settings?.currency_icon || '৳';
 	const item_id = product?.item?.num_iid;
-	const freightList = product?.delivery?.freightList;
+	const freightList = product?.delivery?.freightList || [];
 
 	let aliRate = settings?.ali_increase_rate || 0;
 	aliRate = aliRate ? parseInt(aliRate) : 90;
@@ -101,7 +101,7 @@ const AliShipmentInfo = props => {
 
 			<div className="mb-2">
 				{
-					freightList?.length > 0 &&
+					freightList?.length > 1 &&
 					<div className="form-check form-check-inline">
 						<input className="form-check-input"
 						       type="radio"
@@ -125,7 +125,7 @@ const AliShipmentInfo = props => {
 				</div>
 			</div>
 			{
-				activeShipping === 'regular' && freightList?.length > 0 &&
+				activeShipping === 'regular' && freightList?.length > 1 &&
 				<div>
 					{
 						optionEnable &&

@@ -59,6 +59,12 @@ trait AliexpressApi
     return $this->makeRequest($url);
   }
 
+  public function ApiSellerProducts($seller_id, $page, $limit = 35)
+  {
+    $url = "{$this->baseUrl}?api=shop_items&seller_id={$seller_id}&page={$page}&page_size={$limit}&currency=USD&region=BD&locale=EN";
+    return $this->makeRequest($url);
+  }
+
 
   public function ApiProductShipping($product_id, $toCountry = 'BD')
   {

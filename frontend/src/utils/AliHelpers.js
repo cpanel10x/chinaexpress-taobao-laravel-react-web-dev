@@ -125,12 +125,37 @@ export const itemIsCheckWillProcess = (cartItem, settings) => {
 			minOrder = express_shipping_min_value;
 		}
 	}
-	const itemTotal = sumCartItemTotal(cartItem?.variations);
+	const checkedVariations = cartItem?.variations?.filter(variation => parseInt(variation.is_checked) === 1);
+	const itemTotal = sumCartItemTotal(checkedVariations);
 	if (Number(itemTotal) < Number(minOrder)) {
 		process = false;
 	}
-
+	console.log('itemTotal', itemTotal)
 	return {process, minOrder};
+};
+
+
+export const itemValidateWillPayment = (cartItems, settings) => {
+	const currency = settings?.currency_icon;
+	let process = true;
+	for (let i = 0; i < cartItems.length; i++) {
+		const product = cartItems[i];
+		const {process: willProcess, minOrder} = itemIsCheckWillProcess(product, settings);
+		const Title = product?.Title;
+		if (!willProcess) {
+			Swal.fire({
+				icon: 'info',
+				html:
+					`<b>Product value must be greater than ${currency} ${minOrder}</b> </br>` +
+					`<p class="text-danger mb-0">${Title}</p>`,
+				confirmButtonText: 'Ok, Understood',
+			});
+			process = false;
+			break;
+		}
+	}
+
+	return process;
 };
 
 

@@ -90,7 +90,6 @@ class AliExpressApiController extends Controller
     ]);
   }
 
-
   public function productInfo($product_id)
   {
     $rapid = cache()->get($product_id, null);
@@ -106,6 +105,22 @@ class AliExpressApiController extends Controller
       'result' => json_encode($item)
     ]);
   }
+
+
+
+  public function sellerProducts()
+  {
+    $seller_id = request('seller_id');
+    $page = request('page', 1);
+    $limit = request('limit', 35);
+    $rapid = $this->ApiSellerProducts($seller_id, $page, $limit);
+    return response([
+      'result' => json_encode($rapid)
+    ]);
+  }
+
+
+
 
   public function productShipmentInfo($product_id)
   {

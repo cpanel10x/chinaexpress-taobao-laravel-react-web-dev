@@ -4,12 +4,10 @@ import {characterLimiter} from "../../../../utils/Helpers";
 import AttrConfigs from "../attributes/AttrConfigs";
 import CheckoutQuantity from "../tableComponents/CheckoutQuantity";
 import {useMediaQuery} from "react-responsive";
-import {itemIsCheckWillProcess} from "../../../../utils/AliHelpers";
 
 const TaobaoItemDescription = (props) => {
 	const {productPageLink, product, variation, currency, settings} = props;
 
-	const {process} = itemIsCheckWillProcess(product, settings);
 	const isMobile = useMediaQuery({query: '(max-width: 991px)'});
 
 	const approxWeight = (qty, product) => {
@@ -20,7 +18,7 @@ const TaobaoItemDescription = (props) => {
 
 	return (
 		<div>
-			<Link to={productPageLink} title={product.Title} className={process === false && 'text-danger'}>
+			<Link to={productPageLink} title={product.Title}>
 				{
 					isMobile ?
 						characterLimiter(product.Title, 45)

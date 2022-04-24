@@ -11,9 +11,9 @@ import SmallSpinner from "../../loader/SmallSpinner";
 import PaymentItem from "./includes/PaymentItem";
 import {goPageTop} from "../../utils/Helpers";
 import Helmet from "react-helmet";
+import {itemValidateWillPayment} from "../../utils/AliHelpers";
 
 const Payment = (props) => {
-
 	const {data: settings} = useSettings();
 	const {data: cart} = useCart();
 	const cartItems = cart?.cart_items || [];
@@ -46,28 +46,28 @@ const Payment = (props) => {
 			Swal.fire({
 				title: "Select your payment method",
 				icon: "warning",
-				buttons: "Ok, Understood",
+				confirmButtonText: "Ok, Understood",
 			});
 			return '';
 		}
 		if (!shipping?.phone) {
 			Swal.fire({
-				title: "Select your payment method",
+				title: "Select your shipping information",
 				icon: "warning",
-				buttons: "Ok, Understood",
+				confirmButtonText: "Ok, Understood",
 			});
 			return '';
 		}
 
-		const checked = cartItems?.filter(item => item.is_checked > 0);
-		if (checked) {
+		const process = itemValidateWillPayment(cartItems, settings);
+		if (process) {
 			confirmOrder.mutateAsync()
 				.then(response => {
 					if (response?.status) {
 						// console.log('response.redirect', response.redirect)
 						window.location.replace(response.redirect);
 					}
-				})
+				});
 		}
 	};
 

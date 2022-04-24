@@ -6,7 +6,7 @@ const AliAttributes = (props) => {
 
 	const Properties = skuProperties?.filter(findItem => findItem.name !== 'Ships From');
 	const ShipsFrom = skuProperties?.find(findItem => findItem.name === 'Ships From');
-	const ShipsFromCountries = ShipsFrom?.values?.find(value => value.name === 'China');
+	const ShipsFromCountries = ShipsFrom?.values?.find(value => value.propTips === "CN");
 
 	useEffect(() => {
 		if (skuProperties?.length > 0) {

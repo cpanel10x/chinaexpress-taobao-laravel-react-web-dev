@@ -15,36 +15,18 @@ const ItemCheck = (props) => {
 
 	const isChecked = variation?.is_checked > 0;
 
-	const willProcess = () => {
-		let {process, minOrder} = itemIsCheckWillProcess(product, settings);
-		const Title = product?.Title;
-		if (!process) {
-			Swal.fire({
-				icon: 'info',
-				html:
-					`<b>Product total must be greater than ${currency} ${minOrder}</b> </br>` +
-					`<p class="text-danger mb-0">${Title}</p>`,
-				confirmButtonText: 'Ok, Understood',
-			});
-		}
-		return process;
-	};
-
-
-	const checkedItem = () => {
-		const process = willProcess();
-		if (process) {
-			const checked = isChecked ? '0' : '1';
-			const variation_id = variation?.id || null;
-			mutateAsync(
-				{variation_id, checked},
-				{
-					onSuccess: (cart) => {
-						cache.setQueryData("useCheckoutCart", cart);
-					}
+	const checkedItem = (event) => {
+		let thisIsChecked = event.target.checked;
+		const checked = thisIsChecked ? '1' : '0';
+		const variation_id = variation?.id || null;
+		mutateAsync(
+			{variation_id, checked},
+			{
+				onSuccess: (cart) => {
+					cache.setQueryData("useCheckoutCart", cart);
 				}
-			);
-		}
+			}
+		);
 	};
 
 	// console.log('isChecked', variation)
@@ -59,7 +41,7 @@ const ItemCheck = (props) => {
 							<input type="checkbox"
 							       id={`variation_${variation.configId}`}
 							       checked={isChecked}
-							       onChange={() => checkedItem()}/>
+							       onChange={event => checkedItem(event)}/>
 							<div className="state">
 								<label htmlFor={`variation_${variation.configId}`}/>
 							</div>

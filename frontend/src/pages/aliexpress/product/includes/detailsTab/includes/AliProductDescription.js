@@ -1,5 +1,4 @@
 import React from 'react';
-import parser from "html-react-parser";
 import {useAliProductDescription} from "../../../../../../api/AliExpressProductApi";
 
 const AliProductDescription = (props) => {
@@ -7,16 +6,16 @@ const AliProductDescription = (props) => {
 
 	const descriptionModule = product?.item?.desc?.url;
 
-	const {data: description, isLoading} = useAliProductDescription(descriptionModule);
+	// const {data: description, isLoading} = useAliProductDescription(descriptionModule);
 
 	if (!descriptionModule) {
 		return '';
 	}
 
 	return (
-		<div className="product-desc-content">
-			<div className="table-responsive">
-				{description && parser(description)}
+		<div className="product-desc-content descriptionModule">
+			<div className="embed-responsive embed-responsive-4by3">
+				<iframe className="embed-responsive-item" src={descriptionModule}/>
 			</div>
 		</div>
 	);

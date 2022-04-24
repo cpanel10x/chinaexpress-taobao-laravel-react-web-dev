@@ -82,3 +82,14 @@ export const useAliRelatedProduct = (product_id) => useQuery(["useAliRelatedProd
 		console.log(error);
 	}
 });
+
+
+
+export const useAliSellerProducts = (seller_id) => useQuery(["useAliSellerProducts", seller_id], async () => {
+	try {
+		const {data} = await instance.get(`/aliexpress/seller-products?seller_id=${seller_id}`);
+		return data?.result ? JSON.parse(data?.result) : [];
+	} catch (error) {
+		console.log(error);
+	}
+});

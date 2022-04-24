@@ -12,7 +12,7 @@ import AliAddToCartButton from "./includes/AliAddToCartButton";
 import {useQueryClient} from "react-query";
 
 const AliQuantityInput = (props) => {
-	const {cartItem, product, settings, shipment, activeShipping, selectShipping, operationalAttributes} = props;
+	const {cartItem, product, settings, activeShipping, selectShipping, operationalAttributes} = props;
 
 	const priceCard = aliActiveConfigurations(product, operationalAttributes);
 

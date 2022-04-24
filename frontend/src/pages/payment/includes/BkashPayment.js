@@ -12,7 +12,7 @@ const BkashPayment = (props) => {
 			Swal.fire({
 				text: "Please accept terms and conditions!",
 				icon: "warning",
-				buttons: "Ok, Understood",
+				confirmButtonText: "Ok, Understood",
 			});
 		} else {
 			props.paymentConfirm(e);

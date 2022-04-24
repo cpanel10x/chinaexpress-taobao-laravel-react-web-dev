@@ -26,8 +26,6 @@ const AliProductBody = (props) => {
 	const {data: cart} = useCart();
 	const cartItem = cart?.cart_items?.find(item => String(item.ItemId) === String(productId)) || {};
 
-	const {shipment, shippingLoading} = {shipment: {}, shippingLoading: false};
-
 	const product_title = productItem?.title;
 
 	const imagePathList = productItem?.images || [];
@@ -76,48 +74,41 @@ const AliProductBody = (props) => {
 								setActiveImg={setActiveImg}/>
 						}
 						{
-							shippingLoading ?
-								<div className="text-center py-3">
-									<MediumSpinner buttonClass="text-danger"/>
+							(hasShipFromChina || hasBDShipment) ?
+								<div className="shipment">
+									<AliShipmentInfo
+										cartItem={cartItem}
+										product={product}
+										activeShipping={activeShipping}
+										setActiveShipping={setActiveShipping}
+										selectShipping={selectShipping}
+										setSelectShipping={setSelectShipping}
+										settings={settings}/>
+
+									<AliQuantityInput
+										cartItem={cartItem}
+										product={product}
+										settings={settings}
+										activeShipping={activeShipping}
+										selectShipping={selectShipping}
+										operationalAttributes={operationalAttributes}
+									/>
+
+									<AliProductSummary
+										cartItem={cartItem}
+										product={product}
+										selectShipping={selectShipping}
+										settings={settings}
+										operationalAttributes={operationalAttributes}
+									/>
+
+									<AliAddToCart
+										cartItem={cartItem}
+										product={product}
+										settings={settings}/>
 								</div>
 								:
-								(hasShipFromChina || hasBDShipment) ?
-									<div className="shipment">
-										<AliShipmentInfo
-											cartItem={cartItem}
-											product={product}
-											activeShipping={activeShipping}
-											setActiveShipping={setActiveShipping}
-											selectShipping={selectShipping}
-											setSelectShipping={setSelectShipping}
-											shipment={shipment}
-											settings={settings}/>
-
-										<AliQuantityInput
-											cartItem={cartItem}
-											product={product}
-											settings={settings}
-											shipment={shipment}
-											activeShipping={activeShipping}
-											selectShipping={selectShipping}
-											operationalAttributes={operationalAttributes}
-										/>
-
-										<AliProductSummary
-											cartItem={cartItem}
-											product={product}
-											selectShipping={selectShipping}
-											settings={settings}
-											operationalAttributes={operationalAttributes}
-										/>
-
-										<AliAddToCart
-											cartItem={cartItem}
-											product={product}
-											settings={settings}/>
-									</div>
-									:
-									<h3 className="text-danger my-3">"This product not possible to Ship Bangladesh"</h3>
+								<h3 className="text-danger my-3">"This product not possible to Ship Bangladesh"</h3>
 						}
 
 						<AliSellerInfo product={product}/>

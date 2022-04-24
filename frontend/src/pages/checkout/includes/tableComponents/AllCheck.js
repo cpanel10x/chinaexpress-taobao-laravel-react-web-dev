@@ -13,8 +13,6 @@ const AllCheck = (props) => {
 
 	const variations_count = cart?.variations_count || 0;
 
-	const currency = settings?.currency_icon;
-
 	const checkedItems = () => {
 		let totalChecked = 0;
 		cartItems?.map(item => {
@@ -31,37 +29,14 @@ const AllCheck = (props) => {
 
 	const checkedAllItem = (event) => {
 		let thisIsChecked = event.target.checked;
-		let process = true;
-		if (thisIsChecked) {
-			for (let i = 0; i < cartItems.length; i++) {
-				const product = cartItems[i];
-				const {process: willProcess, minOrder} = itemIsCheckWillProcess(product, settings);
-				const Title = product?.Title;
-				if (!willProcess) {
-					Swal.fire({
-						icon: 'info',
-						html:
-							`<b>Product total must be greater than ${currency} ${minOrder}</b> </br>` +
-							`<p class="text-danger mb-0">${Title}</p>`,
-						confirmButtonText: 'Ok, Understood',
-					});
-					process = false;
-					break;
+		const checked = thisIsChecked ? '1' : '0';
+		return mutateAsync(
+			{checked},
+			{
+				onSuccess: (cart) => {
+					cache.setQueryData("useCheckoutCart", cart);
 				}
-			}
-		}
-
-		if (process) {
-			const checked = isAllChecked ? '0' : '1';
-			return mutateAsync(
-				{checked},
-				{
-					onSuccess: (cart) => {
-						cache.setQueryData("useCheckoutCart", cart);
-					}
-				});
-		}
-		return '';
+			});
 	};
 
 	return (

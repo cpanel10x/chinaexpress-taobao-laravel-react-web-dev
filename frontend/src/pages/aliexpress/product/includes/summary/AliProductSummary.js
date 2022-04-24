@@ -40,6 +40,10 @@ const AliProductSummary = (props) => {
 						<td>{`${quantity}`}</td>
 					</tr>
 					<tr>
+						<td className="text-nowrap">Products Price</td>
+						<td>{`${currency} ${itemTotal}`}</td>
+					</tr>
+					<tr>
 						<td>Weight</td>
 						<td>{(Number(cartItem.weight) * Number(quantity)).toFixed(3)}kg</td>
 					</tr>

@@ -3,6 +3,7 @@ import {CartProductSummary} from "../../../utils/CartHelpers";
 import ShippingAddress from "./shipping/ShippingAddress";
 import Swal from "sweetalert2";
 import {withRouter} from "react-router-dom";
+import {itemValidateWillPayment} from "../../../utils/AliHelpers";
 
 const CheckoutSidebar = (props) => {
 	const {settings, cart, cartItems} = props;
@@ -15,6 +16,7 @@ const CheckoutSidebar = (props) => {
 	const shipping = cart?.shipping ? JSON.parse(cart?.shipping) : {};
 
 
+
 	const manageShippingAddress = (e) => {
 		e.preventDefault();
 		setManageShipping(true);
@@ -22,8 +24,8 @@ const CheckoutSidebar = (props) => {
 
 	const processToPaymentPage = (e) => {
 		e.preventDefault();
-		const variations = cartItems?.filter(item => item?.variations?.find(variation => variation.is_checked > 0)) || [];
-		if (variations?.length > 0) {
+		const process = itemValidateWillPayment(cartItems, settings);
+		if (process) {
 			if (shipping?.phone) {
 				props.history.push("/payment");
 			} else {
@@ -33,12 +35,6 @@ const CheckoutSidebar = (props) => {
 					confirmButtonText: "Ok, Understood",
 				});
 			}
-		} else {
-			Swal.fire({
-				text: "Select your product first",
-				icon: "warning",
-				confirmButtonText: "Ok, Understood",
-			});
 		}
 	};
 
