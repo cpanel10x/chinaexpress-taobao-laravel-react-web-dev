@@ -6,7 +6,7 @@ import {useQueryClient} from "react-query";
 import ShippingModal from "./includes/ShippingModal";
 
 const AliShipmentInfo = props => {
-	const {cartItem, product, shipment, settings, activeShipping, setActiveShipping, selectShipping, setSelectShipping} = props;
+	const {cartItem, product, settings, activeShipping, setActiveShipping, selectShipping, setSelectShipping} = props;
 	const [optionEnable, setOptionEnable] = useState(false);
 
 	const cache = useQueryClient();
@@ -50,7 +50,7 @@ const AliShipmentInfo = props => {
 	useEffect(() => {
 		if (!isExpressEnable) {
 			const shipping_cost = shippingRate(selectShipping?.delivery_fee || 0);
-			if (freightList?.length > 0) {
+			if (freightList?.length > 1) {
 				setActiveShipping('regular');
 				updateShippingInformation({shipping_cost, shipping_type: 'regular'});
 			}else{

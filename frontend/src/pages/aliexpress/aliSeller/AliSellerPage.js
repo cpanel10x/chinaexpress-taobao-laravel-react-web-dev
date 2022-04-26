@@ -10,7 +10,7 @@ import {useQuery} from "../../../utils/customHooks";
 
 const AliSellerPage = (props) => {
 	const history = useHistory();
-	const {seller} = useQuery();
+	const {seller, rating} = useQuery();
 	const {seller_id} = useParams();
 	const {data: settings} = useSettings();
 	const {data, isLoading} = useAliSellerProducts(seller_id, 1);
@@ -47,12 +47,19 @@ const AliSellerPage = (props) => {
 	return (
 		<main className="main">
 			<div className="container">
-				<div className="card my-5">
+				<div className="card my-3 my-md-5">
 					<div className="card-body">
 						<div className="product_list_container">
-							<div className="mb-3">
-								<h2> <i className="icon-shop-window"/> {seller} | Total found <span>{base?.total_results || 0}</span> Products</h2>
+
+							<div className="text-center seller_page_title">
+								<h1 className="text-capitalize"><i className="icon-shop-window"/> {seller}</h1>
+								<p className="m-0">Total Products : <strong>{base?.total_results || 0}</strong></p>
+								{
+									rating && <p className="m-0"><strong>{rating}%</strong> Customer satisfaction</p>
+								}
 							</div>
+
+							<hr className="my-3"/>
 
 							<div className="products mb-3">
 								<div

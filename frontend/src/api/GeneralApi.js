@@ -99,7 +99,14 @@ export const useAllCategories = () => useQuery('allCategories', async () => {
 
 
 
-
+export const useContactMessage = () => useMutation("useContactMessage", async (props) => {
+	try {
+		const {data} = await instance.post(`/contact/message`, props);
+		return data;
+	} catch (error) {
+		throw Error(error.response.statusText);
+	}
+});
 
 
 

@@ -58,9 +58,8 @@ export const aliActiveConfigurations = (product, operationalAttributes) => {
 const aliProductPriceCardToPrice = (priceCard, aliRate) => {
 	const minPrice = priceCard?.promotion_price || 0;
 	const maxPrice = priceCard?.price || 0;
-	const price = minPrice ? Math.round(Number(minPrice) * Number(aliRate)) : Math.round(Number(maxPrice) * Number(aliRate));
-	return price;
-}
+	return minPrice ? Math.round(Number(minPrice) * Number(aliRate)) : Math.round(Number(maxPrice) * Number(aliRate));
+};
 
 
 export const aliProductProcessToCart = (product, priceCard, aliRate) => {
@@ -106,13 +105,13 @@ export const aliProductConfiguration = (product, priceCard, operationalAttribute
 
 
 export const sumCartItemTotal = (variations) => {
-	return variations.reduce((sum, {price, qty}) => sum + parseInt(price) * parseInt(qty), 0)
-}
+	return variations.reduce((sum, {price, qty}) => sum + Number(price) * Number(qty), 0)
+};
 
 
 export const sumCartItemTotalQuantity = (variations) => {
-	return variations.reduce((sum, {price, qty}) => sum + parseInt(qty), 0)
-}
+	return variations.reduce((sum, {price, qty}) => sum + Number(qty), 0)
+};
 
 
 export const itemIsCheckWillProcess = (cartItem, settings) => {
@@ -127,13 +126,15 @@ export const itemIsCheckWillProcess = (cartItem, settings) => {
 			minOrder = express_shipping_min_value;
 		}
 	}
-	const checkedVariations = cartItem?.variations?.filter(variation => parseInt(variation.is_checked) === 1);
+	const checkedVariations = cartItem?.variations?.filter(variation => parseInt(variation.is_checked) === 1) || [];
 	const itemTotal = sumCartItemTotal(checkedVariations);
-	if (Number(itemTotal) < Number(minOrder)) {
-		process = false;
+	if(Number(itemTotal) > 0){
+		if (Number(itemTotal) < Number(minOrder)) {
+			process = false;
+		}
+		return {process, minOrder};
 	}
-	console.log('itemTotal', itemTotal)
-	return {process, minOrder};
+	return {process: true};
 };
 
 
@@ -160,6 +161,11 @@ export const itemValidateWillPayment = (cartItems, settings) => {
 	return process;
 };
 
+
+export const cartItemCheckedVariousTotal = (variations) => {
+	const checkedVariations = variations?.filter(filter => parseInt(filter.is_checked) === 1) || [];
+	return sumCartItemTotal(checkedVariations);
+};
 
 
 

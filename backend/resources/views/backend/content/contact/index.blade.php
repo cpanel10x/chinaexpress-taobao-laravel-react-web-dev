@@ -7,12 +7,7 @@
 @section('content')
 <div class="row">
 
-  <div class="col-md-3">
-    {{-- <a href="#" class="btn btn-primary btn-block mb-3">Compose</a> --}}
-    @include('backend.content.contact.includes.mail-sidebar')
-  </div> <!-- /.col -->
-
-  <div class="col-md-9">
+  <div class="col-md-12">
     <div class="card card-primary card-outline">
       <div class="card-header">
         <h3 class="card-title">Inbox</h3>
@@ -59,14 +54,17 @@
                     <label for="check1"></label>
                   </div>
                 </td>
-                <td class="mailbox-star">
-                  <a href="#"><i class="fa fa-star text-warning"></i></a>
-                </td>
-                <td class="mailbox-name">
+                <td class="mailbox-name text-nowrap">
                   <a href="{{route('admin.contact.show', $contact)}}">{{$contact->name}}</a>
                 </td>
-                <td class="mailbox-subject">{{Str::words($contact->message, 12)}}</td>
-                <td class="mailbox-date">
+                <td class="mailbox-star">
+                  <a href="tel:{{$contact->phone}}">{{$contact->phone}}</a>
+                </td>
+                <td class="mailbox-star">
+                  <a href="mailto:{{$contact->email}}">{{$contact->email}}</a>
+                </td>
+                <td class="mailbox-subject">{{Str::words($contact->message, 60)}}</td>
+                <td class="mailbox-date text-nowrap">
                   {{ $carbon->parse($contact->created_at)->diffForHumans()}}
                 </td>
               </tr>

@@ -17,10 +17,11 @@ const Footer = () => {
 								<Link to="/">
 									<img
 										src={"/assets/img/logo/chinaexpress.png"}
-										className="footer-logo mb-2"
+										className="footer-logo mb-0"
 										alt={settings?.site_name}
 									/>
 								</Link>
+								<p className="small mb-2">ঘরে বসে-বিদেশে শপিং</p>
 								<div className="font-weight-normal second-primary-color">
 									{settings?.footer_description}
 									<br/>
@@ -33,6 +34,7 @@ const Footer = () => {
 											<i className="icon-phone"/>
 											<a
 												href={`tel:${settings?.office_phone}`}
+												style={{fontSize:'1.2rem'}}
 											>
 												{settings?.office_phone}
 											</a>
@@ -41,6 +43,7 @@ const Footer = () => {
 											<i className="icon-mail"/>
 											<a
 												href={`mailto:${settings?.office_email}`}
+												className="font-weight-bold"
 											>
 												{settings?.office_email}
 											</a>
@@ -54,37 +57,22 @@ const Footer = () => {
 								<h4 className="widget-title"> About </h4>
 								<ul className="widget-list">
 									<li>
-										<Link to="/pages/about-us">
-											About Us
-										</Link>
+										<Link to="/pages/about-us">About Us</Link>
 									</li>
 									<li>
 										<Link to="/contact">Contact us</Link>
 									</li>
 									<li>
-										<Link to="/pages/privacy-policy">
-											Privacy Policy
-										</Link>
+										<Link to="/pages/privacy-policy">Privacy Policy</Link>
 									</li>
 									<li>
-										<Link to="/pages/terms-and-conditions">
-											Terms and conditions
-										</Link>
+										<Link to="/pages/terms-and-conditions">Terms and conditions</Link>
 									</li>
 									<li>
-										<Link to="/pages/return-and-refund-policy">
-											Return and Refund Policy
-										</Link>
+										<Link to="/pages/return-and-refund-policy">Return and Refund Policy</Link>
 									</li>
 									<li>
-										<Link to="/pages/secured-payment">
-											Secured Payment
-										</Link>
-									</li>
-									<li>
-										<Link to="/pages/transparency">
-											Transparency
-										</Link>
+										<Link to="/pages/secured-payment">Secured Payment</Link>
 									</li>
 								</ul>
 							</div>
@@ -96,29 +84,22 @@ const Footer = () => {
 								</h4>
 								<ul className="widget-list">
 									<li>
-										<Link to="/pages/how-to-buy">
-											How To Buy
-										</Link>
+										<Link to="/pages/how-to-buy">How To Buy</Link>
 									</li>
 									<li>
-										<Link to="/pages/shipping-and-delivery">
-											Shipping & Delivery
-										</Link>
+										<Link to="/pages/shipping-and-delivery">Shipping & Delivery Time</Link>
 									</li>
 									<li>
-										<Link to="/pages/custom-and-shipping-charge">
-											Custom & Shipping Charge
-										</Link>
+										<Link to="/pages/custom-and-shipping-charge">Shipping Charge</Link>
 									</li>
 									<li>
-										<Link to="/pages/minimum-order-quantity">
-											Minimum Order Quantity
-										</Link>
+										<Link to="/pages/minimum-order-quantity">Minimum Order</Link>
 									</li>
 									<li>
-										<Link to="/pages/prohibited-items">
-											Prohibited Items
-										</Link>
+										<Link to="/pages/prohibited-items">Prohibited Items</Link>
+									</li>
+									<li>
+										<Link to="/pages/BD-delivery-charge">BD Delivery Charge</Link>
 									</li>
 								</ul>
 								{/* End .widget-list */}
@@ -148,7 +129,7 @@ const Footer = () => {
 										</Link>
 									</li>
 									<li>
-										<Link to="/faq">Faq</Link>
+										<Link to="/faq">FAQ</Link>
 									</li>
 								</ul>
 								{/* End .widget-list */}

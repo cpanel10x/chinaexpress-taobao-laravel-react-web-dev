@@ -24,6 +24,10 @@ const AliPopupShown = (props) => {
 		);
 	};
 
+	const only_text = messages?.popup_option === 'only_text';
+	const only_image = messages?.popup_option === 'only_image';
+	const both = messages?.popup_option === 'both';
+
 	return (
 		<>
 			<div className="modal fade show"
@@ -39,14 +43,14 @@ const AliPopupShown = (props) => {
 								<span aria-hidden="true">&times;</span>
 							</button>
 						</div>
-						<div className="modal-body">
-							{messages?.popup_option === 'only_text' && <p>{messages?.popup_message}</p>}
+						<div className={`modal-body ${only_image ? 'p-0' : ''}`}>
+							{only_text && <p>{messages?.popup_message}</p>}
 							{
-								messages?.popup_option === 'only_image' &&
+								only_image &&
 								<img src={loadAsset(messages?.popup_image)} className="img-fluid" alt="popup"/>
 							}
 							{
-								messages?.popup_option === 'both' &&
+								both &&
 								<>
 									<img src={loadAsset(messages?.popup_image)} className="img-fluid mb-3" alt="popup"/>
 									<p>{messages?.popup_message}</p>

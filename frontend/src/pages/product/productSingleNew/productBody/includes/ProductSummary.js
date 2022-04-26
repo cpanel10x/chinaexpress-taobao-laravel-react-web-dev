@@ -59,6 +59,9 @@ const ProductSummary = props => {
 				<tr>
 					<td colSpan={2}>Estimate Delivery: <span className="seller_info">By Air 15-25 Days</span></td>
 				</tr>
+				<tr>
+					<td colSpan={2}>Product Price: <span className="seller_info">{currency + ' ' +totalPrice}</span></td>
+				</tr>
 				{
 					parseInt(DeliveryCost) > 0 &&
 					<tr>

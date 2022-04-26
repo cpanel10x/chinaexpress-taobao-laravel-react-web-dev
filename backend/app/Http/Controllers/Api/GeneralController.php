@@ -4,13 +4,17 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Auth\User;
+use App\Models\Content\Contact;
 use App\Models\Content\Frontend\CustomerCart;
 use App\Models\Content\Frontend\Wishlist;
 use App\Models\Content\Post;
 use App\Models\Content\Product;
 use App\Models\Content\SearchLog;
 use App\Models\Content\Taxonomy;
+use App\Notifications\Backend\ContactInformation;
 use App\Traits\ApiResponser;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
 use Validator;
 
@@ -157,6 +161,18 @@ class GeneralController extends Controller
     ]);
   }
 
+  public function singlePages($slug)
+  {
+    $singles = Post::where('post_status', 'publish')
+      ->where('post_type', 'page')
+      ->where('post_slug', $slug)
+      ->first();
+    return response([
+      'singles' => $singles
+    ]);
+  }
+
+
   public function contactUs()
   {
     $contact = Post::where('post_status', 'publish')
@@ -168,14 +184,30 @@ class GeneralController extends Controller
     ]);
   }
 
-  public function singlePages($slug)
+
+  public function contactMessageSend()
   {
-    $singles = Post::where('post_status', 'publish')
-      ->where('post_type', 'page')
-      ->where('post_slug', $slug)
-      ->first();
-    return response([
-      'singles' => $singles
+    $validator = Validator::make(request()->all(), [
+      'name' => 'required|string|max:191',
+      'phone' => 'required|string|max:12',
+      'email' => 'required|string|max:191',
+      'subject' => 'required|string|max:191',
+      'message' => 'required|string|max:600',
     ]);
+    if ($validator->fails()) {
+      return response(['status' => false, 'errors' => $validator->errors()]);
+    }
+    $users = User::role(['administrator'])->get();
+    DB::transaction(function () use ($users) {
+      $contact = Contact::create([
+        'name' => request('name'),
+        'phone' => request('phone'),
+        'email' => request('email'),
+        'message' => request('message'),
+        'status' => 'contact',
+      ]);
+      Notification::send($users, new ContactInformation($contact));
+    });
+    return response(['status' => true, 'msg' => 'Your message send successfully']);
   }
 }

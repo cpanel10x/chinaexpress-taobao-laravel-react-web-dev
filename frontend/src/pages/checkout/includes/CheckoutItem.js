@@ -2,9 +2,9 @@ import React from 'react';
 import AllCheck from "./tableComponents/AllCheck";
 import ItemCheck from "./tableComponents/ItemCheck";
 import AttributeImage from "./attributes/AttributeImage";
-import {singleProductTotal} from "../../../utils/CartHelpers";
 import TaobaoItemDescription from "./itemDescription/TaobaoItemDescription";
 import AliExpressItemDescription from "./itemDescription/AliExpressItemDescription";
+import CheckoutItemSimpleSummary from "./CheckoutItemSimpleSummary";
 
 const CheckoutItem = (props) => {
 
@@ -53,7 +53,7 @@ const CheckoutItem = (props) => {
 								<div className="variation" key={variation.id}>
 									<div className="row align-items-center">
 										<div className="col-1">
-											<ItemCheck product={product} variation={variation}  settings={settings}/>
+											<ItemCheck product={product} variation={variation} settings={settings}/>
 										</div>
 										<div className="col-3 pr-0 pr-lg-0">
 											<AttributeImage
@@ -69,7 +69,7 @@ const CheckoutItem = (props) => {
 														productPageLink={productPageLink(product)}
 														product={product}
 														variation={variation}
-														settings={settings}
+														isQuantity={true}
 													/>
 													:
 													<TaobaoItemDescription
@@ -77,55 +77,16 @@ const CheckoutItem = (props) => {
 														productPageLink={productPageLink(product)}
 														product={product}
 														variation={variation}
-														settings={settings}
+														isQuantity={true}
 													/>
 											}
-
 										</div>
 									</div>
 									<hr className="my-2"/>
 								</div>
 							)
 						}
-
-						{
-							product?.ProviderType === "aliexpress" && parseInt(product?.DeliveryCost) > 0 &&
-							<div className="row">
-								<div className="col-12">
-									<div className="text-right">
-										{
-											product?.shipping_type === 'express' ?
-												`China Local Delivery Charge:`
-												:
-												`China to BD Shipping Charge:`
-										}
-										<strong>{currency + ' ' + product?.DeliveryCost}</strong>
-									</div>
-								</div>
-							</div>
-						}
-						{
-							product?.ProviderType !== "aliexpress" && parseInt(product?.variations_count) > 0 &&
-							<div className="row">
-								<div className="col-12">
-									<div className="text-right">
-										China Local Shipping cost: <strong>{currency + ' ' + product?.DeliveryCost}</strong>
-									</div>
-								</div>
-							</div>
-						}
-
-						{parseInt(product?.variations_count) > 0 && <hr className="my-2"/>}
-
-						{parseInt(product?.variations_count) > 0 &&
-						<div className="row">
-							<div className="col-12">
-								<div className="text-right">Subtotal: <strong>{currency + ' ' + singleProductTotal(product)}</strong>
-								</div>
-							</div>
-						</div>
-						}
-						{parseInt(product?.variations_count) > 0 && <hr className="my-2"/>}
+						<CheckoutItemSimpleSummary product={product} currency={currency}/>
 					</div>
 				)
 			}

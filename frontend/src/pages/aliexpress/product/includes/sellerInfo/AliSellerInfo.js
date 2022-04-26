@@ -17,9 +17,11 @@ const AliSellerInfo = (props) => {
 			<div className="card mt-3">
 				<div className="card-body">
 					<div className="row mb-2 align-items-center">
-						<div className="col-1">
+						<div className="col-2 col-sm-2">
 							{/*<img src={seller?.shop_icon} className="img-fluid" alt={seller?.shop_title}/>*/}
-							<h1><i className="icon-shop-window"/></h1>
+							<h1 className="text-center m-0" style={{fontSize: '2rem'}}>
+								<i className="icon-shop-window"/>
+							</h1>
 						</div>
 						<div className="col">
 							<h3 className="m-0"> {seller?.shop_title}</h3>
@@ -28,7 +30,7 @@ const AliSellerInfo = (props) => {
 					<div className="row">
 						<div className="col-md-12">
 							<p>
-								<span className="ml-1">Positive Seller Ratings</span> <b style={{color: '#751f8a'}}>{seller?.rating}</b>
+								<span className="ml-1">Positive Seller Ratings</span> <b style={{color: '#751f8a'}}>{seller?.rating}%</b>
 								<br/>
 								<span className="ml-1">Total Items</span> <b style={{color: '#751f8a'}}>{seller?.total_items}</b>
 								<br/>
@@ -36,7 +38,8 @@ const AliSellerInfo = (props) => {
 							</p>
 						</div>
 						<div className="col-md-4">
-							<Link to={`/aliexpress/seller/${seller?.seller_id}?seller=${seller?.shop_title}`} className="btn btn-block btn-default">Visit Store</Link>
+							<Link to={`/aliexpress/seller/${seller?.seller_id}?seller=${seller?.shop_title}&rating=${seller?.rating}`}
+							      className="btn btn-block btn-default">Visit Store</Link>
 						</div>
 					</div>
 				</div>

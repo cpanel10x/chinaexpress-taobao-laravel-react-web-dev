@@ -4,11 +4,11 @@ import {Link} from "react-router-dom";
 import {characterLimiter} from "../../../../utils/Helpers";
 import AttrConfigs from "../../../../pages/checkout/includes/attributes/AttrConfigs";
 import {singleProductTotal} from "../../../../utils/CartHelpers";
+import {cartItemCheckedVariousTotal} from "../../../../utils/AliHelpers";
 
 const OrderBody = (props) => {
 
 	const {product, currency} = props;
-
 
 
 	const productPageLink = (product) => {
@@ -28,15 +28,19 @@ const OrderBody = (props) => {
 								<AttributeImage product={product} productPageLink={productPageLink(product)} attributes={variation?.attributes}/>
 							</div>
 							<div className="col-10">
+
 								<Link to={productPageLink(product)} title={product.Title}>
 									{characterLimiter(product.Title, 130)}
 								</Link>
-								<div className="row">
-									<div className="col-12">
-										<p className="my-1 small">Weight: <strong>{product.weight} Kg.</strong> <span
-											className="ml-2">Shipping Rate: <strong>{currency + ' ' + product.shipping_rate}</strong> per Kg.</span>
-										</p>
-									</div>
+								<div>
+									<p className="my-1 small">Provider: <strong>{product.ProviderType}</strong></p>
+									<p className="my-1 small">Weight: <strong>{product.weight} Kg.</strong>
+										<span className="ml-2">Shipping Rate: <strong>{currency + ' ' + product.shipping_rate}</strong> per Kg.</span>
+									</p>
+									{
+										product.ProviderType === 'aliexpress' &&
+										<p className="my-1 small">Shipping Type: <strong>{product.shipping_type}</strong></p>
+									}
 								</div>
 								{
 									JSON.parse(variation?.attributes).length > 0 &&
@@ -65,19 +69,44 @@ const OrderBody = (props) => {
 					</div>
 				)
 			}
+			<div className="clearfix">
+				<div className="text-right">
+					Product Total: <strong>{currency + ' ' + (parseInt(product?.product_value) - parseInt(product?.DeliveryCost))}</strong>
+				</div>
+			</div>
+			<hr className="my-2"/>
 			{
-				parseInt(product?.DeliveryCost) > 0 &&
+				product?.ProviderType === "aliexpress" && parseInt(product?.DeliveryCost) > 0 &&
 				<div className="row">
 					<div className="col-12">
-						<div className="text-right">China Local Shipping cost: <strong>{currency + ' ' + product?.DeliveryCost}</strong>
+						<div className="text-right">
+							{
+								product?.shipping_type === 'express' ?
+									`China Local Delivery Charge: `
+									:
+									`China to BD Shipping Charge: `
+							}
+							<strong>{currency + ' ' + product?.DeliveryCost}</strong>
+						</div>
+					</div>
+				</div>
+			}
+
+			{
+				product?.ProviderType !== "aliexpress" && parseInt(product?.DeliveryCost) > 0 &&
+				<div className="row">
+					<div className="col-12">
+						<div className="text-right">
+							China Local Shipping cost: <strong>{currency + ' ' + product?.DeliveryCost}</strong>
 						</div>
 					</div>
 				</div>
 			}
 			{parseInt(product?.DeliveryCost) > 0 && <hr className="my-2"/>}
+
 			<div className="row">
 				<div className="col-12">
-					<div className="text-right">Item Total: <strong>{currency + ' ' + product?.product_value}</strong>
+					<div className="text-right">Subtotal: <strong>{currency + ' ' + product?.product_value}</strong>
 					</div>
 				</div>
 			</div>

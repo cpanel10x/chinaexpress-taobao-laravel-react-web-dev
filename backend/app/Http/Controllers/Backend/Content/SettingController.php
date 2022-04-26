@@ -159,7 +159,10 @@ class SettingController extends Controller
 
   public function popupMessageStore()
   {
-    $data = request()->only('popup_message', 'popup_option');
+    $data = get_setting('cart_popup_message');
+    $data = $data ? json_decode($data, true) : [];
+    $data['popup_message'] = request('popup_message');
+    $data['popup_option'] = request('popup_option');
     if (\request()->hasFile('popup_image')) {
       $data['popup_image'] = store_picture(\request()->file('popup_image'), 'setting');
     }
@@ -171,7 +174,10 @@ class SettingController extends Controller
 
   public function popupMessageAliexpressStore()
   {
-    $data = request()->only('popup_message', 'popup_option');
+    $data = get_setting('cart_aliexpress_popup_message');
+    $data = $data ? json_decode($data, true) : [];
+    $data['popup_message'] = request('popup_message');
+    $data['popup_option'] = request('popup_option');
     if (\request()->hasFile('popup_image')) {
       $data['popup_image'] = store_picture(\request()->file('popup_image'), 'setting');
     }
@@ -183,7 +189,10 @@ class SettingController extends Controller
 
   public function aliexpress_express_popup_message()
   {
-    $data = request()->only('popup_message', 'popup_option');
+    $data = get_setting('aliexpress_express_popup_message');
+    $data = $data ? json_decode($data, true) : [];
+    $data['popup_message'] = request('popup_message');
+    $data['popup_option'] = request('popup_option');
     if (\request()->hasFile('popup_image')) {
       $data['popup_image'] = store_picture(\request()->file('popup_image'), 'setting');
     }

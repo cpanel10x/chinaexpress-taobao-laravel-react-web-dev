@@ -20,13 +20,8 @@
         </div> <!-- form-group -->
 
         <div class="form-group">
-          <div class="input-group mb-2">
-            <div class="input-group-prepend">
-              <div class="input-group-text">{{ url('/p')}}/</div>
-            </div>
-            <input type="text" name="post_slug" class="form-control" id="post_slug" placeholder="slug"
-              value="{{old('post_slug')}}">
-          </div>
+          <input type="text" name="post_slug" class="form-control" id="post_slug" placeholder="URL key"
+            value="{{old('post_slug')}}">
         </div> <!-- form-group -->
 
         <div class="form-group">

@@ -45,7 +45,7 @@ const WishlistPage = (props) => {
 	const productPageLink = (wishList) => {
 		const ItemId = wishList?.ItemId;
 		const ProviderType = wishList?.provider_type;
-		return ProviderType === 'aliexpress' ? `/aliexpress/search?url=https://www.aliexpress.com/item/${ItemId}.html` : `/product/${ItemId}`;
+		return ProviderType === 'aliexpress' ? `/aliexpress/product/${ItemId}` : `/product/${ItemId}`;
 	};
 
 	return (

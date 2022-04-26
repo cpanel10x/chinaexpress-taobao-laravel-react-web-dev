@@ -10,7 +10,6 @@ use App\Http\Controllers\Api\GeneralController;
 use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\WishlistController;
-use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,8 +32,10 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function () {
   Route::post('/banners', [GeneralController::class, 'banners']);
 
   Route::get('/faqs', [GeneralController::class, 'faqPages']);
-  Route::get('/contact-us', [GeneralController::class, 'contactUs']);
   Route::get('/page/{slug}', [GeneralController::class, 'singlePages']);
+
+  Route::get('/contact-us', [GeneralController::class, 'contactUs']);
+  Route::post('/contact/message', [GeneralController::class, 'contactMessageSend']);
 
   // sanctum auth user
   Route::get('/user', [AuthController::class, 'authUser']);

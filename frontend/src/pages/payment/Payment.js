@@ -91,7 +91,8 @@ const Payment = (props) => {
 											cartItems={cartItems}
 											currency={currency}
 											advanced_rate={advanced_rate}
-											shippingRate={shippingRate}/>
+											shippingRate={shippingRate}
+											settings={settings}/>
 
 										<div className="row my-3 my-lg-5">
 											<div className="col-md-6">

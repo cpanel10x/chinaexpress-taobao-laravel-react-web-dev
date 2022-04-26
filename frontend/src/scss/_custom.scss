@@ -157,7 +157,6 @@
     background-color: #751f8a;
     color: #fff;
     padding: 0.2rem 0.8rem;
-    font-size: 1.2rem;
 
     &:hover,
     &:focus {
@@ -1086,7 +1085,7 @@
 }
 
 
-.SearchSuggestion{
+.SearchSuggestion {
   position: absolute;
   z-index: 99;
   left: 0;
@@ -1106,16 +1105,25 @@
   transition: ease-in-out 300ms;
   border: 1px solid #7a1e90;
   font-weight: 600;
-  &.active, &:hover{
+
+  &.active, &:hover {
     border: 1px solid #c735ea;
     color: #fff;
     background: linear-gradient(90deg, #7a1e90, #d93aff);
   }
 }
 
-.descriptionModule{
+.descriptionModule {
   .embed-responsive-4by3::before {
     padding-top: 100%;
   }
 }
 
+.descriptionModule {
+  table {
+    max-width: 100%;
+  }
+  img{
+    max-width: 100%;
+  }
+}

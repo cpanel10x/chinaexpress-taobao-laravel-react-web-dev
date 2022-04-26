@@ -1,22 +1,31 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import parser from "html-react-parser";
 import {goPageTop} from "../../utils/Helpers";
-import {isEmpty, isObject} from "lodash";
-import Breadcrumb from "../breadcrumb/Breadcrumb";
 import PageSkeleton from "../../skeleton/PageSkeleton";
 import My404Component from "../404/My404Component";
-import {useCustomPageData, usePageData, useSettings} from "../../api/GeneralApi";
+import {useContactMessage, useCustomPageData, useSettings} from "../../api/GeneralApi";
+import Swal from "sweetalert2";
+import Helmet from "react-helmet";
+import SpinnerButtonLoader from "../../loader/SpinnerButtonLoader";
 
 const Contact = () => {
-
 	const {data: settings} = useSettings();
-	const {data: contact, isLoading} = useCustomPageData('contact-us', 'contact');
+	const {data: contact, isLoading: contactLoading} = useCustomPageData('contact-us', 'contact');
+
+	const {mutateAsync, isLoading} = useContactMessage();
+
+	const [name, setName] = useState('');
+	const [phone, setPhone] = useState('');
+	const [email, setEmail] = useState('');
+	const [subject, setSubject] = useState('');
+	const [message, setMessage] = useState('');
+	const [errors, setErrors] = useState({});
 
 	useEffect(() => {
 		goPageTop();
-	});
+	}, []);
 
-	if (isLoading) {
+	if (contactLoading) {
 		return <PageSkeleton/>;
 	}
 
@@ -26,11 +35,39 @@ const Contact = () => {
 
 	const submitContactForm = (event) => {
 		event.preventDefault();
-		alert("development progress");
+		mutateAsync({name, email, phone, subject, message}, {
+			onSuccess: (data) => {
+				if (data.status === true) {
+					Swal.fire({
+						text: data.msg,
+						icon: 'success',
+						confirmButtonText: 'Dismiss'
+					});
+					setName('');
+					setEmail('');
+					setPhone('');
+					setSubject('');
+					setMessage('');
+					goPageTop();
+				} else if (data.status === false) {
+					setErrors(data?.errors || {})
+				}
+			}
+		});
 	};
+
+	const errorName = errors?.name?.[0] || null;
+	const errorPhone = errors?.phone?.[0] || null;
+	const errorEmail = errors?.email?.[0] || null;
+	const errorSubject = errors?.subject?.[0] || null;
+	const errorMessage = errors?.message?.[0] || null;
 
 	return (
 		<main className="main">
+			<Helmet>
+				<title>Contact with us</title>
+			</Helmet>
+
 			<div className="container">
 				<div className="card my-5">
 					<div className="card-body">
@@ -40,8 +77,7 @@ const Contact = () => {
 									Contact Information
 								</h2>
 								<div className="mb-3">
-									{contact.post_content &&
-									parser(contact.post_content)}
+									{contact?.post_content && parser(contact.post_content)}
 								</div>
 								<div className="row">
 									<div className="col-sm-12">
@@ -49,7 +85,7 @@ const Contact = () => {
 											<h3>The Office</h3>
 											<ul className="contact-list">
 												<li>
-													<i className="icon-map-marker"/>
+													<i className="icon-location"/>
 													{settings?.office_address || ''}
 												</li>
 												<li>
@@ -61,7 +97,7 @@ const Contact = () => {
 													</a>
 												</li>
 												<li>
-													<i className="icon-envelope"/>
+													<i className="icon-mail"/>
 													<a
 														href={`mailto:${settings?.office_email || ''}`}
 													>
@@ -79,105 +115,94 @@ const Contact = () => {
 										</h2>
 										{/* End .title mb-2 */}
 										<p className="mb-2">
-											Use the form below to get in
-											touch with the sales team
+											Use the form below to get in touch with the sales team
 										</p>
 										<form
-											onSubmit={(event) =>
-												submitContactForm(event)
-											}
+											onSubmit={(event) => submitContactForm(event)}
 											className="contact-form mb-3"
 										>
 											<div className="row">
-												<div className="col-sm-6">
-													<label
-														htmlFor="cname"
-														className="sr-only"
-													>
-														Name
-													</label>
+												<div className="form-group col-sm-6">
+													<label htmlFor="name" className="sr-only">Name</label>
 													<input
 														type="text"
 														className="form-control"
-														id="cname"
-														placeholder="Name *"
+														id="name"
+														value={name}
+														onChange={e => setName(e.target.value)}
+														placeholder="Your Name"
 														required
 													/>
+													{errorName && <p className="text-danger">{errorName}</p>}
 												</div>
-												{/* End .col-sm-6 */}
-												<div className="col-sm-6">
-													<label
-														htmlFor="email"
-														className="sr-only"
-													>
-														Email
-													</label>
+												<div className="form-group col-sm-6">
+													<label htmlFor="email" className="sr-only">Email</label>
 													<input
 														type="email"
 														className="form-control"
 														id="email"
+														value={email}
+														onChange={e => setEmail(e.target.value)}
 														placeholder="Email *"
 														required
 													/>
+													{errorEmail && <p className="text-danger">{errorEmail}</p>}
 												</div>
-												{/* End .col-sm-6 */}
 											</div>
-											{/* End .row */}
 											<div className="row">
-												<div className="col-sm-6">
-													<label
-														htmlFor="cphone"
-														className="sr-only"
-													>
-														Phone
-													</label>
+												<div className="form-group col-sm-6">
+													<label htmlFor="phone" className="sr-only"> Phone </label>
 													<input
 														type="tel"
 														className="form-control"
-														id="cphone"
+														id="phone"
+														value={phone}
+														onChange={e => setPhone(e.target.value)}
 														placeholder="Phone"
+														required
 													/>
+													{errorPhone && <p className="text-danger">{errorPhone}</p>}
 												</div>
-												{/* End .col-sm-6 */}
-												<div className="col-sm-6">
-													<label
-														htmlFor="csubject"
-														className="sr-only"
-													>
-														Subject
-													</label>
+												<div className="form-group col-sm-6">
+													<label htmlFor="subject" className="sr-only"> Subject </label>
 													<input
 														type="text"
 														className="form-control"
-														id="csubject"
+														id="subject"
+														value={subject}
+														onChange={e => setSubject(e.target.value)}
 														placeholder="Subject"
+														required
 													/>
+													{errorSubject && <p className="text-danger">{errorSubject}</p>}
 												</div>
-												{/* End .col-sm-6 */}
 											</div>
 											{/* End .row */}
-											<label
-												htmlFor="cmessage"
-												className="sr-only"
-											>
-												Message
-											</label>
-											<textarea
-												className="form-control"
-												cols={30}
-												rows={4}
-												id="cmessage"
-												required
-												placeholder="Message *"
-												defaultValue={""}
-											/>
-											<button
-												type="submit"
-												className="btn btn-outline-primary-2 btn-minwidth-sm"
-											>
-												<span>SUBMIT</span>
-												<i className="icon-long-arrow-right"/>
-											</button>
+											<div className="form-group">
+												<label htmlFor="message" className="sr-only">Message</label>
+												<textarea
+													className="form-control"
+													rows={4}
+													id="message"
+													value={message}
+													onChange={e => setMessage(e.target.value)}
+													placeholder="Your Message"
+													required
+												/>
+												{errorMessage && <p className="text-danger">{errorMessage}</p>}
+											</div>
+											{
+												isLoading ?
+													<SpinnerButtonLoader buttonClass="btn btn-block btn-default"/>
+													:
+													<button
+														type="submit"
+														className="btn btn-block btn-default"
+													>
+														<span>SUBMIT</span>
+														<i className="icon-long-arrow-right"/>
+													</button>
+											}
 										</form>
 									</div>
 								</div>

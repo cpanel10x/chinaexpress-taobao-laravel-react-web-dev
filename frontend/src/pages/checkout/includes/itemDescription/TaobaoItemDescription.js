@@ -6,7 +6,7 @@ import CheckoutQuantity from "../tableComponents/CheckoutQuantity";
 import {useMediaQuery} from "react-responsive";
 
 const TaobaoItemDescription = (props) => {
-	const {productPageLink, product, variation, currency, settings} = props;
+	const {productPageLink, product, variation, currency, isQuantity} = props;
 
 	const isMobile = useMediaQuery({query: '(max-width: 991px)'});
 
@@ -49,20 +49,38 @@ const TaobaoItemDescription = (props) => {
 			</div>
 
 			<div className="row align-items-center">
-				<div className="col-7 pr-0 col-lg-4">
-					<p className="m-0 small d-block d-lg-none">Max: {variation.maxQuantity}</p>
-					<CheckoutQuantity product={product} variation={variation}/>
-				</div>
-				<div className="col-3 d-none d-lg-block">
-					<p className="m-0">Max: {variation.maxQuantity}</p>
-				</div>
-				<div className="col-3 px-0 col-lg-2 text-center d-none d-lg-block ">
-					<p className="m-0 pt-2 pt-lg-0"><strong>{` ${currency + ' ' + variation.price} `}</strong></p>
-				</div>
-				<div className="col-5 col-lg-3 pl-0 text-right">
-					<p className="m-0 pt-3 pt-lg-0">
-						<strong>{`${currency + ' ' + Math.round(Number(variation.qty) * Number(variation.price))}`}</strong></p>
-				</div>
+				{
+					isQuantity ?
+						<>
+							<div className="col-7 pr-0 col-lg-4">
+								<p className="m-0 small d-block d-lg-none">Max: {variation.maxQuantity}</p>
+								<CheckoutQuantity product={product} variation={variation}/>
+							</div>
+							<div className="col-3 d-none d-lg-block">
+								<p className="m-0">Max: {variation.maxQuantity}</p>
+							</div>
+							<div className="col-3 px-0 col-lg-2 text-center d-none d-lg-block ">
+								<p className="m-0 pt-2 pt-lg-0"><strong>{` ${currency + ' ' + variation.price} `}</strong></p>
+							</div>
+							<div className="col-5 col-lg-3 pl-0 text-right">
+								<p className="m-0 pt-3 pt-lg-0">
+									<strong>{`${currency + ' ' + Math.round(Number(variation.qty) * Number(variation.price))}`}</strong></p>
+							</div>
+						</>
+						:
+						<>
+							<div className="col-6 text-left ">
+								<p className="m-0 pt-2 pt-lg-0">
+									<strong>{`${currency + ' ' + variation.price} x ${variation.qty}`}</strong>
+								</p>
+							</div>
+							<div className="col-6 text-right">
+								<p className="m-0 pt-2 pt-lg-0">
+									<strong>{`${currency + ' ' + Math.round(Number(variation.qty) * Number(variation.price))}`}</strong>
+								</p>
+							</div>
+						</>
+				}
 			</div>
 
 		</div>

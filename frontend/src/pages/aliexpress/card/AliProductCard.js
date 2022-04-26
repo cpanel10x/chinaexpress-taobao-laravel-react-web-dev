@@ -85,7 +85,7 @@ const AliProductCard = ({product, currency, aliRate, productClass}) => {
                             {currency}<span className="price_span">{Math.round(promotion_price)}</span>
                         </span>
 						<del className="sold_item_text">
-							{Math.round(price)}
+							{currency + " " + Math.round(price)}
 						</del>
 					</div>
 				</div>

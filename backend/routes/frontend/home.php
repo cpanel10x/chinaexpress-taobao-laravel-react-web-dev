@@ -1,24 +1,15 @@
 <?php
 
-use App\Http\Controllers\Frontend\ContactController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\User\AccountController;
 use App\Http\Controllers\Frontend\User\DashboardController;
 use App\Http\Controllers\Frontend\User\ProfileController;
 use App\Http\Controllers\SslCommerzPaymentController;
 
-use App\Http\Controllers\Frontend\Ajax\WishlistController;
 
 use App\Http\Controllers\PaymentGateway\NagadPaymentController;
 use App\Http\Controllers\PaymentGateway\BkashPaymentController;
 
-use App\Http\Controllers\Frontend\Ajax\AuthController;
-use App\Http\Controllers\Frontend\Ajax\AddressController;
-use App\Http\Controllers\Frontend\Ajax\AliExpressApiController;
-use App\Http\Controllers\Frontend\Ajax\CatalogController;
-use App\Http\Controllers\Frontend\Ajax\CartController;
-use App\Http\Controllers\Frontend\Ajax\GeneralController;
-use App\Http\Controllers\Frontend\Ajax\OrderController;
 
 /*
  * Frontend Controllers

@@ -15,8 +15,6 @@ const CheckoutSidebar = (props) => {
 	const {totalPrice, advanced, dueAmount, totalQty} = CartProductSummary(cart, advanced_rate);
 	const shipping = cart?.shipping ? JSON.parse(cart?.shipping) : {};
 
-
-
 	const manageShippingAddress = (e) => {
 		e.preventDefault();
 		setManageShipping(true);

@@ -539,19 +539,14 @@ export const CartProductSummary = (cart, advanced_rate) => {
 	let dueAmount = 0;
 	cart?.cart_items?.map((product) => {
 		let DeliveryCost = product?.DeliveryCost || 0;
-		let variationPrice = 0;
-		let variationQty = 0;
-		product?.variations?.map(variation => {
-			if (variation.is_checked > 0) {
-				let price = variation.price;
-				let qty = variation.qty;
-				variationQty += Number(qty);
-				variationPrice += (Number(price) * Number(qty));
-			}
-		});
-		totalQty += variationQty;
-		totalPrice += variationPrice;
-		shipping += Number(DeliveryCost);
+		const checkedVariations = product?.variations?.filter(filter => parseInt(filter.is_checked) === 1) || [];
+		let variationPrice = sumCartItemTotal(checkedVariations);
+		let variationQty = sumCartItemTotalQuantity(checkedVariations);
+		if (variationPrice > 0) {
+			totalQty += variationQty;
+			totalPrice += variationPrice;
+			shipping += Number(DeliveryCost);
+		}
 	});
 	if (totalPrice > 0) {
 		totalPrice = Math.round(totalPrice + shipping);
