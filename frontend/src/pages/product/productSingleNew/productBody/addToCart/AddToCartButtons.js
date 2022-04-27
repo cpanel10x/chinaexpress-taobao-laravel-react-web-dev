@@ -58,6 +58,7 @@ const AddToCartButtons = (props) => {
 					cartItem={cartItem}
 					item_id={item_id}
 					processAddToCart={processAddToCart}
+					setShowPopup={setShowPopup}
 					settings={settings}/>
 			}
 			<div className="row">

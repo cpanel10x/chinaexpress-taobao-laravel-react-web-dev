@@ -4,7 +4,7 @@ import {usePopupMessage} from "../../../../../api/CartApi";
 import SpinnerButtonLoader from "../../../../../loader/SpinnerButtonLoader";
 
 const PopupShown = (props) => {
-	const {cartItem, item_id, processAddToCart, settings} = props;
+	const {cartItem, item_id, processAddToCart, settings, setShowPopup} = props;
 
 	const {mutateAsync, isLoading} = usePopupMessage();
 
@@ -29,15 +29,14 @@ const PopupShown = (props) => {
 			     data-backdrop="static"
 			     data-keyboard="false"
 			     style={{display: 'block'}}>
-				<div className="modal-dialog modal-dialog-scrollable">
-					<div className="modal-content">
-						<div className="modal-header">
-							<h5 className="modal-title" id="staticBackdropLabel">Must be Read</h5>
-							<button type="button" className="close" onClick={() => closeModal()}>
-								<span aria-hidden="true">&times;</span>
+				<div className="modal-dialog modal-dialog-centered">
+					<div className="modal-content popupModalBody">
+						<div className="modalCloseButton">
+							<button type="button" className="close" onClick={() => setShowPopup(false)}>
+								<i className="icon-cancel-1"/>
 							</button>
 						</div>
-						<div className="modal-body">
+						<div className="modal-body p-0">
 							{messages?.popup_option === 'only_text' && <p>{messages?.popup_message}</p>}
 							{
 								messages?.popup_option === 'only_image' &&
@@ -50,12 +49,11 @@ const PopupShown = (props) => {
 									<p>{messages?.popup_message}</p>
 								</>
 							}
-
 						</div>
-						<div className="justify-content-center modal-footer">
+						<div className="modalAgreeButton">
 							{
 								isLoading ?
-									<SpinnerButtonLoader buttonClass={'btn btn-default'}/>
+									<SpinnerButtonLoader buttonClass={'btn btn-default px-3'}/>
 									:
 									<button type="button" className="btn btn-default" onClick={() => closeModal()}>Read & Agree</button>
 							}
@@ -63,7 +61,7 @@ const PopupShown = (props) => {
 					</div>
 				</div>
 			</div>
-			<div className="modal-backdrop fade show" onClick={() => closeModal()}/>
+			<div className="modal-backdrop fade show"/>
 		</>
 	);
 };

@@ -137,6 +137,12 @@ const Footer = () => {
 				</div>
 			</div>
 
+			<div className="desktop_messenger d-none d-md-block">
+				<a className="nav-link" href="https://m.me/ChinaExpress.01933778855" rel="noreferrer" target="_blank">
+					<span className="sticky_nav_icon"><i className="icon-messenger"/></span>
+				</a>
+			</div>
+
 			<StickyFooterManage settings={settings}/>
 		</footer>
 	);
