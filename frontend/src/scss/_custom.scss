@@ -1127,3 +1127,50 @@
     max-width: 100%;
   }
 }
+
+
+.popupModalBody{
+  position: relative;
+  background: transparent;
+  border: none;
+  .modalCloseButton{
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 999;
+    button{
+      color: #222;
+      padding: 6px 4px;
+      font-size: 1.3rem;
+      opacity: 0.9;
+    }
+  }
+  .modalAgreeButton{
+    position: absolute;
+    bottom: 20px;
+    left: auto;
+    right: auto;
+    text-align: center;
+    width: 100%;
+  }
+}
+
+.modal-dialog {
+  max-width: 600px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

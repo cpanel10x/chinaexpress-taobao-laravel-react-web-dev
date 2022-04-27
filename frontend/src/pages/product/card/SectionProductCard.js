@@ -32,12 +32,18 @@ const SectionProductCard = (props) => {
 	const image = product?.MainPictureUrl || product?.img;
 	const Title = product?.Title || product?.name;
 	const ItemId = product?.ItemId || product?.product_code;
+	const ProviderType = product?.provider_type || product?.provider_type;
+
+
+	const productPageLink = () => {
+		return ProviderType === 'aliexpress' ? `/aliexpress/product/${ItemId}` : `/product/${ItemId}`;
+	};
 
 	return (
 		<div className={className ? className : 'col-lg-12 col-md-6 col-6'}>
 			<div className="product">
 				<figure className="product-media">
-					<Link to={`/product/${ItemId}`} className="w-100">
+					<Link to={productPageLink()} className="w-100">
 						<LazyLoad height={236} once>
 							<img
 								src={image}
@@ -61,7 +67,7 @@ const SectionProductCard = (props) => {
 								</a>
 						}
 						<Link
-							to={`/product/${ItemId}`}
+							to={productPageLink()}
 							className="btn-product-icon btn-quickview"
 							title="Quick view"
 						>
@@ -79,7 +85,7 @@ const SectionProductCard = (props) => {
 						}}
 						title={Title}
 					>
-						<Link to={`/product/${ItemId}`}>
+						<Link to={productPageLink()}>
 							{Title}
 						</Link>
 					</h3>

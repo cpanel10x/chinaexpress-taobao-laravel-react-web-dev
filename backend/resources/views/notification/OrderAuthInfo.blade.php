@@ -1,7 +1,7 @@
 @component('mail::message')
 # Customer Placed a Order
 
-Mr./Mrs. {{$full_name}} Placed a Order.
+Mr./Mrs. {{$full_name}} Placed an Order.
 
 @php 
 $amount = floating($amount);

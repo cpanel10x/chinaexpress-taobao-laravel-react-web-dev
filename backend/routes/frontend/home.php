@@ -39,7 +39,6 @@ Route::group(['middleware' => ['auth', 'password_expires']], function () {
     Route::get('invoice-details/{invoice_id}', [DashboardController::class, 'invoiceDetails'])->name('invoice-details');
     Route::get('invoice-pay-now/{tranId}', [DashboardController::class, 'invoicePayNow'])->name('invoice.payNow');
 
-
     // User Account Specific
     Route::get('account', [AccountController::class, 'index'])->name('account');
     Route::get('update-information', [AccountController::class, 'updateInformation'])->name('update.information');
@@ -53,16 +52,13 @@ Route::group(['middleware' => ['auth', 'password_expires']], function () {
 // nagad payment process
 Route::get('nagad/callback', [NagadPaymentController::class, 'nagad_payment_verify']);
 
-
 // start bkash payment
 Route::get('bkash/payment/status', [BkashPaymentController::class, 'PaymentStatus']);
 Route::get('bkash/payment/{id}', [BkashPaymentController::class, 'bkashPaymentProcess']);
-
 Route::post('bkash/token', [BkashPaymentController::class, 'bkashToken']);
 Route::post('bkash/checkout', [BkashPaymentController::class, 'createCheckoutPayment']);
 Route::post('bkash/execute', [BkashPaymentController::class, 'executeCheckoutPayment']);
 // end bkash payment
-
 
 // SSLCOMMERZ Start
 Route::post('/pay-via-ajax', [SslCommerzPaymentController::class, 'payViaAjax']); // for some of

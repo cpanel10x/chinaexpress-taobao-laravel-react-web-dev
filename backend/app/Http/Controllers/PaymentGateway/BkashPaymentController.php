@@ -83,7 +83,7 @@ class BkashPaymentController extends Controller
     $auth_id = auth()->id();
 
     $token = $this->PaymentToken($tran_id);
-    $order = Order::with('user')->where('id', $token->order_id)->first();
+    $order = Order::with('user', 'orderItems')->where('id', $token->order_id)->first();
     $this->order = $order;
     $this->paymentID = $paymentID;
     $this->statusMessage = $n_msg;

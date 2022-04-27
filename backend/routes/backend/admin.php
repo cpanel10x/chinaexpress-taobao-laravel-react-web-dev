@@ -51,7 +51,6 @@ Route::namespace('Content')->group(function () {
   Route::post('editor/image-upload', 'PageController@editor_image_upload');
   Route::resource('page', 'PageController');
 
-
   Route::resource('menu', 'MenuController')->except('show');
 
   Route::get('taxonomy/trashed', 'TaxonomyController@trashed')->name('taxonomy.trashed');
@@ -63,9 +62,7 @@ Route::namespace('Content')->group(function () {
 
   Route::resource('taxonomy', 'TaxonomyController');
 
-
   Route::resource('contact', 'ContactController')->except('create', 'store');
-
 
   Route::get('faq/trashed', 'FaqController@trashed')->name('faq.trashed');
   Route::get('faq/restore/{faq}', 'FaqController@restore')->name('faq.restore');
@@ -79,13 +76,11 @@ Route::namespace('Content')->group(function () {
   Route::get('banner/restore/{faq}', 'BannerController@restore')->name('banner.restore');
   Route::resource('banner', 'BannerController');
 
-
   Route::group(['prefix' => 'setting', 'as' => 'setting.'], function () {
 
     Route::get('block-words', [BlockWordController::class, 'create'])->name('block-words');
     Route::post('block-words/store', [BlockWordController::class, 'store'])->name('block-words.store');
     Route::delete('block-words/delete/{id}', [BlockWordController::class, 'destroy'])->name('block-words.delete');
-
 
     Route::get('price', [SettingController::class, 'price'])->name('price');
     Route::get('limit', [SettingController::class, 'limit'])->name('limit');
@@ -95,7 +90,6 @@ Route::namespace('Content')->group(function () {
 
     Route::get('message', [SettingController::class, 'message'])->name('message');
     Route::post('message-store', [SettingController::class, 'messageStore'])->name('message.store');
-
 
     Route::post('airShippingStore', [SettingController::class, 'airShippingStore'])->name('airShippingStore');
 

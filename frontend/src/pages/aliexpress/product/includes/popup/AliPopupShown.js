@@ -4,7 +4,7 @@ import {loadAsset} from "../../../../../utils/Helpers";
 import SpinnerButtonLoader from "../../../../../loader/SpinnerButtonLoader";
 
 const AliPopupShown = (props) => {
-	const {settings, cartItem, processAddToCart, product_id} = props;
+	const {settings, cartItem, processAddToCart, product_id, setShowPopup} = props;
 	const {mutateAsync, isLoading} = usePopupMessage();
 
 	let messages = settings?.cart_aliexpress_popup_message || null;
@@ -35,15 +35,15 @@ const AliPopupShown = (props) => {
 			     data-backdrop="static"
 			     data-keyboard="false"
 			     style={{display: 'block'}}>
-				<div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-					<div className="modal-content">
-						<div className="modal-header">
-							<h5 className="modal-title" id="staticBackdropLabel">Must be Read</h5>
-							<button type="button" className="close" onClick={() => closeModal()}>
-								<span aria-hidden="true">&times;</span>
+				<div className="modal-dialog modal-dialog-centered">
+					<div className="modal-content popupModalBody">
+						<div className="modalCloseButton">
+							<button type="button" className="close" onClick={() => setShowPopup(false)}>
+								<i className="icon-cancel-1"/>
 							</button>
 						</div>
-						<div className={`modal-body ${only_image ? 'p-0' : ''}`}>
+						<div className="modal-body p-0">
+
 							{only_text && <p>{messages?.popup_message}</p>}
 							{
 								only_image &&
@@ -58,14 +58,17 @@ const AliPopupShown = (props) => {
 							}
 
 						</div>
-						<div className="justify-content-center modal-footer">
+
+
+						<div className="modalAgreeButton">
 							{
 								isLoading ?
-									<SpinnerButtonLoader buttonClass={'btn btn-default'}/>
+									<SpinnerButtonLoader buttonClass={'btn btn-default px-3'}/>
 									:
 									<button type="button" className="btn btn-default" onClick={() => closeModal()}>Read & Agree</button>
 							}
 						</div>
+
 					</div>
 				</div>
 			</div>

@@ -69,7 +69,7 @@ const Contact = () => {
 			</Helmet>
 
 			<div className="container">
-				<div className="card my-5">
+				<div className="card my-3 my-md-4">
 					<div className="card-body">
 						<div className="row">
 							<div className="col-lg-6 mb-2 mb-lg-0">

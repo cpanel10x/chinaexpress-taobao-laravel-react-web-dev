@@ -69,6 +69,7 @@ const AliAddToCart = (props) => {
 					cartItem={cartItem}
 					processAddToCart={processAddToCart}
 					product_id={item_id}
+					setShowPopup={setShowPopup}
 					settings={settings}/>
 			}
 

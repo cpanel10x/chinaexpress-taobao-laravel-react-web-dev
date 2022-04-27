@@ -34,7 +34,7 @@ const AliSellerInfo = (props) => {
 								<br/>
 								<span className="ml-1">Total Items</span> <b style={{color: '#751f8a'}}>{seller?.total_items}</b>
 								<br/>
-								<span className="ml-1">Loved</span> <b style={{color: '#751f8a'}}>{seller?.fans}</b>
+								<span className="ml-1">Total Loved</span> <b style={{color: '#751f8a'}}>{seller?.fans}</b>
 							</p>
 						</div>
 						<div className="col-md-4">

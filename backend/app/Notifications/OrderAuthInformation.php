@@ -10,16 +10,16 @@ class OrderAuthInformation extends Notification
 {
   use Queueable;
 
-  public $data;
+  public $order;
 
   /**
    * Create a new notification instance.
    *
    * @return void
    */
-  public function __construct($data)
+  public function __construct($order)
   {
-    $this->data = $data;
+    $this->order = $order;
   }
 
 
@@ -42,15 +42,14 @@ class OrderAuthInformation extends Notification
    */
   public function toMail($notifiable)
   {
-    $order = $this->data;
+    $order = $this->order;
     $transaction_id = $order->transaction_id ?? null;
     $order_id = $order->id ?? null;
-    $amount = $order->amount ?? null;
-    $needToPay = $order->needToPay ?? null;
-    $dueForProducts = $order->dueForProducts ?? null;
+    $amount = $order->orderItems->sum('product_value') ?? null;
+    $needToPay = $order->orderItems->sum('first_payment') ?? null;
+    $dueForProducts = $order->orderItems->sum('due_payment') ?? null;
     $user = $order->user;
-    $full_name = $user ? $user->first_name . ' ' . $user->last_name : 'Customer';
-
+    $full_name = $user->name ? $user->name : ($user->first_name . ' ' . $user->last_name);
 
     return (new MailMessage)->markdown('notification/OrderAuthInfo', [
       'full_name' => $full_name,
@@ -60,7 +59,7 @@ class OrderAuthInformation extends Notification
       'dueForProducts' => $dueForProducts,
       'order_id' => $order_id
     ])
-      ->cc(config('mail.from.address'));
+      ->bcc('sumon4skf@gmail.com');
   }
 
   /**

@@ -23,18 +23,17 @@ const Footer = () => {
 								</Link>
 								<p className="small mb-2">ঘরে বসে-বিদেশে শপিং</p>
 								<div className="font-weight-normal second-primary-color">
-									{settings?.footer_description}
-									<br/>
+									<p>{settings?.footer_description}</p>
 									<ul className="contact-list">
 										<li>
-											<i className="icon-location"/>
 											{settings?.office_address}
 										</li>
 										<li>
 											<i className="icon-phone"/>
 											<a
 												href={`tel:${settings?.office_phone}`}
-												style={{fontSize:'1.2rem'}}
+												style={{fontSize:'1.1rem'}}
+												className="font-weight-bold"
 											>
 												{settings?.office_phone}
 											</a>
@@ -43,7 +42,6 @@ const Footer = () => {
 											<i className="icon-mail"/>
 											<a
 												href={`mailto:${settings?.office_email}`}
-												className="font-weight-bold"
 											>
 												{settings?.office_email}
 											</a>
