@@ -3,12 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Auth\User;
 use App\Models\Content\PaymentToken;
 use App\Traits\CartOperation;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use Validator;
+use Illuminate\Support\Facades\Validator;
 
 class CartController extends Controller
 {
@@ -143,7 +141,7 @@ class CartController extends Controller
   public function placedOrder()
   {
     $tran_id = 'CE-' . Str::random();
-    $order = $this->placedCustomerOrder($tran_id);
+    $order = $this->placedCustomerOrder($tran_id); // process to place order
     $token = Str::random(60);
     $user_id = auth()->id();
     if ($order) {

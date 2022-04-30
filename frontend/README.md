@@ -1,6 +1,6 @@
-# Getting Started with Create React App
+# Getting Started with Chinaexpress.com.bd
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project was with laravel backend and react frontend
 
 ## Available Scripts
 

@@ -1,5 +1,6 @@
 import React from 'react'
 import {calculateAirShippingCharge, getProductWeight} from "../../../../../utils/CartHelpers";
+import {sumCartItemTotal, sumCartItemTotalQuantity} from "../../../../../utils/AliHelpers";
 
 const ProductSummary = props => {
 	const {cart, product, settings} = props;
@@ -10,20 +11,11 @@ const ProductSummary = props => {
 	const weightMessage = settings?.approx_weight_message;
 	const airShippingCharges = settings?.air_shipping_charges || null;
 	const configItem = cart?.cart_items?.find(find => parseInt(find.ItemId) === parseInt(productId));
-	const summary = () => {
-		let totalPrice = 0;
-		let totalQty = 0;
-		configItem?.variations?.map((variation) => {
-			const qty = parseFloat(variation.qty);
-			const price = parseFloat(variation.price);
-			totalQty += qty;
-			totalPrice += (qty * price);
-		});
-		return {totalPrice, totalQty}
-	};
 
-	let totalQty = summary()?.totalQty || 1;
-	let totalPrice = summary()?.totalPrice || 0;
+	const itemVariations = configItem?.variations || [];
+	const totalPrice = sumCartItemTotal(itemVariations);
+	const totalQty = sumCartItemTotalQuantity(itemVariations);
+
 	let ApproxWeight = getProductWeight(product);
 	const weight = () => {
 		let calculateWeight = configItem?.weight ? configItem?.weight : ApproxWeight;

@@ -1,12 +1,11 @@
 <div class="btn-group btn-group-sm" role="group" aria-label="@lang('labels.backend.access.users.user_actions')">
 
   @isset($incomplete)
-    <a href="{{ route('admin.order.makeAsPayment', $order) }}" class="btn btn-info" data-toggle="tooltip" data-placement="top"
-       title="Make Partial">
+    <a href="{{ route('admin.order.makeAsPayment', $order) }}" class="btn btn-info" data-toggle="tooltip" data-placement="top" title="Make Partial">
       Make Partial
     </a>
   @endif
-  <a href="{{ route('admin.order.show', $order) }}" class="btn btn-secondary" data-method="show" data-toggle="tooltip" data-placement="top"
+  <a href="{{ route('admin.order.show', $order) }}" class="btn btn-secondary" data-toggle="tooltip" data-placement="top"
      title="order details">
     <i class="fa fa-file-o"></i>
   </a>

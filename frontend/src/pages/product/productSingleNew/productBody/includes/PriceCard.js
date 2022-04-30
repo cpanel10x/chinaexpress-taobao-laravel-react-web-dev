@@ -1,5 +1,4 @@
 import React from 'react';
-import {getSetting} from "../../../../../utils/Helpers";
 
 const PriceCard = (props) => {
 	const {product, settings, activeConfiguredItems} = props;
@@ -33,10 +32,10 @@ const PriceCard = (props) => {
 		<div className="card mb-3 pricing_card">
 			<div className="card-body">
 				<div>
-					<span>{currency + ' ' + Math.round(OriginalPrice)}</span>
+					<span className="show_price">{currency + ' ' + Math.round(OriginalPrice)}</span>
 					{
 						Number(discount) > 0 &&
-						<del className="ml-3">{currency + ' ' + Math.round(MarginPrice)}</del>
+						<del className="ml-3 delete_price">{currency + ' ' + Math.round(MarginPrice)}</del>
 					}
 				</div>
 				{

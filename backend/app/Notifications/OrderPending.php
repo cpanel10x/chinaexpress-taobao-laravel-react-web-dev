@@ -44,13 +44,14 @@ class OrderPending extends Notification
   public function toMail($notifiable)
   {
     $order = $this->data;
+    $frontend_url = config('app.frontend_url');
     $transaction_id = $order->transaction_id ?? null;
     $txt = get_setting('partial_paid');
     $txt = str_replace('[transactionNumber]', $transaction_id, $txt);
     $txt = str_replace('[orderNumber]', $order->order_number, $txt);
     $txt = str_replace('[amount]', ($order->orderItems->sum('product_value') ?? 0), $txt);
     $subject = 'Payment Confirmation';
-    $url = url('/dashboard/orders');
+    $url = $frontend_url . "/dashboard/orders/{$transaction_id}";
     $first_name = $notifiable->first_name ?? 'Customer';
     $last_name = $notifiable->last_name ?? '';
     $full_name = $notifiable->name ? $notifiable->name : $first_name . ' ' . $last_name;

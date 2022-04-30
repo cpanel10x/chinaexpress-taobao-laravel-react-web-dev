@@ -178,23 +178,7 @@ class OrderController extends Controller
   public function show($id)
   {
     $order = Order::with('orderItems')->findOrFail($id);
-
-    $render = '';
-    $title = 'Wallet details';
-    $status = false;
-    if ($order) {
-      $customer = $order->user->name ?? "Customer";
-      $item_no = $order->order_number;
-      $status = true;
-      $title = "Order details of Mr. {$customer} and Order No #{$item_no}";
-      $render = view('backend.content.order.show', compact('order'))->render();
-    }
-
-    return \response([
-      'status' => $status,
-      'title' => $title,
-      'render' => $render,
-    ]);
+    return view('backend.content.order.show', compact('order'));
   }
 
 

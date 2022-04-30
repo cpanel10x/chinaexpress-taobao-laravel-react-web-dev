@@ -447,6 +447,7 @@ trait CartOperation
         ->whereHas('variations', function ($variation) {
           $variation->where('is_checked', 1);
         })
+        ->withCount('variations')
         ->where('IsCart', 1)
         ->get();
       $advanced_rate = get_setting('payment_advanched_rate', 60);
@@ -477,7 +478,9 @@ trait CartOperation
           $item_id = $orderItem->id;
           $DeliveryCost = $orderItem->DeliveryCost;
           $variations = $product->variations;
+          $variations_count = $product->variations_count;
           $product_value = 0;
+          $count = 0;
           foreach ($variations as $variation) {
             $price = $variation->price;
             $qty = $variation->qty;
@@ -493,6 +496,8 @@ trait CartOperation
               'attributes' => $variation->attributes,
               'subTotal' => $subTotal,
             ]);
+            $count += 1;
+            $variation->delete();
           }
           $product_value = $product_value + $DeliveryCost;
           $first_payment = ($product_value * $advanced_rate) / 100;
@@ -503,6 +508,9 @@ trait CartOperation
             'first_payment' => round($first_payment),
             'due_payment' => round($due_payment),
           ]);
+          if ($count == $variations_count) {
+            $product->delete();
+          }
         }
       }
 
@@ -520,7 +528,7 @@ trait CartOperation
           'user_id' => $user->id,
         ]);
       }
-      $cart->update(['is_purchase' => 1]);
+      // $cart->update(['is_purchase' => 1]);
       return $order;
     }
     return null;

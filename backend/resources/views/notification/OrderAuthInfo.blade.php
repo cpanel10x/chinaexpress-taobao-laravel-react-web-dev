@@ -1,7 +1,7 @@
 @component('mail::message')
-# Customer Placed a Order
+# Customer Placed an Order
 
-Mr./Mrs. {{$full_name}} Placed an Order.
+Customer {{$full_name}}, recently placed an order with partisal payment.
 
 @php 
 $amount = floating($amount);

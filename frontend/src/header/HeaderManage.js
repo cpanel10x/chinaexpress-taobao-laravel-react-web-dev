@@ -18,13 +18,15 @@ const HeaderManage = props => {
 	const isMobile = useMediaQuery({query: '(max-width: 991px)'});
 
 
+	const cart_count = cart?.cart_items?.filter(item => item?.IsCart === 1)?.length || 0;
+
 	if (isMobile) {
 		console.log('mobile activated');
 		return (
 			<MobileHeader
 				customer={customer}
 				wishList={wishList}
-				cart={cart}
+				cart_count={cart_count}
 				settings={settings}
 			/>
 		);
@@ -34,7 +36,7 @@ const HeaderManage = props => {
 		<Header
 			customer={customer}
 			wishList={wishList}
-			cart={cart}
+			cart_count={cart_count}
 			settings={settings}
 		/>
 	);

@@ -8,6 +8,7 @@ use App\Http\Controllers\Backend\Content\ProductController;
 use App\Http\Controllers\Backend\Content\TaxonomyController;
 use App\Http\Controllers\Backend\Content\BkashApiResponseController;
 use App\Http\Controllers\Backend\Content\BlockWordController;
+use Illuminate\Support\Facades\Route;
 
 // All route names are prefixed with 'admin.'.
 Route::redirect('/', '/admin/dashboard', 301);
@@ -28,8 +29,7 @@ Route::namespace('Content')->group(function () {
   Route::get('makeAsPayment/{order}', [OrderController::class, 'makeAsPayment'])->name('order.makeAsPayment');
   Route::get('order/wallet', 'OrderController@walletOrders')->name('order.wallet');
   Route::post('order/wallet/{id}', [OrderController::class, 'walletDetails'])->name('order.wallet.details');
-  Route::post('order/show/{id}', [OrderController::class, 'show'])->name('order.show');
-  Route::resource('order', 'OrderController')->except('edit', 'update', 'show');
+  Route::resource('order', 'OrderController')->except('edit', 'update');
   Route::get('invoice/trashed', 'InvoiceController@trashed')->name('invoice.trashed');
   Route::get('invoice/restore/{invoice}', 'InvoiceController@restore')->name('invoice.restore');
   Route::get('invoice/confirm-received/{invoice}', 'InvoiceController@confirm_received')->name('invoice.confirm.received');

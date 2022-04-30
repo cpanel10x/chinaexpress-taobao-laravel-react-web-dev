@@ -469,7 +469,7 @@
 }
 
 .single-product-title {
-  font-size: 1.3rem;
+  font-size: 1.4rem;
   line-height: 1.5;
   color: #751F8A;
 }
@@ -747,6 +747,13 @@
   color: #fff;
   background: #ec1c24;
   font-weight: 600;
+
+  .show_price{
+    font-size: 1rem;
+  }
+  .delete_price{
+    font-size: 1rem;
+  }
 }
 
 .product-main-image img {
@@ -755,7 +762,7 @@
 }
 
 .plain_attribute {
-  padding: 0px 8px;
+  padding: 0 8px;
   color: #2a2a2a;
 }
 
@@ -825,10 +832,10 @@
 
 .discount_box {
   background: #1a1a1a;
-  padding: 1px 8px;
+  padding: 2px 8px;
   border-radius: 4px;
   display: inline-block;
-  font-size: 12px;
+  font-size: 1rem;
 }
 
 .owl-theme {
@@ -1123,35 +1130,40 @@
   table {
     max-width: 100%;
   }
-  img{
+
+  img {
     max-width: 100%;
   }
 }
 
 
-.popupModalBody{
+.popupModalBody {
   position: relative;
   background: transparent;
   border: none;
-  .modalCloseButton{
+
+  .modalCloseButton {
     position: absolute;
     right: 0;
     top: 0;
     z-index: 999;
-    button{
+
+    button {
       color: #222;
       padding: 6px 4px;
       font-size: 1.3rem;
       opacity: 0.9;
     }
   }
-  .modal-body{
-    img{
+
+  .modal-body {
+    img {
       border-top-left-radius: 4px;
       border-top-right-radius: 4px;
     }
   }
-  .modalAgreeButton{
+
+  .modalAgreeButton {
     text-align: center;
     background: #fff;
     padding: 25px 0;
@@ -1165,20 +1177,58 @@
 }
 
 
-.desktop_messenger{
+.desktop_messenger {
   position: fixed;
   right: 30px;
   bottom: 40px;
-  .nav-link{
+
+  .nav-link {
     color: #ec1c24;
-    &:hover, &:focus{
+
+    &:hover, &:focus {
       color: #751f8a;
     }
   }
-  .sticky_nav_icon{
+
+  .sticky_nav_icon {
     font-size: 3rem;
   }
 }
+
+.faq_card {
+  .card-header {
+    padding: 8px 0px;
+  }
+}
+
+
+.faq_title {
+  .btn {
+    color: #555;
+    font-size: 1.1rem;
+    text-decoration: none;
+
+    &.collapsed{
+      &:after {
+        content: "\e832";
+      }
+    }
+
+    &:after {
+      content: "\e830";
+      font-family: fontello, serif;
+      font-size: 18px;
+      font-weight: 400;
+      position: absolute;
+      right: 18px;
+      top: 14px;
+    }
+
+  }
+}
+
+
+
 
 
 

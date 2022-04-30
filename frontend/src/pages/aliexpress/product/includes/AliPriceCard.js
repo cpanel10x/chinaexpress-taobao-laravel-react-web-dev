@@ -39,10 +39,10 @@ const AliPriceCard = (props) => {
 		<div className="card mb-3 pricing_card">
 			<div className="card-body">
 				<div>
-					<span>{formatedDiscountedPrice()}</span>
+					<span className="show_price">{formatedDiscountedPrice()}</span>
 					{
 						discount() > 0 &&
-						<del className="ml-3">{formatedRegularMaxPrice()}</del>
+						<del className="ml-3 delete_price">{formatedRegularMaxPrice()}</del>
 					}
 				</div>
 				{

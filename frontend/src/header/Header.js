@@ -5,7 +5,7 @@ import SpinnerButtonLoader from "../loader/SpinnerButtonLoader";
 import MobileSearchForm from "./includes/MobileSearchForm";
 
 const Header = (props) => {
-	const {customer, wishList, cart, settings} = props;
+	const {customer, wishList, cart_count, settings} = props;
 
 	const {data: user, isLoading} = customer;
 
@@ -40,7 +40,7 @@ const Header = (props) => {
 								<Link to="/checkout">
 									<div className="icon">
 										<i className="icon-shopping-bag"/>
-										<span className="wishlist-count badge">{cart?.cart_items?.length || 0}</span>
+										<span className="wishlist-count badge">{cart_count}</span>
 									</div>
 								</Link>
 							</div>

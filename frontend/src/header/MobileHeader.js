@@ -3,7 +3,7 @@ import {Link} from "react-router-dom";
 import MobileSearchForm from "./includes/MobileSearchForm";
 
 const MobileHeader = (props) => {
-	const {customer, wishList, cart, settings} = props;
+	const {wishList, cart_count, settings} = props;
 
 	return (
 		<header className="header mobile_header sticky-top header-intro-clearance header-26">
@@ -33,7 +33,7 @@ const MobileHeader = (props) => {
 									<div className="icon">
 										<i className="icon-cart"/>
 										<span className="wishlist-count badge">
-                      {cart?.cart_items?.length || 0}
+                      {cart_count}
                     </span>
 									</div>
 								</Link>
