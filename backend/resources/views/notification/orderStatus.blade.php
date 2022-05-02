@@ -1,5 +1,5 @@
 @component('mail::message')
-# Dear {{$notifiable->full_name}}
+# Dear {{$notifiable->name ? $notifiable->name : $notifiable->full_name}}
 
 {!! $data !!}
 

@@ -38,7 +38,7 @@ class OrderTable extends TableComponent
 
   public function query(): Builder
   {
-    return Order::with('user')->whereNotIn('status', ['Waiting for Payment']);
+    return Order::with('user')->whereNotIn('status', ['waiting-for-payment']);
   }
 
   public function columns(): array

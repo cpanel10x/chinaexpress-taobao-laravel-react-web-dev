@@ -33,7 +33,7 @@ class OrderStatus extends Notification implements ShouldQueue
    */
   public function via($notifiable)
   {
-    return ['mail', 'database'];
+    return ['mail'];
   }
 
   /**
@@ -49,7 +49,7 @@ class OrderStatus extends Notification implements ShouldQueue
 
     return (new MailMessage())
       ->subject($subject)
-      ->replyTo('support@chinabazarb2b.com')
+      ->replyTo('support@chinaexpress.com.bd')
       ->markdown('notification/orderStatus', [
         'data' => $userData,
         'notifiable' => $notifiable

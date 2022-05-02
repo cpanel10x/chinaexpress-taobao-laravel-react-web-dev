@@ -6,8 +6,20 @@
 <div class="row">
   <div class="col">
     <div class="card">
-      <div class="card-header">
-        <strong>@lang('strings.backend.dashboard.welcome') {{ $logged_in_user->name }}!</strong>
+      <div class="card-header clearfix">
+        <div class="float-left">
+          <strong>Daoshboard Summary</strong>
+        </div>
+        <div class="float-right">
+          <select name="durations" id="durations" class="form-control">
+            <option value="1">Last Day</option>
+            <option value="7">Last 7 Days</option>
+            <option value="15">Last 15 Days</option>
+            <option value="30">Last 1 Month</option>
+            <option value="180">Last 6 Month</option>
+            <option value="360">Last 1 Year</option>
+          </select>
+        </div>
       </div> <!-- card-header-->
       <div class="card-body">
 
@@ -57,7 +69,7 @@
             </div>
           </div> <!-- ./col -->
         </div>
-        
+
         <div class="row">
           <div class="col-lg-3 col-6">
             <div class="small-box mb-3 bg-gradient-olive">

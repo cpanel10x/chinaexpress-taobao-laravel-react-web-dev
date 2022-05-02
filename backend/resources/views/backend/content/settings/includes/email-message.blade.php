@@ -19,7 +19,7 @@
       </div> <!-- form-group-->
       <div class="form-group">
         {{html()->textarea('waiting_for_payment', get_setting('waiting_for_payment'))
-        ->class('form-control')
+        ->class('form-control editor')
         ->rows(4)
         ->placeholder('Message')
         ->attributes(['max', 600, 'aria-describedby' => 'waiting_for_payment_help'])
@@ -42,7 +42,7 @@
       </div> <!-- form-group-->
       <div class="form-group">
         {{html()->textarea('partial_paid', get_setting('partial_paid'))
-        ->class('form-control')
+        ->class('form-control editor')
         ->rows(4)
         ->placeholder('Message')
         ->attributes(['max', 600, 'aria-describedby' => 'partial_paid_help'])
@@ -69,7 +69,7 @@
       </div> <!-- form-group-->
       <div class="form-group">
         {{html()->textarea('purchased_message', get_setting('purchased_message'))
-        ->class('form-control')
+        ->class('form-control editor')
         ->rows(4)
         ->placeholder('Message')
         ->attributes(['max', 600, 'aria-describedby' => 'purchased_message_help'])
@@ -92,7 +92,7 @@
       </div> <!-- form-group-->
       <div class="form-group">
         {{html()->textarea('shipped_from_suppliers', get_setting('shipped_from_suppliers'))
-        ->class('form-control')
+        ->class('form-control editor')
         ->rows(4)
         ->placeholder('Message')
         ->attributes(['max', 600, 'aria-describedby' => 'shipped_from_suppliers_help'])
@@ -116,7 +116,7 @@
       </div> <!-- form-group-->
       <div class="form-group">
         {{html()->textarea('received_in_china_warehouse', get_setting('received_in_china_warehouse'))
-        ->class('form-control')
+        ->class('form-control editor')
         ->rows(4)
         ->placeholder('Message')
         ->attributes(['max', 600, 'aria-describedby' => 'received_in_china_warehouse_help'])
@@ -139,7 +139,7 @@
       </div> <!-- form-group-->
       <div class="form-group">
         {{html()->textarea('shipped_from_china_warehouse', get_setting('shipped_from_china_warehouse'))
-        ->class('form-control')
+        ->class('form-control editor')
         ->rows(4)
         ->placeholder('Message')
         ->attributes(['max', 600, 'aria-describedby' => 'shipped_from_china_warehouse_help'])
@@ -162,7 +162,7 @@
       </div> <!-- form-group-->
       <div class="form-group">
         {{html()->textarea('received_in_bd_warehouse', get_setting('received_in_bd_warehouse'))
-        ->class('form-control')
+        ->class('form-control editor')
         ->rows(4)
         ->placeholder('Message')
         ->attributes(['max', 600, 'aria-describedby' => 'received_in_bd_warehouse_help'])
@@ -185,7 +185,7 @@
       </div> <!-- form-group-->
       <div class="form-group">
         {{html()->textarea('on_transit_to_customer', get_setting('on_transit_to_customer'))
-        ->class('form-control')
+        ->class('form-control editor')
         ->rows(4)
         ->placeholder('Message')
         ->attributes(['max', 600, 'aria-describedby' => 'on_transit_to_customer_help'])
@@ -208,7 +208,7 @@
       </div> <!-- form-group-->
       <div class="form-group">
         {{html()->textarea('delivered_completed', get_setting('delivered_completed'))
-        ->class('form-control')
+        ->class('form-control editor')
         ->rows(4)
         ->placeholder('Message')
         ->attributes(['max', 600, 'aria-describedby' => 'delivered_completed_help'])
@@ -231,7 +231,7 @@
       </div> <!-- form-group-->
       <div class="form-group">
         {{html()->textarea('adjustment', get_setting('adjustment'))
-        ->class('form-control')
+        ->class('form-control editor')
         ->rows(4)
         ->placeholder('Message')
         ->attributes(['max', 600, 'aria-describedby' => 'adjustment_help'])
@@ -254,7 +254,7 @@
       </div> <!-- form-group-->
       <div class="form-group">
         {{html()->textarea('canceled_by_seller', get_setting('canceled_by_seller'))
-        ->class('form-control')
+        ->class('form-control editor')
         ->rows(4)
         ->placeholder('Message')
         ->attributes(['max', 600, 'aria-describedby' => 'canceled_by_seller_help'])
@@ -277,7 +277,7 @@
       </div> <!-- form-group-->
       <div class="form-group">
         {{html()->textarea('out_of_stock', get_setting('out_of_stock'))
-        ->class('form-control')
+        ->class('form-control editor')
         ->rows(4)
         ->placeholder('Message')
         ->attributes(['max', 600, 'aria-describedby' => 'out_of_stock_help'])
@@ -300,7 +300,7 @@
       </div> <!-- form-group-->
       <div class="form-group">
         {{html()->textarea('refunded', get_setting('refunded'))
-        ->class('form-control')
+        ->class('form-control editor')
         ->rows(4)
         ->placeholder('Message')
         ->attributes(['max', 600, 'aria-describedby' => 'refunded_help'])

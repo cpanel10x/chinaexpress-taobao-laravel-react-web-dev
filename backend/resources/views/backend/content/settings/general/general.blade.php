@@ -71,7 +71,10 @@
 
 
 @push('after-scripts')
+
+
   <script>
+
      function readImageURL(input, preview) {
         if (input.files && input.files[0]) {
            var reader = new FileReader();

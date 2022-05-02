@@ -149,7 +149,7 @@ if (!function_exists('store_picture')) {
     $fileSize = round($img->filesize() / 1024); // convert to kb
 
     if (!$resize) {
-      $img->save($pathDir . '/' . $imageName, 90); // save original photo
+      $img->save($pathDir . '/' . $imageName); // save original photo
     } else {
       $img->resize(1080, null, function ($c) {
         $c->aspectRatio();

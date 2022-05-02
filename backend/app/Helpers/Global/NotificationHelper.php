@@ -69,7 +69,7 @@ if (!function_exists('generate_customer_notifications')) {
     $subject = str_replace('-', ' ', $status);
     $subject = ucwords($subject);
     if ($emailActive) {
-      $generateText = generate_text_for_customer($text, "<b>{$order_number}</b>", "<b>{$amount}</b>", "<b>{$tracking}</b>");
+      $generateText = generate_text_for_customer($text, $order_number, $amount, $tracking);
       send_status_email($generateText, $subject, $user);
     }
 
@@ -97,8 +97,8 @@ if (!function_exists('send_status_email')) {
   function send_status_email($text, $subject, $user)
   {
     try {
-      //      $when = now()->addSeconds(10);
-      //      $user->notify((new \App\Notifications\Backend\OrderStatus($text, $subject))->delay($when));
+      // $when = now()->addSeconds(10);
+      // $user->notify((new \App\Notifications\Backend\OrderStatus($text, $subject))->delay($when));
       $email = $user->email ?? null;
       if ($email) {
         $user->notify((new \App\Notifications\Backend\OrderStatus($text, $subject)));
@@ -114,7 +114,7 @@ if (!function_exists('send_status_sms')) {
     try {
       $phone = $user->phone ?? null;
       if ($phone) {
-        $status = send_adn_single_sms($text, $phone);
+        $status = send_ware_SMS($text, $phone);
       }
     } catch (Exception $ex) {
     }
