@@ -32,7 +32,7 @@ const PopupShown = (props) => {
 
 
 	return (
-		<>
+		<div className="modal-open">
 			<div className="modal fade show"
 			     id="staticBackdrop"
 			     data-backdrop="static"
@@ -68,7 +68,7 @@ const PopupShown = (props) => {
 				</div>
 			</div>
 			<div className="modal-backdrop fade show" onClick={() => closeModal()}/>
-		</>
+		</div>
 	);
 };
 

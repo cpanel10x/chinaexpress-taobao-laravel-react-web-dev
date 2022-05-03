@@ -66,7 +66,7 @@ const Intro = () => {
 
 					<div className="col-md-3 d-none d-lg-block">
 						<a href="#">
-							<img src={loadAsset(`img/demo14-banner1.jpg`)} className="img-fluid"/>
+							<img src={loadAsset(`img/right-banner-2.png`)} className="img-fluid"/>
 						</a>
 					</div>
 				</div>
