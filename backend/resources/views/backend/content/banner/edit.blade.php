@@ -3,7 +3,8 @@
 @section('title', 'Manage banner | Edit banner')
 
 @section('content')
-{{ html()->modelForm($banner, 'PATCH', route('admin.banner.update', $banner))->class('form-horizontal')->attribute('enctype', 'multipart/form-data')->open() }}
+{{ html()->modelForm($banner, 'PATCH', route('admin.banner.update',
+$banner))->class('form-horizontal')->attribute('enctype', 'multipart/form-data')->open() }}
 <div class="row">
   <div class="col-md-9">
     <div class="card">
@@ -12,19 +13,18 @@
       </div>
       <div class="card-body">
         <div class="form-group">
-            {{html()->text('post_title')->class('form-control cash')->placeholder('Title')}}
-          <p class="text-danger margin-bottom-none" id="post_error">@error('post_title') {{$message}}
-            @enderror</p>
-        </div> <!-- form-group -->
-
-        <div class="form-group d-none">
-          <div class="input-group mb-2">
-              {{html()->text('post_slug')->class('form-control')->placeholder('slug')}}
-          </div>
+          {{html()->text('post_title')->class('form-control cash')->placeholder('Title')}}
+          <p class="text-danger margin-bottom-none" id="post_error">
+            @error('post_title') {{$message}} @enderror
+          </p>
         </div> <!-- form-group -->
 
         <div class="form-group">
-            {{html()->textarea('post_content')->class('editor form-control')}}
+          {{html()->text('post_slug')->class('form-control')->placeholder('URL Key')}}
+        </div> <!-- form-group -->
+
+        <div class="form-group">
+          {{html()->textarea('post_content')->class('editor form-control')}}
           @error('post_content')
           <p class="text-danger margin-bottom-none">{{$message}}</p>
           @enderror
@@ -120,6 +120,17 @@
 {!! script(asset('assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js')) !!}
 
 <script>
+  function slugify(text) {
+      return text
+        .toString()                           // Cast to string (optional)
+        .normalize('NFKD')            // The normalize() using NFKD method returns the Unicode Normalization Form of a given string.
+        .toLowerCase()                  // Convert the string to lowercase letters
+        .trim()                                  // Remove whitespace from both sides of a string (optional)
+        .replace(/\s+/g, '-')            // Replace spaces with -
+        .replace(/[^\w\-]+/g, '')     // Remove all non-word chars
+        .replace(/\-\-+/g, '-');        // Replace multiple - with single -
+    }
+    
   $(document).ready(function () {
     simple_editor('.editor', 450);
     $('#datepicker-autoclose').datepicker({
@@ -138,10 +149,10 @@
       let postField = $(this);
       let post_title = postField.val();
       if (post_title) {
-        ajax_slug_url(post_title);
-        setTimeout(update, 1000); // 30 seconds
-        $("#post_error").empty();
-        postField.removeClass('is-invalid');
+          var slug = slugify(post_title);
+          $("#post_error").empty();
+          postField.removeClass('is-invalid');
+          $("#post_slug").val(slug);
       } else {
         $("#post_error").text('title must not empty');
         postField.addClass('is-invalid');

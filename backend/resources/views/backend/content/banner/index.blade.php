@@ -22,22 +22,27 @@
             <thead>
               <tr class="vertical-middle">
                 <th>Title</th>
-                <th style="width:120px" class="text-center">Author</th>
-                <th style="width:150px" class="text-center">Date</th>
-                <th style="width:150px" class="text-center">@lang('labels.general.actions')</th>
+                <th class="text-center text-nowrap">Picture</th>
+                <th class="text-center text-nowrap">Created By</th>
+                <th class="text-center  text-nowrap">Date</th>
+                <th class="text-center">@lang('labels.general.actions')</th>
               </tr>
             </thead>
             <tbody>
               @foreach($banners as $banner)
               <tr class="vertical-middle">
                 <td>{{ ucwords($banner->post_title) }}</td>
-                <td class="text-center">{{ $banner->user->full_name}}</td>
+                <td style="width: 200px">
+                  <img src="{{asset($banner->post_thumb)}}" class="img-fluid">
+                </td>
+                <td class="text-center">{{ $banner->user->name ?? 'N/A'}}</td>
                 <td class="text-center">
                   <p class="m-0">{{$banner->post_status}}</p>
                   {{ date('d-M-Y', strtotime($banner->created_at)) }}
                 </td>
-                <td class="text-center">@include('backend.content.banner.includes.actions', ['banner' =>
-                  $banner])</td>
+                <td class="text-center">
+                  @include('backend.content.banner.includes.actions', ['banner' => $banner])
+                </td>
               </tr>
               @endforeach
             </tbody>

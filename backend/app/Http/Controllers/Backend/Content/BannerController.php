@@ -45,16 +45,6 @@ class BannerController extends Controller
   public function store(Request $request)
   {
     $data = $this->bannerValidator();
-    unset($data['image']);
-    unset($data['schedule_time']);
-
-    if (\request('post_status') === 'schedule') {
-      $data['schedule_time'] = Carbon::parse(\request('schedule_time'))->toDateTimeString();
-    }
-    $data['post_type'] = 'banner';
-    $data['revision_by'] = \auth()->id();
-    $data['update_by'] = \auth()->id();
-    $data['user_id'] = \auth()->id();
 
     $upload = \request('thumb_status') == 1 && \request()->hasFile('image') ? true : false;
 
@@ -108,9 +98,6 @@ class BannerController extends Controller
   {
     $data = $this->bannerValidator($id);
 
-    unset($data['image']);
-    unset($data['schedule_time']);
-
     if (\request('post_status') === 'schedule') {
       $data['schedule_time'] = Carbon::parse(\request('schedule_time'))->toDateTimeString();
     }
@@ -156,7 +143,7 @@ class BannerController extends Controller
 
   public function bannerValidator(int $update_id = null)
   {
-    return request()->validate([
+    $data = request()->validate([
       'post_title' => 'required|string|max:800',
       'post_slug' => 'required|string|max:800|' . $update_id ? 'unique:posts,post_slug,' . $update_id : 'unique:posts,post_slug', // unique page slug
       'post_content' => 'required|string',
@@ -166,6 +153,20 @@ class BannerController extends Controller
       'thumb_status' => 'nullable|string|max:155',
       'image' => 'nullable|max:800|mimes:jpeg,jpg,png,gif,webp',
     ]);
+
+    unset($data['image'], $data['schedule_time']);
+
+    if (\request('post_status') === 'schedule') {
+      $data['schedule_time'] = Carbon::parse(\request('schedule_time'))->toDateTimeString();
+    }
+    $data['post_type'] = 'banner';
+    if ($update_id) {
+      $data['revision_by'] = \auth()->id();
+      $data['update_by'] = \auth()->id();
+    } else {
+      $data['user_id'] = \auth()->id();
+    }
+    return $data;
   }
 
 
