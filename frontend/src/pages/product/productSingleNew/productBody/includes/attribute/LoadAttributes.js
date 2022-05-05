@@ -56,7 +56,7 @@ const LoadAttributes = (props) => {
 		return exists ? className : null;
 	};
 
-	const isExistsQuantity = (Attribute, className = 'd-none') => {
+	const isExistsQuantity = (Attribute, className = '') => {
 		let exists = false;
 		if (ConfiguredItems?.length > 0) {
 			exists = ConfiguredItems.find(findConfig => findConfig?.Configurators?.find(find => Attribute.Pid === find.Pid && Attribute.Vid === find.Vid));
@@ -72,6 +72,7 @@ const LoadAttributes = (props) => {
 	const firstGroup = groupItems?.length > 0 ? groupItems.slice(0, 1) : [];
 	let otherGroups = groupItems?.length > 1 ? groupItems.slice(1) : [];
 
+	// console.log('firstGroup', firstGroup);
 	return (
 		<div>
 			{
@@ -96,7 +97,7 @@ const LoadAttributes = (props) => {
 											     onClick={() => props.setActiveImg(Attribute.ImageUrl)}
 											     alt={Attribute.Value}
 											     style={{width: '2.5rem', height: '2.5rem'}}/>
-											: Attribute.Value
+											: `${Attribute.Value}`
 										}
 									</div>
 								)

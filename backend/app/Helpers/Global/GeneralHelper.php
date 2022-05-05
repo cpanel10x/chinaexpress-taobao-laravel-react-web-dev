@@ -2,7 +2,9 @@
 
 use App\Models\Content\Setting;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 
@@ -204,6 +206,21 @@ if (!function_exists('create_public_directory')) {
     File::isDirectory(public_path('storage')) ?: Artisan::call('storage:link');
     File::isDirectory(public_path($path)) ?: File::makeDirectory(public_path($path), 0777, true, true);
     return public_path($path);
+  }
+}
+
+if (!function_exists('store_mixed_picture')) {
+  function store_mixed_picture($file, $dir_path = '/')
+  {
+    $imageName = $file->getClientOriginalName();
+    $imageName = strtolower($imageName);
+    $imageName = time() . '-' . str_replace(' ', '-', $imageName);
+    $dir_path = 'storage/' . $dir_path;
+    $pathDir = create_public_directory($dir_path); // manage directory
+
+    $file->move($pathDir, $imageName);
+
+    return $dir_path . '/' . $imageName;
   }
 }
 

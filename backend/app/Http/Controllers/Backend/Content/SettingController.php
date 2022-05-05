@@ -164,7 +164,8 @@ class SettingController extends Controller
     $data['popup_message'] = request('popup_message');
     $data['popup_option'] = request('popup_option');
     if (\request()->hasFile('popup_image')) {
-      $data['popup_image'] = store_picture(\request()->file('popup_image'), 'setting');
+      $file = \request()->file('popup_image');
+      $data['popup_image'] = store_mixed_picture($file, 'setting');
     }
     Setting::save_settings(['cart_popup_message' => json_encode($data)]);
     Cache::forget('settings'); // remove setting cache
@@ -179,7 +180,8 @@ class SettingController extends Controller
     $data['popup_message'] = request('popup_message');
     $data['popup_option'] = request('popup_option');
     if (\request()->hasFile('popup_image')) {
-      $data['popup_image'] = store_picture(\request()->file('popup_image'), 'setting');
+      $file = \request()->file('popup_image');
+      $data['popup_image'] = store_mixed_picture($file, 'setting');
     }
     Setting::save_settings(['cart_aliexpress_popup_message' => json_encode($data)]);
     Cache::forget('settings'); // remove setting cache
@@ -194,7 +196,8 @@ class SettingController extends Controller
     $data['popup_message'] = request('popup_message');
     $data['popup_option'] = request('popup_option');
     if (\request()->hasFile('popup_image')) {
-      $data['popup_image'] = store_picture(\request()->file('popup_image'), 'setting');
+      $file = \request()->file('popup_image');
+      $data['popup_image'] = store_mixed_picture($file, 'setting');
     }
     Setting::save_settings(['aliexpress_express_popup_message' => json_encode($data)]);
     Cache::forget('settings'); // remove setting cache
