@@ -7,18 +7,15 @@ import ParentCategories from "./includes/ParentCategories";
 import CategoryProductList from "../product/productList/CategoryProductList";
 import SidebarCategorySkeleton from "../../skeleton/productSkeleton/SidebarCategorySkeleton";
 import {useAllCategories} from "../../api/GeneralApi";
+import {useQuery} from "../../utils/customHooks";
 
-function useQuery() {
-	return new URLSearchParams(useLocation().search);
-}
 
 const LoadShopProducts = (props) => {
 
 	let {category_slug} = useParams();
 	const {data: categories, isLoading} = useAllCategories();
 
-	const query = useQuery();
-	const page = query.get("page");
+	const {page} = useQuery();
 
 	useEffect(() => {
 		goPageTop();

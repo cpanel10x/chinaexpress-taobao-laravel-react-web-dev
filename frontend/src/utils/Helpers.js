@@ -92,15 +92,6 @@ export const loadAsset = (path) => {
 };
 
 
-const useQuery = () => {
-	return new URLSearchParams(useLocation().search);
-};
-
-export const useQueryValueByKey = (key) => {
-	let value = useQuery()?.get(key);
-	return value !== undefined ? value : "";
-};
-
 
 export const checkIsEmail = (input) => {
 	const format = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
