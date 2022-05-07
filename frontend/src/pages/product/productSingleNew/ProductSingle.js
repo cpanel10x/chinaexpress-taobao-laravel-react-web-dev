@@ -1,5 +1,5 @@
 import React, {useEffect, useRef} from "react";
-import {withRouter, useParams} from "react-router-dom";
+import {useParams} from "react-router-dom";
 import ProductBody from "./productBody/ProductBody";
 import ProductDetailsTab from "./includes/ProductDetailsTab";
 import RelatedProduct from "../reletedProduct/RelatedProduct";
@@ -90,4 +90,4 @@ const ProductSingle = props => {
 };
 
 
-export default withRouter(ProductSingle);
+export default ProductSingle;

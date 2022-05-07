@@ -149,7 +149,16 @@ export const usePictureSearch = (search_id, page = 1) => useQuery(["picture", se
 
 
 
-
+export const useTaobaoSellerProducts = (seller_id, page=1) => useQuery(["useTaobaoSellerProducts", seller_id, page], async () => {
+   try {
+      const {data} = await instance.post(`/vendor-items`,{seller_id, page});
+      return data?.result ? JSON.parse(data?.result) : [];
+   } catch (error) {
+      console.log(error);
+   }
+},{
+   refetchOnMount: false,
+});
 
 
 

@@ -163,9 +163,10 @@ class CatalogController extends Controller
 
   public function getPictureSearchResult($search_id)
   {
-    $page = request('page', 0);
-    $offset = $page * 36;
-    $limit = 36;
+    $page = request('page', 1);
+    $page = $page ? $page - 1 : 0;
+    $offset = $page * 35;
+    $limit = 35;
     $SearchLog = SearchLog::where('search_id', $search_id)->where('search_type', 'picture')->first();
     if ($SearchLog) {
       $products = get_category_browsing_items($SearchLog->query_data, 'picture', $offset, $limit);
@@ -206,6 +207,35 @@ class CatalogController extends Controller
     }
 
     return $this->error('Picture upload fails! Try again', 417);
+  }
+
+  public function SearchVendorItems()
+  {
+    $vendor_id = request('seller_id');
+    $page = request('page', 1);
+    $page = $page ? $page - 1 : 0;
+    $offset = $page * 35;
+    $limit = 35;
+    $products = get_vendor_items($vendor_id, $offset, $limit);
+    if (!empty($products) && is_array($products)) {
+      $TotalCount = getArrayKeyData($products, 'TotalCount', 0);
+      $Contents = getArrayKeyData($products, 'Content', []);
+      if (!empty($Contents) && is_array($Contents)) {
+        $Contents = generate_common_params($Contents);
+        if (!empty($Contents) && is_array($Contents)) {
+          return response([
+            'result' => json_encode([
+              'TotalCount' => $TotalCount,
+              'Content' => $Contents
+            ])
+          ]);
+        }
+      }
+    }
+
+    return response([
+      'result' => ''
+    ]);
   }
 
   public function productDetails($item_id)

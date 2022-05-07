@@ -166,7 +166,6 @@ if (!function_exists('get_category_browsing_items')) {
         }
       }
     }
-
     return ['Content' => [], 'TotalCount' => 0];
   }
 }

@@ -25,6 +25,7 @@ import Profile from "./auth/dashboard/Profile";
 import ManageAddress from "./auth/dashboard/address/ManageAddress";
 import LatestArrivedProduct from "./pages/newArrive/LatestArrivedProduct";
 import AliSellerPage from "./pages/aliexpress/aliSeller/AliSellerPage";
+import TaobaoSellerPage from "./pages/taobaoSeller/taobaoSeller/TaobaoSellerPage";
 
 const Routing = () => {
 	return (
@@ -38,6 +39,7 @@ const Routing = () => {
 
 			<Route path="/pages/:slug" exact component={SinglePage}/>
 			<Route path="/product/:item_id" exact component={ProductSingle}/>
+			<Route path="/taobao/vendor/:seller_id?" exact={true} component={TaobaoSellerPage}/>
 			<Route
 				path="/search"
 				exact={true}

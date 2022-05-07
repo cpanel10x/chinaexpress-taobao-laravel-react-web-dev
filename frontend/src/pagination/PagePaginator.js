@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import ReactPaginate from "react-paginate";
 
 const PagePaginator = (props) => {
-	const {handlePaginationClick, currentPage, totalPage} = props;
+	let {handlePaginationClick, currentPage, totalPage} = props;
+
+	currentPage = Number(currentPage) > 1 ? Number(currentPage) : 1;
 
 	const maxPage = parseInt(totalPage) > 280 ? 280 : totalPage;
 
@@ -35,8 +37,8 @@ const PagePaginator = (props) => {
 
 PagePaginator.propTypes = {
 	handlePaginationClick: PropTypes.func.isRequired,
-	currentPage: PropTypes.number.isRequired,
-	totalPage: PropTypes.number.isRequired,
+	currentPage: PropTypes.any.isRequired,
+	totalPage: PropTypes.any.isRequired,
 };
 
 export default PagePaginator;

@@ -106,6 +106,30 @@ if (!function_exists('otc_search_items')) {
 }
 
 
+
+
+if (!function_exists('get_vendor_items')) {
+  function get_vendor_items($vendor_id, $offset = 1, $limit = 24)
+  {
+    $query = setOtcParams();
+    $query['VendorId'] = $vendor_id;
+    $query['framePosition'] = $offset;
+    $query['frameSize'] = $limit;
+    $response = load_otc_api()->request('GET', 'SearchVendorItems', ['query' => $query]);
+    $statusCode = $response->getStatusCode();
+    if ($statusCode == 200) {
+      $body = json_decode($response->getBody(), true);
+      $result = getArrayKeyData($body, 'Result', []);
+      $Items = getArrayKeyData($result, 'Items', []);
+      $Content = getArrayKeyData($Items, 'Content', []);
+      $TotalCount = getArrayKeyData($Items, 'TotalCount', 0);
+      return ['Content' => $Content, 'TotalCount' => $TotalCount];
+    }
+    return ['Content' => [], 'TotalCount' => 0];
+  }
+}
+
+
 if (!function_exists('otc_items_full_info')) {
   function otc_items_full_info($item_id)
   {

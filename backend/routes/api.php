@@ -62,6 +62,7 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function () {
   Route::post('/search-process', [CatalogController::class, 'searchProcess']);
   Route::post('/get-picture-result/{search_id}', [CatalogController::class, 'getPictureSearchResult']);
   Route::post('/search-picture', [CatalogController::class, 'searchPicture']);
+  Route::post('/vendor-items', [CatalogController::class, 'SearchVendorItems']);
 
   Route::post('/wishlist', [WishlistController::class, 'getCustomerWishList']);
 
