@@ -33,7 +33,6 @@ const OrderDetails = props => {
 	const ShippingCharges = settings?.air_shipping_charges || '';
 	const order_items = order?.order_items || [];
 
-
 	return (
 		<main className="main bg-gray">
 			<Helmet>
@@ -64,7 +63,6 @@ const OrderDetails = props => {
 									</div>
 
 									<hr className="my-2"/>
-
 									{
 										order_items?.length > 0 &&
 										order_items.map((product, index) =>

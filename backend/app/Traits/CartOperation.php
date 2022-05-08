@@ -477,8 +477,8 @@ trait CartOperation
         if ($orderItem) {
           $item_id = $orderItem->id;
           $DeliveryCost = $orderItem->DeliveryCost;
-          $variations = $product->variations;
-          $variations_count = $product->variations_count;
+          $variations = $product->variations->where('is_checked', 1);
+          $variations_count = $orderItem->variations_count;
           $product_value = 0;
           $count = 0;
           foreach ($variations as $variation) {
@@ -486,7 +486,7 @@ trait CartOperation
             $qty = $variation->qty;
             $subTotal = round($price * $qty);
             $product_value += $subTotal;
-            $variation = OrderItemVariation::create([
+            OrderItemVariation::create([
               'order_id' => $order_id,
               'item_id' => $item_id,
               'user_id' => $user->id,

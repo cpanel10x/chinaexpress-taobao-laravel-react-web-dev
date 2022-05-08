@@ -6,29 +6,22 @@ import ReactPlayer from "react-player";
 const AliMediaPart = (props) => {
 	const {product, imagePathList, activeImg, setActiveImg} = props;
 
-	const firstImage = imagePathList?.length > 0 ? imagePathList[0] : '';
-	const PreviewUrl =  '';
-	const Url = '';
+	const {thumbnail, url: videoUrl} = product?.item?.video || {};
 
-	useEffect(() => {
-		if (firstImage) {
-			setActiveImg(firstImage);
-		}
-	}, [firstImage]);
 
 	return (
 		<div className="product-gallery product-gallery-vertical">
 			<figure className="product-main-image">
 				{
-					activeImg === PreviewUrl ?
+					activeImg === thumbnail ?
 						<div className="previewVideoThumb">
-							<img src={PreviewUrl} alt=""/>
-							<div className="videoPlayerIcon" onClick={() => setActiveImg(Url)}>
+							<img src={thumbnail} alt=""/>
+							<div className="videoPlayerIcon" onClick={() => setActiveImg(videoUrl)}>
 								<i className="icon-play-circled"/>
 							</div>
 						</div>
 						:
-						activeImg === Url ? (
+						activeImg === videoUrl ? (
 							<ReactPlayer
 								muted={true}
 								playing={true}
@@ -37,7 +30,7 @@ const AliMediaPart = (props) => {
 								loop={true}
 								width="100%"
 								height="auto"
-								url={Url}
+								url={videoUrl}
 							/>
 						) : (
 							activeImg &&
@@ -50,8 +43,8 @@ const AliMediaPart = (props) => {
 				}
 			</figure>
 			<AliImgGallery
-				PreviewUrl={PreviewUrl}
-				Url={Url}
+				PreviewUrl={thumbnail}
+				Url={videoUrl}
 				setActiveImg={setActiveImg}
 				activeImg={activeImg}
 				Pictures={imagePathList}

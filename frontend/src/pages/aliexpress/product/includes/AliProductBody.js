@@ -30,7 +30,10 @@ const AliProductBody = (props) => {
 
 	useEffect(() => {
 		const mainImg = imagePathList?.length > 0 ? imagePathList[0] : '';
-		if (mainImg) {
+		const {thumbnail} = product?.item?.video || {};
+		if (thumbnail) {
+			setActiveImg(thumbnail);
+		}else if (mainImg) {
 			setActiveImg(mainImg);
 		}
 	}, [imagePathList]);

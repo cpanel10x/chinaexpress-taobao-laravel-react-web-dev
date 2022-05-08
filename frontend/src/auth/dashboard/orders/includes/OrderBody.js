@@ -10,6 +10,8 @@ const OrderBody = (props) => {
 
 	const {product, currency} = props;
 
+	const variations = product?.item_variations || [];
+
 
 	const productPageLink = (product) => {
 		const ItemId = product?.ItemId;
@@ -17,6 +19,7 @@ const OrderBody = (props) => {
 		return ProviderType === 'aliexpress' ? `/aliexpress/product/${ItemId}` : `/product/${ItemId}`;
 	};
 
+	console.log('variations', variations);
 
 	return (
 		<div className="cartItem">

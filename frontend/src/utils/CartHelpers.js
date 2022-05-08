@@ -73,10 +73,13 @@ export const getProductCurrentPrice = ($product, rate) => {
 };
 
 
-export const getProductWeight = ($product) => {
-	let Weight = $product?.PhysicalParameters?.Weight;
+export const getProductWeight = (product) => {
+	let Weight = product?.PhysicalParameters?.Weight || 0;
 	if (!Weight) {
-		Weight = $product?.PhysicalParameters?.ApproxWeight;
+		Weight = product?.PhysicalParameters?.ApproxWeight || 0;
+	}
+	if (!Weight) {
+		Weight = product?.ActualWeightInfo?.Weight || 0;
 	}
 	return Weight ? Number(Weight).toFixed(3) : '0.000';
 };
