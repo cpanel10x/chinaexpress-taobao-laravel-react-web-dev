@@ -4,12 +4,14 @@ import {goPageTop} from "../../utils/Helpers";
 import PageSkeleton from "../../skeleton/PageSkeleton";
 import Breadcrumb from "../breadcrumb/Breadcrumb";
 import {useWishList} from "../../api/WishListApi";
+import {analyticsPageView} from "../../utils/AnalyticsHelpers";
 
 const Wishlist = () => {
 	const {data: wishLists, isLoading} = useWishList();
 
 	useEffect(() => {
 		goPageTop();
+		analyticsPageView();
 	}, []);
 
 	if (isLoading) {

@@ -1,10 +1,10 @@
 import React, {useEffect} from "react";
-import {withRouter} from "react-router-dom";
 import parser from "html-react-parser";
 import {goPageTop} from "../../utils/Helpers";
 import PageSkeleton from "../../skeleton/PageSkeleton";
 import My404Component from "../404/My404Component";
 import {useCustomPageData} from "../../api/GeneralApi";
+import {analyticsPageView} from "../../utils/AnalyticsHelpers";
 
 const Faq = () => {
 
@@ -12,7 +12,8 @@ const Faq = () => {
 
 	useEffect(() => {
 		goPageTop();
-	});
+		analyticsPageView();
+	},[]);
 
 	if (isLoading) {
 		return <PageSkeleton/>;
@@ -57,4 +58,4 @@ const Faq = () => {
 	);
 };
 
-export default withRouter(Faq);
+export default Faq;

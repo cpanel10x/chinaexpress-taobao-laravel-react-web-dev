@@ -10,17 +10,20 @@ import {useSettings} from "../../../api/GeneralApi";
 import RecentViewProduct from "../../product/reletedProduct/RecentViewProduct";
 import AliExpressProduct404 from "../../404/AliExpressProduct404";
 import AliProductDetailsTab from "./includes/detailsTab/AliProductDetailsTab";
+import {analyticsPageView} from "../../../utils/AnalyticsHelpers";
 
 const AliProductPage = (props) => {
 	const {product_id} = useParams();
 	const {data: settings} = useSettings();
 	const {data: product, isLoading} = useAliProductDetails(product_id);
 
+
 	const cardRef = useRef(null);
 	const isMobile = useMediaQuery({query: '(max-width: 991px)'});
 
 	useEffect(() => {
 		goPageTop();
+		analyticsPageView();
 	}, [product_id]);
 
 	if (isLoading) {

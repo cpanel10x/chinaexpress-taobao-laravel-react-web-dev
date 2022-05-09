@@ -1,6 +1,6 @@
 import React, {useEffect} from "react";
 import {goPageTop} from "../../../utils/Helpers";
-import {useParams, withRouter} from "react-router-dom";
+import {useParams} from "react-router-dom";
 import PageSkeleton from "../../../skeleton/PageSkeleton";
 import {useCustomerOrderDetails} from "../../../api/ApiDashboard";
 import Defaul404 from "../../../pages/404/Defaul404";
@@ -10,6 +10,7 @@ import OrderSummary from "./includes/OrderSummary";
 import RePayment from "./includes/RePayment";
 import Breadcrumb from "../../../pages/breadcrumb/Breadcrumb";
 import Helmet from "react-helmet";
+import {analyticsPageView} from "../../../utils/AnalyticsHelpers";
 
 const OrderDetails = props => {
 	const {tran_id} = useParams();
@@ -18,6 +19,7 @@ const OrderDetails = props => {
 
 	useEffect(() => {
 		goPageTop();
+		analyticsPageView();
 	}, [tran_id]);
 
 	if (isLoading) {
@@ -87,4 +89,4 @@ const OrderDetails = props => {
 };
 
 
-export default withRouter(OrderDetails);
+export default OrderDetails;

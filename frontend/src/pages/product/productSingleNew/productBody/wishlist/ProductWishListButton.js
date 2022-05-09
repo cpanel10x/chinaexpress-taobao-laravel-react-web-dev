@@ -7,7 +7,7 @@ import SpinnerButtonLoader from "../../../../../loader/SpinnerButtonLoader";
 import {taobaoProductPrepareForLove} from "../../../../../utils/CartHelpers";
 
 const ProductWishListButton = (props) => {
-	const {product, settings} = props;
+	const {product, gaEventTracker, settings} = props;
 	const {data: wishList} = useWishList();
 	const cache = useQueryClient();
 	const {isLoading, mutateAsync} = useAddToWishList();
@@ -26,6 +26,7 @@ const ProductWishListButton = (props) => {
 					}
 				}
 			});
+			gaEventTracker(`add-to-love-${product?.Id}`);
 		} else {
 			Swal.fire({
 				text: 'Please login your account first',

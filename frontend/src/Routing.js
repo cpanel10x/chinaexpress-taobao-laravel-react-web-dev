@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {Route, Switch} from "react-router-dom";
 import Home from "./pages/home/Home";
 import Login from "./auth/login/Login";
@@ -26,8 +26,15 @@ import ManageAddress from "./auth/dashboard/address/ManageAddress";
 import LatestArrivedProduct from "./pages/newArrive/LatestArrivedProduct";
 import AliSellerPage from "./pages/aliexpress/aliSeller/AliSellerPage";
 import TaobaoSellerPage from "./pages/taobaoSeller/taobaoSeller/TaobaoSellerPage";
+import {analyticsPageView} from "./utils/AnalyticsHelpers";
 
 const Routing = () => {
+
+
+	useEffect(() => {
+		analyticsPageView();
+	}, []);
+
 	return (
 		<Switch>
 			<Route path="/" exact component={Home}/>
@@ -60,11 +67,11 @@ const Routing = () => {
 			<AuthRoute path="/checkout" exact component={Checkout}/>
 			<AuthRoute path="/payment" exact component={Payment}/>
 			<AuthRoute path="/online/payment/:status" exact component={OnlinePaymentStatus}/>
-			<AuthRoute path="/dashboard" exact component={Dashboard} />
-			<AuthRoute path="/dashboard/orders" exact component={AllOrders} />
-			<AuthRoute path="/dashboard/wishlist" exact component={Wishlist} />
-			<AuthRoute path="/dashboard/address" exact component={ManageAddress} />
-			<AuthRoute path="/dashboard/profile" exact component={Profile} />
+			<AuthRoute path="/dashboard" exact component={Dashboard}/>
+			<AuthRoute path="/dashboard/orders" exact component={AllOrders}/>
+			<AuthRoute path="/dashboard/wishlist" exact component={Wishlist}/>
+			<AuthRoute path="/dashboard/address" exact component={ManageAddress}/>
+			<AuthRoute path="/dashboard/profile" exact component={Profile}/>
 			<AuthRoute path="/dashboard/orders/:tran_id" exact component={OrderDetails}/>
 
 			<Route

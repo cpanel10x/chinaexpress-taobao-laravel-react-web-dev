@@ -4,10 +4,15 @@ import ShippingAddress from "./shipping/ShippingAddress";
 import Swal from "sweetalert2";
 import {withRouter} from "react-router-dom";
 import {itemValidateWillPayment} from "../../../utils/AliHelpers";
+import {analyticsEventTracker} from "../../../utils/AnalyticsHelpers";
 
 const CheckoutSidebar = (props) => {
 	const {settings, cart, cartItems} = props;
 	const [manageShipping, setManageShipping] = useState(false);
+
+	const gaEventTracker = (eventName) => {
+		analyticsEventTracker('Checkout Page', eventName);
+	};
 
 	const currency = settings?.currency_icon;
 	const advanced_rate = settings?.payment_advanched_rate || 0;
@@ -26,6 +31,7 @@ const CheckoutSidebar = (props) => {
 		if (process) {
 			if (shipping?.phone) {
 				props.history.push("/payment");
+				gaEventTracker('process-to-payment');
 			} else {
 				Swal.fire({
 					text: "Set your shipping address",

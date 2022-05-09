@@ -1,5 +1,5 @@
 import React, {useEffect} from "react";
-import {useLocation, useParams, withRouter} from "react-router-dom";
+import {useParams} from "react-router-dom";
 import {
 	goPageTop,
 } from "../../utils/Helpers";
@@ -8,6 +8,7 @@ import CategoryProductList from "../product/productList/CategoryProductList";
 import SidebarCategorySkeleton from "../../skeleton/productSkeleton/SidebarCategorySkeleton";
 import {useAllCategories} from "../../api/GeneralApi";
 import {useQuery} from "../../utils/customHooks";
+import {analyticsPageView} from "../../utils/AnalyticsHelpers";
 
 
 const LoadShopProducts = (props) => {
@@ -17,8 +18,10 @@ const LoadShopProducts = (props) => {
 
 	const {page} = useQuery();
 
+
 	useEffect(() => {
 		goPageTop();
+		analyticsPageView();
 	}, [category_slug, page]);
 
 
@@ -62,4 +65,4 @@ const LoadShopProducts = (props) => {
 };
 
 
-export default withRouter(LoadShopProducts);
+export default LoadShopProducts;

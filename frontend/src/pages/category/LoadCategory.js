@@ -1,10 +1,11 @@
 import React, {useEffect} from "react";
-import {withRouter, useParams} from "react-router-dom";
+import {useParams} from "react-router-dom";
 import CategorySidebar from "./includes/CategorySidebar";
 import {goPageTop} from "../../utils/Helpers";
 import SubCategory from "./includes/SubCategory";
 import {useAllCategories} from "../../api/GeneralApi";
 import My404Component from "../404/My404Component";
+import {analyticsPageView} from "../../utils/AnalyticsHelpers";
 
 const LoadCategory = (props) => {
 
@@ -13,7 +14,8 @@ const LoadCategory = (props) => {
 
 	useEffect(() => {
 		goPageTop();
-	}, []);
+		analyticsPageView();
+	}, [category_slug]);
 
 	if (isLoading) {
 		return '';
@@ -76,4 +78,4 @@ const LoadCategory = (props) => {
 };
 
 
-export default withRouter(LoadCategory);
+export default LoadCategory;

@@ -7,6 +7,7 @@ import {useSettings} from "../../../api/GeneralApi";
 import {useQuery} from "../../../utils/customHooks";
 import ProductCart from "../../product/productList/ProductCart";
 import {useTaobaoSellerProducts} from "../../../api/ProductApi";
+import {analyticsPageView} from "../../../utils/AnalyticsHelpers";
 
 const TaobaoSellerPage = (props) => {
 	const history = useHistory();
@@ -19,6 +20,7 @@ const TaobaoSellerPage = (props) => {
 
 	useEffect(() => {
 		goPageTop();
+		analyticsPageView();
 	}, [page]);
 
 	const handlePaginationClick = (data) => {

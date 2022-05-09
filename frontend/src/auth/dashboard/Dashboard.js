@@ -1,14 +1,16 @@
 import React, {useEffect} from "react";
 import Breadcrumb from "../../pages/breadcrumb/Breadcrumb";
-import {withRouter, NavLink} from "react-router-dom";
+import {NavLink} from "react-router-dom";
 import {goPageTop} from "../../utils/Helpers";
 import {useAuthMutation} from "../../api/Auth";
+import {analyticsPageView} from "../../utils/AnalyticsHelpers";
 
 const Dashboard = (props) => {
 	const {authLogout} = useAuthMutation();
 
 	useEffect(() => {
 		goPageTop();
+		analyticsPageView();
 	}, []);
 
 
@@ -122,4 +124,4 @@ const Dashboard = (props) => {
 };
 
 
-export default withRouter(Dashboard);
+export default Dashboard;

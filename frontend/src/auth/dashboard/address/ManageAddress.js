@@ -1,9 +1,11 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Breadcrumb from "../../../pages/breadcrumb/Breadcrumb";
 import {useAddress, useDeleteAddress} from "../../../api/AddressApi";
 import AddEditAddress from "./includes/AddEditAddress";
 import Swal from "sweetalert2";
 import {useQueryClient} from "react-query";
+import {goPageTop} from "../../../utils/Helpers";
+import {analyticsPageView} from "../../../utils/AnalyticsHelpers";
 
 const ManageAddress = (props) => {
 
@@ -15,12 +17,15 @@ const ManageAddress = (props) => {
 
 	const {mutateAsync} = useDeleteAddress();
 
+	useEffect(() => {
+		goPageTop();
+		analyticsPageView();
+	}, []);
 
 	const toggleAddEdit = (shipping = {}) => {
 		setAddressItem(shipping);
 		setEdit(true);
 	};
-
 
 	const deleteShippingAddress = (shipping = {}) => {
 		Swal.fire({

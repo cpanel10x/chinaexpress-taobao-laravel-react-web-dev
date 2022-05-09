@@ -1,5 +1,4 @@
 import React, {useEffect} from "react";
-import {withRouter} from "react-router-dom";
 import {
 	CartProductSummary,
 } from "../../utils/CartHelpers";
@@ -12,6 +11,7 @@ import PaymentItem from "./includes/PaymentItem";
 import {goPageTop} from "../../utils/Helpers";
 import Helmet from "react-helmet";
 import {itemValidateWillPayment} from "../../utils/AliHelpers";
+import {analyticsEventTracker, analyticsPageView} from "../../utils/AnalyticsHelpers";
 
 const Payment = (props) => {
 	const {data: settings} = useSettings();
@@ -28,9 +28,9 @@ const Payment = (props) => {
 	const payment_method = cart?.payment_method || false;
 	const {advanced} = CartProductSummary(cart, advanced_rate);
 
-
 	useEffect(() => {
 		goPageTop();
+		analyticsPageView();
 	}, []);
 
 	const selectPaymentMethod = (event) => {
@@ -61,6 +61,7 @@ const Payment = (props) => {
 
 		const process = itemValidateWillPayment(cartItems, settings);
 		if (process) {
+			analyticsEventTracker('Payment Page', 'payment-process');
 			confirmOrder.mutateAsync()
 				.then(response => {
 					if (response?.status) {
@@ -141,4 +142,4 @@ const Payment = (props) => {
 };
 
 
-export default withRouter(Payment);
+export default Payment;

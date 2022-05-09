@@ -3,11 +3,16 @@ import {Link} from "react-router-dom";
 import Swal from "sweetalert2";
 import {useRepaymentOrderByBkash} from "../../../../api/ApiDashboard";
 import SpinnerButtonLoader from "../../../../loader/SpinnerButtonLoader";
+import {analyticsEventTracker} from "../../../../utils/AnalyticsHelpers";
 
 const RePayment = ({order}) => {
 
 	const [payMethod, setPayMethod] = useState('bkash');
 	const [accept, setAccept] = useState(false);
+
+	const gaEventTracker = (eventName) => {
+		analyticsEventTracker('Order-Details', eventName);
+	};
 
 	const {mutateAsync, isLoading} = useRepaymentOrderByBkash();
 
@@ -19,6 +24,7 @@ const RePayment = ({order}) => {
 				buttons: "Ok, Understood",
 			});
 		} else {
+			gaEventTracker('Repayment-process');
 			mutateAsync({tran_id: order?.transaction_id}, {
 				onSuccess: (data) => {
 					if (data.status === true) {

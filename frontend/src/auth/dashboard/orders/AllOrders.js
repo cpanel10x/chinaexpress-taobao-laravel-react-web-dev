@@ -6,6 +6,7 @@ import {useQuery} from "../../../utils/customHooks";
 import PageSkeleton from "../../../skeleton/PageSkeleton";
 import OrderItemRow from "./includes/OrderItemRow";
 import {useSettings} from "../../../api/GeneralApi";
+import {analyticsPageView} from "../../../utils/AnalyticsHelpers";
 
 const AllOrders = () => {
 	const {page} = useQuery();
@@ -15,9 +16,9 @@ const AllOrders = () => {
 	const {data: settings} = useSettings();
 	const currency = settings?.currency_icon || '৳';
 
-
 	useEffect(() => {
 		goPageTop();
+		analyticsPageView();
 	}, []);
 
 

@@ -1,11 +1,8 @@
 import React, {useEffect} from "react";
-import {withRouter} from "react-router-dom";
-import CategorySidebar from "./includes/CategorySidebar";
 import {goPageTop} from "../../utils/Helpers";
-import SubCategory from "./includes/SubCategory";
-import Defaul404 from "../404/Defaul404";
 import {useNewArrivedProducts} from "../../api/ProductApi";
 import RecentItems from "../home/includes/Products/NewArriveProduct/includes/RecentItems";
+import {analyticsPageView} from "../../utils/AnalyticsHelpers";
 
 const LatestArrivedProduct = (props) => {
 
@@ -13,6 +10,7 @@ const LatestArrivedProduct = (props) => {
 
 	useEffect(() => {
 		goPageTop();
+		analyticsPageView();
 	}, []);
 
 	if (isLoading) {
@@ -51,4 +49,4 @@ const LatestArrivedProduct = (props) => {
 };
 
 
-export default withRouter(LatestArrivedProduct);
+export default LatestArrivedProduct;

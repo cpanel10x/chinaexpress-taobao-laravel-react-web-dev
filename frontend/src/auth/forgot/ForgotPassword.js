@@ -1,9 +1,10 @@
-import React, {useEffect, useState} from "react";
-import {Link, withRouter} from "react-router-dom";
+import React, {useEffect} from "react";
+import {Link} from "react-router-dom";
 import ForgotForm from "./include/ForgotForm";
 import {useSettings} from "../../api/GeneralApi";
-import {useAuthMutation, isAuthenticated} from "../../api/Auth";
+import {isAuthenticated} from "../../api/Auth";
 import {goPageTop} from "../../utils/Helpers";
+import {analyticsPageView} from "../../utils/AnalyticsHelpers";
 
 
 const ForgotPassword = props => {
@@ -13,6 +14,7 @@ const ForgotPassword = props => {
 	const isAuth = isAuthenticated();
 
 	useEffect(() => {
+		analyticsPageView();
 		goPageTop();
 		if (isAuth) {
 			props.history.push("/dashboard");
@@ -53,4 +55,4 @@ const ForgotPassword = props => {
 };
 
 
-export default withRouter(ForgotPassword);
+export default ForgotPassword;

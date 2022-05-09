@@ -10,6 +10,7 @@ import {useTabobaoProduct} from "../../../api/ProductApi";
 import RecentViewProduct from "../reletedProduct/RecentViewProduct";
 import {useSettings} from "../../../api/GeneralApi";
 import TaobaoProduct404 from "../../404/TaobaoProduct404";
+import {analyticsPageView} from "../../../utils/AnalyticsHelpers";
 
 const ProductSingle = props => {
 	const {item_id} = useParams();
@@ -27,6 +28,7 @@ const ProductSingle = props => {
 
 	useEffect(() => {
 		goPageTop();
+		analyticsPageView();
 	}, [item_id]);
 
 	if (isLoading) {

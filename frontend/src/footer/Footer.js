@@ -2,8 +2,13 @@ import React from "react";
 import {Link} from "react-router-dom";
 import StickyFooterManage from "./includes/StickyFooterManage";
 import {useSettings} from "../api/GeneralApi";
+import {analyticsEventTracker} from "../utils/AnalyticsHelpers";
 
 const Footer = () => {
+
+	const gaEventTracker = (eventName) => {
+		analyticsEventTracker('ChinaExpress-Footer', eventName);
+	};
 
 	const {data: settings} = useSettings();
 
@@ -32,8 +37,9 @@ const Footer = () => {
 											<i className="icon-phone"/>
 											<a
 												href={`tel:${settings?.office_phone}`}
-												style={{fontSize:'1.1rem'}}
+												style={{fontSize: '1.1rem'}}
 												className="font-weight-bold"
+												onClick={() => gaEventTracker('click-call')}
 											>
 												{settings?.office_phone}
 											</a>
@@ -42,6 +48,7 @@ const Footer = () => {
 											<i className="icon-mail"/>
 											<a
 												href={`mailto:${settings?.office_email}`}
+												onClick={() => gaEventTracker('click-mail')}
 											>
 												{settings?.office_email}
 											</a>

@@ -7,7 +7,7 @@ import SpinnerButtonLoader from "../../../../../loader/SpinnerButtonLoader";
 import {wishListProcessProduct} from "../../../../../utils/AliHelpers";
 
 const AliProductWishListButton = (props) => {
-	const {product, settings} = props;
+	const {product, gaEventTracker, settings} = props;
 	const {data: wishList} = useWishList();
 	const cache = useQueryClient();
 	const {isLoading, mutateAsync} = useAddToWishList();
@@ -28,6 +28,7 @@ const AliProductWishListButton = (props) => {
 					}
 				}
 			});
+			gaEventTracker(`add-to-love-${product_id}`);
 		} else {
 			Swal.fire({
 				text: 'Please login your account first',

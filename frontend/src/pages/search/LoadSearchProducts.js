@@ -1,5 +1,5 @@
 import React, {useEffect} from "react";
-import {useHistory, withRouter} from "react-router-dom";
+import {useHistory} from "react-router-dom";
 import ProductListSkeleton from "../../skeleton/productSkeleton/ProductListSkeleton";
 import {goPageTop} from "../../utils/Helpers";
 import SearchProductList from "./includes/SearchProductList";
@@ -7,6 +7,7 @@ import My404Component from "../404/My404Component";
 import {useQuery} from "../../utils/customHooks";
 import {useSearchKeyword} from "../../api/ProductApi";
 import SearchBlock from "./includes/SearchBlock";
+import {analyticsPageView} from "../../utils/AnalyticsHelpers";
 
 
 const LoadSearchProducts = (props) => {
@@ -24,6 +25,7 @@ const LoadSearchProducts = (props) => {
 
 	useEffect(() => {
 		goPageTop();
+		analyticsPageView();
 		if (TotalCount === 1) {
 			let product = Content?.[0];
 			const product_code = product?.product_code ? product?.product_code : product?.ItemId;
@@ -76,4 +78,4 @@ const LoadSearchProducts = (props) => {
 };
 
 
-export default withRouter(LoadSearchProducts);
+export default LoadSearchProducts;

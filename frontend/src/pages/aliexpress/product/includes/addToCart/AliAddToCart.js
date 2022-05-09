@@ -6,10 +6,15 @@ import Swal from 'sweetalert2'
 import {useItemMarkAsCart} from "../../../../../api/CartApi";
 import {useQueryClient} from "react-query";
 import AliPopupShown from "../popup/AliPopupShown";
+import {analyticsEventTracker} from "../../../../../utils/AnalyticsHelpers";
 
 const AliAddToCart = (props) => {
 	const {cartItem, product, settings} = props;
 	const [showPopup, setShowPopup] = useState(false);
+
+	const gaEventTracker = (eventName) => {
+		analyticsEventTracker('AliExpress-product-page', eventName);
+	};
 
 	const item_id = product?.item?.num_iid;
 
@@ -22,6 +27,9 @@ const AliAddToCart = (props) => {
 	const isExistsOnCart = cartItem?.IsCart || 0;
 
 	const processAddToCart = () => {
+
+		gaEventTracker(`add-to-cart-${item_id}`);
+
 		mutateAsync({item_id}, {
 			onSuccess: () => {
 				setShowPopup(false);
@@ -92,7 +100,10 @@ const AliAddToCart = (props) => {
 					}
 				</div>
 				<div className="col pl-1">
-					<AliProductWishListButton product={product} settings={settings}/>
+					<AliProductWishListButton
+						product={product}
+						gaEventTracker={gaEventTracker}
+						settings={settings}/>
 				</div>
 			</div>
 		</div>

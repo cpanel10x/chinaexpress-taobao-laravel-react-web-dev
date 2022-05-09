@@ -1,8 +1,14 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Link} from "react-router-dom";
-import Breadcrumb from "../breadcrumb/Breadcrumb";
+import {goPageTop} from "../../utils/Helpers";
+import {analyticsPageView} from "../../utils/AnalyticsHelpers";
 
 const My404Component = () => {
+
+   useEffect(() => {
+      goPageTop();
+      analyticsPageView();
+   }, []);
 
    return (
       <main className="main">

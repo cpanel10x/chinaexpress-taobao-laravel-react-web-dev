@@ -4,6 +4,7 @@ import PageSkeleton from "../../skeleton/PageSkeleton";
 import Breadcrumb from "../../pages/breadcrumb/Breadcrumb";
 import {useAuthMutation} from "../../api/Auth";
 import ProfileUpdate from "./includes/ProfileUpdate";
+import {analyticsPageView} from "../../utils/AnalyticsHelpers";
 
 const Profile = () => {
 
@@ -14,6 +15,7 @@ const Profile = () => {
 
 	useEffect(() => {
 		goPageTop();
+		analyticsPageView();
 	}, []);
 
 

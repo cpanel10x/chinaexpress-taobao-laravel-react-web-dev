@@ -7,6 +7,7 @@ import PagePaginator from "../../../pagination/PagePaginator";
 import AliProductCard from "../card/AliProductCard";
 import {useSettings} from "../../../api/GeneralApi";
 import {useQuery} from "../../../utils/customHooks";
+import {analyticsPageView} from "../../../utils/AnalyticsHelpers";
 
 const AliSellerPage = (props) => {
 	const history = useHistory();
@@ -15,9 +16,9 @@ const AliSellerPage = (props) => {
 	const {data: settings} = useSettings();
 	const {data, isLoading} = useAliSellerProducts(seller_id, 1);
 
-
 	useEffect(() => {
 		goPageTop();
+		analyticsPageView();
 	}, []);
 
 	const handlePaginationClick = (data) => {

@@ -6,10 +6,15 @@ import {useQueryClient} from "react-query";
 import ProductWishListButton from "../wishlist/ProductWishListButton";
 import PopupShown from "../oneTimePopup/PopupShown";
 import {sumCartItemTotal} from "../../../../../utils/AliHelpers";
+import {analyticsEventTracker} from "../../../../../utils/AnalyticsHelpers";
 
 const AddToCartButtons = (props) => {
 	const {cartItem, product, settings} = props;
 	const [showPopup, setShowPopup] = useState(false);
+
+	const gaEventTracker = (eventName) => {
+		analyticsEventTracker('Taobao-product-page', eventName);
+	};
 
 	const cache = useQueryClient();
 	const {mutateAsync, isLoading} = useItemMarkAsCart();
@@ -21,6 +26,7 @@ const AddToCartButtons = (props) => {
 	const isExistsOnCart = cartItem?.IsCart || 0;
 
 	const processAddToCart = () => {
+		gaEventTracker(`add-to-cart-${item_id}`);
 		mutateAsync({item_id}, {
 			onSuccess: () => {
 				setShowPopup(false);
@@ -80,7 +86,10 @@ const AddToCartButtons = (props) => {
 					}
 				</div>
 				<div className="col pl-1">
-					<ProductWishListButton product={product} settings={settings}/>
+					<ProductWishListButton
+						product={product}
+						gaEventTracker={gaEventTracker}
+						settings={settings}/>
 				</div>
 			</div>
 		</div>

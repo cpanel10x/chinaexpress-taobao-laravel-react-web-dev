@@ -7,12 +7,17 @@ import {useContactMessage, useCustomPageData, useSettings} from "../../api/Gener
 import Swal from "sweetalert2";
 import Helmet from "react-helmet";
 import SpinnerButtonLoader from "../../loader/SpinnerButtonLoader";
+import {analyticsEventTracker, analyticsPageView} from "../../utils/AnalyticsHelpers";
 
 const Contact = () => {
 	const {data: settings} = useSettings();
 	const {data: contact, isLoading: contactLoading} = useCustomPageData('contact-us', 'contact');
 
 	const {mutateAsync, isLoading} = useContactMessage();
+
+	const gaEventTracker = (eventName) => {
+		analyticsEventTracker('contact-page', eventName);
+	};
 
 	const [name, setName] = useState('');
 	const [phone, setPhone] = useState('');
@@ -23,6 +28,7 @@ const Contact = () => {
 
 	useEffect(() => {
 		goPageTop();
+		analyticsPageView();
 	}, []);
 
 	if (contactLoading) {
@@ -92,6 +98,7 @@ const Contact = () => {
 													<i className="icon-phone"/>
 													<a
 														href={`tel:${settings?.office_phone || ''}`}
+														onClick={() => gaEventTracker('click-call')}
 													>
 														{settings?.office_phone || ''}
 													</a>
@@ -100,6 +107,7 @@ const Contact = () => {
 													<i className="icon-mail"/>
 													<a
 														href={`mailto:${settings?.office_email || ''}`}
+														onClick={() => gaEventTracker('click-email')}
 													>
 														{settings?.office_email || ''}
 													</a>
@@ -198,6 +206,7 @@ const Contact = () => {
 													<button
 														type="submit"
 														className="btn btn-block btn-default"
+														onClick={() => gaEventTracker('submit-contact')}
 													>
 														<span>SUBMIT</span>
 														<i className="icon-long-arrow-right"/>

@@ -1,10 +1,10 @@
-import React, {useEffect, useState} from "react";
-import {Link, withRouter} from "react-router-dom";
+import React, {useEffect} from "react";
+import {Link} from "react-router-dom";
 import OtpLoginForm from "./include/otpLogin/OtpLoginForm";
 import {useSettings} from "../../api/GeneralApi";
 import {isAuthenticated} from "../../api/Auth";
 import {goPageTop} from "../../utils/Helpers";
-
+import {analyticsPageView} from "../../utils/AnalyticsHelpers";
 
 const Login = props => {
 	const {data: settings} = useSettings();
@@ -13,6 +13,7 @@ const Login = props => {
 
 	useEffect(() => {
 		goPageTop();
+		analyticsPageView();
 		if (isAuth) {
 			props.history.push("/dashboard");
 		}
@@ -52,4 +53,4 @@ const Login = props => {
 };
 
 
-export default withRouter(Login);
+export default Login;

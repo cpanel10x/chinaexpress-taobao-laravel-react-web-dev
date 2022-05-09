@@ -1,12 +1,16 @@
 import React, {useEffect} from 'react';
 import {Link} from "react-router-dom";
-import {getSetting} from "../../utils/Helpers";
 import {toggleMobileMenu} from "../../utils/jQueryImplement";
+import {analyticsEventTracker} from "../../utils/AnalyticsHelpers";
 
 
 const StickyFooter = (props) => {
 	const {settings} = props;
 	const office_phone = settings?.office_phone || '01515234363';
+
+	const gaEventTracker = (eventName) => {
+		analyticsEventTracker('ChinaExpress-Footer', eventName);
+	};
 
 	useEffect(() => {
 		toggleMobileMenu();
@@ -22,7 +26,7 @@ const StickyFooter = (props) => {
 						</a>
 					</div>
 					<div className="col text-center">
-						<a className="nav-link" href={`tel:${office_phone}`}>
+						<a className="nav-link" href={`tel:${office_phone}`} onClick={() => gaEventTracker('click-call')}>
 							<span className="sticky_nav_icon"><i className="icon-headset"/></span>
 						</a>
 					</div>

@@ -4,6 +4,10 @@ import './scss/app.scss';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {QueryClient, QueryClientProvider} from "react-query";
+import ReactGA from 'react-ga';
+
+const TRACKING_ID = "UA-188499439-1"; // OUR_TRACKING_ID
+ReactGA.initialize(TRACKING_ID);
 
 
 const queryClient = new QueryClient({

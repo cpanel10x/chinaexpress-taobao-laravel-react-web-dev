@@ -18,8 +18,6 @@ const Home = (props) => {
    const section_four_active = settings?.section_four_active;
    const section_five_active = settings?.section_five_active;
 
-   const general = {};
-
    return (
       <main className="main" style={{backgroundColor: "#fafafa"}}>
          <Intro/>

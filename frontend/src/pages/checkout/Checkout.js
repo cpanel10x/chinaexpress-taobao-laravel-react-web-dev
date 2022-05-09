@@ -6,6 +6,7 @@ import {useSettings} from "../../api/GeneralApi";
 import {useCartMutation, useCheckoutCart} from "../../api/CartApi";
 import CheckoutItem from "./includes/CheckoutItem";
 import Helmet from "react-helmet";
+import {analyticsPageView} from "../../utils/AnalyticsHelpers";
 
 const Checkout = (props) => {
 	const {data: settings} = useSettings();
@@ -20,6 +21,7 @@ const Checkout = (props) => {
 
 	useEffect(() => {
 		goPageTop();
+		analyticsPageView();
 	}, []);
 
 	const removeItemFromCart = (e) => {

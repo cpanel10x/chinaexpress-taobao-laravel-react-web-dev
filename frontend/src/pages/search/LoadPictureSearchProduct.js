@@ -1,5 +1,5 @@
 import React, {useEffect} from "react";
-import {withRouter, useParams, useHistory} from "react-router-dom";
+import {useParams, useHistory} from "react-router-dom";
 import {goPageTop} from "../../utils/Helpers";
 import ProductListSkeleton from "../../skeleton/productSkeleton/ProductListSkeleton";
 import My404Component from "../404/My404Component";
@@ -7,6 +7,7 @@ import PictureSearchProductList from "./includes/PictureSearchProductList";
 import {useQuery} from "../../utils/customHooks";
 import {usePictureSearch} from "../../api/ProductApi";
 import {useSettings} from "../../api/GeneralApi";
+import {analyticsPageView} from "../../utils/AnalyticsHelpers";
 
 
 const LoadPictureSearchProduct = props => {
@@ -25,9 +26,9 @@ const LoadPictureSearchProduct = props => {
    const TotalCount = products?.TotalCount ? products.TotalCount : 1;
    const totalPage = Math.ceil(TotalCount / limit);
 
-
    useEffect(() => {
       goPageTop();
+      analyticsPageView();
       if (Content?.length === 1) {
          let product = Content?.[0];
          const product_code = product?.product_code ? product?.product_code : product?.ItemId;
@@ -70,4 +71,4 @@ const LoadPictureSearchProduct = props => {
 };
 
 
-export default withRouter(LoadPictureSearchProduct);
+export default LoadPictureSearchProduct;
