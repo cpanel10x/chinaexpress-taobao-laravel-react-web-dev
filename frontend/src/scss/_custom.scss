@@ -321,14 +321,13 @@
     top: 0;
     left: 0;
     z-index: 10000;
-    background: rgb(0 0 0 / 50%);
+    background: rgb(0 0 0 / 40%);
     color: #fa4952;
     font-size: 1.5rem;
     right: 0;
     bottom: 0;
     width: 100%;
     text-align: center;
-    padding-top: 15px;
   }
 
   &:hover {
@@ -1055,15 +1054,16 @@
 
   .videoPlayerIcon {
     position: absolute;
-    background: rgba(0, 0, 0, 0.35);
+    background: rgba(0, 0, 0, 0.25);
     right: 0;
     left: 0;
     top: 0;
     bottom: 0;
     text-align: center;
-    font-size: 2.3rem;
-    padding: 0.8rem 0;
     border-radius: 4px;
+    height: 100%;
+    display: grid;
+    align-items: center;
 
     i {
       color: #fff;
@@ -1075,13 +1075,6 @@
   .videoPlayerIcon {
     font-size: 4rem;
     cursor: pointer;
-
-    i {
-      position: absolute;
-      top: 30%;
-      left: 0;
-      right: 0;
-    }
 
     &:hover {
       i {

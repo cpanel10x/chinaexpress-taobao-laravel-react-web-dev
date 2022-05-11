@@ -12,6 +12,7 @@ import {goPageTop} from "../../utils/Helpers";
 import Helmet from "react-helmet";
 import {itemValidateWillPayment} from "../../utils/AliHelpers";
 import {analyticsEventTracker, analyticsPageView} from "../../utils/AnalyticsHelpers";
+import {fbPixelSimplePurchase, fbTrackCustom} from "../../utils/FacebookPixel";
 
 const Payment = (props) => {
 	const {data: settings} = useSettings();
@@ -59,9 +60,13 @@ const Payment = (props) => {
 			return '';
 		}
 
+		const {totalPrice} = CartProductSummary(cart, advanced_rate);
+
 		const process = itemValidateWillPayment(cartItems, settings);
 		if (process) {
 			analyticsEventTracker('Payment Page', 'payment-process');
+			fbTrackCustom('payment-process-click', {click: 'click-for-partial-payment'});
+			fbPixelSimplePurchase(totalPrice);
 			confirmOrder.mutateAsync()
 				.then(response => {
 					if (response?.status) {

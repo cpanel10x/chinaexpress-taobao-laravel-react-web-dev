@@ -7,6 +7,7 @@ import {useCartMutation, useCheckoutCart} from "../../api/CartApi";
 import CheckoutItem from "./includes/CheckoutItem";
 import Helmet from "react-helmet";
 import {analyticsPageView} from "../../utils/AnalyticsHelpers";
+import {fbTrackCustom} from "../../utils/FacebookPixel";
 
 const Checkout = (props) => {
 	const {data: settings} = useSettings();
@@ -22,6 +23,7 @@ const Checkout = (props) => {
 	useEffect(() => {
 		goPageTop();
 		analyticsPageView();
+		fbTrackCustom('checkout-page', {browse: 'browse-checkout-page'});
 	}, []);
 
 	const removeItemFromCart = (e) => {

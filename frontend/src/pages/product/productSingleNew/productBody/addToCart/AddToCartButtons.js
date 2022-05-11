@@ -7,6 +7,7 @@ import ProductWishListButton from "../wishlist/ProductWishListButton";
 import PopupShown from "../oneTimePopup/PopupShown";
 import {sumCartItemTotal} from "../../../../../utils/AliHelpers";
 import {analyticsEventTracker} from "../../../../../utils/AnalyticsHelpers";
+import {fbPixelAddToCart} from "../../../../../utils/FacebookPixel";
 
 const AddToCartButtons = (props) => {
 	const {cartItem, product, settings} = props;
@@ -27,6 +28,8 @@ const AddToCartButtons = (props) => {
 
 	const processAddToCart = () => {
 		gaEventTracker(`add-to-cart-${item_id}`);
+		fbPixelAddToCart((cartItem?.Title || 'no-product-name'), parseInt(itemTotal));
+
 		mutateAsync({item_id}, {
 			onSuccess: () => {
 				setShowPopup(false);

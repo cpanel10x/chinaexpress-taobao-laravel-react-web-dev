@@ -5,6 +5,7 @@ import Swal from "sweetalert2";
 import {withRouter} from "react-router-dom";
 import {itemValidateWillPayment} from "../../../utils/AliHelpers";
 import {analyticsEventTracker} from "../../../utils/AnalyticsHelpers";
+import {fbTrackCustom} from "../../../utils/FacebookPixel";
 
 const CheckoutSidebar = (props) => {
 	const {settings, cart, cartItems} = props;
@@ -32,6 +33,7 @@ const CheckoutSidebar = (props) => {
 			if (shipping?.phone) {
 				props.history.push("/payment");
 				gaEventTracker('process-to-payment');
+				fbTrackCustom('checkout-process-button', {click: 'click-process-to-checkout-for-payment'});
 			} else {
 				Swal.fire({
 					text: "Set your shipping address",

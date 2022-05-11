@@ -105,6 +105,11 @@ trait CartOperation
           $variations = $item->variations->pluck('id');
           CartItemVariation::whereIn('id', $variations)->delete();
           CartItem::where('id', $item->id)->delete();
+        } else {
+          $variation_count = $item->variations->count();
+          if (!$variation_count) {
+            CartItem::where('id', $item->id)->delete();
+          }
         }
       }
     }

@@ -5,6 +5,7 @@ import {useSettings} from "../../api/GeneralApi";
 import {isAuthenticated} from "../../api/Auth";
 import {goPageTop} from "../../utils/Helpers";
 import {analyticsPageView} from "../../utils/AnalyticsHelpers";
+import {fbTrackCustom} from "../../utils/FacebookPixel";
 
 const Login = props => {
 	const {data: settings} = useSettings();
@@ -14,6 +15,7 @@ const Login = props => {
 	useEffect(() => {
 		goPageTop();
 		analyticsPageView();
+		fbTrackCustom('payment-process-click', {click: 'click-for-partial-payment'});
 		if (isAuth) {
 			props.history.push("/dashboard");
 		}

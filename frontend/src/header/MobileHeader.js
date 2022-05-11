@@ -1,9 +1,13 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {Link} from "react-router-dom";
 import MobileSearchForm from "./includes/MobileSearchForm";
 
 const MobileHeader = (props) => {
 	const {wishList, cart_count, settings} = props;
+
+	useEffect(() => {
+		console.log('mobile activated');
+	}, []);
 
 	return (
 		<header className="header mobile_header sticky-top header-intro-clearance header-26">

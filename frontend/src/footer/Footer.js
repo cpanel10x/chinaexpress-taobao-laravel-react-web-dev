@@ -136,6 +136,9 @@ const Footer = () => {
 									<li>
 										<Link to="/faq">FAQ</Link>
 									</li>
+									<li>
+										<Link to="/pages/media">Media</Link>
+									</li>
 								</ul>
 								{/* End .widget-list */}
 							</div>

@@ -1,4 +1,4 @@
-import React, {useLayoutEffect, useState} from "react";
+import React from "react";
 import Header from "./Header";
 import MobileHeader from "./MobileHeader";
 import {useMediaQuery} from 'react-responsive'
@@ -17,11 +17,9 @@ const HeaderManage = props => {
 
 	const isMobile = useMediaQuery({query: '(max-width: 991px)'});
 
-
-	const cart_count = cart?.cart_items?.filter(item => item?.IsCart === 1)?.length || 0;
+	const cart_count = cart?.cart_items?.filter(item => item?.IsCart > 0)?.length || 0;
 
 	if (isMobile) {
-		console.log('mobile activated');
 		return (
 			<MobileHeader
 				customer={customer}

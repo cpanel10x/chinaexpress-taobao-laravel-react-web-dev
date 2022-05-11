@@ -7,6 +7,7 @@ import {useItemMarkAsCart} from "../../../../../api/CartApi";
 import {useQueryClient} from "react-query";
 import AliPopupShown from "../popup/AliPopupShown";
 import {analyticsEventTracker} from "../../../../../utils/AnalyticsHelpers";
+import {fbPixelAddToCart} from "../../../../../utils/FacebookPixel";
 
 const AliAddToCart = (props) => {
 	const {cartItem, product, settings} = props;
@@ -27,8 +28,8 @@ const AliAddToCart = (props) => {
 	const isExistsOnCart = cartItem?.IsCart || 0;
 
 	const processAddToCart = () => {
-
 		gaEventTracker(`add-to-cart-${item_id}`);
+		fbPixelAddToCart((cartItem?.Title || 'no-product-name'), parseInt(itemTotal), 'aliexpress-products');
 
 		mutateAsync({item_id}, {
 			onSuccess: () => {

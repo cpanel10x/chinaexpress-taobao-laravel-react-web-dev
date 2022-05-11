@@ -17,7 +17,7 @@ const AliMediaPart = (props) => {
 						<div className="previewVideoThumb">
 							<img src={thumbnail} alt=""/>
 							<div className="videoPlayerIcon" onClick={() => setActiveImg(videoUrl)}>
-								<i className="icon-play-circled"/>
+								<i className="icon-play-circle"/>
 							</div>
 						</div>
 						:
