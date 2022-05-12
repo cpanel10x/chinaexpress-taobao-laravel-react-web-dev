@@ -13,7 +13,6 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 use Throwable;
-use Yajra\DataTables\Facades\DataTables;
 
 class OrderController extends Controller
 {
@@ -24,11 +23,9 @@ class OrderController extends Controller
    */
   public function index()
   {
-    $status = request('status');
-    if ($status == 'incomplete') {
-      return view('backend.content.order.incomplete');
-    }
-    return view('backend.content.order.index');
+    $orders = Order::get();
+    $trashedOrders = Order::onlyTrashed()->get();
+    return view('backend.content.order.index', compact('orders', 'trashedOrders'));
   }
 
 

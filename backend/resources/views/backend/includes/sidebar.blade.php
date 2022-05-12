@@ -4,7 +4,7 @@
     <img src="{{asset(get_setting('admin_logo_sm'))}}" alt="{{app_name()}}" class="brand-image elevation-0"
       style="opacity: .8">
     @else
-    <img src="{{asset(" /img/logo/chinaexpress.png")}}" alt="{{app_name()}}" class="brand-image elevation-0"
+    <img src="{{asset('/img/logo/chinaexpress.png')}}" alt="{{app_name()}}" class="brand-image elevation-0"
       style="opacity: .8">
     @endif
     <span class="brand-text font-weight-bold">{{str_replace(' ','', ucfirst(app_name()))}}</span>
@@ -24,6 +24,7 @@
         </li>
 
 
+        @can('manage.order')
         <li
           class="nav-item has-treeview {{ active_class(active_class(Route::is('admin.order.*') || Route::is('admin.invoice.*')), 'menu-open') }}">
           <a href="#" class="nav-link {{ active_class(Route::is('admin.order.*') || Route::is('admin.invoice.*')) }}">
@@ -33,6 +34,7 @@
             </p>
           </a>
           <ul class="nav nav-treeview">
+            @can('recent.order.index')
             <li class="nav-item">
               <a href="{{ route('admin.order.index') }}"
                 class="nav-link {{ active_class(Route::is('admin.order.index') || Route::is('admin.order.show'))  }}">
@@ -40,6 +42,8 @@
                 <p class="text">Recent Orders</p>
               </a>
             </li>
+            @endcan
+            @can('order.wallet')
             <li class="nav-item">
               <a href="{{ route('admin.order.wallet') }}"
                 class="nav-link {{ active_class(Route::is('admin.order.wallet')) }}">
@@ -47,6 +51,8 @@
                 <p class="text">Wallet</p>
               </a>
             </li>
+            @endcan
+            @can('invoice.index')
             <li class="nav-item">
               <a href="{{ route('admin.invoice.index') }}"
                 class="nav-link {{ active_class(Route::is('admin.invoice.*')) }}">
@@ -54,9 +60,12 @@
                 <p class="text">Manage Invoice</p>
               </a>
             </li>
+            @endcan
           </ul>
         </li> <!-- has-treeview -->
+        @endcan
 
+        @can('product.index')
         <li class="nav-item">
           <a href="{{ route('admin.product.index') }}"
             class="nav-link {{ active_class(Route::is('admin.product.*')) }}">
@@ -64,7 +73,9 @@
             <p class="text">Product</p>
           </a>
         </li>
+        @endcan
 
+        @can('coupon.manage')
         <li class="nav-item has-treeview {{ active_class(active_class(Route::is('admin.coupon.*')), 'menu-open') }}">
           <a href="#" class="nav-link {{ active_class(Route::is('admin.coupon.*')) }}">
             <i class="fa fa-angellist nav-icon"></i>
@@ -73,6 +84,7 @@
             </p>
           </a>
           <ul class="nav nav-treeview">
+            @can('coupon.show.log')
             <li class="nav-item">
               <a href="{{ route('admin.coupon.log') }}"
                 class="nav-link {{ active_class(Route::is('admin.coupon.log')) }}">
@@ -80,6 +92,8 @@
                 <p class="text">Coupon Logs</p>
               </a>
             </li>
+            @endcan
+            @can('coupon.manage')
             <li class="nav-item">
               <a href="{{ route('admin.coupon.index') }}"
                 class="nav-link {{ active_class(Route::is('admin.coupon.*') && !Route::is('admin.coupon.log')) }}">
@@ -87,9 +101,12 @@
                 <p class="text">Coupons</p>
               </a>
             </li>
+            @endcan
           </ul>
         </li> <!-- has-treeview -->
+        @endcan
 
+        @can('customer.index')
         <li class="nav-item">
           <a href="{{ route('admin.customer.index') }}"
             class="nav-link {{ active_class(Route::is('admin.customer.*')) }}">
@@ -97,14 +114,18 @@
             <p class="text">Customer</p>
           </a>
         </li>
+        @endcan
 
+        @can('menus.index')
         <li class="nav-item">
           <a class="nav-link {{ active_class(Route::is('admin.menu.*')) }}" href="{{ route('admin.menu.index') }}">
             <i class="nav-icon fa fa-magic"></i>
             <p class="text">Menus</p>
           </a>
         </li>
+        @endcan
 
+        @can('category.index')
         <li class="nav-item">
           <a class="nav-link {{ active_class(Route::is('admin.taxonomy.*')) }}"
             href="{{ route('admin.taxonomy.index') }}">
@@ -112,7 +133,9 @@
             <p class="text">Categories</p>
           </a>
         </li>
+        @endcan
 
+        @can('contact.index')
         <li class="nav-item">
           <a class="nav-link {{ active_class(Route::is('admin.contact.*')) }}"
             href="{{ route('admin.contact.index') }}">
@@ -120,26 +143,31 @@
             <p class="text">Contact Message</p>
           </a>
         </li>
+        @endcan
 
+        @can('pages.index')
         <li class="nav-item">
           <a href="{{ route('admin.page.index') }}" class="nav-link {{ active_class(Route::is('admin.page*')) }}">
             <i class="nav-icon fa fa-file"></i>
             <p class="text">Pages</p>
           </a>
         </li>
+        @endcan
 
+        @can('faq.index')
         <li class="nav-item">
           <a href="{{ route('admin.faq.index') }}" class="nav-link {{ active_class(Route::is('admin.faq*')) }}">
             <i class="nav-icon fa fa-question-circle"></i>
             <p class="text">Faq</p>
           </a>
         </li>
+        @endcan
 
+        @can('frontend.settings')
         @php
         $frontendActive = (Route::is('admin.front-setting.*') || Route::is('admin.announcement.*') ||
         Route::is('admin.banner.*'));
         @endphp
-
         <li class="nav-item has-treeview {{ active_class($frontendActive, 'menu-open') }}">
           <a href="#" class="nav-link {{ active_class($frontendActive) }}">
             <i class="nav-icon fa fa-gears"></i>
@@ -148,6 +176,7 @@
             </p>
           </a>
           <ul class="nav nav-treeview">
+            @can('frontend.top.notice')
             <li class="nav-item">
               <a href="{{ route('admin.front-setting.topNotice.create') }}"
                 class="nav-link {{ active_class(Route::is('admin.front-setting.topNotice.*')) }}">
@@ -155,7 +184,8 @@
                 <p class="text">Top Notice</p>
               </a>
             </li>
-
+            @endcan
+            @can('frontend.announcement')
             <li class="nav-item">
               <a href="{{ route('admin.announcement.index') }}"
                 class="nav-link {{ active_class(Route::is('admin.announcement.*')) }}">
@@ -163,6 +193,8 @@
                 <p class="text">Announcements</p>
               </a>
             </li>
+            @endcan
+            @can('frontend.banner')
             <li class="nav-item">
               <a href="{{ route('admin.banner.index') }}"
                 class="nav-link {{ active_class(Route::is('admin.banner.*')) }}">
@@ -170,7 +202,8 @@
                 <p class="text">Manage Banner</p>
               </a>
             </li>
-
+            @endcan
+            @can('frontend.manage.section')
             <li class="nav-item">
               <a href="{{ route('admin.front-setting.manage.sections') }}"
                 class="nav-link {{ active_class(Route::is('admin.front-setting.manage.sections')) }}">
@@ -178,7 +211,8 @@
                 <p class="text">Manage Sections</p>
               </a>
             </li>
-
+            @endcan
+            @can('frontend.banner.right')
             <li class="nav-item">
               <a href="{{ route('admin.front-setting.banner.right') }}"
                 class="nav-link {{ active_class(Route::is('admin.front-setting.banner.right')) }}">
@@ -186,7 +220,8 @@
                 <p class="text">Banner Right</p>
               </a>
             </li>
-
+            @endcan
+            @can('frontend.image.loader')
             <li class="nav-item">
               <a href="{{ route('admin.front-setting.image.loading.create') }}"
                 class="nav-link {{ active_class(Route::is('admin.front-setting.image.loading.create')) }}">
@@ -194,11 +229,11 @@
                 <p class="text">Image Loader</p>
               </a>
             </li>
-
+            @endcan
           </ul>
         </li>
-
-
+        @endcan
+        @can('backend.settings')
         <li class="nav-item has-treeview {{ active_class(Route::is('admin.setting.*'), 'menu-open') }}">
           <a href="#" class="nav-link {{ active_class(Route::is('admin.setting.*')) }}">
             <i class="nav-icon fa fa-gears"></i>
@@ -210,6 +245,7 @@
             </p>
           </a>
           <ul class="nav nav-treeview">
+            @can('backend.general.setting')
             <li class="nav-item">
               <a href="{{ route('admin.setting.general') }}"
                 class="nav-link {{ active_class(Route::is('admin.setting.general*')) }}">
@@ -217,6 +253,8 @@
                 <p> General Settings </p>
               </a>
             </li>
+            @endcan
+            @can('backend.price.setting')
             <li class="nav-item">
               <a href="{{ route('admin.setting.price') }}"
                 class="nav-link {{ active_class(Route::is('admin.setting.price*')) }}">
@@ -224,6 +262,8 @@
                 <p> Price Settings </p>
               </a>
             </li>
+            @endcan
+            @can('backend.order.setting')
             <li class="nav-item">
               <a href="{{ route('admin.setting.limit') }}"
                 class="nav-link {{ active_class(Route::is('admin.setting.limit*')) }}">
@@ -231,13 +271,17 @@
                 <p> Order Limitation </p>
               </a>
             </li>
+            @endcan
+            @can('backend.popup.message.setup')
             <li class="nav-item">
               <a href="{{ route('admin.setting.popup') }}"
-              class="nav-link {{ active_class(Route::is('admin.setting.popup*')) }}">
+                class="nav-link {{ active_class(Route::is('admin.setting.popup*')) }}">
                 <i class="fa fa-circle nav-icon"></i>
                 <p>Popup Message Setup </p>
               </a>
             </li>
+            @endcan
+            @can('backend.block.words')
             <li class="nav-item">
               <a href="{{ route('admin.setting.block-words') }}"
                 class="nav-link {{ active_class(Route::is('admin.setting.block-words*')) }}">
@@ -245,6 +289,8 @@
                 <p> Block Words </p>
               </a>
             </li>
+            @endcan
+            @can('backend.message.setting')
             <li class="nav-item">
               <a href="{{ route('admin.setting.message') }}"
                 class="nav-link {{ active_class(Route::is('admin.setting.message*')) }}">
@@ -252,7 +298,8 @@
                 <p> Message Settings </p>
               </a>
             </li>
-
+            @endcan
+            @can('backend.cache.control')
             <li class="nav-item">
               <a href="{{ route('admin.setting.cache.control') }}"
                 class="nav-link {{ active_class(Route::is('admin.setting.cache.control*')) }}">
@@ -260,7 +307,8 @@
                 <p> Cache Control </p>
               </a>
             </li>
-
+            @endcan
+            @can('backend.bkash.response')
             <li class="nav-item">
               <a href="{{ route('admin.setting.bkash.api.response') }}"
                 class="nav-link {{ active_class(Route::is('admin.setting.bkash.api.response*')) }}">
@@ -268,13 +316,13 @@
                 <p> Bkash API Response </p>
               </a>
             </li>
-
+            @endcan
 
           </ul>
         </li>
+        @endcan
 
-
-        @if ($logged_in_user->isAdmin())
+        @can('access.control')
         <li class="nav-header text-uppercase">
           @lang('menus.backend.sidebar.system')
         </li>
@@ -318,6 +366,8 @@
             </li>
           </ul>
         </li>
+        @endcan
+        @can('developer.log.view')
         <li class="nav-item has-treeview {{ active_class(request()->is('admin/log-viewer*'), 'menu-open') }}">
           <a href="#" class="nav-link {{ active_class(request()->is('admin/log-viewer*')) }}">
             <i class="nav-icon fa fa-list"></i>
@@ -343,7 +393,7 @@
             </li>
           </ul>
         </li>
-        @endif
+        @endcan
 
       </ul>
     </nav> <!-- /.sidebar-menu -->

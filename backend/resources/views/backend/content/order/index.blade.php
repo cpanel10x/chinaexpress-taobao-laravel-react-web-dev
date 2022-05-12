@@ -1,37 +1,73 @@
 @extends('backend.layouts.app')
 
 @section('title', 'Recent Orders')
+@php
+$status = request('status');
+$allOrdersCount = $orders->count();
+$partialCount = $orders->where('status', 'partial-paid')->count();
+$icompleteCount = $orders->where('status', 'waiting-for-payment')->count();
+$refundedCount = $orders->where('status', 'refunded')->count();
+$processingCount = $orders->where('status', 'processing')->count();
+$purchasedCount = $orders->where('status', 'purchased')->count();
+@endphp
 
 @section('content')
-  <div class="card">
-    <div class="card-header">
-      <div class="row">
-        <div class="col-sm-5">
-          <h4 class="my-1">
-            @lang('Recent Orders')
-            <a href="#" class="ml-3 btn btn-light process_multiple_delete btn-sm" data-table="orders"><i class="fa fa-trash-o"></i> Multiple Delete</a>
-          </h4>
-        </div> <!-- col-->
-        <div class="col-sm-7 pull-right">
-          @include('backend.content.order.includes.header-buttons')
-        </div> <!-- col-->
-      </div> <!-- row-->
+<div class="card">
+
+  <div class="card-header">
+    <h5 class="d-inline-block mr-2">@lang('Recent Orders')</h5>
+    <div class="status-control d-inline">
+      <a href="#" class="btn btn-outline-info btn-sm mr-1 process_multiple_delete" data-table="orders"><i
+        class="fa fa-trash-o"></i> Multiple Delete</a>
+      <a href="{{ route('admin.order.index') }}" class="btn btn-outline-info btn-sm mr-1 @if(!$status) active @endif">
+        @lang('All Orders') ({{$allOrdersCount}})
+      </a>
+      <a href="{{ route('admin.order.index', ['status' => 'partial-paid']) }}"
+        class="btn btn-outline-info btn-sm mr-1 @if($status == 'partial-paid') active @endif">
+        @lang('Partial Paid') ({{$partialCount}})
+      </a>
+      <a href="{{ route('admin.order.index', ['status' => 'waiting-for-payment']) }}"
+        class="btn btn-outline-danger btn-sm mr-1 @if($status == 'waiting-for-payment') active @endif">
+        @lang('Incomplete') ({{$icompleteCount}})
+      </a>
+      <a href="{{ route('admin.order.index', ['status' => 'refunded']) }}"
+        class="btn btn-outline-info btn-sm mr-1 @if($status == 'refunded') active @endif">
+        @lang('Refunded') ({{$refundedCount}})
+      </a>
+      <a href="{{ route('admin.order.index', ['status' => 'processing']) }}"
+        class="btn btn-outline-info btn-sm mr-1 @if($status == 'processing') active @endif">
+        @lang('Processing') ({{$processingCount}})
+      </a>
+      <a href="{{ route('admin.order.index', ['status' => 'purchased']) }}"
+        class="btn btn-outline-info btn-sm mr-1 @if($status == 'purchased') active @endif">
+        @lang('Purchased') ({{$purchasedCount}})
+      </a>
+      @can('recent.order.trash')
+      <a href="{{ route('admin.order.index', ['status' => 'trashed']) }}"
+        class="btn btn-outline-danger btn-sm mr-1 @if($status == 'trashed') active @endif">
+        @lang('Trashed Orders') ({{$trashedOrders->count()}})
+      </a>
+      @endcan
+      <a href="{{ route('admin.export', 'orders') }}" class="btn btn-outline-info btn-sm">
+        @lang('Export order Table')
+      </a>
     </div>
-    <div class="card-body">
-      @livewire('order-table')
-    </div> <!-- card-body-->
-  </div> <!-- card-->
+  </div>
+  <div class="card-body">
+    @livewire('order-table', ['status' => $status])
+  </div> <!-- card-body-->
+</div> <!-- card-->
 @endsection
 
 
 @push('after-styles')
-  @livewireStyles
+@livewireStyles
 @endpush
 
 @push('after-scripts')
-  @livewireScripts
-  <script>
-     const popupCenter = ({url, title, w, h}) => {        // Fixes dual-screen position                             Most browsers      Firefox
+@livewireScripts
+<script>
+  const popupCenter = ({url, title, w, h}) => {        // Fixes dual-screen position                             Most browsers      Firefox
         const dualScreenLeft = window.screenLeft !== undefined ? window.screenLeft : window.screenX;
         const dualScreenTop = window.screenTop !== undefined ? window.screenTop : window.screenY;
         const width = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width;
@@ -51,5 +87,5 @@
            popupCenter({url: href, title: 'Print Order', w: 1080, h: 720});
         });
      });
-  </script>
+</script>
 @endpush

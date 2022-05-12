@@ -36,9 +36,25 @@ class OrderTable extends TableComponent
   public $exportFileName = 'Order-table';
   public $exports = [];
 
+  public $status  = null;
+
+  public function mount($status)
+  {
+    $this->status = $status;
+  }
+
   public function query(): Builder
   {
-    return Order::with('user')->whereNotIn('status', ['waiting-for-payment']);
+    $order =  Order::with(['user', 'orderItems']);
+    $status = $this->status;
+    if ($status) {
+      if ($status == 'trashed') {
+        $order->onlyTrashed();
+      } else {
+        $order->where('status', $status);
+      }
+    }
+    return $order;
   }
 
   public function columns(): array
@@ -54,16 +70,32 @@ class OrderTable extends TableComponent
         ->format(function (Order $model) {
           return date('d-M-Y', strtotime($model->created_at));
         }),
-      Column::make('Transaction No', 'transaction_id')
+      Column::make('TransactionNo', 'transaction_id')
         ->searchable(),
-      Column::make('Customer', 'name')
-        ->searchable(),
+      Column::make('Full Name', 'first_name')
+        ->searchable()
+        ->format(function (Order $model) {
+          return $model->user ? $model->user->full_name : 'Unknown';
+        }),
+      Column::make('CustomerPhone', 'user.phone')
+        ->searchable(function ($builder, $term) {
+          return $builder->where('phone', $term)
+            ->orWhere('address', 'LIKE', '%' . $term . '%')
+            ->orWhereHas('user', function ($query) use ($term) {
+              return $query->where('phone', $term);
+            });
+        }),
       Column::make('Amount', 'amount')
         ->searchable()
         ->format(function (Order $model) {
           return floating($model->amount);
         }),
-      Column::make('Paid', 'needToPay')
+      Column::make('Coupon', 'coupon_victory')
+        ->searchable()
+        ->format(function (Order $model) {
+          return floating($model->coupon_victory);
+        }),
+      Column::make('First Payment', 'needToPay')
         ->searchable()
         ->format(function (Order $model) {
           return floating($model->needToPay);
@@ -73,6 +105,8 @@ class OrderTable extends TableComponent
         ->format(function (Order $model) {
           return floating($model->dueForProducts);
         }),
+      Column::make('PaymentMethod', 'payment_method')
+        ->searchable(),
       Column::make('Status', 'status')
         ->searchable(),
       Column::make('Actions', 'action')
