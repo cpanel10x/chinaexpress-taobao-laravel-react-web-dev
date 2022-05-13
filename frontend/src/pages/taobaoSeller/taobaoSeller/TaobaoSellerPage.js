@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {useParams, useHistory} from "react-router-dom";
-import {goPageTop} from "../../../utils/Helpers";
+import {goPageTop, taobaoSellerPositiveScore} from "../../../utils/Helpers";
 import ProductListSkeleton from "../../../skeleton/productSkeleton/ProductListSkeleton";
 import PagePaginator from "../../../pagination/PagePaginator";
 import {useSettings} from "../../../api/GeneralApi";
@@ -56,7 +56,7 @@ const TaobaoSellerPage = (props) => {
 								<h1 className="text-capitalize"><i className="icon-shop-window"/> {seller}</h1>
 								<p className="m-0">Total Products : <strong>{TotalCount || 0}</strong></p>
 								{
-									rating && <p className="m-0"><strong>{rating}%</strong> Customer satisfaction</p>
+									rating && <p className="m-0"><strong>{taobaoSellerPositiveScore(rating)}%</strong> Positive Feedback</p>
 								}
 							</div>
 

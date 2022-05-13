@@ -1,6 +1,7 @@
 import React from 'react';
 import {useAllCategories} from "../../../../../api/GeneralApi";
 import {Link} from "react-router-dom";
+import {taobaoSellerPositiveScore} from "../../../../../utils/Helpers";
 
 const SellerInfo = (props) => {
 	const {product} = props;
@@ -12,13 +13,20 @@ const SellerInfo = (props) => {
 	const VendorId = product?.VendorId || null;
 
 	const {data: categories} = useAllCategories();
-	const category = categories?.find(find => find?.otc_id === CategoryId) || null;
+	const category = CategoryId ? categories?.find(find => find?.otc_id == CategoryId) : null;
 
 
 	return (
 		<div className="details-filter-row my-3">
 			<p className="mb-1"><b>Product ID:</b> <span className="text-danger">{product?.Id}</span></p>
 			<p className="mb-1"><b>Source:</b> <span className="text-danger">{ProviderType}</span></p>
+			{
+				category &&
+				<p className="mb-1">
+					<b>Category</b> <span className="text-danger"><Link
+					to={`/shop/${category.slug}`}>{category.name}</Link></span>
+				</p>
+			}
 
 			<div className="card mt-3">
 				<div className="card-body">
@@ -37,15 +45,7 @@ const SellerInfo = (props) => {
 							<p>
 								<span className="ml-1">Seller: </span> <b style={{color: '#751f8a'}}>{VendorName}</b>
 								<br/>
-								<span className="ml-1">Seller Score: </span> <b style={{color: '#751f8a'}}>{VendorScore}/20</b>
-								{
-									category &&
-									<>
-										<br/>
-										<span className="ml-1">Category</span> <b style={{color: '#751f8a'}}><Link
-										to={`/shop/${category.slug}`}>{category.name}</Link></b>
-									</>
-								}
+								<span className="ml-1"><b className="h3" style={{color: '#751f8a'}}>{taobaoSellerPositiveScore(VendorScore)}.00%</b>{` Positive Feedback`} </span>
 							</p>
 
 						</div>

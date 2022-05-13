@@ -4,6 +4,10 @@ import ImgGallery from "./ImgGallery";
 import ReactPlayer from "react-player";
 import InnerImageZoom from 'react-inner-image-zoom';
 import 'react-inner-image-zoom/lib/InnerImageZoom/styles.min.css';
+import {useMediaQuery} from "react-responsive";
+import PlayCircleIcon from "../../../../../icons/PlayCircleIcon";
+
+
 
 const MediaPart = (props) => {
 	const {product, activeImg, setActiveImg} = props;
@@ -12,23 +16,37 @@ const MediaPart = (props) => {
 	const PreviewUrl = Videos?.PreviewUrl || null;
 	const Url = Videos?.Url || null;
 
+	const isMobile = useMediaQuery({query: '(max-width: 991px)'});
+
+
 	useEffect(() => {
 		if (Url && PreviewUrl) {
 			setActiveImg(PreviewUrl);
 		}
 	}, [PreviewUrl, Url]);
 
+
+
 	return (
 		<div className="product-gallery product-gallery-vertical">
-			<figure className="product-main-image">
+			<figure className="product-main-image" style={{width: '100%', height: isMobile ? '370px' : '360px'}}>
 
 				{
-					activeImg === PreviewUrl ?
-						<div className="previewVideoThumb">
-              <img src={PreviewUrl} alt=""/>
-              <div className="videoPlayerIcon" onClick={() => setActiveImg(Url)}>
-                <i className="icon-play-circled"/>
-              </div>
+					(activeImg === PreviewUrl) && PreviewUrl ?
+						<div className='player-wrapper'>
+							<ReactPlayer
+								className='react-player '
+								url={Url}
+								playing={true}
+								muted={true}
+								controls={true}
+								light={PreviewUrl}
+								loop={true}
+								pip={false}
+								playIcon={<PlayCircleIcon/>}
+								width='100%'
+								height="100%"
+							/>
 						</div>
 						:
 						activeImg === Url ? (

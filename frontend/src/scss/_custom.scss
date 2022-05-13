@@ -1173,10 +1173,10 @@
   bottom: 40px;
 
   .nav-link {
-    color: #ec1c24;
+    color: rgb(0, 106, 255);
 
     &:hover, &:focus {
-      color: #751f8a;
+      color: rgb(0, 106, 255);
     }
   }
 
@@ -1233,6 +1233,19 @@
 }
 
 
+
+.player-wrapper {
+  position: relative;
+  padding-top: 56.25%;
+  height: 100%;
+}
+
+.react-player {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border: 1px solid rgb(243 244 246);
+}
 
 
 

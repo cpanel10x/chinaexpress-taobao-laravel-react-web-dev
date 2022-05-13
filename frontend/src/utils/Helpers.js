@@ -10,7 +10,7 @@ import {
 /**
  *
  * @param categories
- * @param parentId
+ * @param ParentId
  * @returns {{}|*}
  */
 export const find_cat_parent = (categories, ParentId) => {
@@ -27,15 +27,13 @@ export const find_cat_parent = (categories, ParentId) => {
  */
 export const loadCatImg = (category) => {
 	const asset_base_url = process.env.REACT_APP_ASSET_ENDPOINT;
-	if (!isEmpty(category)) {
-		const picture = category.picture;
-		if (picture) {
-			return asset_base_url + "/" + picture;
-		}
-		const IconImageUrl = category.IconImageUrl;
-		if (IconImageUrl) {
-			return IconImageUrl;
-		}
+	const picture = category?.picture || null;
+	if (picture) {
+		return asset_base_url + "/" + picture;
+	}
+	const IconImageUrl = category?.IconImageUrl || null;
+	if (IconImageUrl) {
+		return IconImageUrl;
 	}
 	return asset_base_url + "/assets/img/backend/no-image-300x300.png";
 };
@@ -91,9 +89,13 @@ export const loadAsset = (path) => {
 };
 
 
-
 export const checkIsEmail = (input) => {
 	const format = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 	return !!input.match(format);
 };
 
+
+export const taobaoSellerPositiveScore = (VendorScore) => {
+	const percent = (VendorScore / 20) * 100;
+	return Math.round(percent);
+};
