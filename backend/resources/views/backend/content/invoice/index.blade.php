@@ -3,35 +3,35 @@
 @section('title', ' Manage Order Invoice')
 
 @section('content')
-  <div class="card">
-    <div class="card-header">
-      <div class="row">
-        <div class="col-sm-5">
-          <h4 class="my-1"> Manage Order Invoice </h4>
-        </div> <!-- col-->
-        <div class="col-sm-7 pull-right">
-          @include('backend.content.invoice.includes.header-buttons')
-        </div> <!-- col-->
-      </div> <!-- row-->
-    </div>
-    <div class="card-body p-0">
-      @livewire('invoice-table')
-    </div> <!-- card-body-->
-  </div> <!-- card-->
+<div class="card">
+  <div class="card-header">
+    <div class="row">
+      <div class="col-sm-5">
+        <h4 class="my-1"> Manage Order Invoice </h4>
+      </div> <!-- col-->
+      <div class="col-sm-7 pull-right">
+        @include('backend.content.invoice.includes.header-buttons')
+      </div> <!-- col-->
+    </div> <!-- row-->
+  </div>
+  <div class="card-body p-0">
+    @livewire('invoice-table')
+  </div> <!-- card-body-->
+</div> <!-- card-->
 
 
 @endsection
 
 
 @push('after-styles')
-  @livewireStyles
+@livewireStyles
 @endpush
 
 @push('after-scripts')
-  @livewireScripts
+@livewireScripts
 
-  <script>
-     const popupCenter = ({url, title, w, h}) => {
+<script>
+  const popupCenter = ({url, title, w, h}) => {
         // Fixes dual-screen position Most browsers      Firefox
         const dualScreenLeft = window.screenLeft !== undefined ? window.screenLeft : window.screenX;
         const dualScreenTop = window.screenTop !== undefined ? window.screenTop : window.screenY;
@@ -76,7 +76,7 @@
 
 
      });
-  </script>
+</script>
 
 
 @endpush

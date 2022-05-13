@@ -32,9 +32,9 @@ $options = [
           <div class="form-row">
             <div class="col-md-4">
               {{html()->select('customer', $findable, request('customer'))
-                                  ->class('form-control mr-sm-2 select2')
-                                  ->attribute('maxlength', 255)
-                                  }}
+              ->class('form-control mr-sm-2 select2')
+              ->attribute('maxlength', 255)
+              }}
             </div>
             <div class="col-md-8">
               @php
@@ -42,10 +42,10 @@ $options = [
               @endphp
               <div class="input-group">
                 {{html()->multiselect('findStatus[]', $options, $requ_status)
-                                      ->class('form-control mb-2 mr-sm-2 select2')
-                                      ->id('findStatus')
-                                      ->attributes(['data-placeholder' => 'Select a Status'])
-                                      }}
+                ->class('form-control mb-2 mr-sm-2 select2')
+                ->id('findStatus')
+                ->attributes(['data-placeholder' => 'Select a Status'])
+                }}
                 <div class="input-group-append">
                   <button type="submit" class="btn btn-info findResultButton" data-toggle="tooltip"
                     title="@lang('Search')">
@@ -59,18 +59,24 @@ $options = [
       </div> <!-- col-->
       <div class="col-md-2 text-right">
         <div class="btn-group" role="group" aria-label="header_button_group">
+          @can('wallet.change.status')
           <button type="button" class="btn btn-primary" id="changeGroupStatusButton" data-toggle="tooltip"
             title="@lang('Change Status')" disabled="true">
             @lang('Status')
           </button>
+          @endcan
+          @can('wallet.generate.invoice')
           <button type="button" class="btn btn-danger" id="generateInvoiceButton" data-toggle="tooltip"
             title="Generate Invoice" disabled="true">
             @lang('Generate')
           </button>
+          @endcan
+          @can('wallet.download')
           <a href="{{ route('admin.export', 'order_item') }}" class="btn btn-warning" data-toggle="tooltip"
             title="Full Export">
             <i class="fa fa-download"></i>
           </a>
+          @endcan
         </div> <!-- btn-group-->
       </div> <!-- col-->
     </div> <!-- row-->
@@ -106,9 +112,9 @@ $options = [
             unset($options['Waiting for Payment'], $options['Partial Paid']);
             @endphp
             {{html()->select('status', $options)
-                                      ->class('form-control')
-                                      ->attribute('maxlength', 255)
-                                      ->required()}}
+            ->class('form-control')
+            ->attribute('maxlength', 255)
+            ->required()}}
           </div> <!--  form-group-->
 
           <div class="form-group" id="additionInputStatusForm">

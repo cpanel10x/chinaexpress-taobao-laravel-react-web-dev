@@ -39,7 +39,7 @@ if (!function_exists('convertedPrice')) {
 
 
 if (!function_exists('floating')) {
-  function floating($price, $length = 2)
+  function floating($price, $length = 0)
   {
     return number_format($price, $length, '.', '');
   }

@@ -16,7 +16,6 @@ Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard'
 Route::get('export/{table}', [DashboardController::class, 'export'])->name('export');
 
 Route::namespace('Content')->group(function () {
-  Route::get('product/trashed', 'ProductController@trashed')->name('product.trashed');
   Route::get('product/restore/{post}', 'ProductController@restore')->name('product.restore');
   Route::get('product/restore/{post}', 'ProductController@restore')->name('product.restore');
   Route::get('product/duplicate', 'ProductController@duplicateIndex')->name('product.duplicate');

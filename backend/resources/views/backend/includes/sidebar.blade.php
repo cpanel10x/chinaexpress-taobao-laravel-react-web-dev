@@ -203,21 +203,21 @@
               </a>
             </li>
             @endcan
-            @can('frontend.manage.section')
-            <li class="nav-item">
-              <a href="{{ route('admin.front-setting.manage.sections') }}"
-                class="nav-link {{ active_class(Route::is('admin.front-setting.manage.sections')) }}">
-                <i class="nav-icon fa fa-desktop"></i>
-                <p class="text">Manage Sections</p>
-              </a>
-            </li>
-            @endcan
             @can('frontend.banner.right')
             <li class="nav-item">
               <a href="{{ route('admin.front-setting.banner.right') }}"
                 class="nav-link {{ active_class(Route::is('admin.front-setting.banner.right')) }}">
                 <i class="nav-icon fa fa-desktop"></i>
                 <p class="text">Banner Right</p>
+              </a>
+            </li>
+            @endcan
+            @can('frontend.manage.section')
+            <li class="nav-item">
+              <a href="{{ route('admin.front-setting.manage.sections') }}"
+                class="nav-link {{ active_class(Route::is('admin.front-setting.manage.sections')) }}">
+                <i class="nav-icon fa fa-desktop"></i>
+                <p class="text">Manage Sections</p>
               </a>
             </li>
             @endcan

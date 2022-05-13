@@ -9,7 +9,8 @@
       <div class="col-sm-5">
         <h4 class="my-1">
           @lang('Products Management')
-          <a href="#" class="ml-3 btn btn-light process_multiple_delete btn-sm" data-table="products"><i class="fa fa-trash-o"></i> Multiple Delete</a>
+          <a href="#" class="ml-3 btn btn-light process_multiple_delete btn-sm" data-table="products"><i
+              class="fa fa-trash-o"></i> Multiple Delete</a>
         </h4>
       </div> <!-- col-->
       <div class="col-sm-7 pull-right">
@@ -18,7 +19,7 @@
     </div> <!-- row-->
   </div>
   <div class="card-body">
-    @livewire('product-table')
+    @livewire('product-table', ['status' => request('status')])
   </div> <!-- card-body-->
 </div> <!-- card-->
 

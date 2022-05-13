@@ -1,10 +1,12 @@
 <div class="btn-group btn-group-sm" role="group" aria-label="@lang('labels.backend.access.users.user_actions')">
+  @can('product.edit')
   <a href="{{ route('admin.product.edit', $product) }}" class="btn btn-primary" data-toggle="tooltip"
      data-placement="top" title="@lang('buttons.general.crud.edit')">
     <i class="fa fa-edit"></i>
   </a>
+  @endcan
 
-  @hasrole('administrator')
+  @can('product.delete')
   <a href="{{ route('admin.product.destroy', $product) }}" data-method="delete"
      data-trans-button-cancel="@lang('buttons.general.cancel')"
      data-trans-button-confirm="@lang('buttons.general.crud.delete')"
@@ -12,5 +14,5 @@
      data-placement="top" title="@lang('buttons.general.crud.delete')">
     <i class="fa fa-trash-o"></i>
   </a>
-  @endhasrole
+  @endcan
 </div>

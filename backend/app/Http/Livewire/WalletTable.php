@@ -3,7 +3,6 @@
 namespace App\Http\Livewire;
 
 use App\Models\Content\OrderItem;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Rappasoft\LaravelLivewireTables\TableComponent;
 use Rappasoft\LaravelLivewireTables\Traits\HtmlComponents;
@@ -82,11 +81,10 @@ class WalletTable extends TableComponent
         ->format(function (OrderItem $model) {
           return $model->order->transaction_id ?? 'N/A';
         }),
-      Column::make('ItemNo.', 'order_item_number')
+      Column::make('OrderNumber', 'order.order_number')
         ->searchable()
-        ->sortable()
         ->format(function (OrderItem $model) {
-          return $this->html('<span class="order_item_number">' . $model->order_item_number . '</span>');
+          return $this->html('<span class="order_number">' . $model->order->order_number . '</span>');
         }),
       Column::make('Customer', 'user.name')
         ->searchable()
@@ -96,37 +94,37 @@ class WalletTable extends TableComponent
       Column::make('TrackingNo.', 'tracking_number')
         ->searchable()
         ->format(function (OrderItem $model) {
-          return $this->html('<span class="tracking_number">' . $model->tracking_number . '</span>');
+          return $this->html('<span class="tracking_number">' . ($model->tracking_number ? $model->tracking_number : 'N/A') . '</span>');
         }),
       Column::make('TaobaoOrderNo.', 'order_number')
         ->searchable()
         ->format(function (OrderItem $model) {
-          return $this->html('<span class="order_number">' . $model->order_number . '</span>');
+          return $this->html('<span class="order_number">' . ($model->order_number ? $model->order_number : 'N/A') . '</span>');
         }),
-      Column::make('ProductsTitle', 'name')
+      Column::make('ProductsTitle', 'Title')
         ->searchable()
         ->format(function (OrderItem $model) {
-          return $this->html('<span class="product_name" data-product-id="' . $model->product_id . '">' . strip_tags($model->name) . '</span>');
+          return $this->html('<span class="product_name" data-product-id="' . $model->product_id . '">' . strip_tags($model->Title) . '</span>');
         }),
       Column::make('ShippedBy', 'shipped_by')
         ->format(function (OrderItem $model) {
-          return $this->html('<span>' . $model->shipped_by . '</span> <br> <span class="text-danger">' . $model->shipping_rate . '</span>');
+          $rate = $model->shipping_rate ? $model->shipping_rate : '0';
+          return $this->html('<span>' . $model->shipped_by . ' - </span><span class="text-danger">' . ($rate) . '</span>');
         }),
       Column::make('TaobaoLink', '1688_link')
         ->format(function (OrderItem $model) {
-          $product_id = isset($model->product) ? $model->product->ItemId : '';
-          return $this->html($this->link("https://item.taobao.com/item.htm?id=" . $product_id, 'Click', ['target' => '_blank']));
+          return $this->html($this->link("https://item.taobao.com/item.htm?id=" . $model->ItemId, 'Click', ['target' => '_blank']));
         })
         ->excludeFromExport(),
-      Column::make('Quantity', 'quantity')
+      Column::make('Quantity', 'Quantity')
         ->format(function (OrderItem $model) {
-          return $this->html('<span class="quantity">' . $model->quantity . '</span>');
+          return $this->html('<span class="quantity">' . $model->Quantity . '</span>');
         }),
       Column::make('ProductsValue', 'product_value')
         ->format(function (OrderItem $model) {
-          return $this->html('<span class="product_value">' . $model->product_value . '</span>');
+          return $this->html('<span class="product_value">' . ($model->product_value ? $model->product_value : 0) . '</span>');
         }),
-      Column::make('LocalDelivery', 'chinaLocalDelivery'),
+      Column::make('LocalDelivery', 'DeliveryCost'),
       Column::make('Coupon Value', 'coupon_contribution')
         ->format(function (OrderItem $model) {
           $coupon = $model->coupon_contribution ? $model->coupon_contribution : 0;
@@ -134,56 +132,74 @@ class WalletTable extends TableComponent
         }),
       Column::make('1stPayment', 'first_payment')
         ->format(function (OrderItem $model) {
-          return $this->html('<span class="first_payment">' . $model->first_payment . '</span>');
+          return $this->html('<span class="first_payment">' . ($model->first_payment ?  $model->first_payment : 0) . '</span>');
+        }),
+      Column::make('Weight', 'weight')
+        ->format(function (OrderItem $model) {
+          $weight = $model->weight ? $model->weight : 0;
+          $Quantity = $model->Quantity ? $model->Quantity : 0;
+          $totalWeight = $weight * $Quantity;
+          $html = '<span class="actual_weight">' . (floating($totalWeight, 3)) . ' KG</span>';
+          $html .= "</br>";
+          $html .= "<span>({$Quantity}x{$weight})</span>";
+          return $this->html($html);
+        }),
+      Column::make('Weightcharges', 'shipping_rate')
+        ->format(function (OrderItem $model) {
+          $shipping_rate = $model->shipping_rate ? $model->shipping_rate : 0;
+          $weight = $model->weight ? $model->weight : 0;
+          $Quantity = $model->Quantity ? $model->Quantity : 0;
+          $totalWeight = $weight * $Quantity;
+          $totalShipping = round($shipping_rate * $totalWeight);
+          $floatingWeight = floating($totalWeight, 3);
+          $html = '<span class="shipping_rate">' . ($totalShipping) . '</span>';
+          $html .= "</br>";
+          $html .= "<span>({$shipping_rate}x{$floatingWeight})</span>";
+          return $this->html($html);
         }),
       Column::make('Outofstock', 'out_of_stock')
         ->format(function (OrderItem $model) {
-          return $this->html('<span class="out_of_stock">' . $model->out_of_stock . '</span>');
+          return $this->html('<span class="out_of_stock">' . ($model->out_of_stock ? $model->out_of_stock : 0) . '</span>');
         }),
       Column::make('Missing/Shortage', 'missing')
         ->format(function (OrderItem $model) {
-          return $this->html('<span class="missing">' . $model->missing . '</span>');
+          return $this->html('<span class="missing">' . ($model->missing ? $model->missing : 0) . '</span>');
         }),
       Column::make('Refunded', 'refunded')
         ->format(function (OrderItem $model) {
-          return $this->html('<span class="refunded">' . $model->refunded . '</span>');
+          return $this->html('<span class="refunded">' . ($model->refunded ? $model->refunded : 0) . '</span>');
         }),
       Column::make('Adjustment', 'adjustment')
         ->format(function (OrderItem $model) {
-          return $this->html('<span class="adjustment">' . $model->adjustment . '</span>');
-        }),
-      Column::make('Weight', 'actual_weight')
-        ->format(function (OrderItem $model) {
-          return $this->html('<span class="actual_weight">' . $model->actual_weight . '</span>');
-        }),
-      Column::make('Weightcharges', 'shipping_charge')
-        ->format(function (OrderItem $model) {
-          return $this->html('<span class="shipping_charge">' . $model->shipping_charge . '</span>');
+          return $this->html('<span class="adjustment">' . ($model->adjustment ? $model->adjustment : 0) . '</span>');
         }),
       Column::make('CourierBill', 'courier_bill')
         ->format(function (OrderItem $model) {
-          return $this->html('<span class="courier_bill">' . $model->courier_bill . '</span>');
+          return $this->html('<span class="courier_bill">' . ($model->courier_bill ? $model->courier_bill : 0) . '</span>');
         }),
       Column::make('LastPayment', 'last_payment')
         ->format(function (OrderItem $model) {
-          return $this->html('<span class="last_payment">' . $model->last_payment . '</span>');
+          return $this->html('<span class="last_payment">' . ($model->last_payment ? $model->last_payment : 0) . '</span>');
         }),
-      Column::make('Due', 'due_payment')
+      Column::make('CurrentDue', 'due_payment')
         ->format(function (OrderItem $model) {
-          return $this->html('<span class="due_payment">' . $model->due_payment . '</span>');
+          return $this->html('<span class="due_payment">' . ($model->due_payment ? $model->due_payment : 0) . '</span>');
         }),
       Column::make('Ref.Invoice', 'invoice_no')
         ->format(function (OrderItem $model) {
-          return $this->html('<span class="invoice_no">' . $model->invoice_no . '</span>');
+          return $this->html('<span class="invoice_no">' . ($model->invoice_no ? $model->invoice_no : 'N/A') . '</span>');
         }),
       Column::make('Status', 'status')
         ->searchable()
         ->format(function (OrderItem $model) {
-          return $this->html('<span class="status" data-status="' . $model->status . '">' . $model->status . '</span>');
+          return $this->html('<span class="status" data-status="' . ($model->status) . '">' . ($model->status) . '</span>');
         }),
       Column::make(__('Action'), 'action')
         ->format(function (OrderItem $model) {
-          $htmlHref = '<a href="' . route('admin.order.wallet.details', $model->id) . '" class="btn btn-secondary btn-sm" data-method="show"><i class="fa fa-file-o"></i></a>';
+          $htmlHref = '';
+          if (auth()->user()->can('wallet.view.details')) {
+            $htmlHref = '<a href="' . route('admin.order.wallet.details', $model->id) . '" class="btn btn-secondary btn-sm" data-method="show"><i class="fa fa-file-o"></i></a>';
+          }
           return $this->html($htmlHref);
         })
         ->excludeFromExport(),
@@ -195,16 +211,8 @@ class WalletTable extends TableComponent
   {
     if ($attribute == 'action') {
       return ['style' => 'min-width:80px;'];
-    } elseif ($attribute == 'name') {
+    } elseif ($attribute == 'Title') {
       return ['style' => 'min-width:260px;'];
-    } elseif ($attribute == 'order_item_number') {
-      return ['style' => 'min-width: 100px'];
-    } elseif ($attribute == 'transaction_id') {
-      return ['style' => 'min-width: 130px'];
-    } elseif ($attribute == 'order_number') {
-      return ['style' => 'min-width: 150px'];
-    } elseif ($attribute == 'checkbox') {
-      return ['style' => 'min-width: 100px'];
     }
     return [
       'style' => 'min-width:120px'
@@ -216,7 +224,7 @@ class WalletTable extends TableComponent
     $array = ['id', 'image', 'order_item_number', 'shipped_by', 'chinaLocalDelivery', '1688_link', 'action', 'due_payment', 'checkbox'];
     if (in_array($attribute, $array)) {
       $allSelect = $attribute == 'id' ? 'allSelectTitle' : '';
-      return ' text-center ' . $allSelect;
+      return ' text-center text-nowrap' . $allSelect;
     }
 
 
@@ -226,11 +234,11 @@ class WalletTable extends TableComponent
 
   public function setTableDataClass($attribute, $value): ?string
   {
-    $array = ['name'];
+    $array = ['Title'];
     if (in_array($attribute, $array)) {
       return 'align-middle';
     }
-    return 'text-center align-middle';
+    return 'text-center align-middle  text-nowrap';
   }
 
   public function setTableRowId($model): ?string

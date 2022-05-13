@@ -258,7 +258,7 @@ class OrderController extends Controller
       return \response([
         'status' => true,
         'icon' => 'success',
-        'msg' => 'Order, Order Item and Item variation permanently deleted',
+        'msg' => 'Order, Order Item and Order Item variation permanently deleted',
       ]);
     } else if ($order->delete()) {
       $orderItem->delete();
@@ -266,7 +266,7 @@ class OrderController extends Controller
       return \response([
         'status' => true,
         'icon' => 'success',
-        'msg' => 'Order, Order Item and Item variation delete successfully',
+        'msg' => 'Order, Order Item and Order Item variation delete successfully',
       ]);
     }
     return \response([

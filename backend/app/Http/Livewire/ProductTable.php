@@ -32,11 +32,21 @@ class ProductTable extends TableComponent
 
   public $exportFileName = 'Product-table';
   public $exports = [];
+  public $status  = null;
 
+  public function mount($status)
+  {
+    $this->status = $status;
+  }
 
   public function query(): Builder
   {
-    return  Product::with('user', 'orderItems')->withCount('orderItems');
+    $product =  Product::with('user', 'orderItems')->withCount('orderItems');
+    $status = $this->status;
+    if ($status == 'trashed') {
+      $product->onlyTrashed();
+    }
+    return $product;
   }
 
   public function columns(): array
@@ -59,6 +69,8 @@ class ProductTable extends TableComponent
         }),
       Column::make('Title', 'Title')
         ->searchable(),
+      Column::make('ProviderType', 'ProviderType')
+        ->searchable(),
       Column::make('TaobaoLink', '1688_link')
         ->format(function (Product $model) {
           $url = 'https://item.taobao.com/item.htm?id=' . $model->ItemId . '.html';
@@ -79,6 +91,10 @@ class ProductTable extends TableComponent
         }),
       Column::make(__('Action'), 'action')
         ->format(function (Product $model) {
+          $status = $this->status;
+          if ($status == 'trashed') {
+            return view('backend.content.product.includes.actions-trash', ['product' => $model]);
+          }
           return view('backend.content.product.includes.actions', ['product' => $model]);
         }),
     ];

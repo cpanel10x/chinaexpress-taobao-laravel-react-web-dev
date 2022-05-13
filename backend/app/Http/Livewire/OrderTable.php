@@ -68,11 +68,13 @@ class OrderTable extends TableComponent
       Column::make('Date', 'created_at')
         ->searchable()
         ->format(function (Order $model) {
-          return date('d-M-Y', strtotime($model->created_at));
+          return date('d-m-Y', strtotime($model->created_at));
         }),
+      Column::make('OrderNumber', 'order_number')
+        ->searchable(),
       Column::make('TransactionNo', 'transaction_id')
         ->searchable(),
-      Column::make('Full Name', 'first_name')
+      Column::make('Customer', 'name')
         ->searchable()
         ->format(function (Order $model) {
           return $model->user ? $model->user->full_name : 'Unknown';
@@ -86,24 +88,21 @@ class OrderTable extends TableComponent
             });
         }),
       Column::make('Amount', 'amount')
-        ->searchable()
         ->format(function (Order $model) {
-          return floating($model->amount);
+          return '৳ ' . floating($model->orderItems->sum('product_value'));
         }),
       Column::make('Coupon', 'coupon_victory')
-        ->searchable()
         ->format(function (Order $model) {
-          return floating($model->coupon_victory);
+          return '৳ ' . floating($model->orderItems->sum('coupon_contribution'));
         }),
       Column::make('First Payment', 'needToPay')
-        ->searchable()
         ->format(function (Order $model) {
-          return floating($model->needToPay);
+          return '৳ ' . floating($model->orderItems->sum('first_payment'));
         }),
       Column::make('Due', 'dueForProducts')
         ->searchable()
         ->format(function (Order $model) {
-          return floating($model->dueForProducts);
+          return '৳ ' . floating($model->orderItems->sum('due_payment'));
         }),
       Column::make('PaymentMethod', 'payment_method')
         ->searchable(),
@@ -111,6 +110,10 @@ class OrderTable extends TableComponent
         ->searchable(),
       Column::make('Actions', 'action')
         ->format(function (Order $model) {
+          $status = $this->status;
+          if ($status == 'trashed') {
+            return view('backend.content.order.includes.actions-trash', ['order' => $model]);
+          }
           return view('backend.content.order.includes.actions', ['order' => $model]);
         })
     ];
@@ -118,7 +121,7 @@ class OrderTable extends TableComponent
 
   public function setTableHeadClass($attribute): ?string
   {
-    $array = ['action', 'status', 'dueForProducts', 'needToPay', 'amount', 'transaction_id', 'created_at'];
+    $array = ['action', 'status', 'order_number', 'payment_method', 'dueForProducts', 'needToPay', 'dueForProducts', 'coupon_victory', 'amount', 'transaction_id', 'created_at'];
     if (in_array($attribute, $array)) {
       return ' text-center';
     }
@@ -128,11 +131,11 @@ class OrderTable extends TableComponent
 
   public function setTableDataClass($attribute, $value): ?string
   {
-    $array = ['action', 'status', 'dueForProducts', 'needToPay', 'amount', 'transaction_id', 'created_at'];
+    $array = ['action', 'status', 'order_number', 'payment_method', 'dueForProducts', 'needToPay', 'dueForProducts', 'coupon_victory', 'amount', 'transaction_id', 'created_at'];
     if (in_array($attribute, $array)) {
-      return 'text-center align-middle';
+      return 'text-center align-middle  text-nowrap';
     }
-    return 'align-middle';
+    return 'align-middle text-nowrap';
   }
 
   public function setTableRowId($model): ?string
