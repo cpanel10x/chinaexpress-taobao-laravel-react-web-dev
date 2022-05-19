@@ -93,7 +93,6 @@ class AliExpressApiController extends Controller
   public function productInfo($product_id)
   {
     $rapid = cache()->get($product_id, null);
-    // $rapid = null;
     if (!$rapid) {
       $rapid = $this->ApiProductDetails($product_id);
       cache()->put($product_id, $rapid, now()->addMinutes(10));
@@ -101,9 +100,75 @@ class AliExpressApiController extends Controller
     $item['item'] = $rapid['result']['item'] ?? [];
     $item['delivery'] = $rapid['result']['delivery'] ?? [];
     $item['seller'] = $rapid['result']['seller'] ?? [];
+
+    $num_iid = $item['item']['num_iid'] ?? null;
+    if ($num_iid) {
+      $this->updateOrInsertAliProducts($item);
+    }
     return response([
       'result' => json_encode($item)
     ]);
+  }
+
+  public function priceSeparation($promo_price)
+  {
+    $promo_price = $promo_price ? explode(' - ', $promo_price) : [];
+    $min_promo_price = $promo_price[0] ?? null;
+    $max_promo_price = end($promo_price) ?? null;
+    return [
+      'min' => $min_promo_price < 0.1 ? null : $min_promo_price,
+      'max' => $max_promo_price < 0.1 ? null : $max_promo_price,
+    ];
+  }
+
+  public function updateOrInsertAliProducts($item)
+  {
+    $product = getArrayKeyData($item, 'item');
+    $seller = getArrayKeyData($item, 'seller');
+    $recent_token = request('recent_view');
+    $promo_price = $product['promotion_price'] ?? null;
+    $promo_price = $this->priceSeparation($promo_price);
+    $price = $product['price'] ?? null;
+    $price = $this->priceSeparation($price);
+    $price = [
+      'min_promo_price' => $promo_price['min'] ?? null,
+      'max_promo_price' => $promo_price['max'] ?? null,
+      'min_price' => $price['min'] ?? null,
+      'max_price' => $price['max'] ?? null,
+    ];
+    try {
+      $test = Product::updateOrInsert(
+        [
+          'ItemId' => getArrayKeyData($product, 'num_iid'),
+          'ProviderType' => 'aliexpress'
+        ],
+        [
+          'active' => now(),
+          'Title' => getArrayKeyData($product, 'title'),
+          'CategoryId' => null,
+          'ExternalCategoryId' => null,
+          'VendorName' => $seller['shop_title'] ?? '',
+          'VendorId' => $seller['seller_id'] ?? '',
+          'VendorScore' => $seller['rating'] ?? '',
+          'PhysicalParameters' => null,
+          'BrandId' => $product['BrandId'] ?? '',
+          'BrandName' => $product['BrandName'] ?? '',
+          'TaobaoItemUrl' => $product['product_url'] ?? null,
+          'ExternalItemUrl' => null,
+          'MainPictureUrl' => $product['images'][0] ?? null,
+          'Price' => json_encode($price),
+          'Pictures' => json_encode($product['images'] ?? []),
+          'Features' => null,
+          'MasterQuantity' => $product['stock'] ?? null,
+          'user_id' => auth()->check() ? auth()->id() : null,
+          'recent_view_token' => $recent_token,
+          'created_at' => now(),
+          'updated_at' => now(),
+        ]
+      );
+    } catch (\Throwable $e) {
+      return response(['status' => false, 'message' => $e]);
+    }
   }
 
 

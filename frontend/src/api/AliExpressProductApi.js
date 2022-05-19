@@ -2,6 +2,7 @@ import {useMutation, useQuery} from "react-query";
 import {instance} from "../utils/AxiosInstance";
 import axios from "axios";
 import {setGetToken} from "./CartApi";
+import {recent_view_token} from "./ProductApi";
 
 export const useAliSearchProduct = () => useMutation("useAliSearchProduct", async (props) => {
 	try {
@@ -13,8 +14,9 @@ export const useAliSearchProduct = () => useMutation("useAliSearchProduct", asyn
 });
 
 export const useAliProductDetails = (product_id) => useQuery(["useAliProductDetails", product_id], async () => {
+	const recent_view = recent_view_token();
 	try {
-		const {data} = await instance.get(`aliexpress/product/${product_id}`);
+		const {data} = await instance.post(`aliexpress/product/${product_id}`, {recent_view});
 		return data?.result ? JSON.parse(data?.result) : {};
 	} catch (error) {
 		console.log(error);

@@ -70,7 +70,7 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function () {
 
   //  aliexpress routes
   Route::post('/aliexpress/search', [AliExpressApiController::class, 'searchQuery']);
-  Route::get('/aliexpress/product/{product_id}', [AliExpressApiController::class, 'productInfo']);
+  Route::post('/aliexpress/product/{product_id}', [AliExpressApiController::class, 'productInfo']);
   Route::get('/aliexpress/seller-products', [AliExpressApiController::class, 'sellerProducts']);
   Route::get('/aliexpress/related-products/{product_id}', [AliExpressApiController::class, 'relatedProducts']);
 

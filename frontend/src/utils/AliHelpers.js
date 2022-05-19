@@ -16,7 +16,7 @@ export const wishListProcessProduct = (product, aliRate) => {
 		img: product?.item?.images?.[0],
 		rating: null,
 		sale_price: price * parseInt(aliRate),
-		regular_price: promotion_price * parseInt(aliRate),
+		regular_price: (promotion_price < 0.10 ? price : promotion_price) * parseInt(aliRate),
 		stock: product?.item?.stock,
 		total_sold: product?.item?.sales,
 	}
@@ -44,10 +44,12 @@ export const aliActiveConfigurations = (product, operationalAttributes) => {
 	query = query.substring(0, query.length - 1);
 	let cardPrice = skuList?.[query];
 	if (!cardPrice) {
+		let Price = product?.item?.price || 0;
+		let promoPrice = product?.item?.promotion_price < 0.10 ? Price : (product?.item?.promotion_price || Price);
 		cardPrice = {
 			stock: product?.item?.stock,
-			price: product?.item?.price,
-			promotion_price: product?.item?.promotion_price,
+			price: Price,
+			promotion_price: promoPrice,
 		}
 	}
 	cardPrice.skuPropIds = query;
@@ -56,8 +58,8 @@ export const aliActiveConfigurations = (product, operationalAttributes) => {
 
 
 const aliProductPriceCardToPrice = (priceCard, aliRate) => {
-	const minPrice = priceCard?.promotion_price || 0;
 	const maxPrice = priceCard?.price || 0;
+	const minPrice = priceCard?.promotion_price < 0.10 ? maxPrice : (priceCard?.promotion_price || maxPrice);
 	return minPrice ? Math.round(Number(minPrice) * Number(aliRate)) : Math.round(Number(maxPrice) * Number(aliRate));
 };
 
@@ -128,7 +130,7 @@ export const itemIsCheckWillProcess = (cartItem, settings) => {
 	}
 	const checkedVariations = cartItem?.variations?.filter(variation => parseInt(variation.is_checked) === 1) || [];
 	const itemTotal = sumCartItemTotal(checkedVariations);
-	if(Number(itemTotal) > 0){
+	if (Number(itemTotal) > 0) {
 		if (Number(itemTotal) < Number(minOrder)) {
 			process = false;
 		}

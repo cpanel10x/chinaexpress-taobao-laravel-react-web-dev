@@ -41,7 +41,7 @@ const AliProductWishListButton = (props) => {
 		return <SpinnerButtonLoader buttonClass={`btn btn-custom-product btn-wishlist btn-block`}/>
 	}
 
-	const isExists = wishList.find(find => find.ItemId === product_id)?.id || false;
+	const isExists = wishList?.find(find => find.ItemId === product_id)?.id || false;
 
 	return (
 		<a href={"/add-to-wishlist"}

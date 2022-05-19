@@ -1,7 +1,7 @@
 import React from "react";
 import {Link} from "react-router-dom";
 import LazyLoad from "react-lazyload";
-import {getDBProductPrice, taobaoCardProductPrepareForLove} from "../../../utils/CartHelpers";
+import {getDBAliProductPrice, getDBProductPrice, taobaoCardProductPrepareForLove} from "../../../utils/CartHelpers";
 import SmallSpinnerButtonLoader from "../../../loader/SmallSpinnerButtonLoader";
 import {useQueryClient} from "react-query";
 import {useSettings} from "../../../api/GeneralApi";
@@ -12,6 +12,7 @@ const SectionProductCard = (props) => {
 
 	const {data: settings} = useSettings();
 	const rate = settings?.increase_rate || 0;
+	const ali_rate = settings?.ali_increase_rate || 0;
 	const currency_icon = settings?.currency_icon || '৳';
 
 	const cache = useQueryClient();
@@ -32,11 +33,17 @@ const SectionProductCard = (props) => {
 	const image = product?.MainPictureUrl || product?.img;
 	const Title = product?.Title || product?.name;
 	const ItemId = product?.ItemId || product?.product_code;
-	const ProviderType = product?.provider_type || product?.provider_type;
-
+	const ProviderType = product?.provider_type || product?.ProviderType;
 
 	const productPageLink = () => {
 		return ProviderType === 'aliexpress' ? `/aliexpress/product/${ItemId}` : `/product/${ItemId}`;
+	};
+
+	const productPrice = () => {
+		if (ProviderType === 'aliexpress') {
+			return getDBAliProductPrice(product, ali_rate);
+		}
+		return getDBProductPrice(product, rate);
 	};
 
 	return (
@@ -91,7 +98,7 @@ const SectionProductCard = (props) => {
 					</h3>
 					<div className="clearfix d-block product-price">
                   <span className="float-left">{`${currency_icon}`} <span
-	                  className="price_span">{getDBProductPrice(product, rate)}</span></span>
+	                  className="price_span">{productPrice()}</span></span>
 						{
 							product?.total_sold > 0 && <span className="sold_item_text">SOLD: {product.total_sold}</span>
 						}

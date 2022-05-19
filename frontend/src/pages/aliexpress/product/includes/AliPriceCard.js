@@ -9,8 +9,8 @@ const AliPriceCard = (props) => {
 	const currency = settings?.currency_icon || '৳';
 	const aliRate = settings?.ali_increase_rate || 90;
 
-	const skuActivityAmount = priceCard?.promotion_price;
 	const skuAmount = priceCard?.price;
+	const skuActivityAmount = priceCard?.promotion_price < 0.10 ? skuAmount : (priceCard?.promotion_price || skuAmount);
 	const discount = () => {
 		let percent = 0;
 		if (skuAmount > skuActivityAmount) {

@@ -80,7 +80,7 @@ class HomeController extends Controller
   {
     $lists = Wishlist::with('product')
       ->latest()
-      ->limit(30)
+      ->limit(10)
       ->get();
     return response([
       'products' => json_encode($lists)

@@ -15,15 +15,11 @@ const ProductsLoving = (props) => {
 				<div className="card-body">
 					<div className="row mb-3">
 						<div className="col-12">
-							<h3 className="title ">
-								<i className="icon-heart-empty"/> MORE TO LOVE <i className="icon-heart-empty"/>
-							</h3>
+							<h3 className="title">More To Love</h3>
 						</div>
 					</div>
-
 					{isLoading && <ProductSectionSkeleton/>}
 					{!isLoading && products.length > 0 && <RecentItems sectionCart={true} products={products}/>}
-
 				</div>
 			</div>
 		</div>

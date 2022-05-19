@@ -11,7 +11,7 @@ export const isAuthenticated = () => {
    return isAuthenticated ? JSON.parse(isAuthenticated)?.login : false;
 };
 
-const recent_view_token = () => {
+export const recent_view_token = () => {
    const recent_view = window.localStorage.getItem('recent_view');
    if (recent_view) {
       return recent_view;

@@ -281,6 +281,17 @@ export const getDBProductPrice = (product, rate = 15, selectedConfig = {}) => {
 	return sellPrice;
 };
 
+export const getDBAliProductPrice = (product, rate = 100) => {
+	let Price = product?.Price ? JSON.parse(product?.Price) : {};
+	let sellPrice = 0;
+	if (Price?.min_promo_price > 0) {
+		sellPrice = Number(Price.min_promo_price) * Number(rate);
+	}else if (Price?.min_price > 0) {
+		sellPrice = Number(Price.min_price) * Number(rate);
+	}
+	return Math.round(sellPrice);
+};
+
 /**
  *
  * @param words
