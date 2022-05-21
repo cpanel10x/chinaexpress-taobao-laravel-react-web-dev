@@ -4,7 +4,7 @@
   </button>
   <div class="dropdown-menu dropdown-menu-right">
     @can('wallet.view.details')
-    <a href="{{ route('admin.order.wallet.details', $wallet) }}" class="dropdown-item" data-toggle="tooltip" data-placement="top"
+    <a href="{{$wallet->id}}" class="dropdown-item walletDetails" data-toggle="tooltip" data-placement="top"
       title="wallet details">
       View
     </a>
@@ -21,8 +21,14 @@
       Edit Wallet
     </a>
     @endcan
+    @can('wallet.master.edit')
+    <a href="{{$wallet->id}}" class="dropdown-item walletMasterEdit" data-toggle="tooltip" data-placement="top"
+      title="Edit wallet">
+      Master Wallet
+    </a>
+    @endcan
     @can('recent.order.delete')
-    <a href="{{ route('admin.order.destroy', $wallet) }}" data-method="delete"
+    <a href="{{ route('admin.order.wallet.destroy', $wallet) }}" data-method="delete"
       data-trans-button-cancel="@lang('buttons.general.cancel')"
       data-trans-button-confirm="@lang('buttons.general.crud.delete')" data-trans-title="Are You Sure ?"
       class="dropdown-item" data-toggle="tooltip" data-placement="top" title="@lang('buttons.general.crud.delete')">

@@ -21,43 +21,56 @@ $options = [
 
 
 @section('content')
+
+
+<div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="searchModalLabel">Search Wallet</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="filterWalletForm" action="/admin/order/wallet" method="get">
+          <div class="form-group">
+            <label for="customer">Customer</label>
+            {{html()->select('customer', $findable, request('customer'))->class('form-control mr-sm-2 select2')}}
+          </div>
+          <div class="form-group">
+            <label for="wallet_status">Wallet Status</label>
+            <br>
+            @php
+            $requ_status = request('findStatus', []);
+            @endphp
+            @foreach ($options as $key => $option)
+            <div class="form-check form-check-inline">
+              {{html()->checkbox("findStatus[$key]", in_array($key, $requ_status),
+              $key)->id($key)->class('form-check-input')}}
+              {{ html()->label($option)->class('form-check-label')->for($key) }}
+            </div>
+            @endforeach
+          </div> <!-- form-group -->
+          <div class="form-group">
+            <button type="submit" class="btn btn-block btn-info"><i class="fa fa-search"></i> Search</button>
+          </div>
+        </form> <!-- form-inline -->
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <div class="card">
   <div class="card-header">
     <div class="row">
-      <div class="col-md-2">
-        <h4 class="my-1">@lang('Manage Wallet')</h4>
+      <div class="col-md-6">
+        <h4 class="d-inline mr-3">@lang('Manage Wallet')</h4>
+        <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#searchModal"><i
+            class="fa fa-filter"></i> Filter</button>
       </div> <!-- col-->
-      <div class="col-md-8">
-        <form id="filterWalletForm">
-          <div class="form-row">
-            <div class="col-md-4">
-              {{html()->select('customer', $findable, request('customer'))
-              ->class('form-control mr-sm-2 select2')
-              ->attribute('maxlength', 255)
-              }}
-            </div>
-            <div class="col-md-8">
-              @php
-              $requ_status = explode(',', request('status'));
-              @endphp
-              <div class="input-group">
-                {{html()->multiselect('findStatus[]', $options, $requ_status)
-                ->class('form-control mb-2 mr-sm-2 select2')
-                ->id('findStatus')
-                ->attributes(['data-placeholder' => 'Select a Status'])
-                }}
-                <div class="input-group-append">
-                  <button type="submit" class="btn btn-info findResultButton" data-toggle="tooltip"
-                    title="@lang('Search')">
-                    <i class="fa fa-search"></i>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </form> <!-- form-inline -->
-      </div> <!-- col-->
-      <div class="col-md-2 text-right">
+      <div class="col-md-6 text-right">
         <div class="btn-group" role="group" aria-label="header_button_group">
           @can('wallet.change.status')
           <button type="button" class="btn btn-primary" id="changeGroupStatusButton" data-toggle="tooltip"
@@ -72,9 +85,9 @@ $options = [
           </button>
           @endcan
           @can('wallet.download')
-          <a href="{{ route('admin.export', 'order_item') }}" class="btn btn-warning" data-toggle="tooltip"
-            title="Full Export">
-            <i class="fa fa-download"></i>
+          <a href="/export-wallet" class="btn btn-warning exportWalletTable" data-toggle="tooltip"
+            title="Export wallet">
+            <i class="fa fa-download"></i> Export xlsx
           </a>
           @endcan
         </div> <!-- btn-group-->
@@ -82,12 +95,29 @@ $options = [
     </div> <!-- row-->
   </div>
   <div class="card-body p-0">
-
-    @livewire('wallet-table', ['status' => request('status'), 'customer' => request('customer')])
-
+    <div class="main-wallet-table">
+      @livewire('wallet-table', ['status' => request('status'), 'customer' => request('customer')])
+    </div>
   </div> <!-- card-body-->
 </div> <!-- card-->
 
+
+<div class="modal fade" id="detailsModal" tabindex="-1" role="dialog" aria-labelledby="detailsModalCenterTitle"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Wallet details loading...</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        {{-- details modal info append here --}}
+      </div>
+    </div>
+  </div>
+</div> <!-- changeStatusButton -->
 
 <div class="modal fade" id="changeStatusButton" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
   aria-hidden="true">
@@ -254,8 +284,7 @@ $options = [
 
 
 @push('before-styles')
-{{style('assets/plugins/select2/css/select2.min.css')}}
-{{-- {{style('assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')}} --}}
+<link rel="stylesheet" href="{{asset('assets/plugins/select2/css/select2.min.css')}}">
 @endpush
 
 @push('after-styles')
@@ -263,9 +292,30 @@ $options = [
 @endpush
 
 @push('middle-scripts')
-{{script('assets/plugins/select2/js/select2.full.min.js')}}
 @livewireScripts
-
-{!! script('assets/js/manage-wallet.js') !!}
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.3/moment.min.js"></script>
+<script src="{{asset('assets/plugins/select2/js/select2.full.min.js')}}"></script>
+<script src="{{asset('assets/plugins/table2excel/jquery.table2excel.min.js')}}"></script>
+<script>
+  $(document).ready(function() {
+      $(document).on('click','.exportWalletTable',function(e) {
+        e.preventDefault()
+          var table = $('.table');
+          if (table.length) {
+              var preserveColors = (table.hasClass('table') ? true : false);
+              var dateTime = moment().format('DD-MM-YYYY-hh-mm-ss-a');
+              $(table).table2excel({
+                  exclude: ".noExl",
+                  name: "Wallet-export",
+                  filename: "wallet-export-" + dateTime + ".xls",
+                  fileext: ".xls",
+                  exclude_img: true,
+                  exclude_links: true,
+                  exclude_inputs: true,
+                  preserveColors: preserveColors
+              });
+          }
+      });
+  });
+</script>
 @endpush

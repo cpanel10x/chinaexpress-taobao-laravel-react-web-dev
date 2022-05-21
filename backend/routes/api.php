@@ -103,7 +103,7 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function () {
     Route::post('/store-new-address', [AddressController::class, 'StoreNewAddress']);
     Route::post('/delete-address', [AddressController::class, 'deleteAddress']);
 
-    Route::post('nagad/payment', [NagadPaymentController::class, 'payment_process']);
+    // Route::post('nagad/payment', [NagadPaymentController::class, 'payment_process']);
 
     // dashboard operations
     Route::group(['prefix' => 'dashboard', 'as' => 'dashboard.'], function () {

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Rappasoft\LaravelLivewireTables\TableComponent;
 use Rappasoft\LaravelLivewireTables\Traits\HtmlComponents;
 use Rappasoft\LaravelLivewireTables\Views\Column;
+use Str;
 
 class WalletTable extends TableComponent
 {
@@ -20,7 +21,7 @@ class WalletTable extends TableComponent
   public $perPage = 6;
   public $perPageOptions = [6, 10, 20, 30, 50, 100, 200, 500, 1000];
 
-  public $loadingIndicator = true;
+  public $loadingIndicator = false;
   public $clearSearchButton = true;
 
   protected $options = [
@@ -65,11 +66,16 @@ class WalletTable extends TableComponent
   public function columns(): array
   {
     return [
-      Column::make('<input type="checkbox" id="allSelectCheckbox">', 'checkbox')
+      Column::make('<input type="checkbox" id="allSelectCheckbox" value="id">', 'checkbox')
         ->format(function (OrderItem $model) {
           $checkbox = '<input type="checkbox" class="checkboxItem " data-status="' . $model->status . '" data-user="' . $model->user_id . '" name="wallet[]" value="' . $model->id . '">';
           return $this->html($checkbox);
         })->excludeFromExport(),
+      Column::make(__('Action'), 'action')
+        ->format(function (OrderItem $model) {
+          return view('backend.content.wallet.includes.actions', ['wallet' => $model]);
+        })
+        ->excludeFromExport(),
       Column::make('Date', 'created_at')
         ->searchable()
         ->format(function (OrderItem $model) {
@@ -80,15 +86,20 @@ class WalletTable extends TableComponent
         ->format(function (OrderItem $model) {
           return $model->order->transaction_id ?? 'N/A';
         }),
-      Column::make('ItemNo.', 'order.order_number')
+      Column::make('Order Number.', 'order.order_number')
         ->searchable()
         ->format(function (OrderItem $model) {
           return $this->html('<span class="order_number">' . $model->order->order_number . '</span>');
         }),
+      Column::make('ItemNo.', 'item_number')
+        ->searchable()
+        ->format(function (OrderItem $model) {
+          return $this->html('<span class="item_number">' . $model->item_number . '</span>');
+        }),
       Column::make('Customer', 'user.name')
         ->searchable()
         ->format(function (OrderItem $model) {
-          return $model->user->name ? $model->user->full_name : 'N/A';
+          return $model->user->name ?? 'N/A';
         }),
       Column::make('Source Site',  'ProviderType')
         ->searchable()
@@ -106,10 +117,10 @@ class WalletTable extends TableComponent
           $html = '<span class="shipping_rate">' . ($shipping_rate) . '</span>';
           return $this->html($html);
         }),
-      Column::make('Source Order Number', 'order_number')
+      Column::make('Source Order Number', 'source_order_number')
         ->searchable()
         ->format(function (OrderItem $model) {
-          return $this->html('<span class="order_number">' . ($model->order_number ? $model->order_number : 'N/A') . '</span>');
+          return $this->html('<span class="source_order_number">' . ($model->source_order_number ? $model->source_order_number : 'N/A') . '</span>');
         }),
       Column::make('TrackingNo.', 'tracking_number')
         ->searchable()
@@ -119,7 +130,8 @@ class WalletTable extends TableComponent
       Column::make('ProductTitle', 'Title')
         ->searchable()
         ->format(function (OrderItem $model) {
-          return $this->html('<span class="product_name" data-product-id="' . $model->product_id . '">' . strip_tags($model->Title) . '</span>');
+          $title = strip_tags($model->Title);
+          return $this->html('<span class="product_name" data-product-id="' . $model->product_id . '" title="' . $title . '">' . Str::words($title, 6) . '</span>');
         }),
       Column::make('Source Link', '1688_link')
         ->format(function (OrderItem $model) {
@@ -128,7 +140,7 @@ class WalletTable extends TableComponent
           if ($model->ProviderType == 'aliexpress') {
             $itemLink = "https://www.aliexpress.com/item/{$ItemId}.html";
           }
-          $htmlHref = '<a href="' . $itemLink . '" class="btn-info btn-block btn-sm" target="_blank"><i class="fa fa-external-link"></i></a>';
+          $htmlHref = '<a href="' . $itemLink . '" class="btn-info btn-sm" target="_blank"><i class="fa fa-external-link"></i></a>';
           return $this->html($htmlHref);
         }),
       Column::make('Quantity', 'Quantity')
@@ -226,7 +238,7 @@ class WalletTable extends TableComponent
         }),
       Column::make(__('Action'), 'action')
         ->format(function (OrderItem $model) {
-          return view('backend.content.order.wallet.includes.actions', ['wallet' => $model]);
+          return view('backend.content.wallet.includes.actions', ['wallet' => $model]);
         })
         ->excludeFromExport(),
       Column::make('Day Count', 'day_count')
@@ -257,7 +269,7 @@ class WalletTable extends TableComponent
     if ($attribute == 'action') {
       return ['style' => 'min-width:80px;'];
     } elseif ($attribute == 'Title') {
-      return ['style' => 'min-width:350px;'];
+      return ['style' => 'min-width:200px;'];
     }
     return [
       'style' => ''
@@ -266,7 +278,7 @@ class WalletTable extends TableComponent
 
   public function setTableHeadClass($attribute): ?string
   {
-    $array = ['id', 'created_at', 'order.transaction_id', 'order.order_number', 'ProviderType', 'shipping_type', 'shipping_rate', 'order_number', '1688_link', 'coupon_contribution', 'net_product_value', 'lost_in_transit', 'customer_tax', 'weight_charges', 'order_item_number', 'chinaLocalDelivery', '1688_link', 'status', 'action', 'due_payment', 'checkbox', 'day_count', 'update_log', 'comments1', 'comments2'];
+    $array = ['id', 'created_at', 'order.transaction_id', 'order.order_number', 'user.name', 'ProviderType', 'source_order_number', 'shipping_type', 'shipping_rate', 'order_number', '1688_link', 'coupon_contribution', 'net_product_value', 'lost_in_transit', 'customer_tax', 'weight_charges', 'order_item_number', 'chinaLocalDelivery', '1688_link', 'status', 'action', 'due_payment', 'checkbox', 'day_count', 'update_log', 'comments1', 'comments2'];
     if (in_array($attribute, $array)) {
       $allSelect = $attribute == 'id' ? 'allSelectTitle' : '';
       return ' text-center text-nowrap' . $allSelect;
@@ -282,7 +294,7 @@ class WalletTable extends TableComponent
     if (in_array($attribute, $array)) {
       return 'align-middle';
     }
-    $array = ['id', 'created_at', 'order.transaction_id', 'order.order_number', 'ProviderType', 'shipping_type', 'shipping_rate', 'order_number', '1688_link', 'coupon_contribution', 'net_product_value', 'lost_in_transit', 'customer_tax', 'weight_charges', 'order_item_number', 'chinaLocalDelivery', '1688_link', 'status', 'action', 'due_payment', 'checkbox', 'day_count', 'update_log'];
+    $array = ['id', 'created_at', 'order.transaction_id', 'order.order_number', 'user.name', 'ProviderType', 'source_order_number', 'shipping_type', 'shipping_rate', 'order_number', '1688_link', 'coupon_contribution', 'net_product_value', 'lost_in_transit', 'customer_tax', 'weight_charges', 'order_item_number', 'chinaLocalDelivery', '1688_link', 'status', 'action', 'due_payment', 'checkbox', 'day_count', 'update_log'];
     if (in_array($attribute, $array)) {
       return ' text-center align-middle text-nowrap';
     }

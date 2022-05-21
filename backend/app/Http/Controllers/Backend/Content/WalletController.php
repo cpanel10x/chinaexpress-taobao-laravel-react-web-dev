@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 use Throwable;
 
-class OrderController extends Controller
+class WalletController extends Controller
 {
   /**
    * Display a listing of the resource.
@@ -23,41 +23,12 @@ class OrderController extends Controller
    */
   public function index()
   {
-    $orders = Order::get();
-    $trashedOrders = Order::onlyTrashed()->get();
-    return view('backend.content.order.index', compact('orders', 'trashedOrders'));
-  }
-
-
-  public function makeAsPayment($id)
-  {
-    $order = Order::findOrFail($id);
-    $order_id = $id;
-    $order_user_id = $order->user_id;
-    if ($order) {
-      DB::transaction(function () use ($order, $order_id, $order_user_id) {
-        $order->update([
-          'status' => 'partial-paid'
-        ]);
-
-        OrderItem::where('order_id', $order_id)
-          ->where('user_id', $order_user_id)
-          ->update([
-            'status' => 'partial-paid',
-          ]);
-      });
+    $customers = User::role('user')->withCount('orders')->orderBy('first_name')->get();
+    $findable[''] = ' - Select Customer - ';
+    foreach ($customers as $customer) {
+      $findable[$customer->id] = $customer->full_name;
     }
-    $tran = $order->order_number ?? '';
-    return redirect()->back()->withFlashSuccess('Incomplete order #' . $tran . ' make as partial paid');
-  }
-
-
-  public function orderPrint($id)
-  {
-    dd('development not finished');
-    return redirect()->route('admin.order.print', $id);
-    // $orderItem = OrderItem::with('order', 'itemVariations')->findOrFail($id);
-    // return view('backend.content.order.print', compact('orderItem'));
+    return view('backend.content.wallet.index', ['findable' => $findable]);
   }
 
   /**
@@ -174,8 +145,21 @@ class OrderController extends Controller
    */
   public function show($id)
   {
-    $order = Order::with('orderItems')->findOrFail($id);
-    return view('backend.content.order.show', compact('order'));
+    $data = OrderItem::with('user:id,name,phone,email,first_name,last_name', 'order', 'itemVariations')->find($id);
+    $render = '';
+    $title = 'Wallet details';
+    $status = false;
+    if ($data) {
+      $item_no = $data->item_number;
+      $status = true;
+      $title = "Wallet details of #{$item_no}";
+    }
+
+    return \response([
+      'status' => $status,
+      'title' => $title,
+      'data' => $data,
+    ]);
   }
 
   /**
@@ -198,7 +182,13 @@ class OrderController extends Controller
    */
   public function update(Request $request, $id)
   {
-    //
+    $data = request()->all();
+    unset($data['_method']);
+    $orderItem  = OrderItem::find($id);
+    if ($orderItem) {
+      $orderItem->update($data);
+    }
+    return response(['status' => true]);
   }
 
   /**

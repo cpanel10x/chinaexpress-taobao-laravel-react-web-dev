@@ -40,8 +40,12 @@ ADD COLUMN `shipping_type` VARCHAR(191) NULL AFTER `shipping_from`;
 
 
 ALTER TABLE `chinaexpress_web`.`order_items` 
+ADD COLUMN `source_order_number` VARCHAR(191) NULL AFTER `status`;
 ADD COLUMN `lost_in_transit` INT(10) NULL AFTER `out_of_stock`,
 ADD COLUMN `customer_tax` INT(10) NULL AFTER `lost_in_transit`,
 ADD COLUMN `purchases_at` TIMESTAMP NULL AFTER `invoice_no`,
 ADD COLUMN `comment1` TEXT NULL AFTER `purchases_at`,
 ADD COLUMN `comment2` TEXT NULL AFTER `comment1`;
+
+ALTER TABLE `chinaexpress_web`.`order_items` 
+ADD COLUMN `source_order_number` VARCHAR(191) NULL AFTER `status`;

@@ -8,6 +8,7 @@ use App\Http\Controllers\Backend\Content\ProductController;
 use App\Http\Controllers\Backend\Content\TaxonomyController;
 use App\Http\Controllers\Backend\Content\BkashApiResponseController;
 use App\Http\Controllers\Backend\Content\BlockWordController;
+use App\Http\Controllers\Backend\Content\WalletController;
 use Illuminate\Support\Facades\Route;
 
 // All route names are prefixed with 'admin.'.
@@ -22,13 +23,18 @@ Route::namespace('Content')->group(function () {
   Route::post('product/multi-delete', [ProductController::class, 'multiDelete']);
   Route::resource('product', 'ProductController')->except('create', 'show');
 
+
+  Route::group(['prefix' => 'order', 'as' => 'order.'], function () {
+    Route::resource('wallet', 'WalletController');
+  });
+
+
   Route::get('order/trashed', 'OrderController@trashed')->name('order.trashed');
   Route::get('order/restore/{order}', 'OrderController@restore')->name('order.restore');
   Route::get('order/{order}/print', 'OrderController@orderPrint')->name('order.print');
   Route::get('makeAsPayment/{order}', [OrderController::class, 'makeAsPayment'])->name('order.makeAsPayment');
-  Route::get('order/wallet', 'OrderController@walletOrders')->name('order.wallet');
-  Route::post('order/wallet/{id}', [OrderController::class, 'walletDetails'])->name('order.wallet.details');
   Route::resource('order', 'OrderController')->except('edit', 'update');
+
   Route::get('invoice/trashed', 'InvoiceController@trashed')->name('invoice.trashed');
   Route::get('invoice/restore/{invoice}', 'InvoiceController@restore')->name('invoice.restore');
   Route::get('invoice/confirm-received/{invoice}', 'InvoiceController@confirm_received')->name('invoice.confirm.received');

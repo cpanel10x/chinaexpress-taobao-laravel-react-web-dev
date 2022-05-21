@@ -30,7 +30,8 @@ Breadcrumbs::for('admin.order.show', function ($trail, $id) {
   $trail->parent('admin.order.index');
   $trail->push('Show Order Details', route('admin.order.show', $id));
 });
-Breadcrumbs::for('admin.order.wallet.details', function ($trail, $id) {
-  $trail->parent('admin.order.wallet');
-  $trail->push('Wallet Details', route('admin.order.wallet.details', $id));
+
+
+Breadcrumbs::for('admin.order.wallet.index', function ($trail) {
+  $trail->push('Wallet', route('admin.order.wallet.index'));
 });

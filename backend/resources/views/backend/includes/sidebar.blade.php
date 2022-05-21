@@ -45,8 +45,8 @@
             @endcan
             @can('order.wallet')
             <li class="nav-item">
-              <a href="{{ route('admin.order.wallet') }}"
-                class="nav-link {{ active_class(Route::is('admin.order.wallet')) }}">
+              <a href="{{ route('admin.order.wallet.index') }}"
+                class="nav-link {{ active_class(Route::is('admin.order.wallet.*')) }}">
                 <i class="nav-icon fa fa-circle-o"></i>
                 <p class="text">Wallet</p>
               </a>
