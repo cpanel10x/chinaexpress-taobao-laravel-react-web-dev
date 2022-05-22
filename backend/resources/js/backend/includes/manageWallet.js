@@ -12,6 +12,11 @@ function remove_space(stringData) {
 
 (function ($) {
 
+  function make_full_url(url) {
+    var base_url = $("#app_base_url").val();
+    return base_url + '/' + url;
+  }
+
   let body = $("body");
 
   function updateColumnValue(itemData) {
@@ -65,12 +70,10 @@ function remove_space(stringData) {
   }
 
   function enable_proceed_button() {
-    $('#changeGroupStatusButton').removeAttr('disabled');
     $('#generateInvoiceButton').removeAttr('disabled');
   }
 
   function disabled_proceed_button() {
-    $('#changeGroupStatusButton').attr('disabled', 'disabled');
     $('#generateInvoiceButton').attr('disabled', 'disabled');
   }
 
@@ -108,40 +111,6 @@ function remove_space(stringData) {
       out_of_stock.val('');
     }
 
-  }).on('change', '#status', function (event) {
-    event.preventDefault();
-    var item_id = body.find('#item_id').val();
-    var status = $(this).val();
-    var additionStatus = $('#additionInputStatusForm');
-    var itemRow = body.find('#' + item_id);
-    var inputData = '';
-
-    if (status === 'purchased') {
-      var order_number = itemRow.find('.order_number').text();
-      inputData = `<input type="text" name="order_number" value="${order_number}" placeholder="Order Number" class="form-control" required="true">`;
-    } else if (status === 'shipped-from-suppliers') {
-      var tracking_number = itemRow.find('.tracking_number').text();
-      inputData = `<input type="text" name="tracking_number" value="${tracking_number}" placeholder="Tracking Number" class="form-control" required="true">`;
-    } else if (status === 'received-in-BD-warehouse') {
-      var actual_weight = itemRow.find('.actual_weight').text();
-      inputData = `<input type="text" name="actual_weight" value="${actual_weight}" placeholder="Actual Weight" class="form-control" required="true">`;
-    } else if (status === 'out-of-stock') {
-      var out_of_stock = itemRow.find('.out_of_stock').text();
-      inputData = `<select name="out_of_stock_type" class="form-control mb-3" required="true">
-                          <option value="partial">Partial</option>
-                          <option value="full">Full</option>
-                      </select>
-                      <input type="text" name="out_of_stock" value="${out_of_stock}" placeholder="Amount" class="form-control" required="true">`;
-    } else if (status === 'adjustment') {
-      var adjustment = itemRow.find('.adjustment').text();
-      inputData = `<input type="text" name="adjustment" value="${adjustment}" placeholder="Adjustment Amount" class="form-control" required="true">`;
-    } else if (status === 'refunded') {
-      var refunded = itemRow.find('.refunded').text();
-      inputData = `<input type="text" name="refunded" value="${refunded}" placeholder="Refund Amount" class="form-control" required="true">`;
-    }
-
-    additionStatus.html(inputData);
-
   }).on('submit', '#statusChargeForm', function (event) {
     event.preventDefault();
     var csrf = $('meta[name="csrf-token"]');
@@ -176,16 +145,6 @@ function remove_space(stringData) {
         body.find('#statusSubmitBtn').removeAttr('disabled');
       }
     });
-  }).on('click', '.findResultButton', function (event) {
-    event.preventDefault();
-    body.find('#filterWalletForm').submit();
-
-  }).on('submit', '#filterWalletForm', function (event) {
-    event.preventDefault();
-    var customer = $(this).find('#customer').val();
-    var status = $(this).find('#findStatus').val();
-    window.location.href = '/admin/order/wallet?status=' + status + '&customer=' + customer;
-
   }).on('change', '#allSelectCheckbox', function () {
     var tbodyCheckbox = $('tbody').find('input.checkboxItem');
     if ($(this).is(':checked')) {
@@ -210,17 +169,6 @@ function remove_space(stringData) {
     } else {
       disabled_proceed_button();
     }
-
-  }).on('click', '#changeGroupStatusButton', function () {
-    var changeStatusModal = $('#changeStatusButton');
-    var hiddenField = changeStatusModal.find('.hiddenField');
-    var hiddenInput = '';
-    $('input.checkboxItem:checked').each(function (index) {
-      hiddenInput += `<input type="hidden" name="item_id[]" value="${$(this).val()}">`;
-    });
-    hiddenField.html(hiddenInput);
-    changeStatusModal.modal('show');
-    $('#statusChargeForm').trigger("reset");
 
   }).on('click', '#generateInvoiceButton', function () {
     var generateInvoiceModal = $('#generateInvoiceModal');
@@ -359,6 +307,26 @@ function remove_space(stringData) {
   });
 
 
+  //  wallet search helper js
+  function checkUncheckSearchOption() {
+    var all_select = $('#all_select');
+    var checked = all_select.closest('.form-group').find('.status_checkbox:checked');
+    var allCheckBox = all_select.closest('.form-group').find('.status_checkbox');
+    all_select.prop('checked', (allCheckBox.length === checked.length));
+  }
+  $(document).on('click', '#all_select', function () {
+    $('#all_select').closest('.form-group').find('input[type=checkbox]').prop('checked', $(this).is(":checked"));
+  });
+
+  $(document).on('show.bs.modal', '#searchModal', function (event) {
+    checkUncheckSearchOption();
+  });
+  $(document).on('change', '.status_checkbox', function (event) {
+    checkUncheckSearchOption();
+  });
+
+
+
   //  wallet customizing develop
 
   function modalLoader() {
@@ -406,55 +374,55 @@ function remove_space(stringData) {
       </td>
     </tr>
     <tr>
-      <td colspan="4" class="text-right">Transaction ID</td>
+      <td colspan="5" class="text-right">Transaction ID</td>
       <td class="text-right">${wallet.order.transaction_id}</td>
     </tr>
     <tr>
-      <td colspan="4" class="text-right">Payment Method</td>
+      <td colspan="5" class="text-right">Payment Method</td>
       <td class="text-right">${wallet.order.payment_method}</td>
     </tr>
     <tr>
-      <td colspan="4" class="text-right">Order Number</td>
+      <td colspan="5" class="text-right">Order Number</td>
       <td class="text-right">${wallet.order.order_number}</td>
     </tr>
     <tr>
-      <td colspan="4" class="text-right">Wallet Number</td>
+      <td colspan="5" class="text-right">Wallet Number</td>
       <td class="text-right">${wallet.item_number}</td>
     </tr>
     <tr>
-      <td colspan="4" class="text-right">Product ID</td>
+      <td colspan="5" class="text-right">Product ID</td>
       <td class="text-right">${wallet.ItemId}</td>
     </tr>
     <tr>
-      <td colspan="4" class="text-right">Source Site</td>
+      <td colspan="5" class="text-right">Source Site</td>
       <td class="text-right">${wallet.ProviderType}</td>
     </tr>
     <tr>
-      <td colspan="4" class="text-right">Shipping Method</td>
+      <td colspan="5" class="text-right">Shipping Method</td>
       <td class="text-right">${wallet.shipping_type ? wallet.shipping_type : 'express'}</td>
     </tr>
     <tr>
-      <td colspan="4" class="text-right">Shipping Rate</td>
+      <td colspan="5" class="text-right">Shipping Rate</td>
       <td class="text-right">${wallet.shipping_rate || 'not set'}</td>
     </tr>
     <tr>
-      <td colspan="4" class="text-right">Source Order Number</td>
+      <td colspan="5" class="text-right">Source Order Number</td>
       <td class="text-right">${wallet.source_order_number || 'not set'}</td>
     </tr>
     <tr>
-      <td colspan="4" class="text-right">TrackingNo</td>
+      <td colspan="5" class="text-right">TrackingNo</td>
       <td class="text-right">${wallet.tracking_number || 'not set'}</td>
     </tr>
     <tr>
-      <td colspan="4" class="text-right">Ref.Invoice</td>
+      <td colspan="5" class="text-right">Ref.Invoice</td>
       <td class="text-right">${wallet.invoice_no || 'not set'}</td>
     </tr>
     <tr>
-      <td colspan="4" class="text-right">Status</td>
+      <td colspan="5" class="text-right">Status</td>
       <td class="text-right">${wallet.status}</td>
     </tr>
     <tr>
-      <td colspan="4" class="text-right">Day Count</td>
+      <td colspan="5" class="text-right">Day Count</td>
       <td class="text-right">${12}</td>
     </tr>
     <tr>
@@ -484,63 +452,63 @@ function remove_space(stringData) {
 
     return `
       <tr>
-        <td colspan="4" class="text-right">Products Value</td>
+        <td colspan="5" class="text-right">Products Value</td>
         <td class="text-right">${product_value}</td>
       </tr>
       <tr>
-        <td colspan="4" class="text-right">China Local Shipping</td>
+        <td colspan="5" class="text-right">China Local Shipping</td>
         <td class="text-right">${DeliveryCost || 0}</td>
       </tr>
       <tr>
-        <td colspan="4" class="text-right">(-) Coupon Value</td>
+        <td colspan="5" class="text-right">(-) Coupon Value</td>
         <td class="text-right">${coupon_contribution || 0}</td>
       </tr>
       <tr>
-        <td colspan="4" class="text-right">Net Product Value</td>
+        <td colspan="5" class="text-right">Net Product Value</td>
         <td class="text-right">${netValue || 0}</td>
       </tr>
       <tr>
-        <td colspan="4" class="text-right">1st Payment</td>
+        <td colspan="5" class="text-right">1st Payment</td>
         <td class="text-right">${wallet.first_payment || 0}</td>
       </tr>
       <tr>
-        <td colspan="4" class="text-right">Out of Stock</td>
+        <td colspan="5" class="text-right">Out of Stock</td>
         <td class="text-right">${wallet.out_of_stock || 0}</td>
       </tr>
       <tr>
-        <td colspan="4" class="text-right">Missing/Shortage</td>
+        <td colspan="5" class="text-right">Missing/Shortage</td>
         <td class="text-right">${wallet.missing || 0}</td>
       </tr>
       <tr>
-        <td colspan="4" class="text-right">Lost in Transit</td>
+        <td colspan="5" class="text-right">Lost in Transit</td>
         <td class="text-right">${wallet.lost_in_transit || 0}</td>
       </tr>
       <tr>
-        <td colspan="4" class="text-right">Refunded</td>
+        <td colspan="5" class="text-right">Refunded</td>
         <td class="text-right">${wallet.refunded || 0}</td>
       </tr>
       <tr>
-        <td colspan="4" class="text-right">Adjustment</td>
+        <td colspan="5" class="text-right">Adjustment</td>
         <td class="text-right">${wallet.adjustment || 0}</td>
       </tr>
       <tr>
-        <td colspan="4" class="text-right">AliExpress Tax</td>
+        <td colspan="5" class="text-right">AliExpress Tax</td>
         <td class="text-right">${wallet.customer_tax || 0}</td>
       </tr>
       <tr>
-        <td colspan="4" class="text-right">Weight Charges</td>
+        <td colspan="5" class="text-right">Weight Charges</td>
         <td class="text-right">${$weightCharges || 0}</td>
       </tr>
       <tr>
-        <td colspan="4" class="text-right">Courier Bill</td>
+        <td colspan="5" class="text-right">Courier Bill</td>
         <td class="text-right">${wallet.courier_bill || 0}</td>
       </tr>
       <tr>
-        <td colspan="4" class="text-right">Last Payment</td>
+        <td colspan="5" class="text-right">Last Payment</td>
         <td class="text-right">${wallet.last_payment || 0}</td>
       </tr>
       <tr>
-        <td colspan="4" class="text-right">Closing Balance</td>
+        <td colspan="5" class="text-right">Closing Balance</td>
         <td class="text-right">${wallet.due_payment || 0}</td>
       </tr>`;
   }
@@ -553,9 +521,15 @@ function remove_space(stringData) {
     return html + '</p>';
   }
 
+  function variationImage(attributes, wallet) {
+    var imgItem = attributes?.find(attr => attr?.ImageUrl !== undefined) || {}
+    return imgItem?.ImageUrl ? imgItem?.ImageUrl : wallet?.MainPictureUrl;
+  }
+
   function walletVariationsInfo(wallet) {
     var html = `<tr>
               <th class="text-center">SL</th>
+              <th class="text-center">Picture</th>
               <th>Variations</th>
               <th class="text-center">Quantity</th>
               <th class="text-center">Price</th>
@@ -565,8 +539,12 @@ function remove_space(stringData) {
       wallet?.item_variations?.map((variation, key) => {
         var attributes = variation?.attributes ? JSON.parse(variation.attributes) : [];
         var attrData = attributesInfo(attributes);
+        var variationImg = variationImage(attributes, wallet);
         html += `<tr>
               <td class="text-center text-nowrap align-middle">${key + 1}</td>
+              <td class="text-nowrap align-middle">
+                <img src="${variationImg}" style="width:90px" class="img-fluid mx-auto" alt="variation"/>
+              </td>
               <td class="text-nowrap align-middle">${attrData}</td>
               <td class="text-center text-nowrap align-middle">${variation?.qty}</td>
               <td class="text-center text-nowrap align-middle">${variation?.price}</td>
@@ -597,7 +575,7 @@ function remove_space(stringData) {
     var detailsModal = $("#detailsModal");
     detailsModal.modal('show');
     detailsModal.find('.modal-body').html(loader)
-    axios.get(`/admin/order/wallet/${wallet_id}`)
+    axios.get(make_full_url(`/admin/order/wallet/${wallet_id}`))
       .then(res => {
         const resData = res.data;
         var htmlData = walletInfoDetails(resData);
@@ -646,7 +624,6 @@ function remove_space(stringData) {
     var action = $(this).attr('action');
     var formData = $(this).serializeArray();
     formData = formDataObject(formData);
-    console.log('formData', formData);
     axios.post(action, { ...formData, _method: 'PUT' })
       .then(res => {
         console.log('res', res);
@@ -682,7 +659,7 @@ function remove_space(stringData) {
     var detailsModal = $("#detailsModal");
     detailsModal.modal('show');
     detailsModal.find('.modal-body').html(loader)
-    axios.get(`/admin/order/wallet/${wallet_id}`)
+    axios.get(make_full_url(`/admin/order/wallet/${wallet_id}`))
       .then(res => {
         const resData = res.data;
         var htmlData = walletMasterEditForm(resData);
@@ -699,6 +676,136 @@ function remove_space(stringData) {
     event.preventDefault();
     var wallet_id = $(this).attr('href');
     generateWalletMasterEdit(wallet_id);
+  });
+
+
+
+  //  section for change wallet status
+
+  function show_enable_field(show_array) {
+    var statusBlock = $("#additionInputStatusForm");
+    statusBlock.find('.form-group').addClass('d-none');
+    for (var i = 0; show_array.length > i; i++) {
+      var item = show_array[i];
+      $("#" + item).closest('.form-group').removeClass('d-none');
+    }
+  }
+
+  $(document).on('submit', '#updateWalletStatus', function (event) {
+    event.preventDefault();
+    var action = make_full_url(`admin/order/wallet/status/change`);
+    var loader = modalLoader();
+    var formData = $(this).serialize();
+    var detailsModal = $("#changeStatusModal");
+    detailsModal.find('.modal-body').html(loader)
+    axios.post(action, formData)
+      .then(res => {
+        const resData = res.data;
+      })
+      .catch(error => {
+        console.log(error);
+      })
+      .then(() => {
+        window.location.reload();
+        detailsModal.modal('hide');
+      });
+  });
+
+  $(document).on('change', '#status', function (event) {
+    event.preventDefault();
+    var status = $(this).val();
+    if (status == 'purchased') {
+      show_enable_field(['source_order_number']);
+    } else if (status == 'shipped-from-suppliers') {
+      show_enable_field(['tracking_number']);
+    } else if (status == 'received-in-BD-warehouse') {
+      show_enable_field(['actual_weight']);
+    } else if (status == 'out-of-stock') {
+      show_enable_field(['out_of_stock']);
+    } else if (status == 'adjustment') {
+      show_enable_field(['adjustment']);
+    } else if (status == 'refunded') {
+      show_enable_field(['refunded']);
+    } else {
+      show_enable_field([]);
+    }
+  });
+
+  function wallet_status_change_form(wallet) {
+    console.log('wallet', wallet);
+    return `<input type="hidden" name="item_id" value="${wallet.id}">
+  <div class="form-group d-none">
+    <label for="source_order_number">Source Order Number</label>
+    <input type="text" name="source_order_number" class="form-control" value="${wallet.source_order_number || ''}" id="source_order_number"
+      placeholder="Source Order Number">
+  </div>
+  <div class="form-group d-none">
+    <label for="tracking_number">Tracking Number</label>
+    <input type="text" name="tracking_number" class="form-control" value="${wallet.tracking_number || ''}" id="tracking_number"
+      placeholder="Tracking Number">
+  </div>
+  <div class="form-group d-none">
+    <label for="out_of_stock">Out of Stock</label>
+    <input type="text" name="out_of_stock" class="form-control" value="${wallet.out_of_stock || ''}" id="out_of_stock" placeholder="Out of Stock">
+  </div>
+  <div class="form-group d-none">
+    <label for="weight">Actual Weight</label>
+    <input type="text" name="actual_weight" class="form-control" value="${wallet.actual_weight || ''}" id="actual_weight"
+      placeholder="Actual Weight">
+  </div>
+  <div class="form-group d-none">
+    <label for="lost_in_transit">Lost In Transit</label>
+    <input type="text" name="lost_in_transit" value="${wallet.lost_in_transit || ''}" class="form-control" id="lost_in_transit"
+      placeholder="Lost In Transit">
+  </div>
+  <div class="form-group d-none">
+    <label for="customer_tax">Customer Tax</label>
+    <input type="text" name="customer_tax" class="form-control" value="${wallet.customer_tax || ''}" id="customer_tax" placeholder="Customer Tax">
+  </div>
+  <div class="form-group d-none">
+    <label for="missing">Missing</label>
+    <input type="text" name="missing" class="form-control" value="${wallet.missing || ''}" id="missing" placeholder="Missing">
+  </div>
+  <div class="form-group d-none">
+    <label for="adjustment">Adjustment</label>
+    <input type="text" name="adjustment" class="form-control" value="${wallet.adjustment || ''}" id="adjustment" placeholder="Adjustment">
+  </div>
+  <div class="form-group d-none">
+    <label for="refunded">Refunded</label>
+    <input type="text" name="refunded" class="form-control" value="${wallet.refunded || ''}" id="refunded" placeholder="Refunded">
+  </div>
+  <div class="form-group d-none">
+    <label for="Last Payment">Refunded</label>
+    <input type="text" name="last_payment" class="form-control" value="${wallet.last_payment || ''}" id="last_payment" placeholder="Last Payment">
+  </div>`;
+  }
+
+
+  function processToChangeStatus(wallet_id) {
+    var loader = modalLoader();
+    var detailsModal = $("#changeStatusModal");
+    detailsModal.modal('show');
+    // detailsModal.find('.modal-body').html(loader)
+    axios.get(make_full_url(`/admin/order/wallet/${wallet_id}`))
+      .then(res => {
+        const resData = res.data;
+        var htmlData = wallet_status_change_form(resData.data);
+        detailsModal.find('.modal-title').text(`Change wallet status of #${wallet_id}`);
+        detailsModal.find('#additionInputStatusForm').html(htmlData);
+      })
+      .catch(error => {
+        console.log(error);
+      })
+      .then(() => {
+        $('#status').trigger('change');
+      })
+  }
+
+
+  $(document).on('click', '.changeWalletStatus', function (event) {
+    event.preventDefault();
+    var wallet_id = $(this).attr('href');
+    processToChangeStatus(wallet_id);
   });
 
 })(jQuery);

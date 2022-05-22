@@ -14,8 +14,8 @@ $options = [
 'adjustment' => 'Adjustment',
 'refunded' => 'Refunded',
 'delivered' => 'Delivered',
-'Waiting for Payment' => 'Waiting for Payment',
-'Partial Paid' => 'Partial Paid',
+'waiting-for-payment' => 'Waiting for Payment',
+'partial-paid' => 'Partial Paid',
 ]
 @endphp
 
@@ -24,7 +24,7 @@ $options = [
 
 
 <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="searchModalLabel">Search Wallet</h5>
@@ -41,13 +41,17 @@ $options = [
           <div class="form-group">
             <label for="wallet_status">Wallet Status</label>
             <br>
+            <div class="form-check">
+              {{html()->checkbox("all_select")->class('form-check-input')}}
+              {{ html()->label('Select All')->class('form-check-label')->for('all_select') }}
+            </div>
             @php
-            $requ_status = request('findStatus', []);
+            $requ_status = request('status', []);
             @endphp
             @foreach ($options as $key => $option)
-            <div class="form-check form-check-inline">
-              {{html()->checkbox("findStatus[$key]", in_array($key, $requ_status),
-              $key)->id($key)->class('form-check-input')}}
+            <div class="form-check">
+              {{html()->checkbox("status[]", in_array($key, $requ_status),
+              $key)->id($key)->class('form-check-input status_checkbox')}}
               {{ html()->label($option)->class('form-check-label')->for($key) }}
             </div>
             @endforeach
@@ -72,12 +76,6 @@ $options = [
       </div> <!-- col-->
       <div class="col-md-6 text-right">
         <div class="btn-group" role="group" aria-label="header_button_group">
-          @can('wallet.change.status')
-          <button type="button" class="btn btn-primary" id="changeGroupStatusButton" data-toggle="tooltip"
-            title="@lang('Change Status')" disabled="true">
-            @lang('Status')
-          </button>
-          @endcan
           @can('wallet.generate.invoice')
           <button type="button" class="btn btn-danger" id="generateInvoiceButton" data-toggle="tooltip"
             title="Generate Invoice" disabled="true">
@@ -117,26 +115,21 @@ $options = [
       </div>
     </div>
   </div>
-</div> <!-- changeStatusButton -->
+</div>
 
-<div class="modal fade" id="changeStatusButton" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
-  aria-hidden="true">
+<div class="modal fade" id="changeStatusModal" tabindex="-1" role="dialog"
+  aria-labelledby="changeStatusModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
-      <form method="POST" action="{{route('admin.order.store')}}" id="statusChargeForm">
-        @csrf
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalCenterTitle">Change Status <span class="orderId"></span>
-          </h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <div class="hiddenField">
-            {{-- hidden input field append here --}}
-          </div>
-
+      <div class="modal-header">
+        <h5 class="modal-title" id="changeStatusModalCenterTitle">Change Status <span class="orderId"></span>
+        </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="#" id="updateWalletStatus" method="post">
           <div class="form-group">
             @php
             unset($options['Waiting for Payment'], $options['Partial Paid']);
@@ -147,21 +140,24 @@ $options = [
             ->required()}}
           </div> <!--  form-group-->
 
-          <div class="form-group" id="additionInputStatusForm">
-
+          <div id="additionInputStatusForm">
+            {{-- status element form will append here --}}
           </div> <!-- additionInputStatusForm -->
 
-          <div class="form-group form-check">
-            <input type="checkbox" name="notify" value="1" class="form-check-input" id="notify" checked="true">
-            <label class="form-check-label" for="notify">Notify User</label>
+          <div class="form-group">
+            <div class=" form-check">
+              <input type="checkbox" name="notify" value="1" class="form-check-input" id="notify" checked="true">
+              <label class="form-check-label" for="notify">Notify User</label>
+            </div>
           </div>
 
-        </div>
-        <div class="modal-footer justify-content-between">
-          <button type="submit" class="btn btn-primary" id="statusSubmitBtn">Save changes</button>
-        </div>
+          <div class="form-group">
+            <button type="submit" class="btn btn-block btn-primary">Update</button>
+          </div>
+        </form>
 
-      </form>
+      </div>
+
     </div>
   </div>
 </div> <!-- changeStatusButton -->

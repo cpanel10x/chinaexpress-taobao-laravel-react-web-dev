@@ -10,21 +10,15 @@
     </a>
     @endcan
     @can('wallet.change.status')
-    <a href="#" class="dropdown-item" data-toggle="tooltip" data-placement="top"
+    <a href="{{$wallet->id}}" class="dropdown-item changeWalletStatus" data-toggle="tooltip" data-placement="top"
       title="Change Status">
       Change Status
-    </a>
-    @endcan
-    @can('wallet.edit')
-    <a href="#" class="dropdown-item" data-toggle="tooltip" data-placement="top"
-      title="Edit wallet">
-      Edit Wallet
     </a>
     @endcan
     @can('wallet.master.edit')
     <a href="{{$wallet->id}}" class="dropdown-item walletMasterEdit" data-toggle="tooltip" data-placement="top"
       title="Edit wallet">
-      Master Wallet
+      Master Edit
     </a>
     @endcan
     @can('recent.order.delete')

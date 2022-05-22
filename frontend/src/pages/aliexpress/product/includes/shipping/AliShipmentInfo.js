@@ -121,7 +121,7 @@ const AliShipmentInfo = props => {
 					       name="shipping"
 					       id="express"
 					       value="express"/>
-					<label className={`form-check-label ${isExpressEnable && 'font-weight-bold'}`} htmlFor="express">Express Shipping (15-20 Days) </label>
+					<label className={`form-check-label ${isExpressEnable && 'font-weight-bold'}`} htmlFor="express">Express Shipping (15-25 Days) </label>
 				</div>
 			</div>
 			{

@@ -36,6 +36,12 @@
 </head>
 
 <body class="layout-fixed sidebar-mini text-sm sidebar-collapse">
+
+  <div id="general_data" class="d-none">
+    <input type="hidden" name="base_url" id="app_base_url" value="{{url('/')}}">
+    <input type="hidden" name="asset_url" id="app_asset_url" value="{{asset('/')}}">
+  </div>
+
   <!-- Site wrapper -->
   <div class="wrapper">
 

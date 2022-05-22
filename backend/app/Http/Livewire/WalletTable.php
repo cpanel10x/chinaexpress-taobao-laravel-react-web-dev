@@ -53,13 +53,10 @@ class WalletTable extends TableComponent
   {
     $customer = $this->customer;
     $status = $this->status;
-    $status = $status ? explode(',', $this->status) : [];
-    $status = array_filter($status, function ($v) {
-      return $v != 'null';
-    });
-
     $orderItem = OrderItem::with('user', 'order', 'product');
-    $orderItem = !empty($status) ? $orderItem->whereIn('status', $status) : $orderItem;
+    if (is_array($status)) {
+      $orderItem = count($status) > 0 ? $orderItem->whereIn('status', $status) : $orderItem;
+    }
     return $customer ? $orderItem->where('user_id', $customer) : $orderItem;
   }
 
@@ -192,27 +189,23 @@ class WalletTable extends TableComponent
         ->format(function (OrderItem $model) {
           return $this->html('<span class="customer_tax">' . ($model->customer_tax ?? 0) . '</span>');
         }),
-      Column::make('Weight', 'weight')
+      Column::make('Total Weight', 'actual_weight')
         ->format(function (OrderItem $model) {
-          $weight = $model->weight ? $model->weight : 0;
+          $weight = $model->actual_weight ? $model->actual_weight : 0;
           $Quantity = $model->Quantity ? $model->Quantity : 0;
           $totalWeight = $weight * $Quantity;
-          $html = '<span class="actual_weight">' . (floating($totalWeight, 3)) . ' KG</span>';
-          $html .= "</br>";
-          $html .= "<span>({$Quantity}x{$weight})</span>";
+          $html = '<span class="actual_weight">' . (floating($totalWeight, 3)) . '</span>';
           return $this->html($html);
         }),
       Column::make('WeightCharges', 'shipping_rate')
         ->format(function (OrderItem $model) {
           $shipping_rate = $model->shipping_rate ? $model->shipping_rate : 0;
-          $weight = $model->weight ? $model->weight : 0;
+          $weight = $model->actual_weight ? $model->actual_weight : 0;
           $Quantity = $model->Quantity ? $model->Quantity : 0;
           $totalWeight = $weight * $Quantity;
           $totalShipping = round($shipping_rate * $totalWeight);
           $floatingWeight = floating($totalWeight, 3);
           $html = '<span class="shipping_rate">' . ($totalShipping) . '</span>';
-          $html .= "</br>";
-          $html .= "<span>({$shipping_rate}x{$floatingWeight})</span>";
           return $this->html($html);
         }),
       Column::make('CourierBill', 'courier_bill')
@@ -278,7 +271,7 @@ class WalletTable extends TableComponent
 
   public function setTableHeadClass($attribute): ?string
   {
-    $array = ['id', 'created_at', 'order.transaction_id', 'order.order_number', 'user.name', 'ProviderType', 'source_order_number', 'shipping_type', 'shipping_rate', 'order_number', '1688_link', 'coupon_contribution', 'net_product_value', 'lost_in_transit', 'customer_tax', 'weight_charges', 'order_item_number', 'chinaLocalDelivery', '1688_link', 'status', 'action', 'due_payment', 'checkbox', 'day_count', 'update_log', 'comments1', 'comments2'];
+    $array = ['id', 'created_at', 'order.transaction_id', 'order.order_number', 'user.name', 'ProviderType', 'source_order_number', 'shipping_type', 'shipping_rate', 'order_number', '1688_link', 'coupon_contribution', 'net_product_value', 'lost_in_transit', 'customer_tax', 'actual_weight', 'weight_charges', 'order_item_number', 'chinaLocalDelivery', '1688_link', 'status', 'action', 'due_payment', 'checkbox', 'day_count', 'update_log', 'comments1', 'comments2'];
     if (in_array($attribute, $array)) {
       $allSelect = $attribute == 'id' ? 'allSelectTitle' : '';
       return ' text-center text-nowrap' . $allSelect;
@@ -294,7 +287,7 @@ class WalletTable extends TableComponent
     if (in_array($attribute, $array)) {
       return 'align-middle';
     }
-    $array = ['id', 'created_at', 'order.transaction_id', 'order.order_number', 'user.name', 'ProviderType', 'source_order_number', 'shipping_type', 'shipping_rate', 'order_number', '1688_link', 'coupon_contribution', 'net_product_value', 'lost_in_transit', 'customer_tax', 'weight_charges', 'order_item_number', 'chinaLocalDelivery', '1688_link', 'status', 'action', 'due_payment', 'checkbox', 'day_count', 'update_log'];
+    $array = ['id', 'created_at', 'order.transaction_id', 'order.order_number', 'user.name', 'ProviderType', 'source_order_number', 'shipping_type', 'shipping_rate', 'order_number', '1688_link', 'coupon_contribution', 'net_product_value', 'lost_in_transit', 'customer_tax', 'actual_weight', 'weight_charges', 'order_item_number', 'chinaLocalDelivery', '1688_link', 'status', 'action', 'due_payment', 'checkbox', 'day_count', 'update_log'];
     if (in_array($attribute, $array)) {
       return ' text-center align-middle text-nowrap';
     }

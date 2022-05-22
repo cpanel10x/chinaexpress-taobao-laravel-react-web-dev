@@ -70,38 +70,40 @@ class WalletController extends Controller
   }
 
 
-  public function update_order_wallet_status($item_id, $status, $request)
+  public function update_order_wallet_status(Request $request)
   {
+    $item_id = request('item_id');
+    $status = request('status');
     $orderItem = OrderItem::find($item_id);
     $data = [];
     $order_id = $orderItem->order_item_number;
     $amount = '';
     $tracking = '';
     if ($status === 'purchased') {
-      $data = $request->only('order_number', 'status');
+      $data = $request->only('source_order_number', 'status');
     } elseif ($status === 'shipped-from-suppliers') {
       $data = $request->only('tracking_number', 'status');
-      $tracking = $data['tracking_number'];
+      $tracking = request('tracking_number');
     } elseif ($status === 'received-in-china-warehouse') {
       $data = $request->only('status');
     } elseif ($status === 'shipped-from-china-warehouse') {
       $data = $request->only('status');
     } elseif ($status === 'received-in-BD-warehouse') {
       $data = $request->only('actual_weight', 'status');
-      $data['shipping_charge'] = $orderItem->shipping_rate * $data['actual_weight'];
+      $data['bd_shipping_charge'] = $orderItem->shipping_rate * request('actual_weight', 0);
     } elseif ($status === 'on-transit-to-customer') {
       $data = $request->only('status');
     } elseif ($status === 'delivered') {
       $data = $request->only('status');
     } elseif ($status === 'out-of-stock') {
       $data = $request->only('out_of_stock', 'out_of_stock_type', 'status');
-      $amount = $data['out_of_stock'];
+      $amount = request('out_of_stock');
     } elseif ($status === 'adjustment') {
       $data = $request->only('adjustment', 'status');
-      $amount = $data['adjustment'];
+      $amount = request('adjustment');
     } elseif ($status === 'refunded') {
       $data = $request->only('refunded', 'status');
-      $amount = $data['refunded'];
+      $amount = request('refunded');
     }
 
     // manage customer Messages
@@ -109,31 +111,29 @@ class WalletController extends Controller
     if ($request->input('notify')) {
       generate_customer_notifications($status, $user, $order_id, $amount, $tracking);
     }
-
+    $status =  false;
     if (!empty($data)) {
       $orderItem->update($data);
-
-      $product_value = (int)$orderItem->product_value;
-      $chinaLocalDelivery = (int)$orderItem->chinaLocalDelivery;
-      $coupon_contribution = (int)$orderItem->coupon_contribution;
-      $first_payment = ($product_value + $chinaLocalDelivery - $coupon_contribution) * 0.50;
-
-      $out_of_stock = (int)$orderItem->out_of_stock;
-      $adjustment = (int)$orderItem->adjustment;
-      $refunded = (int)$orderItem->refunded;
-      $shipping_charge = (int)$orderItem->shipping_charge;
-      $courier_bill = (int)$orderItem->courier_bill;
-      $last_payment = (int)$orderItem->last_payment;
-      $missing = (int)$orderItem->missing;
-
+      $product_value = $orderItem->product_value;
+      $chinaLocalDelivery = $orderItem->chinaLocalDelivery;
+      $coupon_contribution = $orderItem->coupon_contribution;
+      $first_payment = $orderItem->first_payment;
+      $out_of_stock = $orderItem->out_of_stock;
+      $adjustment = $orderItem->adjustment;
+      $refunded = $orderItem->refunded;
+      $shipping_charge = $orderItem->shipping_charge;
+      $courier_bill = $orderItem->courier_bill;
+      $last_payment = $orderItem->last_payment;
+      $missing = $orderItem->missing;
       $due_payment = $product_value + $chinaLocalDelivery - $coupon_contribution - $first_payment - $out_of_stock + $refunded + $shipping_charge + $courier_bill - $last_payment - $missing;
 
       $due_payment = $adjustment > 0 ? $due_payment + abs($adjustment) : $due_payment - abs($adjustment);
 
       $orderItem->update(['due_payment' => $due_payment, 'first_payment' => $first_payment]);
+      $status = true;
     }
 
-    return $orderItem;
+    return response(['status' => $status, 'data' => $orderItem]);
   }
 
 

@@ -30,7 +30,7 @@ const TaobaoItemDescription = (props) => {
 				<p className="mb-0 mr-1 small">
 					Weight: <strong>{approxWeight(variation.qty, product)} Kg.</strong>
 					{isMobile && <br/>}
-					<span>Shipping Rate: <strong>{currency + ' ' + product?.shipping_rate}</strong> per Kg.</span>
+					<span>Shipping Rate: <strong>{currency + ' ' + (product?.shipping_rate || 0)}</strong> per Kg.</span>
 				</p>
 			</div>
 			{

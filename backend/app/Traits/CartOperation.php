@@ -504,12 +504,13 @@ trait CartOperation
             $count += 1;
             $variation->delete();
           }
+          $product_value_sum = $product_value;
           $product_value = $product_value + $DeliveryCost;
           $first_payment = ($product_value * $advanced_rate) / 100;
           $due_payment = $product_value - $first_payment;
           $orderItem->update([
             'item_number' => generate_order_number($orderItem->id),
-            'product_value' => $product_value,
+            'product_value' => $product_value_sum,
             'first_payment' => round($first_payment),
             'due_payment' => round($due_payment),
           ]);

@@ -9,7 +9,12 @@ if (!function_exists('generate_customer_notifications')) {
     $smsActive = null;
     $smsText = null;
 
-    if ($status == 'purchased') {
+    if ($status == 'partial-paid') {
+      $emailActive = get_setting('active_partial_paid');
+      $text = get_setting('partial_paid');
+      $smsActive = get_setting('sms_active_partial_paid');
+      $smsText = get_setting('sms_partial_paid');
+    } elseif ($status == 'purchased') {
       $emailActive = get_setting('active_purchased_message');
       $text = get_setting('purchased_message');
       $smsActive = get_setting('sms_active_purchased_message');
