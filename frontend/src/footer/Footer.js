@@ -26,7 +26,6 @@ const Footer = () => {
 										alt={settings?.site_name}
 									/>
 								</Link>
-								<p className="small mb-2">ঘরে বসে-বিদেশে শপিং</p>
 								<div className="font-weight-normal second-primary-color">
 									<p>{settings?.footer_description}</p>
 									<ul className="contact-list">
@@ -121,7 +120,7 @@ const Footer = () => {
 										<Link to="/login">Sign In</Link>
 									</li>
 									<li>
-										<Link to="/special-offer">
+										<Link to="/pages/special-offer">
 											Special Offer
 										</Link>
 									</li>

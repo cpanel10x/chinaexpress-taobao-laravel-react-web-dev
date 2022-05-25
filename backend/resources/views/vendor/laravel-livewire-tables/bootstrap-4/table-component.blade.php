@@ -6,7 +6,10 @@
     @include('laravel-livewire-tables::'.config('laravel-livewire-tables.theme').'.includes.options')
 
     @if ($this->getOption('bootstrap.responsive'))
-        <div class="table-responsive">
+    @php
+        $res_classes = $this->getOption('bootstrap.classes.responsive');
+    @endphp
+        <div class="{{$res_classes ? $res_classes : 'table-responsive'}}">
     @endif
         <table class="{{ $this->getOption('bootstrap.classes.table') }}">
             @include('laravel-livewire-tables::'.config('laravel-livewire-tables.theme').'.includes.thead')

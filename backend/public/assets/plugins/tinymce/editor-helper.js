@@ -36,7 +36,7 @@ function small_editor(selector, height = 250) {
     plugins: ["wordcount lists link code importcss hr image imagetools"],
     toolbar:
       "formatselect | bold italic underline  | removeformat | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent| image | hr  code ",
-   
+
     relative_urls: false,
     automatic_uploads: false,
     images_reuse_filename: true,
@@ -53,7 +53,8 @@ function small_editor(selector, height = 250) {
     ],
     images_upload_handler: function (blobInfo, success, failure) {
       var xhr = new XMLHttpRequest();
-      xhr.open("POST", "/ajax/image-upload");
+      var base_url = $("#app_base_url").val();
+      xhr.open("POST", `${base_url}/ajax/image-upload`);
       xhr.setRequestHeader(
         "X-CSRF-TOKEN",
         $('meta[name="csrf-token"]').attr("content")
@@ -116,7 +117,8 @@ function simple_editor(selector, height = 400) {
     ],
     images_upload_handler: function (blobInfo, success, failure) {
       var xhr = new XMLHttpRequest();
-      xhr.open("POST", "/admin/editor/image-upload");
+      var base_url = $("#app_base_url").val();
+      xhr.open("POST", `${base_url}/admin/editor/image-upload`);
       xhr.setRequestHeader(
         "X-CSRF-TOKEN",
         $('meta[name="csrf-token"]').attr("content")

@@ -57,6 +57,17 @@ export const useNewArrivedProducts = () => useQuery(["useNewArrivedProducts"], a
    refetchOnMount: false,
 });
 
+export const useFavoriteProducts = () => useQuery(["useFavoriteProducts"], async () => {
+   try {
+      const {data} = await instance.post(`favorite-products`);
+      return data?.favorite ? JSON.parse(data?.favorite) : [];
+   } catch (error) {
+      console.log(error);
+   }
+},{
+   refetchOnMount: false,
+});
+
 
 export const useRecentViewProducts = () => useQuery(["useRecentViewProducts"], async () => {
    const recent_view = recent_view_token();

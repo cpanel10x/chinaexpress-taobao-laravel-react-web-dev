@@ -7,6 +7,7 @@ use App\Models\Auth\User;
 use App\Models\Content\Order;
 use App\Models\Content\OrderItem;
 use App\Models\Content\OrderItemVariation;
+use Carbon\Carbon;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -16,6 +17,21 @@ use Throwable;
 
 class OrderController extends Controller
 {
+  public function delete_incomplete_order()
+  {
+    try {
+      $days = get_setting('incomplete_order_deletion_after_day', 90);
+      $before = Carbon::now()->subDays($days)->endOfDay()->toDateTimeString();
+      $orders_arr = Order::where('status', 'waiting-for-payment')
+        ->where('created_at', '<', $before)
+        ->pluck('id');
+      OrderItem::whereIn('order_id',  $orders_arr)->delete();
+      OrderItemVariation::whereIn('order_id', $orders_arr)->delete();
+      Order::whereIn('id', $orders_arr)->delete();
+    } catch (\Exception $ex) {
+      dump('incomplete_order deletion error');
+    }
+  }
   /**
    * Display a listing of the resource.
    *
@@ -23,6 +39,7 @@ class OrderController extends Controller
    */
   public function index()
   {
+    $this->delete_incomplete_order();
     $orders = Order::get();
     $trashedOrders = Order::onlyTrashed()->get();
     return view('backend.content.order.index', compact('orders', 'trashedOrders'));
@@ -209,13 +226,10 @@ class OrderController extends Controller
    */
   public function destroy($id)
   {
-    $order = Order::withTrashed()->find($id);
     $order_id = $id;
-    $order_user_id = $order->user_id ?? null;
-    $orderItem = OrderItem::withTrashed()->where('order_id', $order_id)
-      ->where('user_id', $order_user_id);
-    $orderItemItems = $orderItem->pluck('id')->toArray();
-    $OrderItemVariation = OrderItemVariation::withTrashed()->whereIn('order_item_id', $orderItemItems)->where('user_id', $order_user_id);
+    $order = Order::withTrashed()->find($order_id);
+    $orderItem = OrderItem::withTrashed()->where('order_id', $order_id);
+    $OrderItemVariation = OrderItemVariation::withTrashed()->where('order_id', $order_id);
 
     if ($order->trashed()) {
       $order->forceDelete();
@@ -258,7 +272,7 @@ class OrderController extends Controller
     $orderItem = OrderItem::onlyTrashed()->where('order_id', $order_id)
       ->where('user_id', $order_user_id);
     $orderItemItems = $orderItem->pluck('id')->toArray();
-    $OrderItemVariation = OrderItemVariation::onlyTrashed()->whereIn('order_item_id', $orderItemItems)->where('user_id', $order_user_id);
+    $OrderItemVariation = OrderItemVariation::onlyTrashed()->whereIn('item_id', $orderItemItems)->where('user_id', $order_user_id);
 
     $trashOrder->restore();
     $orderItem->restore();

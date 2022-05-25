@@ -3,6 +3,7 @@
 namespace App\Http\Livewire;
 
 use App\Models\Content\OrderItem;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Rappasoft\LaravelLivewireTables\TableComponent;
 use Rappasoft\LaravelLivewireTables\Traits\HtmlComponents;
@@ -25,11 +26,12 @@ class WalletTable extends TableComponent
   public $clearSearchButton = true;
 
   protected $options = [
-    'bootstrap.classes.table' => 'table table-bordered table-hover',
+    'bootstrap.classes.table' => 'table table-bordered table-hover ',
     'bootstrap.classes.thead' => null,
     'bootstrap.classes.buttons.export' => 'btn btn-info',
     'bootstrap.container' => true,
     'bootstrap.responsive' => true,
+    'bootstrap.classes.responsive' => 'table-scrollable',
   ];
 
   public $sortDefaultIcon = '<i class="text-muted fa fa-sort"></i>';
@@ -86,12 +88,7 @@ class WalletTable extends TableComponent
       Column::make('Order Number.', 'order.order_number')
         ->searchable()
         ->format(function (OrderItem $model) {
-          return $this->html('<span class="order_number">' . $model->order->order_number . '</span>');
-        }),
-      Column::make('ItemNo.', 'item_number')
-        ->searchable()
-        ->format(function (OrderItem $model) {
-          return $this->html('<span class="item_number">' . $model->item_number . '</span>');
+          return $this->html('<span class="order_number">' . ($model->order ? $model->order->order_number : 'N/A') . '</span>');
         }),
       Column::make('Customer', 'user.name')
         ->searchable()
@@ -234,9 +231,12 @@ class WalletTable extends TableComponent
           return view('backend.content.wallet.includes.actions', ['wallet' => $model]);
         })
         ->excludeFromExport(),
-      Column::make('Day Count', 'day_count')
+      Column::make('Day Count', 'purchases_at')
         ->format(function (OrderItem $model) {
-          return $this->html('<span class="day_count text-danger">' . (1) . ' Days</span>');
+          $purchases_at = $model->purchases_at;
+          $days = $purchases_at ? Carbon::parse($purchases_at)->diffInDays() : 0;
+          $value = $days <= 1 ? $days . ' Day' : $days . ' Days';
+          return $this->html('<span class="day_count text-danger">' . ($value) . '</span>');
         }),
       Column::make('Update Log', 'update_log')
         ->format(function (OrderItem $model) {
@@ -271,7 +271,7 @@ class WalletTable extends TableComponent
 
   public function setTableHeadClass($attribute): ?string
   {
-    $array = ['id', 'created_at', 'order.transaction_id', 'order.order_number', 'user.name', 'ProviderType', 'source_order_number', 'shipping_type', 'shipping_rate', 'order_number', '1688_link', 'coupon_contribution', 'net_product_value', 'lost_in_transit', 'customer_tax', 'actual_weight', 'weight_charges', 'order_item_number', 'chinaLocalDelivery', '1688_link', 'status', 'action', 'due_payment', 'checkbox', 'day_count', 'update_log', 'comments1', 'comments2'];
+    $array = ['id', 'created_at', 'order.transaction_id', 'order.order_number', 'user.name', 'ProviderType', 'source_order_number', 'shipping_type', 'shipping_rate', 'order_number', '1688_link', 'coupon_contribution', 'net_product_value', 'lost_in_transit', 'customer_tax', 'actual_weight', 'weight_charges', 'order_item_number', 'chinaLocalDelivery', '1688_link', 'status', 'action', 'due_payment', 'checkbox', 'purchases_at', 'update_log', 'comments1', 'comments2'];
     if (in_array($attribute, $array)) {
       $allSelect = $attribute == 'id' ? 'allSelectTitle' : '';
       return ' text-center text-nowrap' . $allSelect;
@@ -287,7 +287,7 @@ class WalletTable extends TableComponent
     if (in_array($attribute, $array)) {
       return 'align-middle';
     }
-    $array = ['id', 'created_at', 'order.transaction_id', 'order.order_number', 'user.name', 'ProviderType', 'source_order_number', 'shipping_type', 'shipping_rate', 'order_number', '1688_link', 'coupon_contribution', 'net_product_value', 'lost_in_transit', 'customer_tax', 'actual_weight', 'weight_charges', 'order_item_number', 'chinaLocalDelivery', '1688_link', 'status', 'action', 'due_payment', 'checkbox', 'day_count', 'update_log'];
+    $array = ['id', 'created_at', 'order.transaction_id', 'order.order_number', 'user.name', 'ProviderType', 'source_order_number', 'shipping_type', 'shipping_rate', 'order_number', '1688_link', 'coupon_contribution', 'net_product_value', 'lost_in_transit', 'customer_tax', 'actual_weight', 'weight_charges', 'order_item_number', 'chinaLocalDelivery', '1688_link', 'status', 'action', 'due_payment', 'checkbox', 'purchases_at', 'update_log'];
     if (in_array($attribute, $array)) {
       return ' text-center align-middle text-nowrap';
     }

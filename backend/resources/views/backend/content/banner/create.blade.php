@@ -141,19 +141,19 @@
             });
         });
 
-        $(document).on('blur', "#post_title", function () {
-            let postField = $(this);
-            let post_title = postField.val();
-            if (post_title) {
-              var slug = slugify(post_title);
-                $("#post_error").empty();
-                postField.removeClass('is-invalid');
-                $("#post_slug").val(slug);
-            } else {
-                $("#post_error").text('Title must not empty');
-                postField.addClass('is-invalid');
-            }
-        });
+        // $(document).on('blur', "#post_title", function () {
+        //     let postField = $(this);
+        //     let post_title = postField.val();
+        //     if (post_title) {
+        //       var slug = slugify(post_title);
+        //         $("#post_error").empty();
+        //         postField.removeClass('is-invalid');
+        //         $("#post_slug").val(slug);
+        //     } else {
+        //         $("#post_error").text('Title must not empty');
+        //         postField.addClass('is-invalid');
+        //     }
+        // });
 
         $(function () {
             $(".form-check-input").click(function () {

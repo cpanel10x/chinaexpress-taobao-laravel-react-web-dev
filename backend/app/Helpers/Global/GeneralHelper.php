@@ -254,9 +254,9 @@ if (!function_exists('clear_upload_location')) {
 
 
 if (!function_exists('generate_order_number')) {
-  function generate_order_number($id)
+  function generate_order_number($id, $prefix = '2555', $length = 6)
   {
-    return str_pad($id, 6, "0", STR_PAD_LEFT);
+    return str_pad($id, $length, $prefix, STR_PAD_LEFT);
   }
 }
 
@@ -424,7 +424,7 @@ if (!function_exists('get_aliExpress_air_shipping_rate')) {
     foreach ($variations as $variation) {
       $qty = $variation->qty;
       $price = $variation->price;
-      $total = $qty * $price;
+      $total += ($qty * $price);
     }
     $charges = $type == 'express' ? get_setting('ali_air_shipping_charges') : get_setting('air_shipping_charges');
     $charges = $charges ? json_decode($charges, true) : [];
@@ -446,7 +446,10 @@ if (!function_exists('calculate_air_shipping_rate')) {
       $minimum = $condition['minimum'] ?? 0;
       $maximum = $condition['maximum'] ?? 0;
       $rate = $condition['rate'] ?? 0;
-      if ($amount >= $minimum && $amount <= $maximum) {
+      if (!$amount) {
+        $shipping_rate = $rate;
+        break;
+      } else if ($amount >= $minimum && $amount <= $maximum) {
         $shipping_rate = $rate;
         break;
       }

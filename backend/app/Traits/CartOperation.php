@@ -140,7 +140,7 @@ trait CartOperation
     $CartItem = null;
     if ($cart_id) {
       $data['Title'] = $product['Title'] ?? null;
-      $data['ProviderType'] = $product['ProviderType'] ?? null;
+      $data['ProviderType'] = $ProviderType;
       $data['ItemMainUrl'] = $product['TaobaoItemUrl'] ?? null;
       $data['MainPictureUrl'] = $product['MainPictureUrl'] ?? null;
       $data['MasterQuantity'] = $product['MasterQuantity'] ?? null;
@@ -457,17 +457,21 @@ trait CartOperation
         ->get();
       $advanced_rate = get_setting('payment_advanched_rate', 60);
       foreach ($cartItems as $product) {
+        $ProviderType = $product->ProviderType;
+        $ship_method = $product->shipping_type;
+        $del_cost = ($ship_method == 'regular' && $ProviderType == 'aliexpress') ? 0 : $product->DeliveryCost;
+
         $orderItem = OrderItem::create([
           'order_id' => $order_id,
           'user_id' => $user->id,
           'ItemId' => $product->ItemId,
           'Title' => $product->Title,
-          'ProviderType' => $product->ProviderType,
+          'ProviderType' => $ProviderType,
           'ItemMainUrl' => $product->ItemMainUrl,
           'MainPictureUrl' => $product->MainPictureUrl,
           'regular_price' => $product->ProductPrice,
           'weight' => $product->weight,
-          'DeliveryCost' => $product->DeliveryCost,
+          'DeliveryCost' => $del_cost,
           'Quantity' => $product->Quantity,
           'hasConfigurators' => $product->hasConfigurators,
           'shipped_by' => $product->shipped_by,
@@ -475,7 +479,7 @@ trait CartOperation
           'shipping_from' => $product->shipping_from,
           'status' => $status,
           'tracking_number' => null,
-          'shipping_type' => $product->shipping_type,
+          'shipping_type' => $ship_method,
           'shipped_by' => 'Air',
         ]);
 
@@ -509,7 +513,7 @@ trait CartOperation
           $first_payment = ($product_value * $advanced_rate) / 100;
           $due_payment = $product_value - $first_payment;
           $orderItem->update([
-            'item_number' => generate_order_number($orderItem->id),
+            'item_number' => generate_order_number($orderItem->id, '1000000'),
             'product_value' => $product_value_sum,
             'first_payment' => round($first_payment),
             'due_payment' => round($due_payment),

@@ -70,6 +70,17 @@
           </div> <!-- col-->
         </div> <!-- form-group-->
 
+        
+        <div class="form-group row mb-4">
+          {{html()->label('Incomplete Order Deletion After (Days)')->class('col-md-7 col-form-label
+          text-right')->for('incomplete_order_deletion_after_day')}}
+          <div class="col-md-5">
+            {{html()->number('incomplete_order_deletion_after_day', get_setting('incomplete_order_deletion_after_day'))
+            ->class('form-control')
+            ->placeholder('Incomplete Order Deletion After Day')}}
+          </div> <!-- col-->
+        </div> <!-- form-group-->
+
 
         <div class="form-group row mb-4">
           <div class="col-md-5 offset-md-7">

@@ -46,9 +46,10 @@ const AllOrders = () => {
 											<thead>
 											<tr>
 												<th className="text-left">Date</th>
-												<th>OrderId</th>
-												<th>Total</th>
-												<th>1stPayment</th>
+												<th>OrderNo.</th>
+												{/*<th className="text-center">Tracking number</th>*/}
+												<th className="text-center">Products Value</th>
+												<th className="text-center">Initial Payment</th>
 												<th>Due</th>
 												<th className="text-left">Status</th>
 												<th>Actions</th>

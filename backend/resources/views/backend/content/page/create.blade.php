@@ -3,7 +3,8 @@
 @section('title', ' Page Management | Create new page')
 
 @section('content')
-{{ html()->form('POST', route('admin.page.store'))->class('form-horizontal')->attribute('enctype', 'multipart/form-data')->open() }}
+{{ html()->form('POST', route('admin.page.store'))->class('form-horizontal')->attribute('enctype',
+'multipart/form-data')->open() }}
 
 <div class="row">
   <div class="col-md-9">

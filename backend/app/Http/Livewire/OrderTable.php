@@ -82,7 +82,6 @@ class OrderTable extends TableComponent
       Column::make('CustomerPhone', 'user.phone')
         ->searchable(function ($builder, $term) {
           return $builder->where('phone', $term)
-            ->orWhere('address', 'LIKE', '%' . $term . '%')
             ->orWhereHas('user', function ($query) use ($term) {
               return $query->where('phone', $term);
             });
@@ -95,12 +94,21 @@ class OrderTable extends TableComponent
         ->format(function (Order $model) {
           return '৳ ' . floating($model->orderItems->sum('coupon_contribution'));
         }),
-      Column::make('First Payment', 'needToPay')
+      Column::make('First Payment', 'first_payment')
+        ->searchable(function ($builder, $term) {
+          return $builder->orWhereHas('orderItems', function ($query) use ($term) {
+            return $query->where('first_payment', $term);
+          });
+        })
         ->format(function (Order $model) {
           return '৳ ' . floating($model->orderItems->sum('first_payment'));
         }),
-      Column::make('Due', 'dueForProducts')
-        ->searchable()
+      Column::make('Due', 'due_payment')
+        ->searchable(function ($builder, $term) {
+          return $builder->orWhereHas('orderItems', function ($query) use ($term) {
+            return $query->where('due_payment', $term);
+          });
+        })
         ->format(function (Order $model) {
           return '৳ ' . floating($model->orderItems->sum('due_payment'));
         }),

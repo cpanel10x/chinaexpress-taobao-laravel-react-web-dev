@@ -12,8 +12,10 @@ $options = [
 'on-transit-to-customer' => 'On Transit to Customer',
 'out-of-stock' => 'Out of Stock',
 'adjustment' => 'Adjustment',
+'customer_tax' => 'Customer Tax',
 'refunded' => 'Refunded',
 'delivered' => 'Delivered',
+'lost_in_transit' => 'Lost in Transit',
 'waiting-for-payment' => 'Waiting for Payment',
 'partial-paid' => 'Partial Paid',
 ]
@@ -33,7 +35,7 @@ $options = [
         </button>
       </div>
       <div class="modal-body">
-        <form id="filterWalletForm" action="/admin/order/wallet" method="get">
+        <form id="filterWalletForm" action="{{route('admin.order.wallet.index')}}" method="get">
           <div class="form-group">
             <label for="customer">Customer</label>
             {{html()->select('customer', $findable, request('customer'))->class('form-control mr-sm-2 select2')}}
@@ -288,12 +290,30 @@ $options = [
 @endpush
 
 @push('middle-scripts')
+<script src="{{asset('assets/plugins/jquery-freeze-table/dist/js/freeze-table.min.js')}}"></script>
 @livewireScripts
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.3/moment.min.js"></script>
 <script src="{{asset('assets/plugins/select2/js/select2.full.min.js')}}"></script>
 <script src="{{asset('assets/plugins/table2excel/jquery.table2excel.min.js')}}"></script>
 <script>
   $(document).ready(function() {
+
+    function freezingExecute(){
+      setTimeout(() => {
+        $(".table-scrollable").freezeTable({
+          scrollable: true,
+          columnNum: 6
+        });
+      }, 300);
+    }
+    // deafult
+    freezingExecute();
+
+
+    $(document).on('change blur','.liveWireEventInputField', function(){
+      freezingExecute();
+    });
+
       $(document).on('click','.exportWalletTable',function(e) {
         e.preventDefault()
           var table = $('.table');

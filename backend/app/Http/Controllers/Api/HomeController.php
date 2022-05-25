@@ -162,6 +162,18 @@ class HomeController extends Controller
     ]);
   }
 
+  public function newFavoriteProducts()
+  {
+    $products = Wishlist::with('product')
+      ->latest()
+      ->limit(10)
+      ->get();
+
+    return response([
+      'favorite' => json_encode($products)
+    ]);
+  }
+
 
   public function generalSettings()
   {

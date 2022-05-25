@@ -687,7 +687,7 @@ function remove_space(stringData) {
     statusBlock.find('.form-group').addClass('d-none');
     for (var i = 0; show_array.length > i; i++) {
       var item = show_array[i];
-      $("#" + item).closest('.form-group').removeClass('d-none');
+      statusBlock.find("#" + item).closest('.form-group').removeClass('d-none');
     }
   }
 
@@ -724,6 +724,10 @@ function remove_space(stringData) {
       show_enable_field(['out_of_stock']);
     } else if (status == 'adjustment') {
       show_enable_field(['adjustment']);
+    }  else if (status == 'customer_tax') {
+      show_enable_field(['customer_tax']);
+    }   else if (status == 'lost_in_transit') {
+      show_enable_field(['lost_in_transit']);
     } else if (status == 'refunded') {
       show_enable_field(['refunded']);
     } else {
@@ -754,21 +758,20 @@ function remove_space(stringData) {
       placeholder="Actual Weight">
   </div>
   <div class="form-group d-none">
-    <label for="lost_in_transit">Lost In Transit</label>
-    <input type="text" name="lost_in_transit" value="${wallet.lost_in_transit || ''}" class="form-control" id="lost_in_transit"
-      placeholder="Lost In Transit">
-  </div>
-  <div class="form-group d-none">
-    <label for="customer_tax">Customer Tax</label>
-    <input type="text" name="customer_tax" class="form-control" value="${wallet.customer_tax || ''}" id="customer_tax" placeholder="Customer Tax">
-  </div>
-  <div class="form-group d-none">
     <label for="missing">Missing</label>
     <input type="text" name="missing" class="form-control" value="${wallet.missing || ''}" id="missing" placeholder="Missing">
   </div>
   <div class="form-group d-none">
     <label for="adjustment">Adjustment</label>
     <input type="text" name="adjustment" class="form-control" value="${wallet.adjustment || ''}" id="adjustment" placeholder="Adjustment">
+  </div>
+  <div class="form-group d-none">
+    <label for="customer_tax">Customer Tax</label>
+    <input type="text" name="customer_tax" class="form-control" value="${wallet.customer_tax || ''}" id="customer_tax" placeholder="Customer Tax">
+  </div>
+  <div class="form-group d-none">
+    <label for="lost_in_transit">Lost in Transit</label>
+    <input type="text" name="lost_in_transit" class="form-control" value="${wallet.lost_in_transit || ''}" id="lost_in_transit" placeholder="Lost in Transit">
   </div>
   <div class="form-group d-none">
     <label for="refunded">Refunded</label>

@@ -81,6 +81,7 @@ class WalletController extends Controller
     $tracking = '';
     if ($status === 'purchased') {
       $data = $request->only('source_order_number', 'status');
+      $data['purchases_at'] = now();
     } elseif ($status === 'shipped-from-suppliers') {
       $data = $request->only('tracking_number', 'status');
       $tracking = request('tracking_number');
@@ -101,6 +102,10 @@ class WalletController extends Controller
     } elseif ($status === 'adjustment') {
       $data = $request->only('adjustment', 'status');
       $amount = request('adjustment');
+    } elseif ($status === 'customer_tax') {
+      $data = $request->only('customer_tax');
+    } elseif ($status === 'lost_in_transit') {
+      $data = $request->only('lost_in_transit');
     } elseif ($status === 'refunded') {
       $data = $request->only('refunded', 'status');
       $amount = request('refunded');
@@ -199,30 +204,25 @@ class WalletController extends Controller
    */
   public function destroy($id)
   {
-    $order = Order::withTrashed()->find($id);
-    $order_id = $id;
-    $order_user_id = $order->user_id ?? null;
-    $orderItem = OrderItem::withTrashed()->where('order_id', $order_id)
-      ->where('user_id', $order_user_id);
+    $orderItem = OrderItem::withTrashed()->find($id);
+    $order_user_id = $orderItem->user_id ?? null;
     $orderItemItems = $orderItem->pluck('id')->toArray();
-    $OrderItemVariation = OrderItemVariation::withTrashed()->whereIn('order_item_id', $orderItemItems)->where('user_id', $order_user_id);
+    $OrderItemVariation = OrderItemVariation::withTrashed()->whereIn('item_id', $orderItemItems)->where('user_id', $order_user_id);
 
-    if ($order->trashed()) {
-      $order->forceDelete();
+    if ($orderItem->trashed()) {
       $orderItem->forceDelete();
       $OrderItemVariation->forceDelete();
       return \response([
         'status' => true,
         'icon' => 'success',
-        'msg' => 'Order, Order Item and Order Item variation permanently deleted',
+        'msg' => 'Wallet and Order Item variation permanently deleted',
       ]);
-    } else if ($order->delete()) {
-      $orderItem->delete();
+    } else if ($orderItem->delete()) {
       $OrderItemVariation->delete();
       return \response([
         'status' => true,
         'icon' => 'success',
-        'msg' => 'Order, Order Item and Order Item variation delete successfully',
+        'msg' => 'Wallet and Order Item variation delete successfully',
       ]);
     }
     return \response([

@@ -16,6 +16,7 @@ function OrderItemRow({order, currency}) {
 				{moment(order.created_at).format('DD/MM/YYYY')}
 			</td>
 			<td>{order.order_number}</td>
+			{/*<td>{order.tracking_number}</td>*/}
 			<td>{productValue}</td>
 			<td>{firstPayment}</td>
 			<td>{dueAmount}</td>

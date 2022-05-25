@@ -84,6 +84,7 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function () {
   Route::post('/related-products/{item_id}', [HomeController::class, 'relatedProducts']);
   Route::post('/new-arrived-products', [HomeController::class, 'newArrivedProducts']);
   Route::post('/recent-view-products', [HomeController::class, 'recentViewProducts']);
+  Route::post('/favorite-products', [HomeController::class, 'newFavoriteProducts']);
 
   Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
 

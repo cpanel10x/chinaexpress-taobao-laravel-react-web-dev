@@ -30,27 +30,12 @@ $purchasedCount = $orders->where('status', 'purchased')->count();
         class="btn btn-outline-danger btn-sm mr-1 @if($status == 'waiting-for-payment') active @endif">
         @lang('Incomplete') ({{$icompleteCount}})
       </a>
-      <a href="{{ route('admin.order.index', ['status' => 'refunded']) }}"
-        class="btn btn-outline-info btn-sm mr-1 @if($status == 'refunded') active @endif">
-        @lang('Refunded') ({{$refundedCount}})
-      </a>
-      <a href="{{ route('admin.order.index', ['status' => 'processing']) }}"
-        class="btn btn-outline-info btn-sm mr-1 @if($status == 'processing') active @endif">
-        @lang('Processing') ({{$processingCount}})
-      </a>
-      <a href="{{ route('admin.order.index', ['status' => 'purchased']) }}"
-        class="btn btn-outline-info btn-sm mr-1 @if($status == 'purchased') active @endif">
-        @lang('Purchased') ({{$purchasedCount}})
-      </a>
       @can('recent.order.trash')
       <a href="{{ route('admin.order.index', ['status' => 'trashed']) }}"
         class="btn btn-outline-danger btn-sm mr-1 @if($status == 'trashed') active @endif">
         @lang('Trashed Orders') ({{$trashedOrders->count()}})
       </a>
       @endcan
-      <a href="{{ route('admin.export', 'orders') }}" class="btn btn-outline-info btn-sm">
-        @lang('Export order Table')
-      </a>
     </div>
   </div>
   <div class="card-body">

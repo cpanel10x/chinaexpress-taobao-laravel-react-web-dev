@@ -27,6 +27,7 @@ import LatestArrivedProduct from "./pages/newArrive/LatestArrivedProduct";
 import AliSellerPage from "./pages/aliexpress/aliSeller/AliSellerPage";
 import TaobaoSellerPage from "./pages/taobaoSeller/taobaoSeller/TaobaoSellerPage";
 import {analyticsPageView} from "./utils/AnalyticsHelpers";
+import FavoriteProduct from "./pages/favorite/FavoriteProduct";
 
 const Routing = () => {
 
@@ -43,6 +44,7 @@ const Routing = () => {
 			<Route path="/faq" exact component={Faq}/>
 			<Route path="/contact" exact component={Contact}/>
 			<Route path="/new-arrived" exact component={LatestArrivedProduct}/>
+			<Route path="/customer-favorite" exact component={FavoriteProduct}/>
 
 			<Route path="/pages/:slug" exact component={SinglePage}/>
 			<Route path="/product/:item_id" exact component={ProductSingle}/>

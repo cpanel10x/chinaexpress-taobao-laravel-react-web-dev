@@ -48,14 +48,13 @@ class BannerController extends Controller
 
     $upload = \request('thumb_status') == 1 && \request()->hasFile('image') ? true : false;
 
-    $location = str_replace(".", "", Str::limit($data['post_slug'], 30));
     $file = \request()->file('image');
 
-    DB::transaction(function () use ($data, $file, $upload, $location) {
+    DB::transaction(function () use ($data, $file, $upload) {
       $data = Post::create($data);
-      $folder = $data->id . '-' . $location;
+      $folder = $data->id . '-banner';
       if ($upload) {
-        $post_thumb = store_picture($file, 'banner/' . $folder, $location . '-' . time());
+        $post_thumb = store_picture($file, 'banner/' . $folder, 'banner-' . time());
         $data->update(['post_thumb' => $post_thumb]);
       }
     });
@@ -107,13 +106,12 @@ class BannerController extends Controller
 
     $upload = \request('thumb_status') == 1 && \request()->hasFile('image') ? true : false;
 
-    $location = str_replace(".", "", Str::limit($data['post_slug'], 30));
     $file = \request()->file('image');
 
-    DB::transaction(function () use ($id, $data, $file, $upload, $location) {
-      $folder = $id . '-' . $location;
+    DB::transaction(function () use ($id, $data, $file, $upload) {
+      $folder = $id . '-banner';
       if ($upload) {
-        $data['post_thumb'] = store_picture($file, 'banner/' . $folder, $location . '-' . time());
+        $data['post_thumb'] = store_picture($file, 'banner/' . $folder, 'banner-' . time());
       }
       Post::find($id)->update($data);
     });
