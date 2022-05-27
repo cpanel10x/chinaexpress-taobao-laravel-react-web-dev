@@ -3,6 +3,12 @@
     <i class="fa fa-cog"></i>
   </button>
   <div class="dropdown-menu dropdown-menu-right">
+    @can('recent.order.show')
+    <a href="{{ route('admin.order.show', $order) }}" class="dropdown-item" data-toggle="tooltip" data-placement="top"
+      title="Details">
+      View
+    </a>
+    @endcan
     @can('recent.order.edit')
     @if($order->status == "waiting-for-payment")
     <a href="{{ route('admin.order.makeAsPayment', $order) }}" class="dropdown-item toggle_make_top"
@@ -10,12 +16,6 @@
       Make Partial
     </a>
     @endif
-    @endcan
-    @can('recent.order.show')
-    <a href="{{ route('admin.order.show', $order) }}" class="dropdown-item" data-toggle="tooltip" data-placement="top"
-      title="Details">
-      View Details
-    </a>
     @endcan
     @can('recent.order.delete')
     <a href="{{ route('admin.order.destroy', $order) }}" data-method="delete"

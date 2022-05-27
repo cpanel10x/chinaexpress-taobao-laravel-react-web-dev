@@ -70,16 +70,16 @@ class OrderTable extends TableComponent
         ->format(function (Order $model) {
           return date('d-m-Y', strtotime($model->created_at));
         }),
-      Column::make('OrderNumber', 'order_number')
+      Column::make('Order Number', 'order_number')
         ->searchable(),
-      Column::make('TransactionNo', 'transaction_id')
+      Column::make('Transaction Number', 'transaction_id')
         ->searchable(),
-      Column::make('Customer', 'name')
+      Column::make('Customer Name', 'name')
         ->searchable()
         ->format(function (Order $model) {
           return $model->user ? $model->user->full_name : 'Unknown';
         }),
-      Column::make('CustomerPhone', 'user.phone')
+      Column::make('Customer Phone', 'user.phone')
         ->searchable(function ($builder, $term) {
           return $builder->where('phone', $term)
             ->orWhereHas('user', function ($query) use ($term) {
@@ -94,7 +94,7 @@ class OrderTable extends TableComponent
         ->format(function (Order $model) {
           return '৳ ' . floating($model->orderItems->sum('coupon_contribution'));
         }),
-      Column::make('First Payment', 'first_payment')
+      Column::make('Initial Payment', 'first_payment')
         ->searchable(function ($builder, $term) {
           return $builder->orWhereHas('orderItems', function ($query) use ($term) {
             return $query->where('first_payment', $term);
@@ -112,11 +112,11 @@ class OrderTable extends TableComponent
         ->format(function (Order $model) {
           return '৳ ' . floating($model->orderItems->sum('due_payment'));
         }),
-      Column::make('PaymentMethod', 'payment_method')
+      Column::make('Payment Method', 'payment_method')
         ->searchable(),
       Column::make('Status', 'status')
         ->searchable(),
-      Column::make('Actions', 'action')
+      Column::make('Action', 'action')
         ->format(function (Order $model) {
           $status = $this->status;
           if ($status == 'trashed') {
@@ -131,9 +131,9 @@ class OrderTable extends TableComponent
   {
     $array = ['action', 'status', 'order_number', 'payment_method', 'dueForProducts', 'needToPay', 'dueForProducts', 'coupon_victory', 'amount', 'transaction_id', 'created_at'];
     if (in_array($attribute, $array)) {
-      return ' text-center';
+      return ' text-center  align-middle';
     }
-    return $attribute;
+    return $attribute . '  align-middle';
   }
 
 

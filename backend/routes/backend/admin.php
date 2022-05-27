@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Route;
 // All route names are prefixed with 'admin.'.
 Route::redirect('/', '/admin/dashboard', 301);
 Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+Route::post('dashboard/report/data', [DashboardController::class, 'quickReportData']);
+
 Route::get('export/{table}', [DashboardController::class, 'export'])->name('export');
 
 Route::namespace('Content')->group(function () {

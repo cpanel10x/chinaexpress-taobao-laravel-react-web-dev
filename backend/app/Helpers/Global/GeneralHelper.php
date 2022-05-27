@@ -353,11 +353,9 @@ if (!function_exists('check_attribute_image')) {
   {
     $attr_data = "";
     if (is_array($attributes)) {
-
       if (empty($attributes)) {
         return $mainImage;
       }
-
       $attribute = collect($attributes)->filter(function ($colour) {
         return key_exists('MiniImageUrl', $colour) || key_exists('ImageUrl', $colour);
       })->first();

@@ -46,6 +46,8 @@ class OrderAuthInformation extends Notification
     $transaction_id = $order->transaction_id ?? null;
     $order_id = $order->id ?? null;
     $amount = $order->orderItems->sum('product_value') ?? null;
+    $DeliveryCost = $order->orderItems->sum('DeliveryCost') ?? null;
+    $amount = ($amount + $DeliveryCost);
     $needToPay = $order->orderItems->sum('first_payment') ?? null;
     $dueForProducts = $order->orderItems->sum('due_payment') ?? null;
     $user = $order->user;
