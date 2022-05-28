@@ -98,7 +98,9 @@ trait CartOperation
   public function get_checkout_cart()
   {
     $cart = $this->get_customer_cart();
+    $cart_id = null;
     if ($cart) {
+      $cart_id = $cart->id;
       $cartItems = $cart->cartItems;
       foreach ($cartItems as $item) {
         if (!$item->IsCart) {
@@ -113,7 +115,7 @@ trait CartOperation
         }
       }
     }
-    return  $this->get_pure_cart($cart->id);
+    return  $this->get_pure_cart($cart_id);
   }
 
   public function add_to_cart($product)
@@ -272,6 +274,9 @@ trait CartOperation
           $process['shipping_rate'] = get_aliExpress_air_shipping_rate($variations, 'taobao');
         }
         $item->update($process);
+      }
+      if ($item->shipping_type != 'regular') {
+        $this->shippingCalculate($item);
       }
     }
 
@@ -513,7 +518,7 @@ trait CartOperation
           $first_payment = ($product_value * $advanced_rate) / 100;
           $due_payment = $product_value - $first_payment;
           $orderItem->update([
-            'item_number' => generate_order_number($orderItem->id, '1000000'),
+            'item_number' => generate_order_number($orderItem->id),
             'product_value' => $product_value_sum,
             'first_payment' => round($first_payment),
             'due_payment' => round($due_payment),

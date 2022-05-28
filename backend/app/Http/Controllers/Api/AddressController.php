@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Auth\User;
 use App\Models\Content\Frontend\Address;
 use App\Traits\ApiResponser;
 use Illuminate\Support\Facades\Validator;
@@ -23,6 +24,26 @@ class AddressController extends Controller
     ]);
   }
 
+
+  public function updateUserInfoIfNeeded($address)
+  {
+    $user = auth()->user();
+    $user_id = auth('sanctum')->id();
+    if ($user) {
+      $user = User::find($user_id);
+      $user->shipping_id =  $address->id;
+      if (!$user->name) {
+        $user->name =  $address->name ?? '';
+        $user->phone =  $address->phone ?? '';
+      }
+      if (!$user->first_name) {
+        $user->first_name =  $address->name ?? '';
+        $user->phone =  $address->phone ?? '';
+      }
+      $user->save();
+    }
+  }
+
   public function StoreNewAddress()
   {
     $validator = Validator::make(request()->all(), [
@@ -35,7 +56,6 @@ class AddressController extends Controller
       return response(['status' => false, 'errors' => $validator->errors()]);
     }
 
-    $user = auth()->user();
     $id = request('id');
     $data = [
       'name' => request('name'),
@@ -52,13 +72,7 @@ class AddressController extends Controller
       $address = Address::create($data);
     }
 
-    if ($user) {
-      $updateData['shipping_id'] =  $address->id;
-      if (!$user->name) {
-        $updateData['name'] =  $address->name;
-      }
-      $user->update($updateData);
-    }
+    $this->updateUserInfoIfNeeded($address);
 
     return response([
       'status' => true,

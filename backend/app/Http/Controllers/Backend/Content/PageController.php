@@ -194,10 +194,7 @@ class PageController extends Controller
 
   public function get_slug_from_title(Request $request)
   {
-    $this->validate($request, [
-      'title' => 'required|string|max:800',
-    ]);
-    $title = \request('title');
+    $title = \request('title', '');
     $slug = Str::slug($title);
 
     if ($slug) {

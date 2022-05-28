@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Content\Order;
+use App\Models\Content\OrderItem;
 use App\Models\Content\PaymentToken;
 use Illuminate\Support\Str;
 
@@ -42,7 +43,7 @@ class DashboardController extends Controller
     $limit = request('limit', 10);
     $offset = ($page * $limit);
 
-    $orders = Order::with('orderItems')
+    $orders = OrderItem::with('order')
       ->latest()
       ->where('user_id', $user_id)
       ->offset($offset)

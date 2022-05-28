@@ -70,11 +70,6 @@ class WalletTable extends TableComponent
           $checkbox = '<input type="checkbox" class="checkboxItem " data-status="' . $model->status . '" data-user="' . $model->user_id . '" name="wallet[]" value="' . $model->id . '">';
           return $this->html($checkbox);
         })->excludeFromExport(),
-      Column::make(__('Action'), 'action')
-        ->format(function (OrderItem $model) {
-          return view('backend.content.wallet.includes.actions', ['wallet' => $model]);
-        })
-        ->excludeFromExport(),
       Column::make('Date', 'created_at')
         ->searchable()
         ->format(function (OrderItem $model) {
@@ -85,10 +80,10 @@ class WalletTable extends TableComponent
         ->format(function (OrderItem $model) {
           return $model->order->transaction_id ?? 'N/A';
         }),
-      Column::make('Order Number.', 'order.order_number')
+      Column::make('Order Number', 'item_number')
         ->searchable()
         ->format(function (OrderItem $model) {
-          return $this->html('<span class="order_number">' . ($model->order ? $model->order->order_number : 'N/A') . '</span>');
+          return $this->html('<span class="item_number">' . ($model->item_number ? $model->item_number : 'N/A') . '</span>');
         }),
       Column::make('Customer', 'user.name')
         ->searchable()

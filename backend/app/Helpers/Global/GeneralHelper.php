@@ -254,7 +254,7 @@ if (!function_exists('clear_upload_location')) {
 
 
 if (!function_exists('generate_order_number')) {
-  function generate_order_number($id, $prefix = '2555', $length = 6)
+  function generate_order_number($id, $prefix = '255', $length = 5)
   {
     return str_pad($id, $length, $prefix, STR_PAD_LEFT);
   }

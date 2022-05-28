@@ -3,7 +3,8 @@
 @section('title', ' Page Management | Create new page')
 
 @section('content')
-{{ html()->form('POST', route('admin.faq.store'))->class('form-horizontal')->attribute('enctype', 'multipart/form-data')->open() }}
+{{ html()->form('POST', route('admin.faq.store'))->class('form-horizontal')->attribute('enctype',
+'multipart/form-data')->open() }}
 
 <div class="row">
   <div class="col-md-9">
@@ -133,13 +134,13 @@
 <script>
   $(document).ready(function () {
     simple_editor('.editor', 450);
-    $('#datepicker-autoclose').datepicker({
-        format: "dd/mm/yyyy",
-        clearBtn: true,
-        autoclose: true,
-        todayHighlight: true,
+      $('#datepicker-autoclose').datepicker({
+          format: "dd/mm/yyyy",
+          clearBtn: true,
+          autoclose: true,
+          todayHighlight: true,
+      });
     });
-  });
 
     $(document).on('blur', "#post_title", function () {
       let postField = $(this);

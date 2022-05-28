@@ -16,6 +16,7 @@ const AddressItem = (props) => {
 		await mutateAsync(address, {
 			onSuccess: () => {
 				cache.invalidateQueries("customer_cart");
+				cache.invalidateQueries("useCheckoutCart");
 				cache.invalidateQueries("address");
 				setManageShipping(false);
 			}

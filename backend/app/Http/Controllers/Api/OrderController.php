@@ -53,7 +53,7 @@ class OrderController extends Controller
 
         $auth_id = auth()->id();
         CustomerCart::where('user_id', $auth_id)->whereNull('buy_status')->update([
-          'buy_status' => Carbon::now()->toDateTimeString()
+          'buy_status' => now()
         ]);
       }, 3);
     } catch (\Exception $ex) {

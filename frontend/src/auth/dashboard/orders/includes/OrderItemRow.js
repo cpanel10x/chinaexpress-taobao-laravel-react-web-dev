@@ -1,26 +1,23 @@
 import React from "react";
 import {Link} from "react-router-dom";
 import moment from 'moment';
-import {orderSummaryCalculation} from "../../../../utils/CartHelpers";
 
 
 function OrderItemRow({order, currency}) {
 
-
-	const order_items = order?.order_items || [];
-	const {productValue, firstPayment, dueAmount} = orderSummaryCalculation(order_items);
+	const {item_number, DeliveryCost, product_value, first_payment, due_payment,status, created_at} = order;
 
 	return (
 		<tr>
 			<td className="text-left">
-				{moment(order.created_at).format('DD/MM/YYYY')}
+				{created_at ? moment(created_at).format('DD/MM/YYYY') : 'Unknown'}
 			</td>
-			<td>{order.order_number}</td>
+			<td>{item_number}</td>
 			{/*<td>{order.tracking_number}</td>*/}
-			<td>{productValue}</td>
-			<td>{firstPayment}</td>
-			<td>{dueAmount}</td>
-			<td className="text-left text-nowrap">{order.status}</td>
+			<td>{`${currency} `+(Number(product_value) + Number(DeliveryCost))}</td>
+			<td>{`${currency} `+first_payment}</td>
+			<td>{`${currency} `+due_payment}</td>
+			<td className="text-left text-nowrap">{status}</td>
 			<td>
 				{
 					order.status === 'waiting-for-payment' ?

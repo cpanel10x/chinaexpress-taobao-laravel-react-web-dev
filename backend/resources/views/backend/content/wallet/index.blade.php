@@ -281,8 +281,52 @@ $options = [
 @endsection
 
 
-@push('before-styles')
-<link rel="stylesheet" href="{{asset('assets/plugins/select2/css/select2.min.css')}}">
+@push('after-styles')
+{{--
+<link rel="stylesheet" href="{{asset('assets/plugins/select2/css/select2.min.css')}}"> --}}
+
+<style>
+  .table-scrollable {
+    width: 100%;
+    overflow-x: scroll;
+  }
+
+  .table-scrollable .table th:nth-child(1),
+  .table-scrollable .table td:nth-child(1),
+  .table-scrollable .table th:nth-child(2),
+  .table-scrollable .table td:nth-child(2),
+  .table-scrollable .table th:nth-child(3),
+  .table-scrollable .table td:nth-child(3),
+  .table-scrollable .table th:nth-child(4),
+  .table-scrollable .table td:nth-child(4),
+  .table-scrollable .table th:nth-child(5),
+  .table-scrollable .table td:nth-child(5){
+    background: #fff;
+    position: sticky;
+    z-index: 99;
+    width: 60px;
+  }
+  .table-scrollable .table th:nth-child(1),
+  .table-scrollable .table td:nth-child(1) {
+    left: -2px;
+  }
+  .table-scrollable .table th:nth-child(2),
+  .table-scrollable .table td:nth-child(2) {
+    left: 46px;
+  }
+  .table-scrollable .table th:nth-child(3),
+  .table-scrollable .table td:nth-child(3) {
+    left: 146px;
+  }
+  .table-scrollable .table th:nth-child(4),
+  .table-scrollable .table td:nth-child(4) {
+    left: 308px;
+  }
+  .table-scrollable .table th:nth-child(5),
+  .table-scrollable .table td:nth-child(5) {
+    left: 381px;
+  }
+</style>
 @endpush
 
 @push('after-styles')
@@ -290,7 +334,7 @@ $options = [
 @endpush
 
 @push('middle-scripts')
-<script src="{{asset('assets/plugins/jquery-freeze-table/dist/js/freeze-table.min.js')}}"></script>
+{{-- <script src="{{asset('assets/plugins/jquery-freeze-table/dist/js/freeze-table.min.js')}}"></script> --}}
 @livewireScripts
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.3/moment.min.js"></script>
 <script src="{{asset('assets/plugins/select2/js/select2.full.min.js')}}"></script>

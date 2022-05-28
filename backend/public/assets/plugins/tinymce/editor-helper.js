@@ -293,12 +293,13 @@ function fmSetLink($url) {
 }
 
 function ajax_slug_url(title) {
+  var base_url = $("#app_base_url").val();
   $.ajax({
     headers: {
       "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
     },
     type: "POST",
-    url: "/admin/get-slug-from-title",
+    url: base_url + "/admin/get-slug-from-title",
     data: {
       title: title,
     },

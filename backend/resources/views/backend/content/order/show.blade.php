@@ -94,8 +94,10 @@ $currency = currency_icon();
                     $shipping_rate =$item->shipping_rate;
                     $itemLink = ($ProviderType == 'aliexpress') ? "https://www.aliexpress.com/item/{$ItemId}.html" :
                     "https://item.taobao.com/item.htm?id={$ItemId}";
+                    $interNalLink = ($ProviderType == 'aliexpress') ? "https://www.chinaexpress.com.bd/aliexpress/product/{$ItemId}" :
+                    "https://www.chinaexpress.com.bd/product/{$ItemId}";
                     @endphp
-                    {{strip_tags($Title)}} <br>
+                    <a href="{{$interNalLink}}" target="_blank">{{strip_tags($Title)}}</a> <br>
                     <p class="m-0">Product Id: {{$ItemId}}</p>
                     <p class="m-0"><span>Source: {{$ProviderType}}</span> </p>
                     <p class="m-0">Express Shipping Rate: <span class="text-danger">

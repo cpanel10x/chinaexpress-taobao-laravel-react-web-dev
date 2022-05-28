@@ -575,7 +575,8 @@ function remove_space(stringData) {
     var detailsModal = $("#detailsModal");
     detailsModal.modal('show');
     detailsModal.find('.modal-body').html(loader)
-    axios.get(make_full_url(`/admin/order/wallet/${wallet_id}`))
+    var updateWalletStatus = make_full_url(`/admin/order/wallet/${wallet_id}`);
+    axios.get(updateWalletStatus)
       .then(res => {
         const resData = res.data;
         var htmlData = walletInfoDetails(resData);
@@ -639,7 +640,8 @@ function remove_space(stringData) {
 
   function walletMasterEditForm(resData) {
     var wallet = resData.data
-    var htmlForm = `<form action="${`/admin/order/wallet/${wallet.id}`}" method="post" class="masterEditForm"><input type="hidden" name="_method" value="put"/><table class="table"><tr><th>Parameter</th><th>CurrentData</th><th style="width:200px">UpdateInfo<th/></tr>`;
+    var update_url = make_full_url(`/admin/order/wallet/${wallet.id}`);
+    var htmlForm = `<form action="${update_url}" method="post" class="masterEditForm"><input type="hidden" name="_method" value="put"/><table class="table"><tr><th>Parameter</th><th>CurrentData</th><th style="width:200px">UpdateInfo<th/></tr>`;
     const editable = ['regular_price', 'weight', 'DeliveryCost', 'Quantity', 'shipping_type', 'shipping_rate', 'tracking_number', 'product_value', 'first_payment', 'coupon_contribution', 'bd_shipping_charge', 'courier_bill', 'out_of_stock', 'lost_in_transit', 'customer_tax', 'missing', 'adjustment', 'refunded', 'last_payment', 'due_payment', 'invoice_no', 'comment1', 'comment2'];
     for (const item in wallet) {
       if (editable.includes(item)) {

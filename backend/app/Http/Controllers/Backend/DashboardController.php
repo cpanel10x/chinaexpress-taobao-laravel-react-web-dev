@@ -70,7 +70,7 @@ class DashboardController extends Controller
     $shipping_rate = $express->sum('shipping_rate');
     $weight = $express->sum('weight');
     $express_count = $express->count();
-    $shipping_rate = ($shipping_rate / $express_count);
+    $shipping_rate = ($shipping_rate / ($express_count ? $express_count : 1));
 
     $invoice = Invoice::whereBetween('created_at', [$startDate, $endDate]);
     $invoice_count = $invoice->count();
