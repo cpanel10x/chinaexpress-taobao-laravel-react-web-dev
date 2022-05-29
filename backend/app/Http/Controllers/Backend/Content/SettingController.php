@@ -255,22 +255,12 @@ class SettingController extends Controller
 
   public function bannerRightStore()
   {
-    $data = request()->only('top_image_link', 'bottom_image_link');
-
-    $rightBanner = json_decode(get_setting('banner_right_images'));
-
-    if (\request()->hasFile('top_image')) {
-      $data['top_image'] = store_picture(\request()->file('top_image'), 'setting/banner-right');
-    } else {
-      $data['top_image'] = $rightBanner->top_image ?? null;
-    }
-    if (\request()->hasFile('bottom_image')) {
-      $data['bottom_image'] = store_picture(\request()->file('bottom_image'), 'setting/banner-right');
-    } else {
-      $data['bottom_image'] = $rightBanner->bottom_image ?? null;
+    $data['right_banner_image_link'] = request('right_banner_image_link', null);
+    if (\request()->hasFile('right_banner_image')) {
+      $data['right_banner_image'] = store_picture(\request()->file('right_banner_image'), 'setting/banner-right');
     }
 
-    Setting::save_settings(['banner_right_images' => json_encode($data)]);
+    Setting::save_settings($data);
 
     return redirect()->back()->withFlashSuccess('Banner Right Image Set Successfully');
   }

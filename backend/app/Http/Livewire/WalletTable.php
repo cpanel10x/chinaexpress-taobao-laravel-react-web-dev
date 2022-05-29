@@ -70,6 +70,16 @@ class WalletTable extends TableComponent
           $checkbox = '<input type="checkbox" class="checkboxItem " data-status="' . $model->status . '" data-user="' . $model->user_id . '" name="wallet[]" value="' . $model->id . '">';
           return $this->html($checkbox);
         })->excludeFromExport(),
+      Column::make(__('Action'), 'action')
+        ->format(function (OrderItem $model) {
+          return view('backend.content.wallet.includes.actions', ['wallet' => $model]);
+        })
+        ->excludeFromExport(),
+      Column::make('Status', 'status')
+        ->searchable()
+        ->format(function (OrderItem $model) {
+          return $this->html('<span class="status" data-status="' . ($model->status) . '">' . ($model->status) . '</span>');
+        }),
       Column::make('Date', 'created_at')
         ->searchable()
         ->format(function (OrderItem $model) {
@@ -216,16 +226,6 @@ class WalletTable extends TableComponent
         ->format(function (OrderItem $model) {
           return $this->html('<span class="invoice_no">' . ($model->invoice_no ? $model->invoice_no : 'N/A') . '</span>');
         }),
-      Column::make('Status', 'status')
-        ->searchable()
-        ->format(function (OrderItem $model) {
-          return $this->html('<span class="status" data-status="' . ($model->status) . '">' . ($model->status) . '</span>');
-        }),
-      Column::make(__('Action'), 'action')
-        ->format(function (OrderItem $model) {
-          return view('backend.content.wallet.includes.actions', ['wallet' => $model]);
-        })
-        ->excludeFromExport(),
       Column::make('Day Count', 'purchases_at')
         ->format(function (OrderItem $model) {
           $purchases_at = $model->purchases_at;

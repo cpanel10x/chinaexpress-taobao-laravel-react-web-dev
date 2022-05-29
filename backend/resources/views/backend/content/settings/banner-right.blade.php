@@ -19,48 +19,27 @@ $demoImg = 'img/backend/front-logo.png';
       <div class="card-body">
 
         @php
-          $rightBanner = json_decode(get_setting('banner_right_images'));
+          $asmLogo = get_setting('right_banner_image', $demoImg);
         @endphp
 
         {{ html()->form('POST', route('admin.front-setting.banner.right.store'))->class('form-horizontal')->attribute('enctype', 'multipart/form-data')->open() }}
 
         <div class="form-group row mb-4">
-          {{html()->label('Top Image')->class('col-md-4 form-control-label text-right')->for('top_image')}}
+          {{html()->label('Right Banner Image (370x500)')->class('col-md-4 form-control-label text-right')->for('right_banner_image')}}
           <div class="col-md-8">
-            @php($asmLogo = $rightBanner->top_image ?? $demoImg )
-            <label for="top_image">
+            <label for="right_banner_image">
               <img src="{{asset($asmLogo)}}" class="border img-fluid rounded holder" alt="Image upload">
             </label>
-            {{html()->file('top_image')->class('form-control-file image d-none')->acceptImage()}}
+            {{html()->file('right_banner_image')->class('form-control-file image d-none')->acceptImage()}}
           </div> <!-- col-->
         </div> <!-- form-group-->
 
         <div class="form-group row mb-4">
-          {{html()->label('Top Image Link')->class('col-md-4 form-control-label text-right')->for('top_image_link')}}
+          {{html()->label('Right Banner Image Link')->class('col-md-4 form-control-label text-right')->for('right_banner_image_link')}}
           <div class="col-md-8">
-            {{html()->text('top_image_link', $rightBanner->top_image_link ?? '')->placeholder('Top Image Link')->class('form-control')}}
+            {{html()->text('right_banner_image_link', $rightBanner->right_banner_image_link ?? '')->placeholder('Right Banner Image Link')->class('form-control')}}
           </div> <!-- col-->
         </div> <!-- form-group-->
-
-
-        <div class="form-group row mb-4">
-          {{html()->label('Bottom Image')->class('col-md-4 form-control-label text-right')->for('bottom_image')}}
-          <div class="col-md-8">
-            @php($asmLogo =  $rightBanner->bottom_image ?? $demoImg )
-            <label for="bottom_image">
-              <img src="{{asset($asmLogo)}}" class="border img-fluid rounded holder" alt="Image upload">
-            </label>
-            {{html()->file('bottom_image')->class('form-control-file image d-none')->acceptImage()}}
-          </div> <!-- col-->
-        </div> <!-- form-group-->
-
-        <div class="form-group row mb-4">
-          {{html()->label('Bottom Image Link')->class('col-md-4 form-control-label text-right')->for('right_bottom_image_link')}}
-          <div class="col-md-8">
-            {{html()->text('bottom_image_link', $rightBanner->bottom_image_link ?? '')->placeholder('Bottom Image Link')->class('form-control')}}
-          </div> <!-- col-->
-        </div> <!-- form-group-->
-
 
         <div class="form-group row mb-4">
           <div class="col-md-8 offset-md-4">

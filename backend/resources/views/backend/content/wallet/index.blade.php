@@ -282,8 +282,7 @@ $options = [
 
 
 @push('after-styles')
-{{--
-<link rel="stylesheet" href="{{asset('assets/plugins/select2/css/select2.min.css')}}"> --}}
+<link rel="stylesheet" href="{{asset('assets/plugins/select2/css/select2.min.css')}}">
 
 <style>
   .table-scrollable {
@@ -300,31 +299,48 @@ $options = [
   .table-scrollable .table th:nth-child(4),
   .table-scrollable .table td:nth-child(4),
   .table-scrollable .table th:nth-child(5),
-  .table-scrollable .table td:nth-child(5){
+  .table-scrollable .table td:nth-child(5),
+  .table-scrollable .table th:nth-child(6),
+  .table-scrollable .table td:nth-child(6),
+  .table-scrollable .table th:nth-child(7),
+  .table-scrollable .table td:nth-child(7){
     background: #fff;
     position: sticky;
     z-index: 99;
     width: 60px;
   }
+
   .table-scrollable .table th:nth-child(1),
   .table-scrollable .table td:nth-child(1) {
     left: -2px;
   }
+
   .table-scrollable .table th:nth-child(2),
   .table-scrollable .table td:nth-child(2) {
     left: 46px;
   }
+
   .table-scrollable .table th:nth-child(3),
   .table-scrollable .table td:nth-child(3) {
-    left: 146px;
+    left: 120px;
   }
+
   .table-scrollable .table th:nth-child(4),
   .table-scrollable .table td:nth-child(4) {
-    left: 308px;
+    left: 265px;
   }
+
   .table-scrollable .table th:nth-child(5),
   .table-scrollable .table td:nth-child(5) {
-    left: 381px;
+    left: 360px;
+  }
+  .table-scrollable .table th:nth-child(6),
+  .table-scrollable .table td:nth-child(6) {
+    left: 530px;
+  }
+  .table-scrollable .table th:nth-child(7),
+  .table-scrollable .table td:nth-child(7) {
+    left: 602px;
   }
 </style>
 @endpush
@@ -334,7 +350,6 @@ $options = [
 @endpush
 
 @push('middle-scripts')
-{{-- <script src="{{asset('assets/plugins/jquery-freeze-table/dist/js/freeze-table.min.js')}}"></script> --}}
 @livewireScripts
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.3/moment.min.js"></script>
 <script src="{{asset('assets/plugins/select2/js/select2.full.min.js')}}"></script>
@@ -342,21 +357,9 @@ $options = [
 <script>
   $(document).ready(function() {
 
-    function freezingExecute(){
-      setTimeout(() => {
-        $(".table-scrollable").freezeTable({
-          scrollable: true,
-          columnNum: 6
-        });
-      }, 300);
-    }
-    // deafult
-    freezingExecute();
 
-
-    $(document).on('change blur','.liveWireEventInputField', function(){
-      freezingExecute();
-    });
+    // $(".select2").select2();
+    
 
       $(document).on('click','.exportWalletTable',function(e) {
         e.preventDefault()

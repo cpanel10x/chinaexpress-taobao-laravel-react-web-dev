@@ -98,12 +98,13 @@ $currency = currency_icon();
                     "https://www.chinaexpress.com.bd/product/{$ItemId}";
                     @endphp
                     <a href="{{$interNalLink}}" target="_blank">{{strip_tags($Title)}}</a> <br>
-                    <p class="m-0">Product Id: {{$ItemId}}</p>
-                    <p class="m-0"><span>Source: {{$ProviderType}}</span> </p>
-                    <p class="m-0">Express Shipping Rate: <span class="text-danger">
+                    <p class="m-0"><b>Product Id:</b> {{$ItemId}}</p>
+                    <p class="m-0"><b>Source:</b><span>{{$ProviderType}}</span> </p>
+                    <p class="m-0"><b>Express Shipping Rate:</b> <span class="text-danger">
                         {{$shipping_rate ? $shipping_rate : 0}} Per KG</span>
                     </p>
                     <a href="{{$itemLink}}" target="_blank"> Source Link</a>
+                    <p class="m-0"><b>Item/Wallet Id:</b> {{$item->item_number}}</p>
                   </td>
                 </tr>
                 @php
@@ -132,11 +133,11 @@ $currency = currency_icon();
                     $PropertyName = $attribute['PropertyName'] ?? 'Unknown';
                     $Value = $attribute['Value'] ?? 'Unknown';
                     @endphp
-                    <p class="m-0">{!! $PropertyName !!}: {!! $Value !!}</p>
+                    <p class="m-0"><b>{!! $PropertyName !!}:</b> {!! $Value !!}</p>
                     @empty
                     <p class="m-0">No Attributes</p>
                     @endforelse
-                    <p class="m-0">Unit Price: {{$variation->price}}</p>
+                    <p class="m-0"><b>Price:</b> {{$variation->price}}</p>
                   </td>
                   <td class="text-center align-middle"> {{$variation->qty}}</td>
                   <td class="text-right align-middle">{{$variation->subTotal}}</td>

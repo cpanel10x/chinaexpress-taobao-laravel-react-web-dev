@@ -6,9 +6,12 @@ import TinySlider from "tiny-slider-react";
 import 'tiny-slider/dist/tiny-slider.css';
 import {useHome} from "../../../../api/GeneralApi";
 
-const Intro = () => {
+const Intro = ({settings}) => {
 
     const {banner: {data: banners, isLoading}} = useHome();
+
+    const right_banner_image = settings?.right_banner_image || 'img/right-banner-2.png';
+    const right_banner_image_link = settings?.right_banner_image_link || null;
 
     const imgStyles = {
         objectFit: "cover",
@@ -16,7 +19,7 @@ const Intro = () => {
         transition: "ease-in-out 200ms"
     };
 
-    const settings = {
+    const tinySettings = {
         controls: true,
         controlsPosition: "bottom",
         nav: true,
@@ -41,7 +44,7 @@ const Intro = () => {
                             <div className="col-lg-9 cols col-md-12 col-12 mb-md-0 mb-2 p-lg-0">
                                 <div className="intro-slider-container">
                                     {banners?.length > 0 && !isLoading ? (
-                                        <TinySlider settings={settings}>
+                                        <TinySlider settings={tinySettings}>
                                             {
                                                 banners.map((banner, index) => (
                                                     <div key={index} style={{position: "relative"}}>
@@ -76,8 +79,8 @@ const Intro = () => {
                     </div>
 
                     <div className="col-md-3 d-none d-lg-block">
-                        <a href="#">
-                            <img src={loadAsset(`img/right-banner-2.png`)} className="img-fluid"/>
+                        <a href={right_banner_image_link ? right_banner_image_link : '#'}>
+                            <img src={loadAsset(right_banner_image)} className="img-fluid"/>
                         </a>
                     </div>
                 </div>

@@ -54,6 +54,7 @@ class WishlistController extends Controller
         ->where('user_id', $auth_id)
         ->delete();
     }
+    Wishlist::whereNull('ItemId')->delete();
     $wishlists = Wishlist::where('user_id', $auth_id)->get();
     return response([
       'status' => true,

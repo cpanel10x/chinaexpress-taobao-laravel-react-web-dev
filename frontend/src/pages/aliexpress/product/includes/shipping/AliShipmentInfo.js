@@ -58,7 +58,7 @@ const AliShipmentInfo = props => {
 				updateShippingInformation({shipping_cost, shipping_type: null});
 			}
 		}
-	}, [isExpressEnable]);
+	}, [isExpressEnable,selectShipping]);
 
 
 	const selectShippingMethod = (event) => {

@@ -32,6 +32,36 @@ class OrderController extends Controller
       dump('incomplete_order deletion error');
     }
   }
+
+  public function fix_no_name_user()
+  {
+    $orderUsers = Order::with('user')->whereHas('user', function ($user) {
+      $user->whereNull('name')->orWhereNull('first_name');
+    })->get();
+    foreach ($orderUsers as $order) {
+      $user_id = $order->user_id;
+      $shipping = $order->shipping ? json_decode($order->shipping, true) : [];
+      $user_name = $shipping['name'] ?? '';
+      $user_phone = $shipping['phone'] ?? '';
+      $user = User::find($user_id);
+      $user->name = $user->name ? $user->name : $user_name;
+      $user->first_name = $user->first_name ? $user->first_name : $user_name;
+      $user->phone = $user->phone ? $user->phone : $user_phone;
+      $user->save();
+    }
+
+    $orderUsers = Order::with('user')->whereNull('name')->orWhereNull('phone')->get();
+
+    foreach ($orderUsers as $order) {
+      $user_id = $order->user_id;
+      $shipping = $order->shipping ? json_decode($order->shipping, true) : [];
+      $user_name = $shipping['name'] ?? '';
+      $user_phone = $shipping['phone'] ?? '';
+      $order->name = $order->name ? $order->name : $user_name;
+      $order->phone = $order->phone ? $order->phone : $user_phone;
+      $order->save();
+    }
+  }
   /**
    * Display a listing of the resource.
    *
@@ -40,6 +70,8 @@ class OrderController extends Controller
   public function index()
   {
     $this->delete_incomplete_order();
+    $this->fix_no_name_user();
+
     $orders = Order::get();
     $trashedOrders = Order::onlyTrashed()->get();
     return view('backend.content.order.index', compact('orders', 'trashedOrders'));

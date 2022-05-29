@@ -92,6 +92,7 @@ const AliProductBody = (props) => {
 										settings={settings}
 										activeShipping={activeShipping}
 										selectShipping={selectShipping}
+										setSelectShipping={setSelectShipping}
 										operationalAttributes={operationalAttributes}
 									/>
 

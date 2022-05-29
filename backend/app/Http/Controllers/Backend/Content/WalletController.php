@@ -23,12 +23,14 @@ class WalletController extends Controller
    */
   public function index()
   {
-    $customers = User::role('user')->withCount('orders')->orderBy('first_name')->get();
-    $findable[''] = ' - Select Customer - ';
-    foreach ($customers as $customer) {
-      $findable[$customer->id] = $customer->full_name;
-    }
-    return view('backend.content.wallet.index', ['findable' => $findable]);
+    $customers = User::role('user')
+      ->whereNotNull('first_name')
+      ->orderBy('first_name')
+      ->get()
+      ->pluck('first_name', 'id')
+      ->prepend(' - Select Customer - ', '');
+
+    return view('backend.content.wallet.index', ['findable' => $customers]);
   }
 
   /**

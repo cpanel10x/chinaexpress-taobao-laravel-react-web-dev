@@ -176,7 +176,7 @@
 
         <div class="form-group row">
           <div class="col-md-6">
-            {{html()->label('AliExpress minimum order (BDT.)')->for('ali_min_order_value')}}
+            {{html()->label('AliExpress minimum order Amount  (BDT.)')->for('ali_min_order_value')}}
             {{html()->number('ali_min_order_value', get_setting('ali_min_order_value'))
             ->class('form-control')
             ->placeholder('AliExpress minimum order')}}

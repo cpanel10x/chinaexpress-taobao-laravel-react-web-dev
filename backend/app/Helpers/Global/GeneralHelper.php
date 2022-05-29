@@ -351,15 +351,13 @@ if (!function_exists('check_attribute_image')) {
    */
   function check_attribute_image($attributes, $mainImage)
   {
-    $attr_data = "";
+    $attr_data = $mainImage;
     if (is_array($attributes)) {
       if (empty($attributes)) {
         return $mainImage;
       }
-      $attribute = collect($attributes)->filter(function ($colour) {
-        return key_exists('MiniImageUrl', $colour) || key_exists('ImageUrl', $colour);
-      })->first();
-      if (is_array($attribute)) {
+      $attribute = collect($attributes)->whereNotNull('ImageUrl')->first();
+      if ($attribute) {
         if (key_exists('MiniImageUrl', $attribute)) {
           $attr_data = $attribute['MiniImageUrl'] ?? $mainImage;
         } else {

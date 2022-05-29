@@ -20,7 +20,7 @@ const Home = (props) => {
 
    return (
       <main className="main" style={{backgroundColor: "#fafafa"}}>
-         <Intro/>
+         <Intro settings={settings}/>
          <AliExpressSearchBar/>
          {/* <IconBoxes/> */}
          {/*<PopularCategory/>*/}

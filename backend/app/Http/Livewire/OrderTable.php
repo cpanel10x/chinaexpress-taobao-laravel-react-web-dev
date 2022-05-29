@@ -74,18 +74,13 @@ class OrderTable extends TableComponent
         ->searchable(),
       Column::make('Transaction Number', 'transaction_id')
         ->searchable(),
-      Column::make('Customer Name', 'name')
+      Column::make('Customer Name', 'user.name')
         ->searchable()
         ->format(function (Order $model) {
-          return $model->user ? $model->user->full_name : 'Unknown';
+          return $model->user ? $model->user->name : 'Unknown';
         }),
       Column::make('Customer Phone', 'user.phone')
-        ->searchable(function ($builder, $term) {
-          return $builder->where('phone', $term)
-            ->orWhereHas('user', function ($query) use ($term) {
-              return $query->where('phone', $term);
-            });
-        }),
+        ->searchable(),
       Column::make('Amount', 'amount')
         ->format(function (Order $model) {
           return '৳ ' . floating($model->orderItems->sum('product_value'));

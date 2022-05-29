@@ -58,7 +58,6 @@ abstract class BaseUser extends Authenticatable implements Recordable
    * @var array
    */
   protected $appends = [
-    'name',
     'full_name',
   ];
 
