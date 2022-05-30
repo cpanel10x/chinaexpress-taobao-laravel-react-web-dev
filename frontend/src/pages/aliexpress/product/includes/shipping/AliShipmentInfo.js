@@ -50,7 +50,7 @@ const AliShipmentInfo = props => {
 	useEffect(() => {
 		if (!isExpressEnable) {
 			const shipping_cost = shippingRate(selectShipping?.delivery_fee || 0);
-			if (freightList?.length > 1) {
+			if (freightList?.length > 0) {
 				setActiveShipping('regular');
 				updateShippingInformation({shipping_cost, shipping_type: 'regular'});
 			}else{
@@ -101,7 +101,7 @@ const AliShipmentInfo = props => {
 
 			<div className="mb-2">
 				{
-					freightList?.length > 1 &&
+					freightList?.length > 0 &&
 					<div className="form-check form-check-inline">
 						<input className="form-check-input"
 						       type="radio"
@@ -125,7 +125,7 @@ const AliShipmentInfo = props => {
 				</div>
 			</div>
 			{
-				activeShipping === 'regular' && freightList?.length > 1 &&
+				activeShipping === 'regular' && freightList?.length > 0 &&
 				<div>
 					{
 						optionEnable &&

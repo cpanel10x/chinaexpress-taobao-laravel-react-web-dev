@@ -12,7 +12,9 @@ use App\Models\Content\Product;
 use App\Models\Content\SearchLog;
 use App\Models\Content\Taxonomy;
 use App\Notifications\Backend\ContactInformation;
+use App\Repositories\Frontend\Settings\SettingRepository;
 use App\Traits\ApiResponser;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
@@ -143,9 +145,9 @@ class GeneralController extends Controller
   }
 
 
-  public function generalSettings()
+  public function generalSettings(SettingRepository $settingRepository)
   {
-    $settings = general_settings();
+    $settings = $settingRepository->list();
     return response([
       'settings' => json_encode($settings)
     ]);

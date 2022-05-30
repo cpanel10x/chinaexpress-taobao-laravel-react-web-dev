@@ -19,7 +19,7 @@ const AliQuantityInput = (props) => {
     const cache = useQueryClient();
     const {mutateAsync, isLoading} = useAddToCart();
 
-    const aliRate = settings?.ali_increase_rate || 88;
+    const aliRate = settings?.ali_increase_rate || 95;
     const weight = product?.delivery?.packageDetail?.weight || 0;
 
     const DeliveryCost = () => {

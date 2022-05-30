@@ -285,7 +285,7 @@ $options = [
 <link rel="stylesheet" href="{{asset('assets/plugins/select2/css/select2.min.css')}}">
 
 <style>
-  .table-scrollable {
+  /* .table-scrollable {
     width: 100%;
     overflow-x: scroll;
   }
@@ -341,7 +341,7 @@ $options = [
   .table-scrollable .table th:nth-child(7),
   .table-scrollable .table td:nth-child(7) {
     left: 602px;
-  }
+  } */
 </style>
 @endpush
 
@@ -350,6 +350,7 @@ $options = [
 @endpush
 
 @push('middle-scripts')
+<script src="{{asset('assets/plugins/jquery-freeze-table/dist/js/freeze-table.min.js')}}"></script>
 @livewireScripts
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.3/moment.min.js"></script>
 <script src="{{asset('assets/plugins/select2/js/select2.full.min.js')}}"></script>
@@ -357,8 +358,33 @@ $options = [
 <script>
   $(document).ready(function() {
 
+    function freezingExecute(){
+      setTimeout(() => {
+        $(".table-scrollable").freezeTable({
+          namespace: 'wallet-table',
+          scrollable: true,
+          columnNum: 6
+        });
+      }, 300);
+    }
+    // deafult
+    // freezingExecute();
 
-    // $(".select2").select2();
+    // $(document).on('keyup','.option_search_field', function(){
+    //   freezingExecute();
+    // });
+    
+    // $(document).on('change','.liveWireEventInputField', function(){
+    //   freezingExecute();
+    // });
+
+    // $(document).on('click','.pagination .page-link', function(){
+    //   var tbody = $('.table-scrollable table').find('tbody');
+    //   tbody.find('tr').remove();
+    //   tbody.css({'min-height':'30vh','display':'block'});
+    //   freezingExecute();
+    //   tbody.removeAttr('style');
+    // });
     
 
       $(document).on('click','.exportWalletTable',function(e) {

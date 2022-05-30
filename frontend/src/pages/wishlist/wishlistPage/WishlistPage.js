@@ -31,8 +31,8 @@ const WishlistPage = (props) => {
 					onSuccess: (responseData) => {
 						if (responseData?.status) {
 							Swal.fire({
-								text: "WishList remove successfully.",
-								icon: "Success"
+								icon: "success",
+								text: "WishList remove successfully."
 							});
 							cache.setQueryData('wishlist', (responseData?.wishlists || {}));
 						}

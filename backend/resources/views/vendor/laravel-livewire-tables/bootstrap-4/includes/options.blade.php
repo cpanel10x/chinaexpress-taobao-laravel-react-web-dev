@@ -21,7 +21,7 @@
                 @endif
                 @if ($searchUpdateMethod === 'lazy') wire:model.lazy="search" @endif
                 @if ($disableSearchOnLoading) wire:loading.attr="disabled" @endif
-                class="form-control liveWireEventInputField"
+                class="form-control option_search_field"
                 type="text"
                 placeholder="{{ __('laravel-livewire-tables::strings.search') }}"
             />
