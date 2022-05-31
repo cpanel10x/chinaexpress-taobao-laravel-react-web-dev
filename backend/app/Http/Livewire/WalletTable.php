@@ -32,6 +32,9 @@ class WalletTable extends TableComponent
     'bootstrap.container' => true,
     'bootstrap.responsive' => true,
     'bootstrap.classes.responsive' => 'table-scrollable',
+
+    'bootstrap.freeze.enable' => true,
+    'bootstrap.freeze.table.columns' => 7,
   ];
 
   public $sortDefaultIcon = '<i class="text-muted fa fa-sort"></i>';
@@ -240,12 +243,12 @@ class WalletTable extends TableComponent
         }),
       Column::make('Comments-1', 'comments1')
         ->format(function (OrderItem $model) {
-          $htmlHref = 'Lorem ipsum dolor';
+          $htmlHref = $model->comments1 ? $model->comments1 : 'N/A';
           return $this->html($htmlHref);
         }),
       Column::make('Comments-2', 'comments2')
         ->format(function (OrderItem $model) {
-          $htmlHref = 'Lorem ipsum dolor sit amet ';
+          $htmlHref = $model->comments2 ? $model->comments2 : 'N/A';
           return $this->html($htmlHref);
         }),
     ];

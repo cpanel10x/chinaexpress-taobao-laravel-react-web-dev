@@ -2,10 +2,7 @@
 
 namespace App\Repositories\Frontend\Settings;
 
-use App\Events\Frontend\Auth\UserConfirmed;
-use App\Events\Frontend\Auth\UserProviderRegistered;
 use App\Exceptions\GeneralException;
-use App\Models\Auth\SocialAccount;
 use App\Models\Auth\User;
 use App\Models\Content\Setting;
 use App\Notifications\Frontend\Auth\UserNeedsConfirmation;
@@ -30,52 +27,9 @@ class SettingRepository extends BaseRepository
     $this->model = $model;
   }
 
-  /**
-   * @param $token
-   *
-   * @return bool|\Illuminate\Database\Eloquent\Model
-   */
-  public function list()
+  public function all()
   {
     return $this->model->whereNotNull('active')->pluck('value', 'key')->toArray();
-  }
-
-  /**
-   * @param $uuid
-   *
-   * @throws GeneralException
-   * @return mixed
-   */
-  public function findByUuid($uuid)
-  {
-    $user = $this->model
-      ->uuid($uuid)
-      ->first();
-
-    if ($user instanceof $this->model) {
-      return $user;
-    }
-
-    throw new GeneralException(__('exceptions.backend.access.users.not_found'));
-  }
-
-  /**
-   * @param $code
-   *
-   * @throws GeneralException
-   * @return mixed
-   */
-  public function findByConfirmationCode($code)
-  {
-    $user = $this->model
-      ->where('confirmation_code', $code)
-      ->first();
-
-    if ($user instanceof $this->model) {
-      return $user;
-    }
-
-    throw new GeneralException(__('exceptions.backend.access.users.not_found'));
   }
 
   /**

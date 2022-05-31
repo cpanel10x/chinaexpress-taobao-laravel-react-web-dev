@@ -338,9 +338,9 @@ function remove_space(stringData) {
 
   function walletShippingInfo(wallet) {
     var shipping = wallet?.order?.shipping ? JSON.parse(wallet?.order?.shipping) : {};
-    return `<tr><td colspan="5" class="text-center"><h5 class="m-0">Shipping Info</h5></td></tr>
+    return `<tr><td colspan="6" class="text-center"><h5 class="m-0">Shipping Info</h5></td></tr>
             <tr>
-              <td colspan="5" class="text-center align-middle">
+              <td colspan="6" class="text-center align-middle">
                 <p class="m-0">
                   Name: <b>${shipping?.name}</b> <br>
                   Phone: <b>${shipping?.phone}</b> <br>
@@ -354,9 +354,9 @@ function remove_space(stringData) {
   function walletCustomerInfo(wallet) {
     var customer = wallet?.user || {};
     var name = customer?.name || `${customer?.first_name} ${customer?.last_name}` || 'Unknown';
-    return `<tr><td colspan="5" class="text-center"><h5 class="m-0">Customer Info</h5></td></tr>
+    return `<tr><td colspan="6" class="text-center"><h5 class="m-0">Customer Info</h5></td></tr>
             <tr>
-              <td colspan="5" class="text-center align-middle">
+              <td colspan="6" class="text-center align-middle">
                 <p class="m-0">
                   Name: <b>${name}</b> <br>
                   Phone: <b>${customer?.phone}</b> <br>
@@ -426,12 +426,12 @@ function remove_space(stringData) {
       <td class="text-right">${12}</td>
     </tr>
     <tr>
-      <td colspan="5" class="text-center align-middle">
+      <td colspan="6" class="text-center align-middle">
         <p class="m-0">Comments-1: ${wallet.comment1 || 'not set'}</p>
       </td>
     </tr>
     <tr>
-      <td colspan="5" class="text-center align-middle">
+      <td colspan="6" class="text-center align-middle">
         <p class="m-0">Comments-2: ${wallet.comment2 || 'not set'}</p>
       </td>
     </tr>`;

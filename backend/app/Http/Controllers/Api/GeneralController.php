@@ -147,7 +147,7 @@ class GeneralController extends Controller
 
   public function generalSettings(SettingRepository $settingRepository)
   {
-    $settings = $settingRepository->list();
+    $settings = $settingRepository->all();
     return response([
       'settings' => json_encode($settings)
     ]);
