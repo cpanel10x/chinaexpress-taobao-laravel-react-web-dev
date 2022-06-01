@@ -104,7 +104,7 @@ $currency = currency_icon();
                         {{$shipping_rate ? $shipping_rate : 0}} Per KG</span>
                     </p>
                     <a href="{{$itemLink}}" target="_blank"> Source Link</a>
-                    <p class="m-0"><b>Item/Wallet Id:</b> {{$item->item_number}}</p>
+                    <p class="m-0"><b>Item/Wallet Number:</b> {{$item->item_number}}</p>
                   </td>
                 </tr>
                 @php

@@ -241,15 +241,15 @@ class WalletTable extends TableComponent
           $htmlHref = '<a href="#" class="btn btn-sm btn-info btn-block"><i class="fa fa-list"></i> Log</a>';
           return $this->html($htmlHref);
         }),
-      Column::make('Comments-1', 'comments1')
+      Column::make('Comments-1', 'comment1')
         ->format(function (OrderItem $model) {
-          $htmlHref = $model->comments1 ? $model->comments1 : 'N/A';
-          return $this->html($htmlHref);
+          $htmlHref = $model->comment1 ? $model->comment1 : '';
+          return $this->html('<span class="comments1">' . $htmlHref . '</span>');
         }),
-      Column::make('Comments-2', 'comments2')
+      Column::make('Comments-2', 'comment2')
         ->format(function (OrderItem $model) {
-          $htmlHref = $model->comments2 ? $model->comments2 : 'N/A';
-          return $this->html($htmlHref);
+          $htmlHref = $model->comment2 ? $model->comment2 : '';
+          return $this->html('<span class="comments2">' . $htmlHref . '</span>');
         }),
     ];
   }

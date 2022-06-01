@@ -708,7 +708,7 @@ function remove_space(stringData) {
         console.log(error);
       })
       .then(() => {
-        window.location.reload();
+        // window.location.reload();
         detailsModal.modal('hide');
       });
   });
@@ -726,9 +726,9 @@ function remove_space(stringData) {
       show_enable_field(['out_of_stock']);
     } else if (status == 'adjustment') {
       show_enable_field(['adjustment']);
-    }  else if (status == 'customer_tax') {
+    } else if (status == 'customer_tax') {
       show_enable_field(['customer_tax']);
-    }   else if (status == 'lost_in_transit') {
+    } else if (status == 'lost_in_transit') {
       show_enable_field(['lost_in_transit']);
     } else if (status == 'refunded') {
       show_enable_field(['refunded']);
@@ -812,6 +812,51 @@ function remove_space(stringData) {
     var wallet_id = $(this).attr('href');
     processToChangeStatus(wallet_id);
   });
+
+
+
+
+
+
+  // wallet comments option integration
+  $(document).on('click', '.walletCommentButton', function (event) {
+    event.preventDefault();
+    var action = $(this).attr('href');
+    var option = $(this).attr('data-comment');
+    var comments1 = $(this).closest('tr').find('.comments1').text();
+    var comments2 = $(this).closest('tr').find('.comments2').text();
+    var comment = option == 'one' ? comments1 : comments2;
+
+    var submitCommentsForm = $("#submitCommentsForm");
+
+    $("#commentsModal").modal('show');
+
+    submitCommentsForm.attr('action', action);
+    submitCommentsForm.find('[name=type]').val(option);
+    submitCommentsForm.find('[name=comments]').val(comment);
+
+  });
+
+
+  $(document).on('submit', '#submitCommentsForm', function (event) {
+    event.preventDefault();
+    var formData = $(this).serialize();
+    var action = $(this).attr('action');
+    axios.post(action, formData)
+      .then(res => {
+        const resData = res.data;
+      })
+      .catch(error => {
+        console.log(error);
+      })
+      .then(() => {
+        $(".option_search_field").trigger('keyup');
+        $("#commentsModal").modal('hide');
+      });
+  });
+
+
+
 
 })(jQuery);
 

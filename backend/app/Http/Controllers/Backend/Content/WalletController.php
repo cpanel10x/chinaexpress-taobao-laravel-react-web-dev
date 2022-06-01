@@ -7,15 +7,26 @@ use App\Models\Auth\User;
 use App\Models\Content\Order;
 use App\Models\Content\OrderItem;
 use App\Models\Content\OrderItemVariation;
+use App\Repositories\Backend\WalletRepository;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 use Throwable;
 
 class WalletController extends Controller
 {
+
+
+  public $walletRepository;
+
+
+  public function __construct(WalletRepository $walletRepository)
+  {
+    $this->walletRepository = $walletRepository;
+  }
+
+
   /**
    * Display a listing of the resource.
    *
@@ -121,26 +132,17 @@ class WalletController extends Controller
     $status =  false;
     if (!empty($data)) {
       $orderItem->update($data);
-      $product_value = $orderItem->product_value;
-      $chinaLocalDelivery = $orderItem->chinaLocalDelivery;
-      $coupon_contribution = $orderItem->coupon_contribution;
-      $first_payment = $orderItem->first_payment;
-      $out_of_stock = $orderItem->out_of_stock;
-      $adjustment = $orderItem->adjustment;
-      $refunded = $orderItem->refunded;
-      $shipping_charge = $orderItem->shipping_charge;
-      $courier_bill = $orderItem->courier_bill;
-      $last_payment = $orderItem->last_payment;
-      $missing = $orderItem->missing;
-      $due_payment = $product_value + $chinaLocalDelivery - $coupon_contribution - $first_payment - $out_of_stock + $refunded + $shipping_charge + $courier_bill - $last_payment - $missing;
-
-      $due_payment = $adjustment > 0 ? $due_payment + abs($adjustment) : $due_payment - abs($adjustment);
-
-      $orderItem->update(['due_payment' => $due_payment, 'first_payment' => $first_payment]);
+      $abcd = $this->walletRepository->updateWalletCalculation($request, $item_id);
       $status = true;
     }
 
     return response(['status' => $status, 'data' => $orderItem]);
+  }
+
+  public function storeWalletComment(Request $request, $id)
+  {
+    $wallet = $this->walletRepository->storeComments($request, $id);
+    return response(['status' => $id, 'data' => $wallet]);
   }
 
 

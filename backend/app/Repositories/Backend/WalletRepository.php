@@ -11,6 +11,7 @@ use App\Models\Auth\User;
 use App\Models\Content\OrderItem;
 use App\Notifications\Frontend\Auth\UserNeedsConfirmation;
 use App\Repositories\BaseRepository;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -32,6 +33,58 @@ class WalletRepository extends BaseRepository
   public function all()
   {
     return $this->model->whereNotNull('active')->pluck('value', 'key')->toArray();
+  }
+
+
+  public function storeComments(Request $request, $id)
+  {
+    $wallet = $this->model->find($id);
+    if ($wallet) {
+      $type = $request->type;
+      $comments = $request->comments;
+      if ($type == 'one') {
+        $wallet->comment1 = $comments;
+      } else {
+        $wallet->comment2 = $comments;
+      }
+      $wallet->save();
+    }
+    return $wallet;
+  }
+
+  public function updateWalletCalculation(Request $request, $id)
+  {
+    $wallet = $this->model->find($id);
+    if ($wallet) {
+      $product_price = ($wallet->product_value + $wallet->DeliveryCost);
+      $first_payment = $wallet->first_payment;
+      $out_of_stock = $wallet->out_of_stock;
+      $missing = $wallet->missing;
+      $lost_in_transit = $wallet->lost_in_transit;
+
+      $courier_bill = $wallet->courier_bill;
+      $refunded = $wallet->refunded;
+      $customer_tax = $wallet->customer_tax;
+      $last_payment = $wallet->last_payment;
+
+      $adjustment = $wallet->adjustment;
+
+      $shipping_type = $wallet->shipping_type;
+      $weight_change = 0;
+      if ($shipping_type != 'regular') {
+        $shipping_rate = $wallet->shipping_rate;
+        $actual_weight = $wallet->actual_weight;
+        $weight_change = ($shipping_rate * $actual_weight);
+      }
+
+      $sumData = ($product_price +  $first_payment + $out_of_stock + $missing + $lost_in_transit);
+      $sumData = $sumData - ($lost_in_transit +  $refunded + $customer_tax + $weight_change + $courier_bill + $last_payment);
+
+      $orderItem = $this->model->find($id);
+      $orderItem->due_payment = ($sumData + $adjustment);
+      $orderItem->save();
+    }
+    return $wallet;
   }
 
 

@@ -2,7 +2,7 @@
   <button type="button" class="btn btn-sm btn-secondary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
     <i class="fa fa-cog"></i>
   </button>
-  <div class="dropdown-menu dropdown-menu-right">
+  <div class="dropdown-menu">
     @can('wallet.view.details')
     <a href="{{$wallet->id}}" class="dropdown-item walletDetails" data-toggle="tooltip" data-placement="top"
       title="wallet details">
@@ -13,6 +13,16 @@
     <a href="{{$wallet->id}}" class="dropdown-item changeWalletStatus" data-toggle="tooltip" data-placement="top"
       title="Change Status">
       Change Status
+    </a>
+    @endcan
+    @can('wallet.comment.one')
+    <a href="{{route('admin.order.wallet.comments', $wallet)}}" class="dropdown-item walletCommentButton" data-comment="one">
+      Add Comments One
+    </a>
+    @endcan
+    @can('wallet.comment.two')
+    <a href="{{route('admin.order.wallet.comments', $wallet)}}" class="dropdown-item walletCommentButton"  data-comment="two">
+      Add Comments Two
     </a>
     @endcan
     @can('wallet.master.edit')

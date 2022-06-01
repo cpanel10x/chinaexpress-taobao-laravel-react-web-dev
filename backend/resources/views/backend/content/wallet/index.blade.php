@@ -278,6 +278,33 @@ $options = [
 </div> <!-- changeStatusButton -->
 
 
+<div class="modal fade" id="commentsModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title" id="commentsModalTitle">Add Your Comments</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="#" id="submitCommentsForm" method="POST">
+          <input type="hidden" name="type" value="">
+          <div class="form-group">
+            <label for="comments">Your Comment</label>
+            <textarea name="comments" id="comments" rows="5" class="form-control" placeholder="Your Comment"></textarea>
+          </div>
+          <div class="form-group">
+            <button type="submit" class="btn btn-block btn-primary">Save</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div> <!-- changeStatusButton -->
+
+
 @endsection
 
 

@@ -38,7 +38,6 @@
   integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 <script>
     var columns = $("#freezeColumnEnd").text();
-    console.log('columns', columns)
     function freezingExecute(){
       setTimeout(() => {
         $(".table-scrollable").freezeTable({
