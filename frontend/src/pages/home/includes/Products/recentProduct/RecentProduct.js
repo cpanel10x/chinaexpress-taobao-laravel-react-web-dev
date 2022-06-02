@@ -6,7 +6,7 @@ import {Link} from "react-router-dom";
 
 const RecentProduct = (props) => {
 
-	const {data: products, isLoading} = useRecentViewProducts();
+	const {data, isLoading} = useRecentViewProducts();
 
 	if (isLoading) {
 		return (
@@ -19,6 +19,8 @@ const RecentProduct = (props) => {
 			</div>
 		)
 	}
+
+	const products = data?.products ? JSON.parse(data?.products) : [];
 
 	if (!products?.length) {
 		return '';

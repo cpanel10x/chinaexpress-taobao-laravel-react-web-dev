@@ -6,7 +6,7 @@ import {Link} from "react-router-dom";
 
 const NewArriveProduct = (props) => {
 
-	const {data: products, isLoading} = useNewArrivedProducts();
+	const {data, isLoading} = useNewArrivedProducts();
 
 	if (isLoading) {
 		return (
@@ -19,6 +19,9 @@ const NewArriveProduct = (props) => {
 			</div>
 		)
 	}
+
+	const products = data?.products ? JSON.parse(data?.products) : [];
+
 
 	if (!products?.length) {
 		return '';
