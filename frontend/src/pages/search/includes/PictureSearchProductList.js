@@ -1,13 +1,14 @@
 import React from "react";
 import ProductCart from "../../product/productList/ProductCart";
-import {withRouter} from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import PagePaginator from "../../../pagination/PagePaginator";
 
 const PictureSearchProductList = (props) => {
 	const {search_id, currentPage, totalPage, currencyIcon, Content, TotalCount} = props;
+	const history = useHistory();
 
 	const handlePaginationClick = (data) => {
-		props.history.push(`/search/picture/${search_id}?page=${data.selected + 1}`);
+		history.push(`/search/picture/${search_id}?page=${data.selected + 1}`);
 	};
 
 	return (
@@ -36,4 +37,4 @@ const PictureSearchProductList = (props) => {
 };
 
 
-export default withRouter(PictureSearchProductList);
+export default PictureSearchProductList;

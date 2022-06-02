@@ -6,16 +6,20 @@ use App\Http\Controllers\Controller;
 use App\Models\Auth\User;
 use App\Models\Content\Frontend\CustomerCart;
 use App\Models\Content\Frontend\Wishlist;
-use App\Models\Content\OrderItem;
 use App\Models\Content\Post;
 use App\Models\Content\Product;
-use App\Models\Content\Taxonomy;
-use App\Traits\ApiResponser;
+use App\Repositories\Frontend\HomeRepository;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-  use ApiResponser;
+
+  public $HomeRepository;
+
+  public function __construct(HomeRepository $HomeRepository)
+  {
+    $this->HomeRepository = $HomeRepository;
+  }
 
   public function verify(Request $request)
   {
@@ -136,42 +140,22 @@ class HomeController extends Controller
     ]);
   }
 
-  public function newArrivedProducts()
+  public function newArrivedProducts(Request $request)
   {
-    $products = Product::select('ItemId', 'ProviderType', 'Title', 'BrandName', 'MainPictureUrl', 'Price', 'Pictures', 'Features', 'MasterQuantity')
-      ->latest()
-      ->limit(15)
-      ->get();
-
-    return response([
-      'new_arrived' => json_encode($products)
-    ]);
+    $data = $this->HomeRepository->getArrivedProducts($request);
+    return response($data);
   }
 
-  public function recentViewProducts()
+  public function recentViewProducts(Request $request)
   {
-    $recent_token = request('recent_view');
-    $products = Product::where('recent_view_token', $recent_token)
-      ->select('ItemId', 'ProviderType', 'Title', 'BrandName', 'MainPictureUrl', 'Price', 'Pictures', 'Features', 'MasterQuantity')
-      ->latest()
-      ->limit(15)
-      ->get();
-
-    return response([
-      'recentView' => json_encode($products)
-    ]);
+    $data = $this->HomeRepository->getRecentViewProducts($request);
+    return response($data);
   }
 
-  public function newFavoriteProducts()
+  public function newFavoriteProducts(Request $request)
   {
-    $products = Wishlist::with('product')
-      ->latest()
-      ->limit(10)
-      ->get();
-
-    return response([
-      'favorite' => json_encode($products)
-    ]);
+    $data = $this->HomeRepository->getFavoriteProducts($request);
+    return response($data);
   }
 
 

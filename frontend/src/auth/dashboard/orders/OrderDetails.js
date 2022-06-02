@@ -3,7 +3,7 @@ import {goPageTop} from "../../../utils/Helpers";
 import {useParams} from "react-router-dom";
 import PageSkeleton from "../../../skeleton/PageSkeleton";
 import {useCustomerOrderDetails} from "../../../api/ApiDashboard";
-import Defaul404 from "../../../pages/404/Defaul404";
+import Default404 from "../../../pages/404/Default404";
 import OrderBody from "./includes/OrderBody";
 import {useSettings} from "../../../api/GeneralApi";
 import OrderSummary from "./includes/OrderSummary";
@@ -28,7 +28,7 @@ const OrderDetails = props => {
 
 
 	if (!order?.order_number) {
-		return <Defaul404/>;
+		return <Default404/>;
 	}
 
 	const currency = settings?.currency_icon || '৳';

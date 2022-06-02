@@ -2,7 +2,7 @@ import React from 'react';
 import {Link} from "react-router-dom";
 import Breadcrumb from "../breadcrumb/Breadcrumb";
 
-const Defaul404 = () => {
+const Default404 = () => {
 
    return (
       <main className="main">
@@ -28,4 +28,4 @@ const Defaul404 = () => {
    );
 };
 
-export default Defaul404;
+export default Default404;

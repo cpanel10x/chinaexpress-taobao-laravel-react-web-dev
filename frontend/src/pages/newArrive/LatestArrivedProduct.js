@@ -3,23 +3,44 @@ import {goPageTop} from "../../utils/Helpers";
 import {useNewArrivedProducts} from "../../api/ProductApi";
 import RecentItems from "../home/includes/Products/NewArriveProduct/includes/RecentItems";
 import {analyticsPageView} from "../../utils/AnalyticsHelpers";
+import {useHistory} from "react-router-dom";
+import {useQuery} from "../../utils/customHooks";
+import ProductListSkeleton from "../../skeleton/productSkeleton/ProductListSkeleton";
+import Default404 from "../404/Default404";
+import PagePaginator from "../../pagination/PagePaginator";
 
 const LatestArrivedProduct = (props) => {
+	const history = useHistory();
+	const {page} = useQuery();
+	const currentPage = page ? page : 1;
 
-	const {data: products, isLoading} = useNewArrivedProducts();
+	const {data, isLoading} = useNewArrivedProducts(currentPage);
 
 	useEffect(() => {
 		goPageTop();
 		analyticsPageView();
-	}, []);
+	}, [page]);
 
 	if (isLoading) {
-		return '';
+		return (
+			<main className="main bg-gray">
+				<div className="page-content">
+					<ProductListSkeleton/>
+				</div>
+			</main>
+		);
 	}
 
-	// if (!products?.id) {
-	// 	return <Defaul404/>;
-	// }
+	const handlePaginationClick = (paginate) => {
+		history.push(`/customer-favorite?page=${paginate.selected + 1}`);
+	};
+
+	const products = data?.products ? JSON.parse(data?.products) : [];
+	const totalPage = data?.totalPage ? data?.totalPage : 0;
+
+	if (!products?.length) {
+		return <Default404/>;
+	}
 
 	return (
 		<main className="main">
@@ -36,6 +57,16 @@ const LatestArrivedProduct = (props) => {
 									<div className="cat-blocks-container">
 										<RecentItems products={products}/>
 									</div>
+
+									{
+										totalPage > 1 &&
+										<div className="mt-3">
+											<PagePaginator
+												handlePaginationClick={handlePaginationClick}
+												currentPage={currentPage}
+												totalPage={(totalPage)}/>
+										</div>
+									}
 
 								</div>
 							</div>

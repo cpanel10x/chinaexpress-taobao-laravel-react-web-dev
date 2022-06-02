@@ -33,7 +33,7 @@ const NewArriveProduct = (props) => {
 							<h3 className="title">New Arrived</h3>
 						</div>
 						<div className="col-5 text-right">
-							<Link to={`new-arrived`} className="btn btn-custom-product px-4">View All</Link>
+							<Link to={`/new-arrived`} className="btn btn-custom-product px-4">View All</Link>
 						</div>
 					</div>
 					<RecentItems products={products}/>

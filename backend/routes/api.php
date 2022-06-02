@@ -49,7 +49,7 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function () {
 
   Route::post('/categories', [CatalogController::class, 'categories']);
 
-  Route::post('/get-section-products', [CatalogController::class, 'getSectionProducts']);
+  Route::get('/get-section-products', [CatalogController::class, 'getSectionProducts']);
   Route::post('/product/{id}', [CatalogController::class, 'productDetails']);
 
   Route::post('/category-products/{slug}', [CatalogController::class, 'categoryProducts']);
@@ -82,9 +82,9 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function () {
   Route::post('/recent-products', [HomeController::class, 'recentProducts']);
 
   Route::post('/related-products/{item_id}', [HomeController::class, 'relatedProducts']);
-  Route::post('/new-arrived-products', [HomeController::class, 'newArrivedProducts']);
-  Route::post('/recent-view-products', [HomeController::class, 'recentViewProducts']);
-  Route::post('/favorite-products', [HomeController::class, 'newFavoriteProducts']);
+  Route::get('/new-arrived-products', [HomeController::class, 'newArrivedProducts']);
+  Route::get('/recent-view-products', [HomeController::class, 'recentViewProducts']);
+  Route::get('/favorite-products', [HomeController::class, 'newFavoriteProducts']);
 
   Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
 

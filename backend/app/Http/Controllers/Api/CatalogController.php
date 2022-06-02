@@ -164,7 +164,7 @@ class CatalogController extends Controller
   public function getPictureSearchResult($search_id)
   {
     $page = request('page', 1);
-    $page = $page ? $page - 1 : 0;
+    $page = $page > 0 ? ($page - 1) : 0;
     $offset = $page * 35;
     $limit = 35;
     $SearchLog = SearchLog::where('search_id', $search_id)->where('search_type', 'picture')->first();

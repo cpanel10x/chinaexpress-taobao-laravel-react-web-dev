@@ -7,7 +7,7 @@ const PagePaginator = (props) => {
 
 	currentPage = Number(currentPage) > 1 ? Number(currentPage) : 1;
 
-	const maxPage = parseInt(totalPage) > 280 ? 280 : totalPage;
+	const maxPage = (totalPage ? Number(totalPage) : 0) > 280 ? 280 : totalPage;
 
 	return (
 		<nav aria-label="Page navigation">

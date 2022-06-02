@@ -1,6 +1,6 @@
 import React, {useEffect} from "react";
 import {goPageTop} from "../../utils/Helpers";
-import {useFavoriteProducts} from "../../api/ProductApi";
+import {useRecentViewProducts} from "../../api/ProductApi";
 import RecentItems from "../home/includes/Products/NewArriveProduct/includes/RecentItems";
 import {analyticsPageView} from "../../utils/AnalyticsHelpers";
 import Default404 from "../404/Default404";
@@ -9,11 +9,11 @@ import {useQuery} from "../../utils/customHooks";
 import PagePaginator from "../../pagination/PagePaginator";
 import ProductListSkeleton from "../../skeleton/productSkeleton/ProductListSkeleton";
 
-const FavoriteProduct = (props) => {
+const RecentViewProduct = () => {
 	const history = useHistory();
 	const {page} = useQuery();
 	const currentPage = page ? page : 1;
-	let {data, isLoading} = useFavoriteProducts(currentPage);
+	let {data, isLoading} = useRecentViewProducts(currentPage);
 
 	useEffect(() => {
 		goPageTop();
@@ -36,7 +36,6 @@ const FavoriteProduct = (props) => {
 
 	const products = data?.products ? JSON.parse(data?.products) : [];
 	const totalPage = data?.totalPage ? data?.totalPage : 0;
-
 
 	if (!products?.length) {
 		return <Default404/>;
@@ -69,7 +68,6 @@ const FavoriteProduct = (props) => {
 										</div>
 									}
 
-
 								</div>
 							</div>
 						</div>
@@ -82,4 +80,4 @@ const FavoriteProduct = (props) => {
 };
 
 
-export default FavoriteProduct;
+export default RecentViewProduct;
