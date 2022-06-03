@@ -112,6 +112,8 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function () {
       Route::get('/orders', [DashboardController::class, 'orderIndex']);
       Route::get('/order/{id}', [DashboardController::class, 'orderDetails']);
       Route::post('/order/payment/generate', [DashboardController::class, 'paymentGenerate']);
+      Route::get('/invoices', [DashboardController::class, 'invoiceIndex']);
+      Route::get('/invoices/{invoice_no}', [DashboardController::class, 'invoiceDetails']);
     });
   });
 

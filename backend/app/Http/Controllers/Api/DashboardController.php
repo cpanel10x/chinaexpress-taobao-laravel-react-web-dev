@@ -6,10 +6,20 @@ use App\Http\Controllers\Controller;
 use App\Models\Content\Order;
 use App\Models\Content\OrderItem;
 use App\Models\Content\PaymentToken;
+use App\Repositories\Frontend\DashboardRepository;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class DashboardController extends Controller
 {
+
+  public $dashboardRepository;
+
+  public function __construct(DashboardRepository $dashboardRepository)
+  {
+    $this->dashboardRepository = $dashboardRepository;
+  }
+
 
   public function paymentStatusUpdate()
   {
@@ -96,5 +106,18 @@ class DashboardController extends Controller
       'status' => false,
       'msg' => 'Payment token generating fail'
     ]);
+  }
+
+
+  public function invoiceIndex(Request $request)
+  {
+    $data = $this->dashboardRepository->getCustomerInvoices($request);
+    return response($data);
+  }
+
+  public function invoiceDetails(Request $request, $invoice_no)
+  {
+    $data = $this->dashboardRepository->getCustomerInvoiceDetails($request, $invoice_no);
+    return response($data);
   }
 }

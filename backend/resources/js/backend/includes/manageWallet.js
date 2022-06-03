@@ -307,6 +307,24 @@ function remove_space(stringData) {
   });
 
 
+
+  //  wallet item updates
+  function walletItemParametersUpdates(item_id) {
+    var updateWalletStatus = make_full_url(`/admin/order/wallet/updated-parameters/${item_id}`);
+    axios.get(updateWalletStatus)
+      .then(res => {
+        const wallet = res.data.wallet;
+        if (wallet?.id > 0) {
+          for (let item in wallet) {
+            $("#" + wallet?.id).find("." + item).text(wallet[item]);
+          }
+        }
+      })
+      .catch(error => {
+        console.log(error);
+      })
+  }
+
   //  wallet search helper js
   function checkUncheckSearchOption() {
     var all_select = $('#all_select');
@@ -627,7 +645,10 @@ function remove_space(stringData) {
     formData = formDataObject(formData);
     axios.post(action, { ...formData, _method: 'PUT' })
       .then(res => {
-        console.log('res', res);
+        const resData = res.data;
+        if (resData.data?.id > 0) {
+          walletItemParametersUpdates(resData.data?.id);
+        }
       })
       .catch(error => {
         console.log('error', error)
@@ -640,7 +661,7 @@ function remove_space(stringData) {
 
   function walletMasterEditForm(resData) {
     var wallet = resData.data
-    var update_url = make_full_url(`/admin/order/wallet/${wallet.id}`);
+    var update_url = make_full_url(`admin/order/wallet/${wallet.id}`);
     var htmlForm = `<form action="${update_url}" method="post" class="masterEditForm"><input type="hidden" name="_method" value="put"/><table class="table"><tr><th>Parameter</th><th>CurrentData</th><th style="width:200px">UpdateInfo<th/></tr>`;
     const editable = ['regular_price', 'weight', 'DeliveryCost', 'Quantity', 'shipping_type', 'shipping_rate', 'tracking_number', 'product_value', 'first_payment', 'coupon_contribution', 'bd_shipping_charge', 'courier_bill', 'out_of_stock', 'lost_in_transit', 'customer_tax', 'missing', 'adjustment', 'refunded', 'last_payment', 'due_payment', 'invoice_no', 'comment1', 'comment2'];
     for (const item in wallet) {
@@ -667,6 +688,9 @@ function remove_space(stringData) {
         var htmlData = walletMasterEditForm(resData);
         detailsModal.find('.modal-title').text('Wallet Master Edit Form')
         detailsModal.find('.modal-body').html(htmlData)
+        if (resData.data?.id > 0) {
+          walletItemParametersUpdates(resData.data?.id);
+        }
       })
       .catch(error => {
         console.log(error);
@@ -699,16 +723,18 @@ function remove_space(stringData) {
     var loader = modalLoader();
     var formData = $(this).serialize();
     var detailsModal = $("#changeStatusModal");
-    detailsModal.find('.modal-body').html(loader)
+    detailsModal.find('#additionInputStatusForm').html(loader)
     axios.post(action, formData)
       .then(res => {
-        const resData = res.data;
+        const resData = res.data.data;
+        if (resData?.id > 0) {
+          walletItemParametersUpdates(resData?.id);
+        }
       })
       .catch(error => {
         console.log(error);
       })
       .then(() => {
-        // window.location.reload();
         detailsModal.modal('hide');
       });
   });
@@ -738,7 +764,6 @@ function remove_space(stringData) {
   });
 
   function wallet_status_change_form(wallet) {
-    console.log('wallet', wallet);
     return `<input type="hidden" name="item_id" value="${wallet.id}">
   <div class="form-group d-none">
     <label for="source_order_number">Source Order Number</label>
@@ -790,7 +815,7 @@ function remove_space(stringData) {
     var loader = modalLoader();
     var detailsModal = $("#changeStatusModal");
     detailsModal.modal('show');
-    // detailsModal.find('.modal-body').html(loader)
+    detailsModal.find('#additionInputStatusForm').html(loader)
     axios.get(make_full_url(`/admin/order/wallet/${wallet_id}`))
       .then(res => {
         const resData = res.data;
@@ -812,9 +837,6 @@ function remove_space(stringData) {
     var wallet_id = $(this).attr('href');
     processToChangeStatus(wallet_id);
   });
-
-
-
 
 
 
@@ -844,13 +866,15 @@ function remove_space(stringData) {
     var action = $(this).attr('action');
     axios.post(action, formData)
       .then(res => {
-        const resData = res.data;
+        const resData = res.data.data;
+        if (resData?.id > 0) {
+          walletItemParametersUpdates(resData?.id);
+        }
       })
       .catch(error => {
         console.log(error);
       })
       .then(() => {
-        $(".option_search_field").trigger('keyup');
         $("#commentsModal").modal('hide');
       });
   });

@@ -148,7 +148,7 @@ $options = [
 
           <div class="form-group">
             <div class=" form-check">
-              <input type="checkbox" name="notify" value="1" class="form-check-input" id="notify" checked="true">
+              <input type="checkbox" name="notify" value="1" class="form-check-input" id="notify">
               <label class="form-check-label" for="notify">Notify User</label>
             </div>
           </div>

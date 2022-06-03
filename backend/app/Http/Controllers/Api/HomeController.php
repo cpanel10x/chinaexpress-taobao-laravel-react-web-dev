@@ -14,11 +14,11 @@ use Illuminate\Http\Request;
 class HomeController extends Controller
 {
 
-  public $HomeRepository;
+  public $homeRepository;
 
-  public function __construct(HomeRepository $HomeRepository)
+  public function __construct(HomeRepository $homeRepository)
   {
-    $this->HomeRepository = $HomeRepository;
+    $this->homeRepository = $homeRepository;
   }
 
   public function verify(Request $request)
@@ -142,19 +142,19 @@ class HomeController extends Controller
 
   public function newArrivedProducts(Request $request)
   {
-    $data = $this->HomeRepository->getArrivedProducts($request);
+    $data = $this->homeRepository->getArrivedProducts($request);
     return response($data);
   }
 
   public function recentViewProducts(Request $request)
   {
-    $data = $this->HomeRepository->getRecentViewProducts($request);
+    $data = $this->homeRepository->getRecentViewProducts($request);
     return response($data);
   }
 
   public function newFavoriteProducts(Request $request)
   {
-    $data = $this->HomeRepository->getFavoriteProducts($request);
+    $data = $this->homeRepository->getFavoriteProducts($request);
     return response($data);
   }
 

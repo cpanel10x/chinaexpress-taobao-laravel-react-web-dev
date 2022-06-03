@@ -71,6 +71,7 @@
 .icon-check-empty:before { content: '\f096'; } /* '' */
 .icon-docs:before { content: '\f0c5'; } /* '' */
 .icon-chat-empty:before { content: '\f0e6'; } /* '' */
+.icon-doc-text:before { content: '\f0f6'; } /* '' */
 .icon-angle-left:before { content: '\f104'; } /* '' */
 .icon-angle-right:before { content: '\f105'; } /* '' */
 .icon-circle-empty:before { content: '\f10c'; } /* '' */

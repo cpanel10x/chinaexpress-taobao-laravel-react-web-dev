@@ -142,7 +142,13 @@ class WalletController extends Controller
   public function storeWalletComment(Request $request, $id)
   {
     $wallet = $this->walletRepository->storeComments($request, $id);
-    return response(['status' => $id, 'data' => $wallet]);
+    return response(['status' => true, 'data' => $wallet]);
+  }
+
+  public function walletUpdatedParameters(Request $request, $id)
+  {
+    $wallet = $this->walletRepository->updatedParameters($request, $id);
+    return response(['wallet' => $wallet]);
   }
 
 
@@ -171,16 +177,6 @@ class WalletController extends Controller
     ]);
   }
 
-  /**
-   * Show the form for editing the specified resource.
-   *
-   * @param int $id
-   * @return Response
-   */
-  public function edit($id)
-  {
-    dd($id);
-  }
 
   /**
    * Update the specified resource in storage.
@@ -196,8 +192,9 @@ class WalletController extends Controller
     $orderItem  = OrderItem::find($id);
     if ($orderItem) {
       $orderItem->update($data);
+      $abcd = $this->walletRepository->updateWalletCalculation($request, $id);
     }
-    return response(['status' => true]);
+    return response(['data' => $orderItem]);
   }
 
   /**

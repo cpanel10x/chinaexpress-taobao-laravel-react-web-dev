@@ -29,6 +29,7 @@ Route::namespace('Content')->group(function () {
   Route::group(['prefix' => 'order', 'as' => 'order.'], function () {
     Route::post('wallet/status/change', [WalletController::class, 'update_order_wallet_status']);
     Route::post('wallet/comments/{wallet}', [WalletController::class, 'storeWalletComment'])->name('wallet.comments');
+    Route::get('wallet/updated-parameters/{wallet}', [WalletController::class, 'walletUpdatedParameters']);
     Route::resource('wallet', 'WalletController');
   });
 

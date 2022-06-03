@@ -202,7 +202,7 @@ class WalletTable extends TableComponent
           $html = '<span class="actual_weight">' . (floating($totalWeight, 3)) . '</span>';
           return $this->html($html);
         }),
-      Column::make('WeightCharges', 'shipping_rate')
+      Column::make('WeightCharges', 'weight_charges')
         ->format(function (OrderItem $model) {
           $shipping_rate = $model->shipping_rate ? $model->shipping_rate : 0;
           $weight = $model->actual_weight ? $model->actual_weight : 0;
@@ -210,7 +210,7 @@ class WalletTable extends TableComponent
           $totalWeight = $weight * $Quantity;
           $totalShipping = round($shipping_rate * $totalWeight);
           $floatingWeight = floating($totalWeight, 3);
-          $html = '<span class="shipping_rate">' . ($totalShipping) . '</span>';
+          $html = '<span class="weight_charges">' . ($totalShipping) . '</span>';
           return $this->html($html);
         }),
       Column::make('CourierBill', 'courier_bill')

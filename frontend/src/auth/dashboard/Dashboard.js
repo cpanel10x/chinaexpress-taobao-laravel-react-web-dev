@@ -13,12 +13,10 @@ const Dashboard = (props) => {
 		analyticsPageView();
 	}, []);
 
-
 	const authLogoutProcess = async (e) => {
 		e.preventDefault();
 		authLogout()
 	};
-
 
 	return (
 		<main className="main bg-gray">
@@ -51,6 +49,20 @@ const Dashboard = (props) => {
 												</div>
 												<div className="card_text">
 													My Cart
+												</div>
+											</div>
+										</div>
+									</NavLink>
+								</div>
+								<div className="col-lg-3 col-md-4 col-6">
+									<NavLink to={`/dashboard/my-invoice`} className="d-block">
+										<div className="card">
+											<div className="card-body">
+												<div className="card_icon">
+													<i className="icon-doc-text"/>
+												</div>
+												<div className="card_text">
+													My Invoice
 												</div>
 											</div>
 										</div>

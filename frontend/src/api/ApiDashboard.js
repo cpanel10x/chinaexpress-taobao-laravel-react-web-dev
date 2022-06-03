@@ -21,6 +21,7 @@ export const useCustomerOrders = (page, limit) => useQuery(['useOrders', page], 
 	}
 });
 
+
 export const useCustomerOrderDetails = (tran_id) => useQuery(['useOrderDetails', tran_id], async () => {
 	try {
 		const {data} = await instance.get(`/dashboard/order/${tran_id}`);
@@ -35,6 +36,28 @@ export const useRepaymentOrderByBkash = () => useMutation('useRepaymentOrderByBk
 	try {
 		const {data} = await instance.post(`/dashboard/order/payment/generate`, props);
 		return data;
+	} catch (error) {
+		console.log(error);
+	}
+});
+
+
+
+export const useCustomerInvoices = (page) => useQuery(['useOrders', page], async () => {
+	let limit = 10;
+	try {
+		const {data} = await instance.get(`/dashboard/invoices`,  {params: {page, limit}});
+		return data;
+	} catch (error) {
+		console.log(error);
+	}
+});
+
+
+export const useCustomerInvoiceDetails = (invoice_id) => useQuery(['useOrderDetails', invoice_id], async () => {
+	try {
+		const {data} = await instance.get(`/dashboard/invoices/${invoice_id}`);
+		return data?.invoice ? JSON.parse(data.invoice) : {};
 	} catch (error) {
 		console.log(error);
 	}

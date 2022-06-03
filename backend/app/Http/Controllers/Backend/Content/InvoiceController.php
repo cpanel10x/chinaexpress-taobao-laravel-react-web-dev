@@ -23,15 +23,6 @@ class InvoiceController extends Controller
     return view('backend.content.invoice.index');
   }
 
-  /**
-   * Show the form for creating a new resource.
-   *
-   * @return \Illuminate\Http\Response
-   */
-  public function create()
-  {
-    //
-  }
 
   /**
    * Store a newly created resource in storage.
@@ -80,7 +71,6 @@ class InvoiceController extends Controller
           } else {
             $invoice_status = $item['status'];
           }
-
           InvoiceItem::create([
             'invoice_id' => $invoice->id,
             'order_item_id' => $item['id'],
@@ -89,7 +79,6 @@ class InvoiceController extends Controller
             'product_name' => $item['product_name'],
             'weight' => $item['actual_weight'],
             'total_due' => $item['due_payment'],
-            'status' => $invoice_status,
             'user_id' => $user_id,
           ]);
           if ($isNotify) {
