@@ -822,6 +822,7 @@ function remove_space(stringData) {
         var htmlData = wallet_status_change_form(resData.data);
         detailsModal.find('.modal-title').text(`Change wallet status of #${wallet_id}`);
         detailsModal.find('#additionInputStatusForm').html(htmlData);
+        detailsModal.find('#status').find(`option[value=${resData.data.status}]`).attr('selected', 'selected');
       })
       .catch(error => {
         console.log(error);

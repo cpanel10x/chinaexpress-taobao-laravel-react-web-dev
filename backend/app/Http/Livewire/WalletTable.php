@@ -251,7 +251,7 @@ class WalletTable extends TableComponent
       Column::make('Comments-2', 'comment2')
         ->format(function (OrderItem $model) {
           $htmlHref = $model->comment2 ? $model->comment2 : '';
-          return $this->html('<span class="comment1">' . $htmlHref . '</span>');
+          return $this->html('<span class="comment2">' . $htmlHref . '</span>');
         }),
     ];
   }
@@ -263,6 +263,8 @@ class WalletTable extends TableComponent
       return ['style' => 'min-width:80px;'];
     } elseif ($attribute == 'Title') {
       return ['style' => 'min-width:200px;'];
+    } elseif ($attribute == 'comment1' || $attribute == 'comment2') {
+      return ['style' => 'min-width:300px;'];
     }
     return [
       'style' => ''

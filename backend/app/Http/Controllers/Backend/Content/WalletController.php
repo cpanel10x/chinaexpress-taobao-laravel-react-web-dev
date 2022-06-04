@@ -92,48 +92,49 @@ class WalletController extends Controller
     $order_id = $orderItem->order_item_number;
     $amount = '';
     $tracking = '';
-    if ($status === 'purchased') {
+    if ($status == 'purchased') {
       $data = $request->only('source_order_number', 'status');
       $data['purchases_at'] = now();
-    } elseif ($status === 'shipped-from-suppliers') {
+    } elseif ($status == 'shipped-from-suppliers') {
       $data = $request->only('tracking_number', 'status');
       $tracking = request('tracking_number');
-    } elseif ($status === 'received-in-china-warehouse') {
+    } elseif ($status == 'received-in-china-warehouse') {
       $data = $request->only('status');
-    } elseif ($status === 'shipped-from-china-warehouse') {
+    } elseif ($status == 'shipped-from-china-warehouse') {
       $data = $request->only('status');
-    } elseif ($status === 'received-in-BD-warehouse') {
+    } elseif ($status == 'received-in-BD-warehouse') {
       $data = $request->only('actual_weight', 'status');
       $data['bd_shipping_charge'] = $orderItem->shipping_rate * request('actual_weight', 0);
-    } elseif ($status === 'on-transit-to-customer') {
+    } elseif ($status == 'on-transit-to-customer') {
       $data = $request->only('status');
-    } elseif ($status === 'delivered') {
+    } elseif ($status == 'delivered') {
       $data = $request->only('status');
-    } elseif ($status === 'out-of-stock') {
+    } elseif ($status == 'out-of-stock') {
       $data = $request->only('out_of_stock', 'out_of_stock_type', 'status');
       $amount = request('out_of_stock');
-    } elseif ($status === 'adjustment') {
+    } elseif ($status == 'adjustment') {
       $data = $request->only('adjustment', 'status');
       $amount = request('adjustment');
-    } elseif ($status === 'customer_tax') {
+    } elseif ($status == 'customer_tax') {
       $data = $request->only('customer_tax');
-    } elseif ($status === 'lost_in_transit') {
+    } elseif ($status == 'lost_in_transit') {
       $data = $request->only('lost_in_transit');
-    } elseif ($status === 'refunded') {
+    } elseif ($status == 'refunded') {
       $data = $request->only('refunded', 'status');
       $amount = request('refunded');
     }
 
     // manage customer Messages
-    $user = $orderItem->user;
-    if ($request->input('notify')) {
-      generate_customer_notifications($status, $user, $order_id, $amount, $tracking);
-    }
     $status =  false;
     if (!empty($data)) {
       $orderItem->update($data);
       $abcd = $this->walletRepository->updateWalletCalculation($request, $item_id);
       $status = true;
+    }
+
+    $user = $orderItem->user;
+    if ($request->input('notify')) {
+      generate_customer_notifications($status, $user, $order_id, $amount, $tracking);
     }
 
     return response(['status' => $status, 'data' => $orderItem]);
