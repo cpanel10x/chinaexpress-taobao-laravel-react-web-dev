@@ -5,7 +5,7 @@ import {
 } from "../../../../../../utils/CartHelpers";
 
 const LoadAttributes = (props) => {
-	const {product, cartStore, setCartStore} = props;
+	const {product, setActiveImg, cartStore, setCartStore} = props;
 
 	const Attributes = product?.Attributes ? product.Attributes : [];
 	const ConfigAttributes = ConfiguratorAttributes(Attributes);
@@ -94,7 +94,7 @@ const LoadAttributes = (props) => {
 										{index2 === 0 && setFirstAttributeOnLoad(group.key, Attribute)}
 										{Attribute?.MiniImageUrl ?
 											<img src={Attribute.MiniImageUrl}
-											     onClick={() => props.setActiveImg(Attribute.ImageUrl)}
+											     onClick={() => setActiveImg(Attribute.ImageUrl)}
 											     alt={Attribute.Value}
 											     style={{width: '2.5rem', height: '2.5rem'}}/>
 											: `${Attribute.Value}`

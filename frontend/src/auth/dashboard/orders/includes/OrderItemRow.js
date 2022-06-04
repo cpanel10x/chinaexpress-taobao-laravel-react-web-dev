@@ -5,7 +5,7 @@ import moment from 'moment';
 
 function OrderItemRow({order, currency}) {
 
-	const {item_number, DeliveryCost, product_value, first_payment, due_payment,status, created_at} = order;
+	const {item_number, tracking_number, DeliveryCost, product_value, first_payment, due_payment,status, created_at} = order;
 
 	return (
 		<tr>
@@ -13,7 +13,7 @@ function OrderItemRow({order, currency}) {
 				{created_at ? moment(created_at).format('DD/MM/YYYY') : 'Unknown'}
 			</td>
 			<td>{item_number}</td>
-			{/*<td>{order.tracking_number}</td>*/}
+			<td>{tracking_number ? tracking_number : 'N/A'}</td>
 			<td>{`${currency} `+(Number(product_value) + Number(DeliveryCost))}</td>
 			<td>{`${currency} `+first_payment}</td>
 			<td>{`${currency} `+due_payment}</td>
@@ -21,9 +21,9 @@ function OrderItemRow({order, currency}) {
 			<td>
 				{
 					order.status === 'waiting-for-payment' ?
-						<Link to={`/dashboard/orders/${order.transaction_id}`} className="btn btn-block btn-default">PayNow</Link>
+						<Link to={`/dashboard/orders/${order.order.transaction_id}`} className="btn btn-block btn-default">PayNow</Link>
 						:
-						<Link to={`/dashboard/orders/${order.transaction_id}`} className="btn btn-block btn-success">View</Link>
+						<Link to={`/dashboard/orders/${order.order.transaction_id}`} className="btn btn-block btn-success">View</Link>
 				}
 			</td>
 		</tr>

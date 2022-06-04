@@ -15,7 +15,8 @@ const AliShipmentInfo = props => {
 	const itemTotal = sumCartItemTotal(cartItem?.variations || []);
 	const currency = settings?.currency_icon || '৳';
 	const item_id = product?.item?.num_iid;
-	const freightList = product?.delivery?.freightList || [];
+	const completeFreightList = product?.delivery?.freightList || [];
+	const freightList = completeFreightList?.filter(filter => filter.tracking === true);
 
 	let aliRate = settings?.ali_increase_rate || 0;
 	aliRate = aliRate ? parseInt(aliRate) : 90;
@@ -53,12 +54,12 @@ const AliShipmentInfo = props => {
 			if (freightList?.length > 0) {
 				setActiveShipping('regular');
 				updateShippingInformation({shipping_cost, shipping_type: 'regular'});
-			}else{
+			} else {
 				setActiveShipping();
 				updateShippingInformation({shipping_cost, shipping_type: null});
 			}
 		}
-	}, [isExpressEnable,selectShipping]);
+	}, [isExpressEnable, selectShipping]);
 
 
 	const selectShippingMethod = (event) => {
@@ -104,24 +105,25 @@ const AliShipmentInfo = props => {
 					freightList?.length > 0 &&
 					<div className="form-check form-check-inline">
 						<input className="form-check-input"
-						       type="radio"
-						       onChange={event => selectShippingMethod(event)}
-						       checked={activeShipping === 'regular'}
-						       name="shipping"
-						       id="regular"
-						       value="regular"/>
+									 type="radio"
+									 onChange={event => selectShippingMethod(event)}
+									 checked={activeShipping === 'regular'}
+									 name="shipping"
+									 id="regular"
+									 value="regular"/>
 						<label className="form-check-label" htmlFor="regular">Regular Shipping</label>
 					</div>
 				}
 				<div className="form-check form-check-inline">
 					<input className="form-check-input"
-					       type="radio"
-					       onChange={event => selectShippingMethod(event)}
-					       checked={activeShipping === 'express'}
-					       name="shipping"
-					       id="express"
-					       value="express"/>
-					<label className={`form-check-label ${isExpressEnable && 'font-weight-bold'}`} htmlFor="express">Express Shipping (15-25 Days) </label>
+								 type="radio"
+								 onChange={event => selectShippingMethod(event)}
+								 checked={activeShipping === 'express'}
+								 name="shipping"
+								 id="express"
+								 value="express"/>
+					<label className={`form-check-label ${isExpressEnable && 'font-weight-bold'}`} htmlFor="express">Express
+						Shipping (15-25 Days) </label>
 				</div>
 			</div>
 			{
@@ -148,8 +150,8 @@ const AliShipmentInfo = props => {
 							</div>
 							<div>
 								<a href="#"
-								   onClick={event => toggleChoseOption(event)}
-								   className="small">
+									 onClick={event => toggleChoseOption(event)}
+									 className="small">
 									More Option <i className="icon-down-open"/>
 								</a>
 							</div>

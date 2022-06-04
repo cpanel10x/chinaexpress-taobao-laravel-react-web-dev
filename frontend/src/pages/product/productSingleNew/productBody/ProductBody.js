@@ -11,6 +11,7 @@ import PriceCard from "./includes/PriceCard";
 import {useCartMutation} from "../../../../api/CartApi";
 import {useMediaQuery} from "react-responsive";
 import AddToCartButtons from "./addToCart/AddToCartButtons";
+import SellDisAllowed from "../sale-disallow/SellDisAllowed";
 
 const ProductBody = (props) => {
 	const {product, settings} = props;
@@ -20,6 +21,7 @@ const ProductBody = (props) => {
 	const {mainCart: {data: cart, isLoading}} = useCartMutation();
 
 	const product_id = product?.Id ? product.Id : 'na';
+	const IsSellAllowed =  product?.IsSellAllowed ;
 	const Title = product?.Title ? product.Title : 'No Title';
 	const cartItem = cart?.cart_items?.find(item => item.ItemId === product_id) || {};
 
@@ -33,7 +35,6 @@ const ProductBody = (props) => {
 	const reviews = FeaturedValues?.find(find => find.Name === 'reviews')?.Value;
 
 	const isMobile = useMediaQuery({query: '(max-width: 991px)'});
-
 
 	return (
 		<div className="product-details-top">
@@ -52,37 +53,42 @@ const ProductBody = (props) => {
 
 					{isMobile && <h1 className="single-product-title">{Title}</h1>}
 
-					<PriceCard product={product} settings={settings} activeConfiguredItems={activeConfiguredItems}/>
-					<p className="mb-0"><b>{favCount}</b> Favorite with <b>{reviews}</b> positive feedback </p>
 					{
-						SalesInLast30Days &&
-						<p>Sales In Last 30 Days - <b>{SalesInLast30Days}</b></p>
+						!IsSellAllowed ?
+							<SellDisAllowed/>
+							: (
+								<div>
+									<PriceCard product={product} settings={settings} activeConfiguredItems={activeConfiguredItems}/>
+									<p className="mb-0"><b>{favCount}</b> Favorite with <b>{reviews}</b> positive feedback </p>
+									{
+										SalesInLast30Days &&
+										<p>Sales In Last 30 Days - <b>{SalesInLast30Days}</b></p>
+									}
+									<div className="product-details">
+										<LoadAttributes
+											setActiveImg={setActiveImg}
+											cartStore={cartStore}
+											setCartStore={setCartStore}
+											product={product}
+										/>
+										<QuantityInput cart={cart} product={product} settings={settings}
+																	 activeConfiguredItems={activeConfiguredItems}/>
+										<ProductSummary
+											cart={cart}
+											product={product}
+											settings={settings}
+										/>
+
+										<AddToCartButtons cartItem={cartItem} product={product} settings={settings}/>
+										<SellerInfo product={product}/>
+										<SocialShare product={product} settings={settings}/>
+									</div>
+								</div>
+							)
 					}
-					<div className="product-details">
-						<LoadAttributes
-							setActiveImg={setActiveImg}
-							cartStore={cartStore}
-							setCartStore={setCartStore}
-							product={product}
-						/>
-						<QuantityInput cart={cart} product={product} settings={settings} activeConfiguredItems={activeConfiguredItems}/>
 
-						<ProductSummary
-							cart={cart}
-							product={product}
-							settings={settings}
-						/>
-
-						<AddToCartButtons cartItem={cartItem} product={product} settings={settings}/>
-
-						<SellerInfo product={product}/>
-
-						<SocialShare product={product} settings={settings}/>
-
-					</div>
-					{/* End .product-details */}
 				</div>
-				{/* End .col-md-6 */}
+
 			</div>
 		</div>
 	);

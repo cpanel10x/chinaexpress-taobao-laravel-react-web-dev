@@ -11,6 +11,7 @@ use App\Models\Auth\User;
 use App\Models\Content\OrderItem;
 use App\Notifications\Frontend\Auth\UserNeedsConfirmation;
 use App\Repositories\BaseRepository;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -59,17 +60,32 @@ class WalletRepository extends BaseRepository
     $data = [];
     if ($wallet) {
       $data = $wallet->toArray();
-
       $product_value = $wallet->product_value ? $wallet->product_value : 0;
       $DeliveryCost = $wallet->DeliveryCost ? $wallet->DeliveryCost : 0;
       $coupon = $wallet->coupon_contribution ? $wallet->coupon_contribution : 0;
       $data['net_product_value'] = ($product_value + $DeliveryCost - $coupon);
-      $shipping_rate = $wallet->shipping_rate ? $wallet->shipping_rate : 0;
+
       $weight = $wallet->actual_weight ? $wallet->actual_weight : 0;
       $Quantity = $wallet->Quantity ? $wallet->Quantity : 0;
       $totalWeight = $weight * $Quantity;
-      $data['weight_charges'] = round($shipping_rate * $totalWeight);
       $data['invoice_no'] = $wallet->invoice_no ? $wallet->invoice_no : "N/A";
+
+      $shipping_rate = $wallet->shipping_rate ? $wallet->shipping_rate : 0;
+      $shipping_type = $wallet->shipping_type ? $wallet->shipping_type : null;
+      if ($shipping_type == 'regular') {
+        $data['shipping_rate'] = 'N/A';
+        $data['weight_charges'] = '0';
+      } else {
+        $data['weight_charges'] = round($shipping_rate * $totalWeight);
+      }
+
+      $data['invoice_no'] = $wallet->invoice_no ? $wallet->invoice_no : "N/A";
+      $data['source_order_number'] = $wallet->source_order_number ? $wallet->source_order_number : "N/A";
+      $data['tracking_number'] = $wallet->tracking_number ? $wallet->tracking_number : "N/A";
+
+      $purchases_at = $wallet->purchases_at;
+      $days = $purchases_at ? Carbon::parse($purchases_at)->diffInDays() : 0;
+      $data['day_count'] = $days <= 1 ? $days . ' Day' : $days . ' Days';
     }
     return $data;
   }

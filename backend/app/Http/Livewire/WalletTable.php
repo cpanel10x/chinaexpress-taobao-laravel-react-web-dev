@@ -116,7 +116,9 @@ class WalletTable extends TableComponent
       Column::make('Shipping Rate', 'shipping_rate')
         ->format(function (OrderItem $model) {
           $shipping_rate = $model->shipping_rate ? $model->shipping_rate : 0;
-          $html = '<span class="shipping_rate">' . ($shipping_rate) . '</span>';
+          $shipping_type = $model->shipping_type ? $model->shipping_type : null;
+          $rate = $shipping_type === 'regular' ? 'N/A' : $shipping_rate;
+          $html = '<span class="shipping_rate">' . ($rate) . '</span>';
           return $this->html($html);
         }),
       Column::make('Source Order Number', 'source_order_number')
@@ -244,12 +246,12 @@ class WalletTable extends TableComponent
       Column::make('Comments-1', 'comment1')
         ->format(function (OrderItem $model) {
           $htmlHref = $model->comment1 ? $model->comment1 : '';
-          return $this->html('<span class="comments1">' . $htmlHref . '</span>');
+          return $this->html('<span class="comment1">' . $htmlHref . '</span>');
         }),
       Column::make('Comments-2', 'comment2')
         ->format(function (OrderItem $model) {
           $htmlHref = $model->comment2 ? $model->comment2 : '';
-          return $this->html('<span class="comments2">' . $htmlHref . '</span>');
+          return $this->html('<span class="comment1">' . $htmlHref . '</span>');
         }),
     ];
   }

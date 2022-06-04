@@ -92,18 +92,24 @@ $currency = currency_icon();
                     $ItemId =$item->ItemId;
                     $ProviderType =$item->ProviderType;
                     $shipping_rate =$item->shipping_rate;
+                    $shipping_type =$item->shipping_type;
                     $itemLink = ($ProviderType == 'aliexpress') ? "https://www.aliexpress.com/item/{$ItemId}.html" :
                     "https://item.taobao.com/item.htm?id={$ItemId}";
                     $interNalLink = ($ProviderType == 'aliexpress') ? "https://www.chinaexpress.com.bd/aliexpress/product/{$ItemId}" :
                     "https://www.chinaexpress.com.bd/product/{$ItemId}";
                     @endphp
                     <a href="{{$interNalLink}}" target="_blank">{{strip_tags($Title)}}</a> <br>
-                    <p class="m-0"><b>Product Id:</b> {{$ItemId}}</p>
-                    <p class="m-0"><b>Source:</b><span>{{$ProviderType}}</span> </p>
-                    <p class="m-0"><b>Express Shipping Rate:</b> <span class="text-danger">
+                    <p class="m-0"><b>Product Id : </b> <span class="ml-2">{{$ItemId}}</span></p>
+                    <p class="m-0"><b>Source:</b><span class="ml-2">{{$ProviderType}}</span> </p>
+                    <p class="m-0"><b>Shipping Type:</b> <span class="text-danger ml-2">
+                        {{$shipping_type == 'regular' ? 'Regular' : 'Express'}}</span>
+                    </p>
+                    @if ($shipping_type != 'regular')
+                    <p class="m-0"><b>Express Shipping Rate:</b> <span class="text-danger ml-2">
                         {{$shipping_rate ? $shipping_rate : 0}} Per KG</span>
                     </p>
-                    <a href="{{$itemLink}}" target="_blank"> Source Link</a>
+                    @endif                    
+                    <p class="m-0"><b>Source Link:</b> <a href="{{$itemLink}}" class="ml-2" target="_blank"> Click Here</a></p>
                     <p class="m-0"><b>Item/Wallet Number:</b> {{$item->item_number}}</p>
                   </td>
                 </tr>

@@ -47,7 +47,7 @@ const AllOrders = () => {
 											<tr>
 												<th className="text-left">Date</th>
 												<th>OrderNo.</th>
-												{/*<th className="text-center">Tracking number</th>*/}
+												<th className="text-center">Tracking number</th>
 												<th className="text-center">Products Value</th>
 												<th className="text-center">Initial Payment</th>
 												<th>Due</th>
@@ -57,8 +57,8 @@ const AllOrders = () => {
 											</thead>
 											<tbody>
 											{
-												orders.length > 0 ?
-													orders.map((order, index) =>
+												orders?.length > 0 ?
+													orders?.map((order, index) =>
 														<OrderItemRow key={index} order={order} currency={currency}/>)
 													:
 													<tr>

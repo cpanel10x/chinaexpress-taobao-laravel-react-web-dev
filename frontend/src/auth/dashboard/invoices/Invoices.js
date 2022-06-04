@@ -35,11 +35,6 @@ const Invoices = () => {
 	const invoices = data?.invoices ? JSON.parse(data?.invoices) : [];
 	const totalPage = data?.totalPage ? data?.totalPage : 0;
 
-	if (!invoices?.length) {
-		return <Default404/>;
-	}
-
-
 	return (
 		<main className="main bg-gray">
 			<div className="page-content">

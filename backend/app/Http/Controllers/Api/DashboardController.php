@@ -53,7 +53,7 @@ class DashboardController extends Controller
     $limit = request('limit', 10);
     $offset = ($page * $limit);
 
-    $orders = OrderItem::with('order')
+    $orders = OrderItem::with('order:id,order_number,name,phone,shipping,billing,coupon_code,coupon_discount,payment_method,transaction_id')
       ->latest()
       ->where('user_id', $user_id)
       ->offset($offset)

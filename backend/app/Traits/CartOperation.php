@@ -266,18 +266,20 @@ trait CartOperation
         $item->delete();
       } else {
         $totalQty = $variations->sum('qty');
-        if ($item->ProviderType == 'aliexpress' && $item->shipping_type == 'express') {
-          $weight = $totalQty * $item->weight;
-          $process['DeliveryCost'] = get_aliExpress_shipping($weight);
-          $process['shipping_rate'] = get_aliExpress_air_shipping_rate($variations);
+        if ($item->ProviderType == 'aliexpress') {
+          if ($item->shipping_type == 'express') {
+            $weight = $totalQty * $item->weight;
+            $process['DeliveryCost'] = get_aliExpress_shipping($weight);
+            $process['shipping_rate'] = get_aliExpress_air_shipping_rate($variations);
+          }
         } else {
           $process['shipping_rate'] = get_aliExpress_air_shipping_rate($variations, 'taobao');
         }
         $item->update($process);
       }
-      if ($item->shipping_type != 'regular') {
-        $this->shippingCalculate($item);
-      }
+      // if ($item->shipping_type != 'regular') {
+      //   $this->shippingCalculate($item);
+      // }
     }
 
     return  $this->get_pure_cart($cart->id);

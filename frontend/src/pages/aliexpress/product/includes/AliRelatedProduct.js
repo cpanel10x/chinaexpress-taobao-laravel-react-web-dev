@@ -9,11 +9,7 @@ const AliRelatedProduct = props => {
 
 	const {data: products, isLoading} = useAliRelatedProduct(productId);
 
-	if (isLoading) {
-		return <ProductDetailsSkeleton/>;
-	}
-
-	if (isEmpty(products)) {
+	if (!products?.length) {
 		return 'Product will be loaded soon';
 	}
 
