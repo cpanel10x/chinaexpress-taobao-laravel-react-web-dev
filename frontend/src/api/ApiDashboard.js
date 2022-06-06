@@ -31,6 +31,14 @@ export const useCustomerOrderDetails = (tran_id) => useQuery(['useOrderDetails',
 	}
 });
 
+export const useCustomerWalletDetails = (id) => useQuery(['useCustomerWalletDetails', id], async () => {
+	try {
+		const {data} = await instance.get(`/dashboard/wallet/${id}`);
+		return data?.wallet ? data.wallet : {};
+	} catch (error) {
+		console.log(error);
+	}
+});
 
 export const useRepaymentOrderByBkash = () => useMutation('useRepaymentOrderByBkash', async (props) => {
 	try {

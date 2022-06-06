@@ -32,7 +32,6 @@ export const useHome = () => {
 	}
 };
 
-
 export const useSettings = (process) => useQuery(["settings"], async () => {
 	try {
 		const {data} = await instance.get(`/general`, {params:process});

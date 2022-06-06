@@ -2,38 +2,36 @@ import React, {useEffect} from "react";
 import {goPageTop} from "../../../utils/Helpers";
 import {useParams} from "react-router-dom";
 import PageSkeleton from "../../../skeleton/PageSkeleton";
-import {useCustomerOrderDetails} from "../../../api/ApiDashboard";
+import {useCustomerWalletDetails} from "../../../api/ApiDashboard";
 import Default404 from "../../../pages/404/Default404";
-import OrderBody from "./includes/OrderBody";
 import {useSettings} from "../../../api/GeneralApi";
-import OrderSummary from "./includes/OrderSummary";
-import RePayment from "./includes/RePayment";
 import Breadcrumb from "../../../pages/breadcrumb/Breadcrumb";
 import Helmet from "react-helmet";
 import {analyticsPageView} from "../../../utils/AnalyticsHelpers";
+import WalletBody from "./includes/WalletBody";
 
-const OrderDetails = props => {
-	const {tran_id} = useParams();
+const WalletDetails = () => {
+	const {id} = useParams();
 	const {data: settings} = useSettings();
-	const {data: order, isLoading} = useCustomerOrderDetails(tran_id);
+	const {data: wallet, isLoading} = useCustomerWalletDetails(id);
 
 	useEffect(() => {
 		goPageTop();
 		analyticsPageView();
-	}, [tran_id]);
+	}, [id]);
 
 	if (isLoading) {
 		return <PageSkeleton/>;
 	}
 
 
-	if (!order?.order_number) {
+	if (!wallet?.id) {
 		return <Default404/>;
 	}
 
 	const currency = settings?.currency_icon || '৳';
 	const ShippingCharges = settings?.air_shipping_charges || '';
-	const order_items = order?.order_items || [];
+	const item_variations = wallet?.item_variations || [];
 
 	return (
 		<main className="main bg-gray">
@@ -54,7 +52,7 @@ const OrderDetails = props => {
 						<aside className="col-md-12 col-lg-8">
 							<div className="card my-3">
 								<div className="card-body">
-									<h2>Order details #{order.order_number}</h2>
+									<h2>Order details #{wallet.item_number}</h2>
 									<hr className="my-2"/>
 
 									<div className="row">
@@ -66,17 +64,171 @@ const OrderDetails = props => {
 
 									<hr className="my-2"/>
 									{
-										order_items?.length > 0 &&
-										order_items.map((product, index) =>
-											<OrderBody product={product} currency={currency} key={index}/>
+										item_variations?.length > 0 &&
+										item_variations.map((variation, index) =>
+											<WalletBody wallet={wallet} variation={variation} currency={currency} key={index}/>
 										)
 									}
 
-									<OrderSummary order={order} order_items={order_items} currency={currency}/>
+									<div className="summary_row">
+										<div className="row">
+											<div className="col-12 text-right">
+												<p className="my-2">
+													<span
+														className="mr-2">Product Value: </span><strong> {`${currency} ${wallet.product_value}`} </strong>
+												</p>
+											</div>
+										</div>
+										{
+											wallet.DeliveryCost > 0 &&
+											<div className="row">
+												<div className="col-12 text-right">
+													<p className="my-2">
+														<span
+															className="mr-2">China Delivery Cost: </span><strong> {`${currency} ${wallet.DeliveryCost}`} </strong>
+													</p>
+												</div>
+											</div>
+										}
+										<div className="row">
+											<div className="col-12 text-right">
+												<p className="my-2">
+													<span
+														className="mr-2">Sub Total: </span><strong> {`${currency} ${(Number(wallet.product_value) + Number(wallet.DeliveryCost))}`} </strong>
+												</p>
+											</div>
+										</div>
+										<div className="row">
+											<div className="col-12 text-right">
+												<p className="my-2">
+													<span
+														className="mr-2">Initial Payment: </span><strong> {`${currency} ${wallet.first_payment}`} </strong>
+												</p>
+											</div>
+										</div>
+										{
+											wallet?.coupon_contribution > 0 &&
+											<div className="row">
+												<div className="col-12 text-right">
+													<p className="my-2">
+														<span
+															className="mr-2">Coupon: </span><strong> {`${currency} ${wallet.coupon_contribution}`} </strong>
+													</p>
+												</div>
+											</div>
+										}
+										{
+											wallet?.bd_shipping_charge > 0 &&
+											<div className="row">
+												<div className="col-12 text-right">
+													<p className="my-2">
+														<span
+															className="mr-2">BD Shipping Charge: </span><strong> {`${currency} ${wallet.bd_shipping_charge}`} </strong>
+													</p>
+												</div>
+											</div>
+										}
+										{
+											wallet?.courier_bill > 0 &&
+											<div className="row">
+												<div className="col-12 text-right">
+													<p className="my-2">
+														<span
+															className="mr-2">Courier Bill: </span><strong> {`${currency} ${wallet.courier_bill}`} </strong>
+													</p>
+												</div>
+											</div>
+										}
+										{
+											wallet?.out_of_stock > 0 &&
+											<div className="row">
+												<div className="col-12 text-right">
+													<p className="my-2">
+														<span
+															className="mr-2">Out of Stock: </span><strong> {`${currency} ${wallet.out_of_stock}`} </strong>
+													</p>
+												</div>
+											</div>
+										}
+										{
+											wallet?.lost_in_transit > 0 &&
+											<div className="row">
+												<div className="col-12 text-right">
+													<p className="my-2">
+														<span
+															className="mr-2">Lost In Transit: </span><strong> {`${currency} ${wallet.lost_in_transit}`} </strong>
+													</p>
+												</div>
+											</div>
+										}
+										{
+											wallet?.customer_tax > 0 &&
+											<div className="row">
+												<div className="col-12 text-right">
+													<p className="my-2">
+														<span
+															className="mr-2">Customer Tax: </span><strong> {`${currency} ${wallet.customer_tax}`} </strong>
+													</p>
+												</div>
+											</div>
+										}
+										{
+											wallet?.missing > 0 &&
+											<div className="row">
+												<div className="col-12 text-right">
+													<p className="my-2">
+														<span
+															className="mr-2">Missing: </span><strong> {`${currency} ${wallet.missing}`} </strong>
+													</p>
+												</div>
+											</div>
+										}
+										{
+											wallet?.adjustment > 0 &&
+											<div className="row">
+												<div className="col-12 text-right">
+													<p className="my-2">
+														<span
+															className="mr-2">Adjustment: </span><strong> {`${currency} ${wallet.adjustment}`} </strong>
+													</p>
+												</div>
+											</div>
+										}
+										{
+											wallet?.refunded > 0 &&
+											<div className="row">
+												<div className="col-12 text-right">
+													<p className="my-2">
+														<span
+															className="mr-2">Refunded: </span><strong> {`${currency} ${wallet.refunded}`} </strong>
+													</p>
+												</div>
+											</div>
+										}
+										{
+											wallet?.last_payment > 0 &&
+											<div className="row">
+												<div className="col-12 text-right">
+													<p className="my-2">
+														<span
+															className="mr-2">Last Payment: </span><strong> {`${currency} ${wallet.last_payment}`} </strong>
+													</p>
+												</div>
+											</div>
+										}
+										{
+											wallet?.due_payment > 0 &&
+											<div className="row">
+												<div className="col-12 text-right">
+													<p className="my-2">
+														<span
+															className="mr-2">Due Payment: </span><strong> {`${currency} ${wallet.due_payment}`} </strong>
+													</p>
+												</div>
+											</div>
+										}
+									</div>
 
-									{order?.status === 'waiting-for-payment' && <hr className="my-2"/>}
-
-									{order?.status === 'waiting-for-payment' && <RePayment order={order}/>}
 
 								</div>
 							</div>
@@ -89,4 +241,4 @@ const OrderDetails = props => {
 };
 
 
-export default OrderDetails;
+export default WalletDetails;

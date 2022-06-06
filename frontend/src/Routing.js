@@ -31,6 +31,7 @@ import FavoriteProduct from "./pages/favorite/FavoriteProduct";
 import RecentViewProduct from "./pages/recent-view/RecentViewProduct";
 import Invoices from "./auth/dashboard/invoices/Invoices";
 import InvoiceDetails from "./auth/dashboard/invoices/InvoiceDetails";
+import WalletDetails from "./auth/dashboard/orders/WalletDetails";
 
 const Routing = () => {
 
@@ -74,12 +75,13 @@ const Routing = () => {
 			<AuthRoute path="/online/payment/:status" exact component={OnlinePaymentStatus}/>
 			<AuthRoute path="/dashboard" exact component={Dashboard}/>
 			<AuthRoute path="/dashboard/orders" exact component={AllOrders}/>
+			<AuthRoute path="/dashboard/orders/:tran_id" exact component={OrderDetails}/>
+			<AuthRoute path="/dashboard/wallet/:id" exact component={WalletDetails}/>
 			<AuthRoute path="/dashboard/my-invoice" exact component={Invoices}/>
 			<AuthRoute path="/dashboard/invoice/:invoice_id" exact component={InvoiceDetails}/>
 			<AuthRoute path="/dashboard/wishlist" exact component={Wishlist}/>
 			<AuthRoute path="/dashboard/address" exact component={ManageAddress}/>
 			<AuthRoute path="/dashboard/profile" exact component={Profile}/>
-			<AuthRoute path="/dashboard/orders/:tran_id" exact component={OrderDetails}/>
 
 			<Route
 				path="/:category_slug/:sub_slug?"

@@ -23,7 +23,7 @@ function OrderItemRow({order, currency}) {
 					order.status === 'waiting-for-payment' ?
 						<Link to={`/dashboard/orders/${order.order.transaction_id}`} className="btn btn-block btn-default">PayNow</Link>
 						:
-						<Link to={`/dashboard/orders/${order.order.transaction_id}`} className="btn btn-block btn-success">View</Link>
+						<Link to={`/dashboard/wallet/${order.id}`} className="btn btn-block btn-success">View</Link>
 				}
 			</td>
 		</tr>
