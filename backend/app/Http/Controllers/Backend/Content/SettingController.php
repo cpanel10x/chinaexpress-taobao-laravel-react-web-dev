@@ -3,19 +3,20 @@
 namespace App\Http\Controllers\Backend\Content;
 
 use App\Http\Controllers\Controller;
-use App\Models\Backend\BlockWords;
 use App\Models\Content\Setting;
+use App\Repositories\Frontend\Settings\SettingRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Storage;
 
 class SettingController extends Controller
 {
 
-  public function __construct()
+  public $settingRepository;
+
+  public function __construct(SettingRepository $settingRepository)
   {
-    // setting will cache if change any settings
+    $this->settingRepository = $settingRepository;
   }
 
   public function general()

@@ -79,6 +79,20 @@ class DashboardController extends Controller
     ]);
   }
 
+  public function walletDetails($id)
+  {
+    $user_id = auth()->id();
+    $wallet = OrderItem::with('order', 'itemVariations')
+      ->latest()
+      ->where('user_id', $user_id)
+      ->where('id', $id)
+      ->first();
+    return response([
+      'wallet' => $wallet
+    ]);
+  }
+
+
   public function paymentGenerate()
   {
     $tran_id = request('tran_id');
