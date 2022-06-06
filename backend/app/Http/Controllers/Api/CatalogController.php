@@ -8,18 +8,24 @@ use App\Models\Content\Post;
 use App\Models\Content\Product;
 use App\Models\Content\SearchLog;
 use App\Models\Content\Taxonomy;
+use App\Repositories\Backend\CatalogRepository;
+use App\Repositories\Backend\TaxonomyRepository;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Validator;
 
 class CatalogController extends Controller
 {
+  public $catalogRepository;
 
-  public function categories()
+  public function __construct(CatalogRepository $catalogRepository)
   {
-    $categories = Taxonomy::whereNotNull('active')
-      ->withCount('children')
-      ->get();
+    $this->catalogRepository = $catalogRepository;
+  }
 
+  public function categories(Request $request)
+  {
+    $categories = $this->catalogRepository->frontendList($request);
     return response([
       'categories' => $categories
     ]);

@@ -11,7 +11,7 @@ export const useHome = () => {
 		} catch (error) {
 			console.log(error);
 		}
-	},{
+	}, {
 		refetchOnMount: false,
 	});
 
@@ -22,7 +22,7 @@ export const useHome = () => {
 		} catch (error) {
 			console.log(error);
 		}
-	},{
+	}, {
 		refetchOnMount: false,
 	});
 
@@ -33,19 +33,16 @@ export const useHome = () => {
 };
 
 
-
-
-export const useSettings = (process) => useQuery(["settings"], async (process) => {
+export const useSettings = (process) => useQuery(["settings"], async () => {
 	try {
-		const {data} = await instance.post(`/general`, process);
+		const {data} = await instance.get(`/general`, {params:process});
 		return data?.settings ? JSON.parse(data?.settings) : {};
 	} catch (error) {
 		console.log(error);
 	}
-},{
+}, {
 	refetchOnMount: false,
 });
-
 
 
 export const usePageData = (slug) => useQuery(['pageData', slug], async () => {
@@ -55,10 +52,9 @@ export const usePageData = (slug) => useQuery(['pageData', slug], async () => {
 	} catch (error) {
 		console.log(error);
 	}
-},{
+}, {
 	refetchOnMount: false,
 });
-
 
 
 export const useCustomPageData = (url, Key) => useQuery(['customPageData', Key], async () => {
@@ -68,7 +64,7 @@ export const useCustomPageData = (url, Key) => useQuery(['customPageData', Key],
 	} catch (error) {
 		console.log(error);
 	}
-},{
+}, {
 	refetchOnMount: false,
 });
 
@@ -83,8 +79,9 @@ export const useAllCategories = () => useQuery('allCategories', async () => {
 			console.log('load cache');
 			return saveData?.data;
 		} else {
-			const {data} = await instance.post(`/categories`, {});
+			const {data} = await instance.get(`/categories`, {params: {update_token: '1234'}});
 			const expire = new Date(startTime + 30 * 60000).getTime(); // expire after 30 minutes
+			// const categories = data?.categories ? JSON.parse(data?.categories) : [];
 			const categories = data?.categories ? data?.categories : [];
 			localStorage.setItem('cats', JSON.stringify({expire: expire, data: categories}));
 			console.log('load server');
@@ -93,10 +90,9 @@ export const useAllCategories = () => useQuery('allCategories', async () => {
 	} catch (error) {
 		throw Error(error.response.statusText);
 	}
-},{
+}, {
 	refetchOnMount: false,
 });
-
 
 
 export const useContactMessage = () => useMutation("useContactMessage", async (props) => {

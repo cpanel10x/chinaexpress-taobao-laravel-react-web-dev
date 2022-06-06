@@ -59,7 +59,7 @@ export const useNewArrivedProducts = (page = 1) => useQuery(["useNewArrivedProdu
 
 export const useFavoriteProducts = (page = 1) => useQuery(["useFavoriteProducts", page], async () => {
 	try {
-		const {data} = await instance.get(`favorite-products`, {params: {page, limit:15}});
+		const {data} = await instance.get(`favorite-products`, {params: {page, limit: 15}});
 		return data;
 	} catch (error) {
 		console.log(error);
@@ -69,7 +69,7 @@ export const useFavoriteProducts = (page = 1) => useQuery(["useFavoriteProducts"
 });
 
 
-export const useRecentViewProducts = (page=1) => useQuery(["useRecentViewProducts", page], async () => {
+export const useRecentViewProducts = (page = 1) => useQuery(["useRecentViewProducts", page], async () => {
 	const recent_view = recent_view_token();
 	try {
 		const {data} = await instance.get(`recent-view-products`, {params: {recent_view, page}});
@@ -149,7 +149,7 @@ export const useSearchPictureUpload = () => useMutation(["search-picture"], asyn
 
 export const usePictureSearch = (search_id, page = 1) => useQuery(["picture", search_id, page], async () => {
 	try {
-		const {data} = await instance.post(`get-picture-result/${search_id}`, {page});
+		const {data} = await instance.get(`get-picture-result/${search_id}`, {params: {page}});
 		return data?.products ? JSON.parse(data?.products) : {};
 	} catch (error) {
 		throw Error(error.response.statusText);

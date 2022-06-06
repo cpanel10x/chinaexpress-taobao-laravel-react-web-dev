@@ -22,12 +22,18 @@ class OrderController extends Controller
     try {
       $days = get_setting('incomplete_order_deletion_after_day', 90);
       $before = Carbon::now()->subDays($days)->endOfDay()->toDateTimeString();
-      $orders_arr = Order::where('status', 'waiting-for-payment')
+      $items = OrderItem::where('status', 'waiting-for-payment')
         ->where('created_at', '<', $before)
-        ->pluck('id');
-      OrderItem::whereIn('order_id',  $orders_arr)->delete();
-      OrderItemVariation::whereIn('order_id', $orders_arr)->delete();
-      Order::whereIn('id', $orders_arr)->delete();
+        ->get();
+      foreach ($items as $item) {
+        $order_id = $item->order_id;
+        OrderItemVariation::where('item_id', $item->id)->delete();
+        $item->delete();
+        $order = Order::withCount('orderItems')->where('id', $order_id)->first();
+        if ($order->order_items_count == 0) {
+          $order->delete();
+        }
+      }
     } catch (\Exception $ex) {
       dump('incomplete_order deletion error');
     }

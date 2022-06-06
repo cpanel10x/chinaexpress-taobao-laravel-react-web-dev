@@ -29,7 +29,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::group(['prefix' => 'v1', 'as' => 'v1.'], function () {
-  Route::post('/general', [GeneralController::class, 'generalSettings']);
+  Route::get('/general', [GeneralController::class, 'generalSettings']);
   Route::post('/banners', [GeneralController::class, 'banners']);
 
   Route::get('/faqs', [GeneralController::class, 'faqPages']);
@@ -47,7 +47,7 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function () {
   Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
   Route::post('/reset-password', [AuthController::class, 'resetPassword']);
 
-  Route::post('/categories', [CatalogController::class, 'categories']);
+  Route::get('/categories', [CatalogController::class, 'categories']);
 
   Route::get('/get-section-products', [CatalogController::class, 'getSectionProducts']);
   Route::post('/product/{id}', [CatalogController::class, 'productDetails']);
@@ -60,7 +60,7 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function () {
   Route::get('/search', [CatalogController::class, 'getSearchResult']);
   Route::post('/search/suggestion', [CatalogController::class, 'searchSuggestion']);
   Route::post('/search-process', [CatalogController::class, 'searchProcess']);
-  Route::post('/get-picture-result/{search_id}', [CatalogController::class, 'getPictureSearchResult']);
+  Route::get('/get-picture-result/{search_id}', [CatalogController::class, 'getPictureSearchResult']);
   Route::post('/search-picture', [CatalogController::class, 'searchPicture']);
   Route::post('/vendor-items', [CatalogController::class, 'SearchVendorItems']);
 
