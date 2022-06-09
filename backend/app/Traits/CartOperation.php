@@ -189,16 +189,22 @@ trait CartOperation
     $ProviderType = $item ? $item->ProviderType : null;
     $shipping_type = getArrayKeyData($process, 'shipping_type', $ship_type);
 
-    if ($ProviderType == 'aliexpress' && $shipping_type == 'express') {
-      $totalQty = $variations->sum('qty');
-      $weight = $totalQty * $item->weight;
-      $aliTotal = get_setting('express_shipping_min_value');
-      $process['DeliveryCost'] = get_aliExpress_shipping($weight);
-      if ($totalPrice < $aliTotal) {
-        $process['shipping_type'] = null;
-        $process['DeliveryCost'] = 0;
+    if ($ProviderType == 'aliexpress') {
+      if ($shipping_type == 'express') {
+        $totalQty = $variations->sum('qty');
+        $weight = $totalQty * $item->weight;
+        $aliTotal = get_setting('express_shipping_min_value');
+        $process['DeliveryCost'] = get_aliExpress_shipping($weight);
+        if ($totalPrice < $aliTotal) {
+          $process['shipping_type'] = null;
+          $process['DeliveryCost'] = 0;
+        }
+        $process['shipping_rate'] = get_aliExpress_air_shipping_rate($variations);
+      } elseif ($shipping_type == 'regular') {
+        $prevDelCost = $item ? $item->DeliveryCost : 0;
+        $delCost = request('DeliveryCost', $prevDelCost);
+        $process['DeliveryCost'] = $delCost;
       }
-      $process['shipping_rate'] = get_aliExpress_air_shipping_rate($variations);
     } else {
       $process['shipping_rate'] = get_aliExpress_air_shipping_rate($variations, 'taobao');
     }
@@ -265,21 +271,8 @@ trait CartOperation
         $process['shipping_rate'] = null;
         $item->delete();
       } else {
-        $totalQty = $variations->sum('qty');
-        if ($item->ProviderType == 'aliexpress') {
-          if ($item->shipping_type == 'express') {
-            $weight = $totalQty * $item->weight;
-            $process['DeliveryCost'] = get_aliExpress_shipping($weight);
-            $process['shipping_rate'] = get_aliExpress_air_shipping_rate($variations);
-          }
-        } else {
-          $process['shipping_rate'] = get_aliExpress_air_shipping_rate($variations, 'taobao');
-        }
-        $item->update($process);
+        $this->shippingCalculate($item);
       }
-      // if ($item->shipping_type != 'regular') {
-      //   $this->shippingCalculate($item);
-      // }
     }
 
     return  $this->get_pure_cart($cart->id);
@@ -365,6 +358,11 @@ trait CartOperation
           ->update(['is_checked' => (int) $is_checked]);
       }
     }
+
+    if (!$cart) {
+      return [];
+    }
+
     return  $this->get_pure_cart($cart->id);
   }
 

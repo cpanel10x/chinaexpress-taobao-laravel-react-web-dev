@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Content\PaymentToken;
+use App\Repositories\Backend\CartRepository;
 use App\Traits\CartOperation;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
 
@@ -13,9 +15,17 @@ class CartController extends Controller
   use CartOperation;
 
 
-  public function currentCart()
+  public $cartRepository;
+
+  public function __construct(CartRepository $cartRepository)
   {
-    $cart = $this->get_customer_cart();
+    $this->cartRepository = $cartRepository;
+  }
+
+
+  public function currentCart(Request $request)
+  {
+    $cart = $this->cartRepository->get_customer_cart($request);
     $cart_token = $cart->cart_uid ?? NULL;
     return response([
       'cart_token' => $cart_token,
@@ -23,9 +33,9 @@ class CartController extends Controller
     ]);
   }
 
-  public function checkoutCart()
+  public function checkoutCart(Request $request)
   {
-    $cart = $this->get_checkout_cart();
+    $cart = $this->cartRepository->get_checkout_cart($request);
     $cart_token = $cart->cart_uid ?? NULL;
     return response([
       'cart_token' => $cart_token,
