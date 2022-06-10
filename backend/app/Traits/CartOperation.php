@@ -464,7 +464,11 @@ trait CartOperation
       foreach ($cartItems as $product) {
         $ProviderType = $product->ProviderType;
         $ship_method = $product->shipping_type;
-        $del_cost = ($ship_method == 'regular' && $ProviderType == 'aliexpress') ? 0 : $product->DeliveryCost;
+        $shipping_rate = $product->shipping_rate;
+        $DeliveryCost = $product->DeliveryCost;
+        if (($ship_method == 'regular' && $ProviderType == 'aliexpress')) {
+          $shipping_rate = 0;
+        }
 
         $orderItem = OrderItem::create([
           'order_id' => $order_id,
@@ -476,11 +480,11 @@ trait CartOperation
           'MainPictureUrl' => $product->MainPictureUrl,
           'regular_price' => $product->ProductPrice,
           'weight' => $product->weight,
-          'DeliveryCost' => $del_cost,
           'Quantity' => $product->Quantity,
           'hasConfigurators' => $product->hasConfigurators,
           'shipped_by' => $product->shipped_by,
-          'shipping_rate' => $product->shipping_rate,
+          'DeliveryCost' => $DeliveryCost,
+          'shipping_rate' => $shipping_rate,
           'shipping_from' => $product->shipping_from,
           'status' => $status,
           'tracking_number' => null,

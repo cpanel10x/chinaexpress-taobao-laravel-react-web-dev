@@ -95,7 +95,8 @@ $currency = currency_icon();
                     $shipping_type =$item->shipping_type;
                     $itemLink = ($ProviderType == 'aliexpress') ? "https://www.aliexpress.com/item/{$ItemId}.html" :
                     "https://item.taobao.com/item.htm?id={$ItemId}";
-                    $interNalLink = ($ProviderType == 'aliexpress') ? "https://www.chinaexpress.com.bd/aliexpress/product/{$ItemId}" :
+                    $interNalLink = ($ProviderType == 'aliexpress') ?
+                    "https://www.chinaexpress.com.bd/aliexpress/product/{$ItemId}" :
                     "https://www.chinaexpress.com.bd/product/{$ItemId}";
                     @endphp
                     <a href="{{$interNalLink}}" target="_blank">{{strip_tags($Title)}}</a> <br>
@@ -108,8 +109,9 @@ $currency = currency_icon();
                     <p class="m-0"><b>Express Shipping Rate:</b> <span class="text-danger ml-2">
                         {{$shipping_rate ? $shipping_rate : 0}} Per KG</span>
                     </p>
-                    @endif                    
-                    <p class="m-0"><b>Source Link:</b> <a href="{{$itemLink}}" class="ml-2" target="_blank"> Click Here</a></p>
+                    @endif
+                    <p class="m-0"><b>Source Link:</b> <a href="{{$itemLink}}" class="ml-2" target="_blank"> Click
+                        Here</a></p>
                     <p class="m-0"><b>Item/Wallet Number:</b> {{$item->item_number}}</p>
                   </td>
                 </tr>
@@ -150,7 +152,13 @@ $currency = currency_icon();
                 </tr>
                 @endforeach
                 <tr>
-                  <td class="text-right align-middle" colspan="3">China Local Shipping</td>
+                  <td class="text-right align-middle" colspan="3">
+                    @if ($shipping_type == 'regular')
+                    China to BD Shipping Charge
+                    @else
+                    China Local Shipping
+                    @endif
+                  </td>
                   <td class="text-right align-middle">{{$DeliveryCost}}</td>
                 </tr>
                 <tr>

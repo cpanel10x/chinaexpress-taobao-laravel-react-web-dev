@@ -216,17 +216,14 @@ const WalletDetails = () => {
 												</div>
 											</div>
 										}
-										{
-											wallet?.due_payment > 0 &&
 											<div className="row">
 												<div className="col-12 text-right">
 													<p className="my-2">
 														<span
-															className="mr-2">Due Payment: </span><strong> {`${currency} ${wallet.due_payment}`} </strong>
+															className="mr-2">Due After Calculate: </span><strong> {`${currency} ${wallet.due_payment || 0}`} </strong>
 													</p>
 												</div>
 											</div>
-										}
 									</div>
 
 

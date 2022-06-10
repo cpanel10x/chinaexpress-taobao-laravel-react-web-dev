@@ -28,7 +28,8 @@ const OrderBody = (props) => {
 					<div className="variation" key={index}>
 						<div className="row align-items-center">
 							<div className="col-2">
-								<AttributeImage product={product} productPageLink={productPageLink(product)} attributes={variation?.attributes}/>
+								<AttributeImage product={product} productPageLink={productPageLink(product)}
+																attributes={variation?.attributes}/>
 							</div>
 							<div className="col-10">
 
@@ -49,18 +50,21 @@ const OrderBody = (props) => {
 									JSON.parse(variation?.attributes).length > 0 &&
 									<div className="row">
 										<div className="col-12">
-											<div className="mb-2 small">Variations: <strong><AttrConfigs attributes={variation?.attributes}/></strong></div>
+											<div className="mb-2 small">Variations: <strong><AttrConfigs attributes={variation?.attributes}/></strong>
+											</div>
 										</div>
 									</div>
 								}
 								<div className="row align-items-center">
 									<div className="col-6 text-left ">
-										<p className="m-0 pt-3 pt-lg-0"><strong>{`${currency + ' ' + variation.price} x ${variation.qty}`}</strong>
+										<p className="m-0 pt-3 pt-lg-0">
+											<strong>{`${currency + ' ' + variation.price} x ${variation.qty}`}</strong>
 										</p>
 									</div>
 									<div className="col-6 text-right">
 										<p className="m-0 pt-3 pt-lg-0">
-											<strong>{`${currency + ' ' + Math.round(Number(variation.qty) * Number(variation.price))}`}</strong></p>
+											<strong>{`${currency + ' ' + Math.round(Number(variation.qty) * Number(variation.price))}`}</strong>
+										</p>
 									</div>
 								</div>
 
@@ -74,20 +78,20 @@ const OrderBody = (props) => {
 			}
 			<div className="clearfix">
 				<div className="text-right">
-					Product Total: <strong>{currency + ' ' + (parseInt(product?.product_value) - parseInt(product?.DeliveryCost))}</strong>
+					Product Total: <strong>{currency + ' ' + Number(product?.product_value)}</strong>
 				</div>
 			</div>
 			<hr className="my-2"/>
 			{
-				product?.ProviderType === "aliexpress" && parseInt(product?.DeliveryCost) > 0 &&
+				product?.ProviderType === "aliexpress" && Number(product?.DeliveryCost) > 0 &&
 				<div className="row">
 					<div className="col-12">
 						<div className="text-right">
 							{
-								product?.shipping_type === 'express' ?
-									`China Local Delivery Charge: `
-									:
+								product?.shipping_type === 'regular' ?
 									`China to BD Shipping Charge: `
+									:
+									`China Local Delivery Charge: `
 							}
 							<strong>{currency + ' ' + product?.DeliveryCost}</strong>
 						</div>
@@ -96,7 +100,7 @@ const OrderBody = (props) => {
 			}
 
 			{
-				product?.ProviderType !== "aliexpress" && parseInt(product?.DeliveryCost) > 0 &&
+				product?.ProviderType !== "aliexpress" && Number(product?.DeliveryCost) > 0 &&
 				<div className="row">
 					<div className="col-12">
 						<div className="text-right">
@@ -109,7 +113,7 @@ const OrderBody = (props) => {
 
 			<div className="row">
 				<div className="col-12">
-					<div className="text-right">Subtotal: <strong>{currency + ' ' + product?.product_value}</strong>
+					<div className="text-right">Subtotal: <strong>{currency + ' ' + (Number(product?.product_value) + Number(product?.DeliveryCost))}</strong>
 					</div>
 				</div>
 			</div>

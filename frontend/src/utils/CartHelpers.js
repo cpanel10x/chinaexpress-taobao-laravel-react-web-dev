@@ -593,7 +593,7 @@ export const orderSummaryCalculation = (order_items) => {
     let firstPayment = 0;
     let dueAmount = 0;
     order_items?.map(item => {
-        let price = parseInt(item.product_value);
+        let price = Number(item.product_value) + Number(item.DeliveryCost);
         let firstPrice = parseInt(item.first_payment);
         productValue += price;
         firstPayment += firstPrice;

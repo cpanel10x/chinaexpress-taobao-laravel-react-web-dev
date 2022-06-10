@@ -23,6 +23,7 @@ const ItemCheck = (props) => {
 			{variation_id, checked},
 			{
 				onSuccess: (cart) => {
+					cache.setQueryData("customer_cart", cart);
 					cache.setQueryData("useCheckoutCart", cart);
 				}
 			}
@@ -39,9 +40,9 @@ const ItemCheck = (props) => {
 					: (
 						<div className="pretty p-default p-round">
 							<input type="checkbox"
-							       id={`variation_${variation.configId}`}
-							       checked={isChecked}
-							       onChange={event => checkedItem(event)}/>
+										 id={`variation_${variation.configId}`}
+										 checked={isChecked}
+										 onChange={event => checkedItem(event)}/>
 							<div className="state">
 								<label htmlFor={`variation_${variation.configId}`}/>
 							</div>
