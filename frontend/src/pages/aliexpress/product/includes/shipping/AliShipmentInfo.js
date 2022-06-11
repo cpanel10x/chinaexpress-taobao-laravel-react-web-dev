@@ -29,12 +29,21 @@ const AliShipmentInfo = props => {
 		if (!selectShipping && freightList?.length > 0) {
 			setSelectShipping(freightList?.[0]);
 		}
+	}, [freightList, selectShipping]);
+
+	useEffect(() => {
+		if (!selectShipping && freightList?.length > 0) {
+			setSelectShipping(freightList?.[0]);
+		}
 		if (cartItem?.shipping_type) {
 			setActiveShipping(cartItem?.shipping_type);
 		}
 	}, [freightList, setSelectShipping, cartItem]);
 
 	const shippingRate = (amount) => {
+		if (!amount) {
+			return 0;
+		}
 		return aliProductConvertionPrice(amount, aliRate);
 	};
 
@@ -50,13 +59,21 @@ const AliShipmentInfo = props => {
 
 	useEffect(() => {
 		if (!isExpressEnable) {
-			const shipping_cost = shippingRate(selectShipping?.delivery_fee || 0);
-			if (freightList?.length > 0) {
-				setActiveShipping('regular');
-				updateShippingInformation({shipping_cost, shipping_type: 'regular'});
-			} else {
+			const delivery_fee = selectShipping?.delivery_fee;
+			let nextProcess = true;
+			if (delivery_fee !== undefined) {
+				const shipping_cost = shippingRate(delivery_fee);
+				if (shipping_cost) {
+					console.log('has shipping const');
+					setActiveShipping('regular');
+					updateShippingInformation({shipping_cost, shipping_type: 'regular'});
+					nextProcess = false;
+				}
+			}
+			if (nextProcess && !freightList?.length) {
+				console.log('has no shipping const');
 				setActiveShipping();
-				updateShippingInformation({shipping_cost, shipping_type: null});
+				updateShippingInformation({shipping_cost: 0, shipping_type: null});
 			}
 		}
 	}, [isExpressEnable, selectShipping]);
