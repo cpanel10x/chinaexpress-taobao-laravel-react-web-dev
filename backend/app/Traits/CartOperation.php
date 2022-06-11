@@ -202,7 +202,7 @@ trait CartOperation
         $process['shipping_rate'] = get_aliExpress_air_shipping_rate($variations);
       } elseif ($shipping_type == 'regular') {
         $prevDelCost = $item ? $item->DeliveryCost : 0;
-        $delCost = request('DeliveryCost', $prevDelCost);
+        $delCost = request('shipping_cost', $prevDelCost);
         $process['DeliveryCost'] = $delCost;
       }
     } else {
@@ -313,11 +313,9 @@ trait CartOperation
         'is_express_popup_shown' => null,
         'is_popup_shown' => null,
         'IsCart' => null,
-        'shipping_type' => $shipping
+        'shipping_type' => $shipping,
+        'DeliveryCost' => $DeliveryCost,
       ];
-      if ($DeliveryCost !== null) {
-        $data['DeliveryCost'] = $DeliveryCost;
-      }
       $item = CartItem::where('cart_id', $cart->id)
         ->where('ItemId', $item_id)->first();
       $this->shippingCalculate($item, $data);

@@ -56,7 +56,7 @@ class CartController extends Controller
     return response(['status' => true, 'cart' => $cart, 'msg' => 'Product marked successfully']);
   }
 
-  public function choose_shipping()
+  public function choose_shipping(Request $request)
   {
     $cart = $this->ali_product_choose_shipping();
     return response(['status' => true, 'cart' => $cart, 'msg' => 'Product add to express service successfully']);
