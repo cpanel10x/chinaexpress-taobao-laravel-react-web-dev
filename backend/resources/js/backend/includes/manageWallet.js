@@ -576,8 +576,14 @@ function remove_space(stringData) {
 
   function walletInfoDetails(resData) {
     var wallet = resData.data
+    var source_link = (wallet.ProviderType == 'aliexpress') ? `https://www.aliexpress.com/item/${wallet.ItemId}.html` :
+    `https://item.taobao.com/item.htm?id=${wallet.ItemId}`;
+
     var html = `<div class="card"><div class="card-body">`;
     html += `<h5>${wallet.Title}</h5>`;
+    html += `<p class="m-0"><b>ChinaExpress Link:</b> <a href="${ wallet.ProviderType == "Taobao" ?  `/product/${wallet.ItemId}` : `/aliexpress/product/${wallet.ItemId}`}" target="_blank">Click here</a></p>`;
+    html += `<p class="m-0 text-capitalize"><b>Provider:</b> ${wallet.ProviderType}</p>`;
+    html += `<p><b>Source Link:</b> <a href="${source_link}" target="_blank">Click here</a></p>`;
     html += `<table class="table table-bordered">`;
     html += walletVariationsInfo(wallet);
     html += walletSummaryInfo(wallet);

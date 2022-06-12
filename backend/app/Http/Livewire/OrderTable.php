@@ -83,7 +83,10 @@ class OrderTable extends TableComponent
         ->searchable(),
       Column::make('Amount', 'amount')
         ->format(function (Order $model) {
-          return '৳ ' . floating($model->orderItems->sum('product_value'));
+          $product_value = $model->orderItems->sum('product_value');
+          $DeliveryCost = $model->orderItems->sum('DeliveryCost');
+
+          return '৳ ' . floating($product_value + $DeliveryCost);
         }),
       Column::make('Coupon', 'coupon_victory')
         ->format(function (Order $model) {

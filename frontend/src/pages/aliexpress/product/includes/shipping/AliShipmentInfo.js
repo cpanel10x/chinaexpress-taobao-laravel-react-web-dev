@@ -63,7 +63,7 @@ const AliShipmentInfo = props => {
 			let nextProcess = true;
 			if (delivery_fee !== undefined) {
 				const shipping_cost = shippingRate(delivery_fee);
-				if (shipping_cost) {
+				if (shipping_cost >= 0) {
 					console.log('has shipping const');
 					setActiveShipping('regular');
 					updateShippingInformation({shipping_cost, shipping_type: 'regular'});
