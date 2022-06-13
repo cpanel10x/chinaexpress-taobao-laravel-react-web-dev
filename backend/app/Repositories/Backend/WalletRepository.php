@@ -92,15 +92,11 @@ class WalletRepository extends BaseRepository
 
 
 
-  public function updateWalletCalculation(Request $request, $id)
+  public function updateWalletCalculation($id)
   {
-    $wallet = $this->model->find($id);
+    $wallet = OrderItem::find($id);
     if ($wallet) {
       $product_price = ($wallet->product_value + $wallet->DeliveryCost - $wallet->coupon_contribution);
-      $first_payment = $wallet->first_payment;
-      $out_of_stock = $wallet->out_of_stock;
-      $missing = $wallet->missing;
-      $lost_in_transit = $wallet->lost_in_transit;
 
       $courier_bill = $wallet->courier_bill;
       $refunded = $wallet->refunded;
@@ -117,12 +113,11 @@ class WalletRepository extends BaseRepository
         $weight_change = ($shipping_rate * $actual_weight);
       }
 
-      $sumData = ($product_price -  $first_payment - $out_of_stock - $missing - $lost_in_transit);
+      $sumData = ($product_price -  $wallet->first_payment - $wallet->out_of_stock - $wallet->missing - $wallet->lost_in_transit);
       $sumData = ($sumData + $refunded + $customer_tax + $weight_change + $courier_bill) - $last_payment;
 
-      $orderItem = $this->model->find($id);
-      $orderItem->due_payment = ($sumData + $adjustment);
-      $orderItem->save();
+      $wallet->due_payment = ($sumData + $adjustment);
+      $wallet->save();
     }
     return $wallet;
   }

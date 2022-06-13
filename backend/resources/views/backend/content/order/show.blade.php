@@ -76,11 +76,6 @@ $currency = currency_icon();
                 </tr>
               </thead>
               <tbody>
-                @php
-                $invoiceTotal = 0;
-                $firstPayment = 0;
-                $duePayment = 0;
-                @endphp
                 @foreach ($order->orderItems as $item)
                 <tr>
                   <td class="text-center  align-middle" rowspan="{{$item->itemVariations->count() + 3}}">
@@ -124,9 +119,6 @@ $currency = currency_icon();
                 $DeliveryCost = $item->DeliveryCost;
                 $product_value = $item->product_value;
                 $product_total = ($product_value + $DeliveryCost);
-                $invoiceTotal += $product_total;
-                $firstPayment += $item->first_payment;
-                $duePayment += $item->due_payment;
                 @endphp
                 <tr>
                   <td class="align-middle text-center p-1">
@@ -166,14 +158,19 @@ $currency = currency_icon();
                   <td class="text-right">{{$product_total}}</td>
                 </tr>
                 @endforeach
+                @php                    
+                $firstPayment = $order->orderItems->sum('first_payment');
+                $duePayment = $order->orderItems->sum('due_payment');
+                $invoiceTotal = ($order->orderItems->sum('product_value') + $order->orderItems->sum('DeliveryCost'));
+                @endphp
                 <tr>
-                  <td class="text-right" colspan="4">Orter Total</td>
+                  <td class="text-right" colspan="4">Order Total</td>
                   <td class="text-right">{{$invoiceTotal}}</td>
                 </tr>
                 @if ($order->coupon_victory)
                 <tr>
                   <td class="text-right" colspan="4">Coupon</td>
-                  <td class="text-right">{{$order->coupon_victory}}</td>
+                  <td class="text-right">{{$order->orderItems->sum('coupon_contribution')}}</td>
                 </tr>
                 @endif
                 <tr>

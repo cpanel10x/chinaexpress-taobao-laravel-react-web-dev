@@ -128,7 +128,7 @@ class WalletController extends Controller
     $status =  false;
     if (!empty($data)) {
       $orderItem->update($data);
-      $abcd = $this->walletRepository->updateWalletCalculation($request, $item_id);
+      $abcd = $this->walletRepository->updateWalletCalculation($orderItem->id);
       $status = true;
     }
 
