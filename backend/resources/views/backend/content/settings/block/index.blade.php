@@ -7,7 +7,7 @@
 
 <div class="row justify-content-center">
 
-  <div class="col-md-6">
+  <div class="col-md-12">
     <div class="card mb-3">
       <div class="card-header with-border">
         <h3 class="card-title">Manage Block Words <small class="ml-2">(update information anytime)</small></h3>
@@ -33,13 +33,16 @@
           </div>
         </div> <!-- form-group-->
         {{ html()->form()->close() }}
-        <hr>
 
+      </div> <!--  .card-body -->
+
+      <div class="card-body">
         <div class="table-responsive-sm">
           @livewire('backend.block-words-table')
         </div>
-
       </div> <!--  .card-body -->
+
+
     </div> <!--  .card -->
   </div> <!-- .col-md-4 -->
 
@@ -48,8 +51,10 @@
 @endsection
 
 
-
+@push('after-styles')
+@livewireStyles
+@endpush
 
 @push('after-scripts')
-
+@livewireScripts
 @endpush

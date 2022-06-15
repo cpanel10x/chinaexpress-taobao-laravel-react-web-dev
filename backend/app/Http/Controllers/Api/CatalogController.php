@@ -248,6 +248,27 @@ class CatalogController extends Controller
   {
     $item = GetItemFullInfoWithDeliveryCosts($item_id);
     if (!empty($item)) {
+      $title = $item['Title'] ?? "";
+      $titleArray = BlockWords::pluck('word')->toArray();
+
+      $hasBlock = false;
+      if (count($titleArray)) {
+        for ($i = 0; $i < count($titleArray); $i++) {
+          $word = $titleArray[$i];
+          if ((strpos($title, $word) !== false)) {
+            $hasBlock = true;
+            break;
+          }
+        }
+      }
+
+      if ($hasBlock) {
+        return response([
+          'status' => false,
+          'item' => []
+        ]);
+      }
+
       $recent_token = request('recent_view');
       $this->storeProductToDatabase($item, $item_id, $recent_token);
       return response([

@@ -13,6 +13,6 @@ class CatalogRepository
 
   public function frontendList(Request $request)
   {
-    return Taxonomy::whereNotNull('active')->withCount('children')->get();;
+    return Taxonomy::whereNotNull('active')->withCount('children')->get();
   }
 }

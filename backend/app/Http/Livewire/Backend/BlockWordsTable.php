@@ -17,7 +17,7 @@ class BlockWordsTable extends TableComponent
   public $sortField = 'id';
   public $sortDirection = 'desc';
 
-  public $perPage = 15;
+  public $perPage = 10;
   public $perPageOptions = [];
   public $loadingIndicator = true;
 
@@ -79,7 +79,7 @@ class BlockWordsTable extends TableComponent
   {
     $array = ['action', 'word', 'sentence', 'block_count'];
     if (in_array($attribute, $array)) {
-      return 'text-nowrap align-middle text-center';
+      return 'align-middle text-center';
     }
     return 'align-middle';
   }
