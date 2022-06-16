@@ -32,7 +32,7 @@ const LatestArrivedProduct = (props) => {
 	}
 
 	const handlePaginationClick = (paginate) => {
-		history.push(`/customer-favorite?page=${paginate.selected + 1}`);
+		history.push(`/new-arrived?page=${paginate.selected + 1}`);
 	};
 
 	const products = data?.products ? JSON.parse(data?.products) : [];
