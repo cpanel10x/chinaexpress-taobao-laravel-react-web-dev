@@ -21,7 +21,6 @@ const ProductBody = (props) => {
 	const {mainCart: {data: cart, isLoading}} = useCartMutation();
 
 	const product_id = product?.Id ? product.Id : 'na';
-	const IsSellAllowed =  product?.IsSellAllowed ;
 	const Title = product?.Title ? product.Title : 'No Title';
 	const cartItem = cart?.cart_items?.find(item => item.ItemId === product_id) || {};
 
@@ -33,6 +32,9 @@ const ProductBody = (props) => {
 	const SalesInLast30Days = FeaturedValues?.find(find => find.Name === 'SalesInLast30Days')?.Value;
 	const favCount = FeaturedValues?.find(find => find.Name === 'favCount')?.Value;
 	const reviews = FeaturedValues?.find(find => find.Name === 'reviews')?.Value;
+	let IsSellAllowed = product?.IsSellAllowed;
+	let Expired = FeaturedValues.includes("Expired");
+
 
 	const isMobile = useMediaQuery({query: '(max-width: 991px)'});
 
@@ -54,7 +56,7 @@ const ProductBody = (props) => {
 					{isMobile && <h1 className="single-product-title">{Title}</h1>}
 
 					{
-						!IsSellAllowed ?
+						(!IsSellAllowed) ?
 							<SellDisAllowed/>
 							: (
 								<div>

@@ -17,6 +17,7 @@ use Illuminate\Support\Str;
 
 trait CartOperation
 {
+
   public function cart_uid()
   {
     $cart_uid = request('token', null);
@@ -126,12 +127,12 @@ trait CartOperation
     $shipping = $user->shipping ?? [];
     $cart = $this->get_customer_cart();
     if (!$cart) {
-      $cart = Cart::create([
-        'cart_uid' => $cart_uid,
-        'user_id' => $user_id,
-        'shipping' => json_encode($shipping),
-        'status' => 'new'
-      ]);
+      $cart = new Cart();
+      $cart->cart_uid = $cart_uid;
+      $cart->user_id = $user_id;
+      $cart->shipping = json_encode($shipping);
+      $cart->status = 'new';
+      $cart->save();
     }
     if (!$cart) {
       return [];
@@ -141,35 +142,51 @@ trait CartOperation
     $ProviderType = $product['ProviderType'] ?? null;
     $CartItem = null;
     if ($cart_id) {
-      $data['Title'] = $product['Title'] ?? null;
-      $data['ProviderType'] = $ProviderType;
-      $data['ItemMainUrl'] = $product['TaobaoItemUrl'] ?? null;
-      $data['MainPictureUrl'] = $product['MainPictureUrl'] ?? null;
-      $data['MasterQuantity'] = $product['MasterQuantity'] ?? null;
-      $data['FirstLotQuantity'] = $product['FirstLotQuantity'] ?? null;
-      $data['NextLotQuantity'] = $product['NextLotQuantity'] ?? null;
-      $data['ProductPrice'] = $product['Price'] ?? null;
-      $data['weight'] = $product['weight'] ?? null;
-      $data['shipping_type'] = $product['shipping_type'] ?? null;
-      $data['DeliveryCost'] = $product['DeliveryCost'] ?? null;
-      $data['Quantity'] = $product['Quantity'] ?? null;
-      $data['hasConfigurators'] = $product['hasConfigurators'] ?? null;
-      $data['is_checked'] = $product['IsCart'] ?? null;
-      $CartItem = CartItem::updateOrCreate(['cart_id' => $cart_id, 'ItemId' => $ItemId], $data);
+      $CartItem = CartItem::where('cart_id', $cart_id)->where('ItemId', $ItemId)->first();
+      if (!$CartItem) {
+        $CartItem = new CartItem();
+        $CartItem->cart_id = $cart_id;
+        $CartItem->ItemId = $ItemId;
+      }
+      $CartItem->Title = $product['Title'] ?? null;
+      $CartItem->ProviderType = $ProviderType;
+      $CartItem->ItemMainUrl = $product['TaobaoItemUrl'] ?? null;
+      $CartItem->MainPictureUrl = $product['MainPictureUrl'] ?? null;
+      $CartItem->MasterQuantity = $product['MasterQuantity'] ?? null;
+      $CartItem->FirstLotQuantity = $product['FirstLotQuantity'] ?? null;
+      $CartItem->NextLotQuantity = $product['NextLotQuantity'] ?? null;
+      $CartItem->ProductPrice = $product['Price'] ?? null;
+      $CartItem->weight = $product['weight'] ?? null;
+      $CartItem->shipping_type = $product['shipping_type'] ?? null;
+      $CartItem->DeliveryCost = $product['DeliveryCost'] ?? null;
+      $CartItem->Quantity = $product['Quantity'] ?? null;
+      $CartItem->hasConfigurators = $product['hasConfigurators'] ?? null;
+      $CartItem->is_checked = $product['IsCart'] ?? null;
+      $CartItem->save();
     }
 
     $ConfiguredItem = $product['ConfiguredItems'] ?? [];
     if (is_array($ConfiguredItem) && !empty($ConfiguredItem) && $CartItem) {
       $cart_item_id = $CartItem->id;
       $configId = $ConfiguredItem['Id'] ?? null;
-      $variation['attributes'] = json_encode($ConfiguredItem['Attributes'] ?? []);
-      $variation['maxQuantity'] = $ConfiguredItem['maxQuantity'] ?? null;
-      $variation['price'] = $ConfiguredItem['price'] ?? null;
-      $variation['qty'] = $ConfiguredItem['qty'] ?? null;
-      CartItemVariation::updateOrInsert(
-        ['cart_item_id' => $cart_item_id, 'cart_id' => $cart_id, 'configId' => $configId],
-        $variation
-      );
+      $variation = CartItemVariation::where('cart_item_id', $cart_item_id)
+        ->where('cart_id', $cart_id)
+        ->where('configId', $configId)
+        ->first();
+      if (!$variation) {
+        $variation = new CartItemVariation();
+        $variation->cart_item_id = $cart_item_id;
+        $variation->cart_id = $cart_id;
+        $variation->configId = $configId;
+      }
+      $variation->attributes  = json_encode($ConfiguredItem['Attributes'] ?? []);
+      $variation->maxQuantity  = $ConfiguredItem['maxQuantity'] ?? null;
+      $variation->price  = $ConfiguredItem['price'] ?? null;
+      $variation->qty  = $ConfiguredItem['qty'] ?? null;
+      $variation->save();
+    }
+    if ($CartItem) {
+      $this->shippingCalculate($CartItem);
     }
 
     return  $this->get_pure_cart($cart->id);
@@ -196,7 +213,7 @@ trait CartOperation
         $aliTotal = get_setting('express_shipping_min_value');
         $process['DeliveryCost'] = get_aliExpress_shipping($weight);
         if ($totalPrice < $aliTotal) {
-          $process['shipping_type'] = null;
+          // $process['shipping_type'] = null;
           $process['DeliveryCost'] = 0;
         }
         $process['shipping_rate'] = get_aliExpress_air_shipping_rate($variations);
@@ -462,10 +479,13 @@ trait CartOperation
       foreach ($cartItems as $product) {
         $ProviderType = $product->ProviderType;
         $ship_method = $product->shipping_type;
-        $shipping_rate = $product->shipping_rate;
         $DeliveryCost = $product->DeliveryCost;
+        $variations = $product->variations->where('is_checked', 1);
         if (($ship_method == 'regular' && $ProviderType == 'aliexpress')) {
           $shipping_rate = 0;
+        } else {
+          $type = ($ProviderType == 'aliexpress') ? 'express' : 'taobao';
+          $shipping_rate = get_aliExpress_air_shipping_rate($variations, $type);
         }
 
         $orderItem = OrderItem::create([
@@ -493,7 +513,6 @@ trait CartOperation
         if ($orderItem) {
           $item_id = $orderItem->id;
           $DeliveryCost = $orderItem->DeliveryCost;
-          $variations = $product->variations->where('is_checked', 1);
           $variations_count = $orderItem->variations_count;
           $product_value = 0;
           $count = 0;
@@ -548,6 +567,9 @@ trait CartOperation
       // $cart->update(['is_purchase' => 1]);
       return $order;
     }
+
+
+
     return null;
   }
 

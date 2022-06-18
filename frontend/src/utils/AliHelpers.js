@@ -122,9 +122,9 @@ export const itemIsCheckWillProcess = (cartItem, settings) => {
 	const express_shipping_min_value = settings?.express_shipping_min_value || 0;
 	let process = true;
 	let minOrder = min_order_amount;
-	if (cartItem?.ProviderType === "aliexpress") {
+	if (cartItem?.ProviderType == "aliexpress") {
 		minOrder = ali_min_order_value;
-		if (cartItem?.shipping_type === 'express') {
+		if (cartItem?.shipping_type == 'express') {
 			minOrder = express_shipping_min_value;
 			console.log('minOrder',minOrder)
 		}
