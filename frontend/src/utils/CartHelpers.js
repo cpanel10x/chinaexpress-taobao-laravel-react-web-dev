@@ -63,8 +63,8 @@ export const calculatePrice = (price, rate) => {
     return Math.round(cost);
 };
 
-export const getProductCurrentPrice = ($product, rate) => {
-    let OriginalPrice = $product?.Price?.OriginalPrice;
+export const getProductCurrentPrice = ($product,activeConfigItemPrice, rate) => {
+    let OriginalPrice = activeConfigItemPrice ? activeConfigItemPrice : $product?.Price?.OriginalPrice;
     let Promotions = $product?.Promotions;
     if (Promotions?.length > 0) {
         OriginalPrice = Promotions[0]?.Price?.OriginalPrice;
@@ -100,19 +100,21 @@ export const getProductModifiedConfiguredItem = ($product, qty, activeConfigured
     configItem.qty = qty;
     configItem.maxQuantity = activeConfiguredItem?.Quantity;
 
+    let configItemPrice = activeConfiguredItem?.Price?.OriginalPrice;
+
     let ConfigPrice = 0;
     let ProductPrice = $product?.Price?.OriginalPrice;
     let ProductPromotions = $product?.Promotions;
     if (ProductPromotions?.length > 0) {
         ProductPromotions = ProductPromotions[0];
-        ConfigPrice = ProductPromotions?.Price.OriginalPrice;
+        ConfigPrice = ProductPromotions?.Price?.OriginalPrice;
         let promoConfiguredItems = ProductPromotions?.ConfiguredItems;
         let findConfig = promoConfiguredItems?.find(find => find.Id === configId);
         if (findConfig) {
-            ConfigPrice = findConfig?.Price.OriginalPrice;
+            ConfigPrice = findConfig?.Price?.OriginalPrice;
         }
     } else {
-        ConfigPrice = ProductPrice
+        ConfigPrice = configItemPrice ? configItemPrice : ProductPrice
     }
 
     configItem.price = calculatePrice(ConfigPrice, rate);

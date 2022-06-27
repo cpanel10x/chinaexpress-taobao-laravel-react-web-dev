@@ -25,6 +25,7 @@ const QuantityInput = props => {
 
 	const MasterQuantity = product?.MasterQuantity ? product.MasterQuantity : 0;
 	const Quantity = activeConfiguredItem?.Quantity ? activeConfiguredItem.Quantity : 0;
+	let activeConfigItemPrice = activeConfiguredItem?.Price?.OriginalPrice || 0;
 
 	const addToCartProcess = (e) => {
 		e.preventDefault();
@@ -37,7 +38,7 @@ const QuantityInput = props => {
 			MasterQuantity: getObjectPropertyValue(product, 'MasterQuantity'),
 			FirstLotQuantity: getObjectPropertyValue(product, 'FirstLotQuantity'),
 			NextLotQuantity: getObjectPropertyValue(product, 'NextLotQuantity'),
-			Price: getProductCurrentPrice(product, rate),
+			Price: getProductCurrentPrice(product,activeConfigItemPrice, rate),
 			weight: getProductWeight(product),
 			DeliveryCost: getProductDeliveryCosts(product, rate),
 			Quantity: 1,
@@ -70,6 +71,7 @@ const QuantityInput = props => {
 		}
 
 		if (process) {
+			console.log('activeProduct', activeProduct);
 			mutateAsync({product: activeProduct},{
 				onSuccess: (cart)=>{
 					cache.setQueryData("customer_cart", cart);
