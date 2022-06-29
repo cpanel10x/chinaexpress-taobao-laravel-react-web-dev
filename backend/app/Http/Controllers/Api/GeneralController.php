@@ -50,7 +50,7 @@ class GeneralController extends Controller
 
   public function banners()
   {
-    $banners = Post::where('post_type', 'banner')->where('post_status', 'publish')->limit(5)->latest()->get();
+    $banners = Post::where('post_type', 'banner')->where('post_status', 'publish')->limit(6)->latest()->get();
     return response([
       'banners' => json_encode($banners)
     ]);
@@ -108,7 +108,7 @@ class GeneralController extends Controller
     $products = Product::whereNotNull('active')
       ->select('ItemId', 'ProviderType', 'Title', 'BrandName', 'MainPictureUrl', 'Price', 'Pictures', 'Features', 'MasterQuantity')
       ->latest()
-      ->limit(15)
+      ->limit(10)
       ->get();
     return $this->success([
       'recentProducts' => json_encode($products)

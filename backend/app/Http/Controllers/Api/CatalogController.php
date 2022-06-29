@@ -122,7 +122,7 @@ class CatalogController extends Controller
       }
     }
     $page = request('page', 1);
-    $limit = request('limit', 35);
+    $limit = request('limit', 30);
     $offset = $page > 0 ? $limit * ($page - 1) : 0;
     $products = null;
     if ($keyword) {
@@ -160,7 +160,7 @@ class CatalogController extends Controller
     if (auth('sanctum')->check()) {
       $suggestion = $suggestion->where('user_id', auth('sanctum')->id());
     }
-    $suggestion = $suggestion->limit(5)->get();
+    $suggestion = $suggestion->limit(4)->get();
 
     return response([
       'suggestion' => $suggestion
@@ -171,8 +171,8 @@ class CatalogController extends Controller
   {
     $page = request('page', 1);
     $page = $page > 0 ? ($page - 1) : 0;
-    $offset = $page * 35;
-    $limit = 35;
+    $offset = $page * 30;
+    $limit = 30;
     $SearchLog = SearchLog::where('search_id', $search_id)->where('search_type', 'picture')->first();
     if ($SearchLog) {
       $products = get_category_browsing_items($SearchLog->query_data, 'picture', $offset, $limit);
@@ -220,8 +220,8 @@ class CatalogController extends Controller
     $vendor_id = request('seller_id');
     $page = request('page', 1);
     $page = $page ? $page - 1 : 0;
-    $offset = $page * 35;
-    $limit = 35;
+    $offset = $page * 30;
+    $limit = 30;
     $products = get_vendor_items($vendor_id, $offset, $limit);
     if (!empty($products) && is_array($products)) {
       $TotalCount = getArrayKeyData($products, 'TotalCount', 0);

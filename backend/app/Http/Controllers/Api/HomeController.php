@@ -105,7 +105,7 @@ class HomeController extends Controller
     $products = Product::whereNotNull('active')
       ->select('ItemId', 'ProviderType', 'Title', 'BrandName', 'MainPictureUrl', 'Price', 'Pictures', 'Features', 'MasterQuantity')
       ->latest()
-      ->limit(15)
+      ->limit(20)
       ->get();
     return $this->success([
       'recentProducts' => json_encode($products)

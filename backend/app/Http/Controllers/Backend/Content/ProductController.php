@@ -39,7 +39,7 @@ class ProductController extends Controller
         if ($permanent) {
           Product::withTrashed()->whereIn('id', $product_ids)->forceDelete();
         } else {
-          Product::whereIn('id', $product_ids)->delete();
+          Product::withTrashed()->whereIn('id', $product_ids)->delete();
         }
       } else if ($data_table == "orders") {
         if ($permanent) {

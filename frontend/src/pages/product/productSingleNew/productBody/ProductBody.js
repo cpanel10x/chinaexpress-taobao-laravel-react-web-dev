@@ -3,7 +3,6 @@ import LoadAttributes from "./includes/attribute/LoadAttributes";
 import ProductSummary from "./includes/ProductSummary";
 import MediaPart from "./includes/MediaPart";
 import {getActiveConfiguredItems} from "../../../../utils/CartHelpers";
-import {withRouter} from "react-router-dom";
 import QuantityInput from "./quantity/QuantityInput";
 import SocialShare from "./includes/SocialShare";
 import SellerInfo from "./includes/SellerInfo";
@@ -97,4 +96,4 @@ const ProductBody = (props) => {
 };
 
 
-export default withRouter(ProductBody);
+export default ProductBody;

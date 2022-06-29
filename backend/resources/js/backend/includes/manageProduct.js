@@ -37,7 +37,7 @@ function remove_space(stringData) {
     var checkboxItem = $('input.checkboxItem:checked');
     var data_table = $(this).attr('data-table');
     var permanent = $(this).attr('data-permanent');
-    if (checkboxItem.length) {
+    if (checkboxItem.length > 0) {
       Swal.fire({
         icon: 'warning',
         text: 'Are you sure to delete selected items ?',
