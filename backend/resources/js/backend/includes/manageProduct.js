@@ -53,9 +53,11 @@ function remove_space(stringData) {
             product_ids.push(item_id);
           });
 
+          var app_base_url = $("#app_base_url").val();
+
           $.ajax({
             type: "POST",
-            url: '/admin/product/multi-delete',
+            url: `${app_base_url}/admin/product/multi-delete`,
             data: {
               product_ids: product_ids,
               data_table: data_table,

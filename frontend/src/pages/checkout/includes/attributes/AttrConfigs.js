@@ -9,7 +9,7 @@ const AttrConfigs = (props) => {
          {
             parseAttributes?.map((attribute, index) =>
                <div key={index} className="checkout-attribute d-inline-block mr-2">
-                  <span>{` ${attribute.Value}`};</span>
+                  <span>{` ${(attribute.ValueAlias || attribute.Value)}`};</span>
                </div>
             )
          }

@@ -534,7 +534,7 @@ function remove_space(stringData) {
   function attributesInfo(attributes) {
     var html = '<p class="m-0">';
     attributes?.map((attribute, key) => {
-      html += `${attribute?.PropertyName} : ${attribute?.Value}  <br>`;
+      html += `${attribute?.PropertyName} : ${(attribute?.ValueAlias || attribute?.Value)}  <br>`;
     })
     return html + '</p>';
   }

@@ -34,7 +34,7 @@
           @forelse ($attributes as $attribute)
           @php
           $PropertyName = $attribute->PropertyName;
-          $Value = $attribute->Value;
+          $Value = $attribute->ValueAlias ?? $attribute->Value;
           @endphp
           @if ($loop->first)
           <tr>

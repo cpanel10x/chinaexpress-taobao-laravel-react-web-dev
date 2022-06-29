@@ -12,7 +12,6 @@ const OrderBody = (props) => {
 
 	const variations = product?.item_variations || [];
 
-
 	const productPageLink = (product) => {
 		const ItemId = product?.ItemId;
 		const ProviderType = product?.ProviderType;

@@ -131,7 +131,7 @@ $currency = currency_icon();
                     @forelse ($attributes as $attribute)
                     @php
                     $PropertyName = $attribute['PropertyName'] ?? 'Unknown';
-                    $Value = $attribute['Value'] ?? 'Unknown';
+                    $Value = $attribute['ValueAlias'] ?? $attribute['Value'] ?? 'Unknown';
                     @endphp
                     <p class="m-0"><b>{!! $PropertyName !!}:</b> {!! $Value !!}</p>
                     @empty
