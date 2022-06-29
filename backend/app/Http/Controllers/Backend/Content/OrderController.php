@@ -44,28 +44,40 @@ class OrderController extends Controller
     $orderUsers = Order::with('user')->whereHas('user', function ($user) {
       $user->whereNull('name')->orWhereNull('first_name');
     })->get();
-    foreach ($orderUsers as $order) {
-      $user_id = $order->user_id;
-      $shipping = $order->shipping ? json_decode($order->shipping, true) : [];
-      $user_name = $shipping['name'] ?? '';
-      $user_phone = $shipping['phone'] ?? '';
-      $user = User::find($user_id);
-      $user->name = $user->name ? $user->name : $user_name;
-      $user->first_name = $user->first_name ? $user->first_name : $user_name;
-      $user->phone = $user->phone ? $user->phone : $user_phone;
-      $user->save();
+    DB::beginTransaction();
+    try {
+      foreach ($orderUsers as $order) {
+        $user_id = $order->user_id;
+        $shipping = $order->shipping ? json_decode($order->shipping, true) : [];
+        $user_name = $shipping['name'] ?? '';
+        $user_phone = $shipping['phone'] ?? '';
+        $user = User::find($user_id);
+        $user->name = $user->name ? $user->name : $user_name;
+        $user->first_name = $user->first_name ? $user->first_name : $user_name;
+        $user->phone = $user->phone ? $user->phone : $user_phone;
+        $user->save();
+      }
+      DB::commit(); // all good
+    } catch (\Exception $e) {
+      DB::rollback(); // something went wrong
     }
 
     $orderUsers = Order::with('user')->whereNull('name')->orWhereNull('phone')->get();
 
-    foreach ($orderUsers as $order) {
-      $user_id = $order->user_id;
-      $shipping = $order->shipping ? json_decode($order->shipping, true) : [];
-      $user_name = $shipping['name'] ?? '';
-      $user_phone = $shipping['phone'] ?? '';
-      $order->name = $order->name ? $order->name : $user_name;
-      $order->phone = $order->phone ? $order->phone : $user_phone;
-      $order->save();
+    DB::beginTransaction();
+    try {
+      foreach ($orderUsers as $order) {
+        $user_id = $order->user_id;
+        $shipping = $order->shipping ? json_decode($order->shipping, true) : [];
+        $user_name = $shipping['name'] ?? '';
+        $user_phone = $shipping['phone'] ?? '';
+        $order->name = $order->name ? $order->name : $user_name;
+        $order->phone = $order->phone ? $order->phone : $user_phone;
+        $order->save();
+      }
+      DB::commit(); // all good
+    } catch (\Exception $e) {
+      DB::rollback(); // something went wrong
     }
   }
   /**
