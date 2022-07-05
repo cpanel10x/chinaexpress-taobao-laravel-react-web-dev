@@ -7,7 +7,7 @@ use App\Models\Content\Product;
 use Illuminate\Http\Request;
 
 /**
- * Class UserRepository.
+ * Class HomeRepository.
  */
 class HomeRepository
 {
@@ -15,7 +15,7 @@ class HomeRepository
   public function getArrivedProducts(Request $request)
   {
     $page = request('page', 1);
-    $limit = request('limit', 15);
+    $limit = request('limit', 20);
     $page = $page > 0 ? ($page - 1) : 0;
     $offset = $page * $limit;
 
@@ -34,7 +34,7 @@ class HomeRepository
   {
     $recent_token = request('recent_view');
     $page = request('page', 1);
-    $limit = request('limit', 15);
+    $limit = request('limit', 20);
     $page = $page > 0 ? ($page - 1) : 0;
     $offset = $page * $limit;
 
@@ -53,7 +53,7 @@ class HomeRepository
   public function getFavoriteProducts(Request $request)
   {
     $page = request('page', 1);
-    $limit = request('limit', 15);
+    $limit = request('limit', 20);
     $page = $page > 0 ? ($page - 1) : 0;
     $offset = $page * $limit;
 

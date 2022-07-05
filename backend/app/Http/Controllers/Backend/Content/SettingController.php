@@ -21,7 +21,7 @@ class SettingController extends Controller
 
   public function general()
   {
-    return view('backend.content.settings.general.general');
+    return view('backend.content.settings.general.index');
   }
 
   public function logoStore(Request $request)
@@ -52,6 +52,10 @@ class SettingController extends Controller
 
     if (\request()->hasFile('meta_image')) {
       $data['meta_image'] = store_picture(\request()->file('meta_image'), 'setting/meta');
+    }
+
+    if (\request()->hasFile('invoice_logo')) {
+      $data['invoice_logo'] = store_picture(\request()->file('invoice_logo'), 'setting/logo');
     }
 
     Setting::save_settings($data);

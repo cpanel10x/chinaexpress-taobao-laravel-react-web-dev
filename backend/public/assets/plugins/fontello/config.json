@@ -513,6 +513,18 @@
       "css": "up-open-1",
       "code": 59443,
       "src": "entypo"
+    },
+    {
+      "uid": "628e5fc59fc5965a6b91189467b037d5",
+      "css": "heart-3",
+      "code": 59437,
+      "src": "elusive"
+    },
+    {
+      "uid": "2a3cd95de2621bd87479396f236fd2a4",
+      "css": "heart-2",
+      "code": 59436,
+      "src": "websymbols"
     }
   ]
 }

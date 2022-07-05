@@ -30,14 +30,14 @@ $address = array_key_exists('address', $address) ? $address['address'] : 'N/A';
             <table class="width_100_p">
               <tr>
                 <td style="width: 20% !important;">
-                  <img class="width_75_p" src="{{asset("img/frontend/brand/logo.svg")}}">
+                  @php
+                  $fLogo = get_setting('invoice_logo', 'img/backend/no-image.gif')
+                  @endphp
+                  <img class="width_75_p" src="{{asset($fLogo)}}">
                 </td>
-                <td>
-                  <h1 class="p_txt_1">{{app_name()}}</h1>
-                  <h3 class="p_txt_3">Fair Plaza, Shop- 28 & 29, 3rd Floor</h3>
-                  <h3 class="p_txt_3">Mirpur-1, Dhaka-1216</h3>
-                  <h4 class="p_txt_2">01933-778855</h4>
-                  <h3 class="p_txt_3">Email: support@mybdstore.com</h3>
+                <td class="text-center">
+                  <h1 class="p_txt_1">{{ get_setting('invoice_site_name', config('app.name'))}}</h1>
+                  {!! get_setting('invoice_site_address') !!}
                   <p class="inv_black">Invoice</p>
                 </td>
                 <td style="width: 20% !important;"></td>
@@ -46,7 +46,7 @@ $address = array_key_exists('address', $address) ? $address['address'] : 'N/A';
           </div>
 
           <div class="row" style="margin-bottom: 15px">
-            <div class="col-sm-4">
+            <div class="col-sm-5">
               <table class="table table-bordered table-condensed">
                 <tr>
                   <td class="p_txt_5"> Invoice: </td>
@@ -62,9 +62,9 @@ $address = array_key_exists('address', $address) ? $address['address'] : 'N/A';
                 </tr>
               </table>
             </div>
-            <div class="col-sm-4">
+            <div class="col-sm-2">
             </div>
-            <div class="col-sm-4">
+            <div class="col-sm-5">
               <table class="table table-bordered table-condensed">
                 <tr>
                   <td class="p_txt_5"><b>Customer:</b></td>
@@ -89,7 +89,7 @@ $address = array_key_exists('address', $address) ? $address['address'] : 'N/A';
             <thead>
               <tr>
                 <th scope="col" class="text-center">SL</th>
-                <th scope="col">Item No.</th>
+                <th scope="col" class="text-center">Item No.</th>
                 <th scope="col">Product</th>
                 <th scope="col" class="text-center">Status</th>
                 <th scope="col" class="text-center">Weight</th>
@@ -105,11 +105,11 @@ $address = array_key_exists('address', $address) ? $address['address'] : 'N/A';
               $weight = $item->weight ? $item->weight : 0;
               @endphp
               <tr>
-                <td class=" align-middle">{{$loop->iteration}}</td>
-                <td class=" align-middle">{{$item->order_item_number}}</td>
-                <td class=" align-middle">{{$item->product_name}}</td>
-                <td class=" align-middle">{{$item->status}}</td>
-                <td class="text-right align-middle">{{floating($weight, 3)}}</td>
+                <td class="text-center align-middle">{{$loop->iteration}}</td>
+                <td class="text-center align-middle">{{$item->order_item->item_number}}</td>
+                <td class="align-middle">{{$item->product_name}}</td>
+                <td class="text-center align-middle">{{$item->order_item->status}}</td>
+                <td class="text-center align-middle">{{floating($weight, 3)}}</td>
                 <td class="text-right align-middle">{{floating($item->total_due)}}</td>
               </tr>
               @php
@@ -120,7 +120,7 @@ $address = array_key_exists('address', $address) ? $address['address'] : 'N/A';
             <tfoot id="invoiceFooter">
               <tr>
                 <td colspan="4" class="text-right">Total Due</td>
-                <td class="text-right"><span class="total_weight">{{floating($actual_weight, 3)}}</span></td>
+                <td class="text-center"><span class="total_weight">{{floating($actual_weight, 3)}}</span></td>
                 <td class="text-right"><span class="total_due">{{floating($invoice->total_due)}}</span></td>
               </tr>
               <tr>

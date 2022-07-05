@@ -318,6 +318,7 @@ function remove_space(stringData) {
           for (let item in wallet) {
             $("#" + wallet?.id).find("." + item).text(wallet[item]);
           }
+          $("#" + wallet?.id).find(".checkboxItem ").attr('data-status',wallet.status);
         }
       })
       .catch(error => {

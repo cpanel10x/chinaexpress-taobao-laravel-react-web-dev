@@ -1,4 +1,3 @@
-
 .link-underline {
   box-shadow: 0 1px 0 0 #751f8a;
 }
@@ -247,7 +246,7 @@
   cursor: pointer;
 
   &:hover {
-    border: 2px solid #751F8A;
+    border: 2px solid #751f8a;
   }
 
   .btn_ship_here {
@@ -267,9 +266,8 @@
 }
 
 .text-violet {
-  color: #751F8A !important;
+  color: #751f8a !important;
 }
-
 
 .payment_card {
   background: #fff;
@@ -436,10 +434,9 @@
 }
 
 .btn-quickview:before {
-  font-family: 'fontello', sans-serif;
+  font-family: "fontello", sans-serif;
   content: "\e826";
 }
-
 
 .btn-product-icon span {
   display: none;
@@ -470,7 +467,7 @@
 .single-product-title {
   font-size: 1.4rem;
   line-height: 1.5;
-  color: #751F8A;
+  color: #751f8a;
 }
 
 .product-title a {
@@ -539,7 +536,6 @@
   border-radius: 6px;
 }
 
-
 .product-gallery {
   margin-bottom: 1rem;
 }
@@ -574,11 +570,11 @@
     cursor: pointer;
 
     &:hover {
-      border: 2px solid #751F8A;
+      border: 2px solid #751f8a;
     }
 
     &.isSelect {
-      border: 2px solid #751F8A;
+      border: 2px solid #751f8a;
     }
 
     &.noImage {
@@ -747,10 +743,10 @@
   background: #ec1c24;
   font-weight: 600;
 
-  .show_price{
+  .show_price {
     font-size: 1rem;
   }
-  .delete_price{
+  .delete_price {
     font-size: 1rem;
   }
 }
@@ -791,7 +787,7 @@
 }
 
 .seller_info {
-  color: #751F8A;
+  color: #751f8a;
   margin-left: 6px;
   font-weight: 600;
 }
@@ -962,11 +958,9 @@
     background-size: contain;
     margin: 3px 8px;
   }
-
 }
 
 .checkout_table {
-
   .product_title {
     line-height: 1.5;
 
@@ -974,13 +968,13 @@
       color: #1a1a1a;
 
       &:hover {
-        color: #751F8A;
+        color: #751f8a;
       }
     }
   }
 
   .checkout-attribute {
-    color: #6B6B6B;
+    color: #6b6b6b;
     font-weight: 500;
   }
 
@@ -990,7 +984,9 @@
   }
 
   .manage-quantity {
-    .input-group-prepend, .form-control, .input-group-append {
+    .input-group-prepend,
+    .form-control,
+    .input-group-append {
       height: 35px;
     }
   }
@@ -1000,7 +996,6 @@
     font-weight: 600;
   }
 }
-
 
 .dashboard-card {
   .card {
@@ -1033,11 +1028,9 @@
   }
 }
 
-
 .pretty.p-default input:checked ~ .state label:after {
   background-color: #751f8a !important;
 }
-
 
 .login_link {
   color: #1a1a1a;
@@ -1049,7 +1042,8 @@
   }
 }
 
-.video_thumb, .previewVideoThumb {
+.video_thumb,
+.previewVideoThumb {
   display: block;
 
   .videoPlayerIcon {
@@ -1084,7 +1078,6 @@
   }
 }
 
-
 .SearchSuggestion {
   position: absolute;
   z-index: 99;
@@ -1106,7 +1099,8 @@
   border: 1px solid #7a1e90;
   font-weight: 600;
 
-  &.active, &:hover {
+  &.active,
+  &:hover {
     border: 1px solid #c735ea;
     color: #fff;
     background: linear-gradient(90deg, #7a1e90, #d93aff);
@@ -1128,7 +1122,6 @@
     max-width: 100%;
   }
 }
-
 
 .popupModalBody {
   position: relative;
@@ -1165,8 +1158,6 @@
   }
 }
 
-
-
 .desktop_messenger {
   position: fixed;
   right: 30px;
@@ -1175,7 +1166,8 @@
   .nav-link {
     color: rgb(0, 106, 255);
 
-    &:hover, &:focus {
+    &:hover,
+    &:focus {
       color: rgb(0, 106, 255);
     }
   }
@@ -1191,14 +1183,13 @@
   }
 }
 
-
 .faq_title {
   .btn {
     color: #555;
     font-size: 1.1rem;
     text-decoration: none;
 
-    &.collapsed{
+    &.collapsed {
       &:after {
         content: "\e832";
       }
@@ -1213,13 +1204,11 @@
       right: 18px;
       top: 14px;
     }
-
   }
 }
 
-
-.intro-slider-container{
-  .tns-outer .tns-nav{
+.intro-slider-container {
+  .tns-outer .tns-nav {
     margin: 0;
     position: absolute;
     bottom: 15px;
@@ -1227,12 +1216,10 @@
     left: 0;
     right: 0;
   }
-  .tns-controls{
+  .tns-controls {
     display: none;
   }
 }
-
-
 
 .player-wrapper {
   position: relative;
@@ -1247,16 +1234,28 @@
   border: 1px solid rgb(243 244 246);
 }
 
+.variation {
+  position: relative;
 
+  .cart-wishlist {
+    position: absolute;
+    right: 0;
+    z-index: 99;
+    top: 36%;
+  }
+}
 
+.btn-loveProduct {
+  background: transparent;
+  border: none;
+  font-size: 22px;
+  padding: 5px;
+  border-radius: 4px;
 
-
-
-
-
-
-
-
-
-
-
+  &.active {
+    color: #ff3714;
+  }
+  &:hover {
+    color: #ff3714;
+  }
+}
