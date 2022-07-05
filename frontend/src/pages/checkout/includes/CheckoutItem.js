@@ -139,7 +139,7 @@ const CheckoutItem = (props) => {
                         className="btn btn-loveProduct active"
                         title="Already Added to wishlist"
                       >
-                        <i className="icon-heart-3"></i>
+                        <i className="icon-heart-5"></i>
                       </button>
                     ) : (
                       <button
