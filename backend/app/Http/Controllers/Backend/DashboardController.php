@@ -7,11 +7,14 @@ use App\Exports\OrdersExport;
 use App\Exports\WalletsExport;
 use App\Http\Controllers\Controller;
 use App\Models\Auth\User;
+use App\Models\Content\CartItem;
+use App\Models\Content\CartItemVariation;
 use App\Models\Content\Invoice;
 use App\Models\Content\OrderItem;
 use App\Models\Content\OrderItemVariation;
 use App\Notifications\PushNotification;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -20,11 +23,26 @@ use Maatwebsite\Excel\Facades\Excel;
  */
 class DashboardController extends Controller
 {
+
+  public function customerCartReset()
+  {
+    DB::beginTransaction();
+    try {
+      CartItem::where('created_at', '<', now()->subHours(48))->delete();
+      CartItemVariation::where('created_at', '<', now()->subHours(48))->delete();
+      DB::commit(); // all good
+    } catch (\Exception $e) {
+      DB::rollback(); // something went wrong
+    }
+  }
+
+
   /**
    * @return \Illuminate\View\View
    */
   public function index()
   {
+    $this->customerCartReset();
     return view('backend.dashboard');
   }
 
