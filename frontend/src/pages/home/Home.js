@@ -10,7 +10,7 @@ import NewArriveProduct from "./includes/Products/NewArriveProduct/NewArriveProd
 
 const Home = (props) => {
 
-   const {data: settings, isLoading} = useSettings();
+   const {data: settings} = useSettings();
 
    const section_one_active = settings?.section_one_active;
    const section_two_active = settings?.section_two_active;
