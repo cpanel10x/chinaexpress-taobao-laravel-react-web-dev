@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import Sticky from "react-sticky-el";
 import { goPageTop } from "../../utils/Helpers";
 import CheckoutSidebar from "./includes/CheckoutSidebar";
 import Swal from "sweetalert2";
@@ -8,6 +9,7 @@ import CheckoutItem from "./includes/CheckoutItem";
 import Helmet from "react-helmet";
 import { analyticsPageView } from "../../utils/AnalyticsHelpers";
 import { fbTrackCustom } from "../../utils/FacebookPixel";
+import { useMediaQuery } from "react-responsive";
 
 const Checkout = (props) => {
   const { data: settings } = useSettings();
@@ -17,6 +19,8 @@ const Checkout = (props) => {
   const cartItems = cart?.cart_items || [];
 
   const { removeCart } = useCartMutation();
+
+  const isMobile = useMediaQuery({ query: "(max-width: 991px)" });
 
   const currency = settings?.currency_icon;
 
@@ -52,7 +56,7 @@ const Checkout = (props) => {
   };
 
   return (
-    <main className="main">
+    <main className="main stick_block">
       <Helmet>
         <title>Checkout your cart </title>
       </Helmet>
@@ -83,11 +87,24 @@ const Checkout = (props) => {
           </div>
 
           <aside className="col-lg-4 col-md-5">
-            <CheckoutSidebar
-              cart={cart}
-              cartItems={cartItems}
-              settings={settings}
-            />
+            {!isMobile ? (
+              <Sticky
+                boundaryElement=".stick_block"
+                hideOnBoundaryHit={false}
+              >
+                <CheckoutSidebar
+                  cart={cart}
+                  cartItems={cartItems}
+                  settings={settings}
+                />
+              </Sticky>
+            ) : (
+              <CheckoutSidebar
+                cart={cart}
+                cartItems={cartItems}
+                settings={settings}
+              />
+            )}
           </aside>
         </div>
         {/* End .row */}

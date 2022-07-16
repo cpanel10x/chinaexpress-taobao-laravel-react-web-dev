@@ -607,6 +607,18 @@
       "css": "heart-6",
       "code": 59448,
       "src": "websymbols"
+    },
+    {
+      "uid": "f5053e43ef8be31afb905801449ae26d",
+      "css": "ch-truck-2",
+      "code": 59392,
+      "src": "linecons"
+    },
+    {
+      "uid": "7f3d8ff1d5f6ee019f0c00ed7a86caec",
+      "css": "ch-truck",
+      "code": 59393,
+      "src": "fontawesome"
     }
   ]
 }

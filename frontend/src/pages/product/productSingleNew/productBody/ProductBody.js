@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Sticky from "react-sticky-el";
 import LoadAttributes from "./includes/attribute/LoadAttributes";
 import ProductSummary from "./includes/ProductSummary";
 import MediaPart from "./includes/MediaPart";
@@ -55,11 +56,24 @@ const ProductBody = (props) => {
       {!isMobile && <h1 className="single-product-title">{Title}</h1>}
       <div className="row">
         <div className="col-md-5">
-          <MediaPart
-            activeImg={activeImg}
-            setActiveImg={setActiveImg}
-            product={product}
-          />
+          {!isMobile ? (
+            <Sticky
+              boundaryElement=".product-details-top"
+              hideOnBoundaryHit={false}
+            >
+              <MediaPart
+                activeImg={activeImg}
+                setActiveImg={setActiveImg}
+                product={product}
+              />
+            </Sticky>
+          ) : (
+            <MediaPart
+              activeImg={activeImg}
+              setActiveImg={setActiveImg}
+              product={product}
+            />
+          )}
         </div>
         {/* End .col-md-6 */}
         <div className="col-md-7">

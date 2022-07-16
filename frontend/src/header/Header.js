@@ -10,7 +10,7 @@ const Header = (props) => {
   const { data: user, isLoading } = customer;
 
   return (
-    <header className="header header-intro-clearance header-26">
+    <header className="header sticky-top header-intro-clearance header-26">
       <div className="header-middle">
         <div className="container">
           <div className="header-left">

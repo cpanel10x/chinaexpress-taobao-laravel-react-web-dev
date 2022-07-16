@@ -291,13 +291,10 @@ class CatalogController extends Controller
 
   public function productSellerInfo($VendorId)
   {
-    $VendorInfo = getSellerInformation($VendorId);
-    if (!empty($VendorInfo)) {
-      return $this->success([
-        'VendorInfo' => $VendorInfo
-      ]);
-    }
-    return $this->error('some error occurred', 417);
+    $VendorInfo = getSellerInformation($VendorId);    
+    return response([
+      'result' => $VendorInfo
+    ]);
   }
 
 
