@@ -1,59 +1,73 @@
-import React, {useEffect, useState} from 'react';
-import {aliActiveConfigurations, aliProductConvertionPrice} from "../../../../utils/AliHelpers";
+import React, { useEffect, useState } from "react";
+import {
+  aliActiveConfigurations,
+  aliConversionSlubRate,
+  aliProductConvertionPrice,
+} from "../../../../utils/AliHelpers";
 
 const AliPriceCard = (props) => {
-	const {product, operationalAttributes, settings} = props;
+  const { product, operationalAttributes, settings } = props;
 
-	const priceCard = aliActiveConfigurations(product, operationalAttributes);
+  const priceCard = aliActiveConfigurations(product, operationalAttributes);
 
-	const currency = settings?.currency_icon || '৳';
-	const aliRate = settings?.ali_increase_rate || 90;
+  const currency = settings?.currency_icon || "৳";
+  const aliRate = settings?.ali_increase_rate || 100;
+  const conversion = settings?.ali_pricing_conversion || null;
 
-	const skuAmount = priceCard?.price;
-	const skuActivityAmount = priceCard?.promotion_price < 0.10 ? skuAmount : (priceCard?.promotion_price || skuAmount);
-	const discount = () => {
-		let percent = 0;
-		if (skuAmount > skuActivityAmount) {
-			percent = 100 - (skuActivityAmount / skuAmount) * 100;
-		}
-		return parseInt(percent);
-	};
+  const skuAmount = priceCard?.price;
+  const skuActivityAmount =
+    priceCard?.promotion_price < 0.1
+      ? skuAmount
+      : priceCard?.promotion_price || skuAmount;
 
-	const formatedDiscountedPrice = () => {
-		let amount = 0;
-		if (skuActivityAmount) {
-			amount = `${currency} ${aliProductConvertionPrice(skuActivityAmount, aliRate)}`;
-		}
-		return amount;
-	};
+  const ali_rate = aliConversionSlubRate(
+    conversion,
+    skuActivityAmount,
+    aliRate
+  );
 
-	const formatedRegularMaxPrice = () => {
-		let amount = 0;
-		if (skuAmount) {
-			amount = `${currency} ${aliProductConvertionPrice(skuAmount, aliRate)}`;
-		}
-		return amount;
-	};
+  const discount = () => {
+    let percent = 0;
+    if (skuAmount > skuActivityAmount) {
+      percent = 100 - (skuActivityAmount / skuAmount) * 100;
+    }
+    return parseInt(percent);
+  };
 
-	return (
-		<div className="card mb-3 pricing_card">
-			<div className="card-body">
-				<div>
-					<span className="show_price">{formatedDiscountedPrice()}</span>
-					{
-						discount() > 0 &&
-						<del className="ml-3 delete_price">{formatedRegularMaxPrice()}</del>
-					}
-				</div>
-				{
-					discount() > 0 &&
-					<div className="discount_box">
-						{Math.round(discount())}% Discount
-					</div>
-				}
-			</div>
-		</div>
-	);
+  const formatedDiscountedPrice = () => {
+    let amount = 0;
+    if (skuActivityAmount) {
+      amount = `${currency} ${aliProductConvertionPrice(
+        skuActivityAmount,
+        ali_rate
+      )}`;
+    }
+    return amount;
+  };
+
+  const formatedRegularMaxPrice = () => {
+    let amount = 0;
+    if (skuAmount) {
+      amount = `${currency} ${aliProductConvertionPrice(skuAmount, ali_rate)}`;
+    }
+    return amount;
+  };
+
+  return (
+    <div className="card mb-3 pricing_card">
+      <div className="card-body">
+        <div>
+          <span className="show_price">{formatedDiscountedPrice()}</span>
+          {discount() > 0 && (
+            <del className="ml-3 delete_price">{formatedRegularMaxPrice()}</del>
+          )}
+        </div>
+        {discount() > 0 && (
+          <div className="discount_box">{Math.round(discount())}% Discount</div>
+        )}
+      </div>
+    </div>
+  );
 };
 
 export default AliPriceCard;

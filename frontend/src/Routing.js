@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { Route, Switch } from "react-router-dom";
+import AuthRoute from "./AuthRoute";
 import Home from "./pages/home/Home";
 import Login from "./auth/login/Login";
 import My404Component from "./pages/404/My404Component";
@@ -13,7 +14,6 @@ import LoadCategory from "./pages/category/LoadCategory";
 import LoadShopProducts from "./pages/shop/LoadShopProducts";
 import LoadSearchProducts from "./pages/search/LoadSearchProducts";
 import Dashboard from "./auth/dashboard/Dashboard";
-import AuthRoute from "./AuthRoute";
 import Payment from "./pages/payment/Payment";
 import LoadPictureSearchProduct from "./pages/search/LoadPictureSearchProduct";
 import AliProductPage from "./pages/aliexpress/product/AliProductPage";

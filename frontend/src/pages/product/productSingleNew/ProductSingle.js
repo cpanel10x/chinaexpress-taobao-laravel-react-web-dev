@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import ProductBody from "./productBody/ProductBody";
 import ProductDetailsTab from "./includes/ProductDetailsTab";
 import RelatedProduct from "../reletedProduct/RelatedProduct";
@@ -38,48 +38,50 @@ const ProductSingle = (props) => {
   }
 
   return (
-    <div className="main">
-      <div className="bg-gray main mt-4">
-        <div className="container">
-          <div className="row" ref={cardRef}>
-            <div className="col-lg-9 col-md-12">
-              <ProductBody
-                settings={settings}
-                product={product}
-                cartConfigured={cartConfigured}
-              />
+    <>
+      <div className="main">
+        <div className="bg-gray main mt-4">
+          <div className="container">
+            <div className="row" ref={cardRef}>
+              <div className="col-lg-9 col-md-12">
+                <ProductBody
+                  settings={settings}
+                  product={product}
+                  cartConfigured={cartConfigured}
+                />
 
-              <div className="card mb-3 mb-lg-4">
-                <div className="card-body">
-                  <ProductDetailsTab product={product} />
+                <div className="card mb-3 mb-lg-4">
+                  <div className="card-body">
+                    <ProductDetailsTab product={product} />
+                  </div>
                 </div>
               </div>
+              {!isMobile && (
+                <div className="col-lg-3 d-none d-lg-block">
+                  <RelatedProduct item_id={item_id} cardRef={cardRef} />
+                </div>
+              )}
             </div>
-            {!isMobile && (
-              <div className="col-lg-3 d-none d-lg-block">
-                <RelatedProduct item_id={item_id} cardRef={cardRef} />
+
+            {isMobile && (
+              <div className="card mb-3">
+                <div className="card-body">
+                  <h4>Related Products</h4>
+                  <RelatedProduct item_id={item_id} />
+                </div>
               </div>
             )}
-          </div>
 
-          {isMobile && (
             <div className="card mb-3">
               <div className="card-body">
-                <h4>Related Products</h4>
-                <RelatedProduct item_id={item_id} />
+                <h3>Recent View</h3>
+                <RecentViewProduct currencyIcon={currencyIcon} />
               </div>
-            </div>
-          )}
-
-          <div className="card mb-3">
-            <div className="card-body">
-              <h3>Recent View</h3>
-              <RecentViewProduct currencyIcon={currencyIcon} />
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

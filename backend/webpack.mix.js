@@ -12,32 +12,45 @@ const mix = require("laravel-mix");
  */
 
 mix
-  .sass("resources/sass/frontend/app.scss", "public/css")
-  .sass("resources/sass/backend/app.scss", "css/backend.css")
-  .js("resources/js/frontend/frontend.js", "js/frontend.js")
-  .js(
-    [
-      "resources/js/backend/before.js",
-      "resources/js/backend/app.js",
-      "resources/js/backend/after.js",
-    ],
-    "js/backend.js"
-  )
-  .extract(["jquery", "bootstrap", "popper.js", "sweetalert2"])
-  .sourceMaps();
+    .js(
+        [
+            "resources/js/backend/before.js",
+            "resources/js/backend/app.js",
+            "resources/js/backend/after.js",
+        ],
+        "js/backend.js"
+    )
+    .react()
+    .sass("resources/sass/backend/app.scss", "css/backend.css")
+    .extract(["jquery", "bootstrap", "popper.js", "sweetalert2"]);
+
+mix.webpackConfig({
+    optimization: {
+        providedExports: false,
+        sideEffects: false,
+        usedExports: false
+    },
+    watchOptions: {ignored: /node_modules/}
+});
+
 
 if (mix.inProduction()) {
-  mix.options({
-    // Optimize JS minification process
-    terser: {
-      cache: true,
-      parallel: true,
-      sourceMap: true,
-    },
-  }).version();
+    mix
+        .options({
+            // Optimize JS minification process
+            terser: {
+                cache: true,
+                parallel: true,
+                sourceMap: true,
+            },
+        })
+        .version();
 } else {
-  // Uses inline source-maps on development
-  mix.webpackConfig({
-    devtool: "inline-source-map",
-  });
+    mix
+        .webpackConfig({
+            devtool: "inline-source-map",
+        })
+        .browserSync({
+            proxy: '127.0.0.1:8000',
+        });
 }

@@ -3,7 +3,7 @@ import {Link} from "react-router-dom";
 import {characterLimiter} from "../../../utils/Helpers";
 import AttributeImage from "../../checkout/includes/attributes/AttributeImage";
 import AttrConfigs from "../../checkout/includes/attributes/AttrConfigs";
-import {CartProductSummary, singleProductTotal} from "../../../utils/CartHelpers";
+import {calculate_advanced_rate, CartProductSummary, singleProductTotal} from "../../../utils/CartHelpers";
 import {useMediaQuery} from "react-responsive";
 import CheckoutItemSimpleSummary from "../../checkout/includes/CheckoutItemSimpleSummary";
 import AliExpressItemDescription from "../../checkout/includes/itemDescription/AliExpressItemDescription";
@@ -11,9 +11,15 @@ import TaobaoItemDescription from "../../checkout/includes/itemDescription/Taoba
 
 const PaymentItem = (props) => {
 
-	const {cart, cartItems, currency, advanced_rate, settings} = props;
+	const {cart, cartItems, currency, settings} = props;
 
-	const {totalPrice, advanced, dueAmount} = CartProductSummary(cart, advanced_rate);
+
+
+	const current_rate = settings?.payment_advanched_rate || 0;
+	const advanced_rates = settings?.advanced_rates || null;
+
+	const {totalPrice, advanced, dueAmount} = CartProductSummary(cart, advanced_rates,  current_rate);
+	const calculateAdv = totalPrice ?  calculate_advanced_rate(totalPrice,  advanced_rates, current_rate) : 100;
 
 	const activeVariations = (product) => {
 		return product?.variations.filter(filter => parseInt(filter.is_checked) === 1);
@@ -86,7 +92,7 @@ const PaymentItem = (props) => {
 				<div className="row">
 					<div className="col-12 text-right">
 						<p className="my-2"><span
-							className="mr-2">Need To Pay {advanced_rate}%: </span><strong> {currency + " " + advanced} </strong></p>
+							className="mr-2">Need To Pay {calculateAdv}%: </span><strong> {currency + " " + advanced} </strong></p>
 					</div>
 				</div>
 				<div className="row">

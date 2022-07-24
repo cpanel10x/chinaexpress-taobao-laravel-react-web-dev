@@ -24,7 +24,7 @@ const AliProductPage = (props) => {
     goPageTop();
     analyticsPageView();
   }, [product_id]);
-
+ 
   if (isLoading) {
     return <ProductDetailsSkeleton />;
   }

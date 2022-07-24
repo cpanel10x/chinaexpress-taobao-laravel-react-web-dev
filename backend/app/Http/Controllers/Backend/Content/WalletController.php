@@ -8,6 +8,7 @@ use App\Models\Content\Order;
 use App\Models\Content\OrderItem;
 use App\Models\Content\OrderItemVariation;
 use App\Repositories\Backend\WalletRepository;
+use App\Http\Services\Backend\WalletService;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -19,11 +20,13 @@ class WalletController extends Controller
 
 
   public $walletRepository;
+  public $walletService;
 
 
-  public function __construct(WalletRepository $walletRepository)
+  public function __construct(WalletRepository $walletRepository, WalletService $walletService)
   {
     $this->walletRepository = $walletRepository;
+    $this->walletService = $walletService;
   }
 
 
@@ -42,6 +45,12 @@ class WalletController extends Controller
       ->prepend(' - Select Customer - ', '');
 
     return view('backend.content.wallet.index', ['findable' => $customers]);
+  }
+
+  public function list()
+  {
+    $data = $this->walletService->list();
+    return \response($data);
   }
 
   /**
@@ -135,6 +144,9 @@ class WalletController extends Controller
     $user = $orderItem->user;
     if ($request->input('notify')) {
       generate_customer_notifications($status, $user, $order_id, $amount, $tracking);
+    }
+    if ($request->input('tracking')) {
+      $this->walletService->updateTracking($request, $item_id);
     }
 
     return response(['status' => $status, 'data' => $orderItem]);

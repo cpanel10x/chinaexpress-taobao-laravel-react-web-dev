@@ -97,7 +97,6 @@
     </div>
   </div>
 
-
   <!-- Scripts -->
   @stack('before-scripts')
   {!! script(mix('js/manifest.js')) !!}

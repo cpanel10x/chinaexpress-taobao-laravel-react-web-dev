@@ -12,6 +12,7 @@ $purchasedCount = $orders->where('status', 'purchased')->count();
 @endphp
 
 @section('content')
+
 <div class="card">
 
   <div class="card-header">

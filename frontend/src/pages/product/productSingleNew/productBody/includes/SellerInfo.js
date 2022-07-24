@@ -66,27 +66,27 @@ const SellerInfo = (props) => {
                   {` Customer Satisfaction`}
                 </span>
               </p>
-              <div class="mb-2 d-flex justify-content-between align-items-center">
+              <div className="mb-2 d-flex justify-content-between align-items-center">
                 <span>
                   <i className="icon-shopping-bag"></i> Product
                 </span>
-                <span class="badge badge-primary badge-pill">
+                <span className="badge badge-primary badge-pill">
                   {ItemScore}
                 </span>
               </div>
-              <div class="mb-2 d-flex justify-content-between align-items-center">
+              <div className="mb-2 d-flex justify-content-between align-items-center">
                 <span>
                   <i className="icon-ok-circled"></i> Shipping
                 </span>
-                <span class="badge badge-primary badge-pill">
+                <span className="badge badge-primary badge-pill">
                   {DeliveryScore}
                 </span>
               </div>
-              <div class="mb-2 d-flex justify-content-between align-items-center">
+              <div className="mb-2 d-flex justify-content-between align-items-center">
                 <span>
                   <i className="icon-arrows-ccw"></i> Support
                 </span>
-                <span class="badge badge-primary badge-pill">
+                <span className="badge badge-primary badge-pill">
                   {ServiceScore}
                 </span>
               </div>
