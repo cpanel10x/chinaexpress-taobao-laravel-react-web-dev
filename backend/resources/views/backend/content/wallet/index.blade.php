@@ -304,6 +304,72 @@ $options = [
     </div>
   </div> <!-- changeStatusButton -->
 
+  <div class="modal fade" id="trackingInfoModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+
+        <div class="modal-header">
+          <h5 class="modal-title" id="trackingInfoModalTitle">Tracking Information</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          {{-- tracking information will be displayed here --}}
+
+          <div class="timeline">
+            <!-- timeline item -->
+            <div>
+              <i class="fa fa-check-circle bg-blue"></i>
+              <div class="timeline-item">
+                <div class="timeline-body">
+                  <h6>Purchased</h6>
+                  <span>10 Feb. 2022</span>
+                </div>
+              </div>
+            </div>
+            <!-- END timeline item -->
+            <!-- timeline item -->
+            <div>
+              <i class="fa fa-check-circle bg-gray"></i>
+              <div class="timeline-item">
+                <div class="timeline-body">
+                  <h6>Received in BD warehouse</h6>
+                  <span>10 Feb. 2022</span>
+                </div>
+              </div>
+            </div>
+            <!-- END timeline item -->
+            <div>
+              <i class="fa fa-check-circle bg-gray"></i>
+              <div class="timeline-item">
+                <div class="timeline-body">
+                  <h6>On transit to customer</h6>
+                  <span>10 Feb. 2022</span>
+                </div>
+              </div>
+            </div>
+            <div>
+              <i class="fa fa-check-circle bg-gray"></i>
+              <div class="timeline-item">
+                <div class="timeline-body">
+                  <h6>Delivered</h6>
+                  <span>10 Feb. 2022</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="time-label">
+              <span class="bg-green">Completed</span>
+            </div>
+          </div>
+
+          {{--  --}}
+        </div>
+      </div>
+    </div>
+  </div> <!-- changeStatusButton -->
+
 
 @endsection
 

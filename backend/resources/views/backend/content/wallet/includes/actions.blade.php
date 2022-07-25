@@ -14,7 +14,7 @@
       </a>
     @endcan
     @can('wallet.tracking.update')
-      <a href="{{ route('admin.order.wallet.comments', $wallet) }}" class="dropdown-item walletCommentButton" data-comment="one">
+      <a href="{{ route('admin.order.wallet.tracking-information', $wallet) }}" class="dropdown-item showTrackingUpdate" >
         Show Tracking
       </a>
     @endcan

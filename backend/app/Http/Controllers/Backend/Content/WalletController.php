@@ -7,7 +7,6 @@ use App\Models\Auth\User;
 use App\Models\Content\Order;
 use App\Models\Content\OrderItem;
 use App\Models\Content\OrderItemVariation;
-use App\Repositories\Backend\WalletRepository;
 use App\Http\Services\Backend\WalletService;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
@@ -18,14 +17,11 @@ use Throwable;
 class WalletController extends Controller
 {
 
-
-  public $walletRepository;
   public $walletService;
 
 
-  public function __construct(WalletRepository $walletRepository, WalletService $walletService)
+  public function __construct(WalletService $walletService)
   {
-    $this->walletRepository = $walletRepository;
     $this->walletService = $walletService;
   }
 
@@ -137,7 +133,7 @@ class WalletController extends Controller
     $status =  false;
     if (!empty($data)) {
       $orderItem->update($data);
-      $abcd = $this->walletRepository->updateWalletCalculation($orderItem->id);
+      $abcd = $this->walletService->updateWalletCalculation($orderItem->id);
       $status = true;
     }
 
@@ -154,13 +150,19 @@ class WalletController extends Controller
 
   public function storeWalletComment(Request $request, $id)
   {
-    $wallet = $this->walletRepository->storeComments($request, $id);
+    $wallet = $this->walletService->storeComments($request, $id);
     return response(['status' => true, 'data' => $wallet]);
   }
 
   public function walletUpdatedParameters(Request $request, $id)
   {
-    $wallet = $this->walletRepository->updatedParameters($request, $id);
+    $wallet = $this->walletService->updatedParameters($request, $id);
+    return response(['wallet' => $wallet]);
+  }
+
+  public function walletTrackingInformation(Request $request, $id)
+  {
+    $wallet = $this->walletService->walletTrackingInfo($request, $id);
     return response(['wallet' => $wallet]);
   }
 
@@ -205,7 +207,7 @@ class WalletController extends Controller
     $orderItem  = OrderItem::find($id);
     if ($orderItem) {
       $orderItem->update($data);
-      $abcd = $this->walletRepository->updateWalletCalculation($request, $id);
+      $abcd = $this->walletService->updateWalletCalculation($request, $id);
     }
     return response(['data' => $orderItem]);
   }

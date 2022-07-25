@@ -1016,4 +1016,23 @@ function remove_space(stringData) {
                 $("#commentsModal").modal("hide");
             });
     });
+
+    function trackingInfoModal(wallet) {
+        var trackingInfo = $("#trackingInfoModal");
+        trackingInfo.modal("show");
+    }
+
+    $(document).on("click", ".showTrackingUpdate", function (event) {
+        event.preventDefault();
+        var action = $(this).attr("href");
+        axios
+            .get(action)
+            .then((res) => {
+                const wallet = res.data.wallet;
+                trackingInfoModal(wallet);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    });
 })(jQuery);

@@ -3,6 +3,7 @@
 namespace App\Models\Backend;
 
 use App\Models\Auth\User;
+use App\Models\Content\OrderItem;
 use Illuminate\Database\Eloquent\Model;
 
 class TrackingOrder extends Model
@@ -23,5 +24,10 @@ class TrackingOrder extends Model
   public function user()
   {
     return $this->belongsTo(User::class);
+  }
+
+  public function orderItem()
+  {
+    return $this->belongsTo(OrderItem::class, 'order_item_id', 'id');
   }
 }
