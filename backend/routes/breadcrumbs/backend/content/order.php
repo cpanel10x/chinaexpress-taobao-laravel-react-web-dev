@@ -35,3 +35,7 @@ Breadcrumbs::for('admin.order.show', function ($trail, $id) {
 Breadcrumbs::for('admin.order.wallet.index', function ($trail) {
   $trail->push('Wallet', route('admin.order.wallet.index'));
 });
+
+Breadcrumbs::for('admin.order.tracking.index', function ($trail) {
+  $trail->push('Tracking', route('admin.order.tracking.index'));
+});

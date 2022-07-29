@@ -2,7 +2,7 @@
 
 namespace App\Http\Services\Backend;
 
-use App\Models\Backend\TrackingOrder;
+use App\Models\Backend\OrderTracking;
 use App\Models\Content\OrderItem;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -105,7 +105,6 @@ class WalletService
     public function list()
     {
         $data = OrderItem::with('user', 'order', 'product')->orderByDesc('id')->get();
-
         return [
             'info' => [
                 'seed' => '',
@@ -113,52 +112,6 @@ class WalletService
                 'page' => 1,
             ],
             'results' => $data
-        ];
-    }
-
-    public function updateTracking(Request $request, $wallet_id)
-    {
-        $tracking_date = $request->tracking_date;
-        $tracking = TrackingOrder::where('order_item_id', $wallet_id)
-            ->get();
-
-        $statusArray = $this->trackingArray();
-
-        if ($tracking->count !== count($statusArray)) {
-            foreach ($statusArray as $key => $track) {
-                $tracking = new TrackingOrder();
-                $tracking->order_item_id = $wallet_id;
-                $tracking->status = $key;
-                // $tracking->tracking_status = $track;
-                if ($tracking_date) {
-                    $tracking->updated_time = now($tracking_date)->toDateTimeString();
-                } else {
-                    $tracking->updated_time = now();
-                }
-                $tracking->user_id = auth()->id();
-                $tracking->save();
-            }
-        }
-
-        return true;
-    }
-
-    public function walletTrackingInfo(Request $request, $wallet_id)
-    {
-        return TrackingOrder::with('orderItem')->where('order_item_id', $wallet_id)
-            ->get();
-    }
-
-    public function trackingArray()
-    {
-        return [
-            'purchased' => 'Purchased',
-            'shipped-from-suppliers' => 'Shipped from Suppliers',
-            'received-in-china-warehouse' => 'Received in China Warehouse',
-            'shipped-from-china-warehouse' => 'Shipped from China Warehouse',
-            'received-in-BD-warehouse' => 'Received in BD Warehouse',
-            'on-transit-to-customer' => 'On Transit to Customer',
-            'delivered' => 'Delivered',
         ];
     }
 }

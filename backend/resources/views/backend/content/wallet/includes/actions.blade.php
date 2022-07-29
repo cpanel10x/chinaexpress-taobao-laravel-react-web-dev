@@ -14,7 +14,7 @@
       </a>
     @endcan
     @can('wallet.tracking.update')
-      <a href="{{ route('admin.order.wallet.tracking-information', $wallet) }}" class="dropdown-item showTrackingUpdate" >
+      <a href="{{ route('admin.order.tracking.show', $wallet) }}" class="dropdown-item showTrackingUpdate">
         Show Tracking
       </a>
     @endcan

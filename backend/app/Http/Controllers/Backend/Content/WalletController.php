@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend\Content;
 
 use App\Http\Controllers\Controller;
+use App\Http\Services\Backend\TrackingService;
 use App\Models\Auth\User;
 use App\Models\Content\Order;
 use App\Models\Content\OrderItem;
@@ -141,9 +142,8 @@ class WalletController extends Controller
     if ($request->input('notify')) {
       generate_customer_notifications($status, $user, $order_id, $amount, $tracking);
     }
-    if ($request->input('tracking')) {
-      $this->walletService->updateTracking($request, $item_id);
-    }
+
+    (new TrackingService())->updateTracking($request);
 
     return response(['status' => $status, 'data' => $orderItem]);
   }
@@ -157,12 +157,6 @@ class WalletController extends Controller
   public function walletUpdatedParameters(Request $request, $id)
   {
     $wallet = $this->walletService->updatedParameters($request, $id);
-    return response(['wallet' => $wallet]);
-  }
-
-  public function walletTrackingInformation(Request $request, $id)
-  {
-    $wallet = $this->walletService->walletTrackingInfo($request, $id);
     return response(['wallet' => $wallet]);
   }
 

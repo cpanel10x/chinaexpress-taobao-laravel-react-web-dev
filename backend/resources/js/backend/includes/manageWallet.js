@@ -1017,19 +1017,60 @@ function remove_space(stringData) {
             });
     });
 
-    function trackingInfoModal(wallet) {
+    function trackingInfoBlock(track) {
+        return `
+        <div>
+          ${
+              track.updated_time
+                  ? '<i class="fa fa-check-circle bg-blue"></i>'
+                  : '<i class="fa fa-check-circle bg-gray"></i>'
+          }
+          <div class="timeline-item">
+            <div class="timeline-body">
+              <h6>${track.tracking_status}</h6>
+              ${track.updated_time ? `<span>${track.updated_time}</span>` : ""}
+              ${track.comment ? `<p class="m-0">${track.comment}</p>` : ""}
+            </div>
+          </div>
+        </div>`;
+    }
+
+    function trackingInfoModal(tracking) {
         var trackingInfo = $("#trackingInfoModal");
+        var htmlBlock = "";
+        var hasException = tracking.find((find) => find.exceptions?.length > 0);
+        if (hasException) {
+            for (var i = 0; i < hasException.exceptions.length; i++) {
+                var track = hasException.exceptions[i];
+                htmlBlock += trackingInfoBlock(track);
+            }
+            for (var i = 0; i < tracking.length; i++) {
+                var track = tracking[i];
+                if (track.id <= hasException.id) {
+                    htmlBlock += trackingInfoBlock(track);
+                }
+            }
+        } else {
+            for (var i = 0; i < tracking.length; i++) {
+                var track = tracking[i];
+                htmlBlock += trackingInfoBlock(track);
+            }
+        }
+
+        trackingInfo.find(".timeline").html(htmlBlock);
         trackingInfo.modal("show");
     }
+
+    // .reverse();
 
     $(document).on("click", ".showTrackingUpdate", function (event) {
         event.preventDefault();
         var action = $(this).attr("href");
         axios
             .get(action)
-            .then((res) => {
-                const wallet = res.data.wallet;
-                trackingInfoModal(wallet);
+            .then(({ data }) => {
+                const tracking = data.tracking;
+                trackingInfoModal(tracking);
             })
             .catch((error) => {
                 console.log(error);

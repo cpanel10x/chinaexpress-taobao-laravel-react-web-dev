@@ -6,9 +6,9 @@ use App\Models\Auth\User;
 use App\Models\Content\OrderItem;
 use Illuminate\Database\Eloquent\Model;
 
-class TrackingOrder extends Model
+class OrderTrackingExceptional extends Model
 {
-  protected $table = 'order_tracking';
+  protected $table = 'order_tracking_exceptional';
 
   public $primaryKey = 'id';
 

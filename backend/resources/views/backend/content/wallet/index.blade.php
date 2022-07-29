@@ -318,39 +318,8 @@ $options = [
           {{-- tracking information will be displayed here --}}
 
           <div class="timeline">
-            <!-- timeline item -->
             <div>
               <i class="fa fa-check-circle bg-blue"></i>
-              <div class="timeline-item">
-                <div class="timeline-body">
-                  <h6>Purchased</h6>
-                  <span>10 Feb. 2022</span>
-                </div>
-              </div>
-            </div>
-            <!-- END timeline item -->
-            <!-- timeline item -->
-            <div>
-              <i class="fa fa-check-circle bg-gray"></i>
-              <div class="timeline-item">
-                <div class="timeline-body">
-                  <h6>Received in BD warehouse</h6>
-                  <span>10 Feb. 2022</span>
-                </div>
-              </div>
-            </div>
-            <!-- END timeline item -->
-            <div>
-              <i class="fa fa-check-circle bg-gray"></i>
-              <div class="timeline-item">
-                <div class="timeline-body">
-                  <h6>On transit to customer</h6>
-                  <span>10 Feb. 2022</span>
-                </div>
-              </div>
-            </div>
-            <div>
-              <i class="fa fa-check-circle bg-gray"></i>
               <div class="timeline-item">
                 <div class="timeline-body">
                   <h6>Delivered</h6>
@@ -358,9 +327,88 @@ $options = [
                 </div>
               </div>
             </div>
-
-            <div class="time-label">
-              <span class="bg-green">Completed</span>
+            <div>
+              <i class="fa fa-check-circle bg-gray"></i>
+              <div class="timeline-item">
+                <div class="timeline-body">
+                  <h6>On Transit to Customer</h6>
+                  <span>10 Feb. 2022</span>
+                  <p class="m-0">Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugiat fugit aliquid tenetur?</p>
+                </div>
+              </div>
+            </div>
+            <div>
+              <i class="fa fa-check-circle bg-gray"></i>
+              <div class="timeline-item">
+                <div class="timeline-body">
+                  <h6>Received in BD Warehouse</h6>
+                  <span>10 Feb. 2022</span>
+                </div>
+              </div>
+            </div>
+            <div>
+              <i class="fa fa-check-circle bg-gray"></i>
+              <div class="timeline-item">
+                <div class="timeline-body">
+                  <h6>Shipped from China Warehouse</h6>
+                  <span>10 Feb. 2022</span>
+                </div>
+              </div>
+            </div>
+            <div>
+              <i class="fa fa-check-circle bg-gray"></i>
+              <div class="timeline-item">
+                <div class="timeline-body">
+                  <h6>Received in China Warehouse</h6>
+                  <span>10 Feb. 2022</span>
+                </div>
+              </div>
+            </div>
+            <div>
+              <i class="fa fa-check-circle bg-gray"></i>
+              <div class="timeline-item">
+                <div class="timeline-body">
+                  <h6>Shipped from Seller</h6>
+                  <span>10 Feb. 2022</span>
+                </div>
+              </div>
+            </div>
+            <div>
+              <i class="fa fa-check-circle bg-gray"></i>
+              <div class="timeline-item">
+                <div class="timeline-body">
+                  <h6>Received in China Warehouse</h6>
+                  <span>10 Feb. 2022</span>
+                </div>
+              </div>
+            </div>
+            <!-- END timeline item -->
+            <div>
+              <i class="fa fa-check-circle bg-gray"></i>
+              <div class="timeline-item">
+                <div class="timeline-body">
+                  <h6>Shipped from Seller</h6>
+                  <span>10 Feb. 2022</span>
+                </div>
+              </div>
+            </div>
+            <div>
+              <i class="fa fa-check-circle bg-gray"></i>
+              <div class="timeline-item">
+                <div class="timeline-body">
+                  <h6>Purchased</h6>
+                  <span>10 Feb. 2022</span>
+                </div>
+              </div>
+            </div>
+            <div>
+              <i class="fa fa-check-circle bg-blue"></i>
+              <div class="timeline-item">
+                <div class="timeline-body">
+                  <h6>Partial Paid</h6>
+                  <span>10 Feb. 2022</span>
+                </div>
+              </div>
             </div>
           </div>
 

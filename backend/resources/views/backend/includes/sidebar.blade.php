@@ -57,7 +57,7 @@
               @endcan
               @can('order.tracking')
                 <li class="nav-item">
-                  <a href="{{ route('admin.invoice.index') }}" class="nav-link {{ active_class(Route::is('admin.invoice.*')) }}">
+                  <a href="{{ route('admin.order.tracking.index') }}" class="nav-link {{ active_class(Route::is('admin.order.tracking.*')) }}">
                     <i class="nav-icon fa fa-circle-o"></i>
                     <p class="text">Order Tracking Info</p>
                   </a>

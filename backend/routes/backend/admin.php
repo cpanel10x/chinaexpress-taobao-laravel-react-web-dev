@@ -8,6 +8,7 @@ use App\Http\Controllers\Backend\Content\ProductController;
 use App\Http\Controllers\Backend\Content\TaxonomyController;
 use App\Http\Controllers\Backend\Content\BkashApiResponseController;
 use App\Http\Controllers\Backend\Content\BlockWordController;
+use App\Http\Controllers\Backend\Content\OrderTrackingController;
 use App\Http\Controllers\Backend\Content\WalletController;
 use Illuminate\Support\Facades\Route;
 
@@ -30,11 +31,11 @@ Route::namespace('Content')->group(function () {
     Route::post('wallet/status/change', [WalletController::class, 'update_order_wallet_status']);
     Route::post('wallet/comments/{wallet}', [WalletController::class, 'storeWalletComment'])->name('wallet.comments');
     Route::get('wallet/updated-parameters/{wallet}', [WalletController::class, 'walletUpdatedParameters']);
-    Route::get('wallet/tracking-information/{id}', [WalletController::class, 'walletTrackingInformation'])->name('wallet.tracking-information');
     Route::get('wallet/list/data', [WalletController::class, 'list']);
     Route::resource('wallet', 'WalletController');
-  });
 
+    Route::resource('tracking', 'OrderTrackingController');
+  });
 
   Route::get('order/trashed', 'OrderController@trashed')->name('order.trashed');
   Route::get('order/restore/{order}', 'OrderController@restore')->name('order.restore');

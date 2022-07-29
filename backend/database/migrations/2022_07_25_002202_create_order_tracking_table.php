@@ -17,12 +17,30 @@ class CreateOrderTrackingTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedInteger('order_item_id');
             $table->string('status');
-            $table->smallInteger('order')->nullable();
-            $table->timestamp('updated_time');
+            $table->string('tracking_status', 255);
+            $table->smallInteger('sorting')->nullable();
+            $table->timestamp('updated_time')->nullable();
+            $table->text('comment')->nullable();
             $table->unsignedInteger('user_id');
             $table->timestamps();
             $table->softDeletes();
         });
+
+        Schema::create('order_tracking_exceptional', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->unsignedInteger('order_tracking_id');
+            $table->unsignedInteger('order_item_id');
+            $table->string('status');
+            $table->string('tracking_status', 255);
+            $table->smallInteger('sorting')->nullable();
+            $table->timestamp('updated_time')->nullable();
+            $table->text('comment')->nullable();
+            $table->unsignedInteger('user_id');
+            $table->timestamps();
+            $table->softDeletes();
+        });
+
+
         // php artisan migrate:refresh --path='./database/migrations/2022_07_25_002202_create_order_tracking_table.php'
     }
 
@@ -34,5 +52,6 @@ class CreateOrderTrackingTable extends Migration
     public function down()
     {
         Schema::dropIfExists('order_tracking');
+        Schema::dropIfExists('order_tracking_exceptional');
     }
 }

@@ -199,19 +199,14 @@ class WalletTable extends TableComponent
       Column::make('Total Weight', 'actual_weight')
         ->format(function (OrderItem $model) {
           $weight = $model->actual_weight ? $model->actual_weight : 0;
-          $Quantity = $model->Quantity ? $model->Quantity : 0;
-          $totalWeight = $weight * $Quantity;
-          $html = '<span class="actual_weight">' . (floating($totalWeight, 3)) . '</span>';
+          $html = '<span class="actual_weight">' . (floating($weight, 3)) . '</span>';
           return $this->html($html);
         }),
       Column::make('WeightCharges', 'weight_charges')
         ->format(function (OrderItem $model) {
           $shipping_rate = $model->shipping_rate ? $model->shipping_rate : 0;
-          $weight = $model->actual_weight ? $model->actual_weight : 0;
-          $Quantity = $model->Quantity ? $model->Quantity : 0;
-          $totalWeight = $weight * $Quantity;
-          $totalShipping = round($shipping_rate * $totalWeight);
-          $floatingWeight = floating($totalWeight, 3);
+          $weight = $model->actual_weight;
+          $totalShipping = round($shipping_rate * $weight);
           $html = '<span class="weight_charges">' . ($totalShipping) . '</span>';
           return $this->html($html);
         }),
