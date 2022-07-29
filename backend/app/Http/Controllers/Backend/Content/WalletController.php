@@ -109,7 +109,7 @@ class WalletController extends Controller
       $data = $request->only('status');
     } elseif ($status == 'received-in-BD-warehouse') {
       $data = $request->only('actual_weight', 'status');
-      $data['bd_shipping_charge'] = $orderItem->shipping_rate * request('actual_weight', 0);
+      $data['bd_shipping_charge'] = $orderItem->shipping_rate * (int) request('actual_weight', 0);
     } elseif ($status == 'on-transit-to-customer') {
       $data = $request->only('status');
     } elseif ($status == 'delivered') {

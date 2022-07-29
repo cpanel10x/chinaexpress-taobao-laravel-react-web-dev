@@ -87,7 +87,7 @@ class WalletService
             $weight_change = 0;
             if ($shipping_type != 'regular') {
                 $shipping_rate = $wallet->shipping_rate;
-                $actual_weight = $wallet->actual_weight;
+                $actual_weight = (int) $wallet->actual_weight;
                 $weight_change = ($shipping_rate * $actual_weight);
             }
 
