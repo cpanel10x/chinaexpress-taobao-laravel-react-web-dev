@@ -65,6 +65,9 @@ const Header = (props) => {
                     </div>
                   </Link>
                   <div className="dropdown-menu dropdown-menu-right nav_customer_menus">
+                    <Link to="/admin/dashboard" className="dropdown-item">
+                      Admin Dashboard
+                    </Link>
                     <Link to="/dashboard" className="dropdown-item">
                       Dashboard
                     </Link>

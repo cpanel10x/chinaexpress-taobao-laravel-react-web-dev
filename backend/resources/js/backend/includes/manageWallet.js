@@ -873,7 +873,7 @@ function remove_space(stringData) {
         } else if (status == "lost_in_transit") {
             show_enable_field(["lost_in_transit"]);
         } else if (status == "refunded") {
-            show_enable_field(["refunded"]);
+            show_enable_field(["refunded", "refunded_method"]);
         } else {
             show_enable_field([]);
         }
@@ -933,13 +933,19 @@ function remove_space(stringData) {
     }" id="lost_in_transit" placeholder="Lost in Transit">
   </div>
   <div class="form-group d-none">
-    <label for="refunded">Refunded</label>
+    <label for="refunded">Refunded Amount</label>
     <input type="text" name="refunded" class="form-control" value="${
         wallet.refunded || ""
     }" id="refunded" placeholder="Refunded">
   </div>
   <div class="form-group d-none">
-    <label for="Last Payment">Refunded</label>
+    <label for="refunded_method">Refunded Method</label>
+    <input type="text" name="refunded_method" class="form-control" value="${
+        wallet.refunded_method || ""
+    }" id="refunded_method" placeholder="Refunded Method">
+  </div>
+  <div class="form-group d-none">
+    <label for="last_payment">Last Payment</label>
     <input type="text" name="last_payment" class="form-control" value="${
         wallet.last_payment || ""
     }" id="last_payment" placeholder="Last Payment">

@@ -1,29 +1,29 @@
 <?php
 
-namespace App\Http\Controllers\Backend\Content;
+namespace App\Http\Controllers\Api\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Http\Services\Api\Backend\ApiWalletService;
 use App\Http\Services\Backend\TrackingService;
 use App\Models\Auth\User;
 use App\Models\Content\Order;
 use App\Models\Content\OrderItem;
 use App\Models\Content\OrderItemVariation;
-use App\Http\Services\Backend\WalletService;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
+use Svg\Tag\Rect;
 use Throwable;
 
-class WalletController extends Controller
+class ApiWalletController extends Controller
 {
 
-  public $walletService;
+  public $apiWalletService;
 
-
-  public function __construct(WalletService $walletService)
+  public function __construct(ApiWalletService $apiWalletService)
   {
-    $this->walletService = $walletService;
+    $this->apiWalletService = $apiWalletService;
   }
 
 
@@ -32,16 +32,10 @@ class WalletController extends Controller
    *
    * @return Factory|View
    */
-  public function index()
+  public function index(Request $request)
   {
-    $customers = User::role('user')
-      ->whereNotNull('first_name')
-      ->orderBy('first_name')
-      ->get()
-      ->pluck('first_name', 'id')
-      ->prepend(' - Select Customer - ', '');
-
-    return view('backend.content.wallet.index', ['findable' => $customers]);
+    $data = $this->apiWalletService->list();
+    return \response($data);
   }
 
   public function list()

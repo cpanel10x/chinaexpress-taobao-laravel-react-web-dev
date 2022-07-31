@@ -1,67 +1,65 @@
-import {Table} from 'antd';
-import qs from 'qs';
-import moment from 'moment';
-import React, {useState, useEffect} from 'react';
-import {format} from "../../../../../../../public/backend/plugins/pdfmake/pdfmake";
-
+import { Table } from "antd";
+import qs from "qs";
+import moment from "moment";
+import React, { useState, useEffect } from "react";
+import { format } from "../../../../../../../public/backend/plugins/pdfmake/pdfmake";
 
 // id, item_number, order_id, user_id, ItemId, Title, ProviderType, ItemMainUrl, MainPictureUrl, regular_price, weight, actual_weight, DeliveryCost, Quantity, hasConfigurators, shipped_by, shipping_from, shipping_type, shipping_rate, status, source_order_number, tracking_number, product_value, first_payment, coupon_contribution, bd_shipping_charge, courier_bill, out_of_stock, lost_in_transit, customer_tax, missing, adjustment, refunded, last_payment, due_payment, invoice_no, purchases_at, comment1, comment2, created_at, updated_at, deleted_at
 const fixedColumns = [
     {
-        title: 'Date',
-        dataIndex: 'created_at',
+        title: "Date",
+        dataIndex: "created_at",
         fixed: true,
         width: 130,
         render: (text, record, index) => {
             return moment(record.created_at).format("DD-MMM-YYYY ");
-        }
+        },
     },
     {
-        title: 'TransactionNo',
+        title: "TransactionNo",
         render: (item) => {
             return item.order.transaction_id;
-        }
+        },
     },
     {
-        title: 'Order Number',
-        dataIndex: 'item_number',
+        title: "Order Number",
+        dataIndex: "item_number",
     },
     {
-        title: 'Customer',
+        title: "Customer",
         render: (item) => {
             return item.order.name;
-        }
+        },
     },
     {
-        title: 'Source Site',
-        dataIndex: 'ProviderType',
+        title: "Source Site",
+        dataIndex: "ProviderType",
     },
     {
-        title: 'Shipping Method',
-        dataIndex: 'shipping_type',
+        title: "Shipping Method",
+        dataIndex: "shipping_type",
     },
     {
-        title: 'Title',
-        dataIndex: 'Title',
+        title: "Title",
+        dataIndex: "Title",
     },
     {
-        title: 'Customer Phone',
+        title: "Customer Phone",
         render: (item) => {
             return item.order.phone;
-        }
+        },
     },
     {
-        title: 'Comment1',
-        fixed: 'right',
-        dataIndex: 'comment1',
+        title: "Comment1",
+        fixed: "right",
+        dataIndex: "comment1",
     },
     {
-        title: 'Comment2',
-        fixed: 'right',
-        dataIndex: 'comment2',
+        title: "Comment2",
+        fixed: "right",
+        dataIndex: "comment2",
     },
 ];
-
 
 const getRandomuserParams = (params) => ({
     results: params.pagination?.pageSize,
@@ -70,7 +68,6 @@ const getRandomuserParams = (params) => ({
 });
 
 const CustomerWallet = () => {
-
     const [data, setData] = useState();
     const [loading, setLoading] = useState(false);
     const [pagination, setPagination] = useState({
@@ -79,11 +76,14 @@ const CustomerWallet = () => {
     });
 
     const fetchData = (params = {}) => {
-
         setLoading(true);
-        fetch(`/admin/order/wallet/list/data?${qs.stringify(getRandomuserParams(params))}`)
+        fetch(
+            `/admin/order/wallet/list/data?${qs.stringify(
+                getRandomuserParams(params)
+            )}`
+        )
             .then((res) => res.json())
-            .then(({results, info}) => {
+            .then(({ results, info }) => {
                 setData(results);
                 setLoading(false);
                 setPagination({
@@ -123,14 +123,6 @@ const CustomerWallet = () => {
                     y: 500,
                 }}
                 bordered
-                summary={() => (
-                    <Table.Summary fixed>
-                        <Table.Summary.Row>
-                            <Table.Summary.Cell index={0}>Summary</Table.Summary.Cell>
-                            <Table.Summary.Cell index={1} colSpan={2}>This is a summary content</Table.Summary.Cell>
-                        </Table.Summary.Row>
-                    </Table.Summary>
-                )}
             />
         </>
     );
