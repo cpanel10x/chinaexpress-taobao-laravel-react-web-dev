@@ -13,6 +13,7 @@ export const setAuthenticated = (customer) => {
 	if (customer?.id) {
 		localStorage.setItem('isAuthenticate', JSON.stringify({login: true}));
 	} else {
+		window.localStorage.removeItem("_token");
 		localStorage.setItem('isAuthenticate', JSON.stringify({login: false}));
 	}
 };

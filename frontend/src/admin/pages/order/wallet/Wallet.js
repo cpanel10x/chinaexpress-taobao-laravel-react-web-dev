@@ -1,41 +1,11 @@
-import { Table, Button, Space, Typography, Dropdown, Menu } from "antd";
+import { Table, Button, Typography, Dropdown } from "antd";
 import qs from "qs";
 import moment from "moment";
 import React, { useState, useEffect } from "react";
 import { useWalletData } from "../../../query/WalletApi";
-import { DownOutlined, MoreOutlined } from "@ant-design/icons";
+import { MoreOutlined } from "@ant-design/icons";
+import { ActionOptions } from "./includes/Action";
 const { Title } = Typography;
-
-const menu = (
-  <Menu
-    items={[
-      {
-        key: "1",
-        label: (
-          <a
-            target="_blank"
-            rel="noopener noreferrer"
-            href="https://www.antgroup.com"
-          >
-            1st menu item
-          </a>
-        ),
-      },
-      {
-        key: "2",
-        label: (
-          <a
-            target="_blank"
-            rel="noopener noreferrer"
-            href="https://www.aliyun.com"
-          >
-            2nd menu item
-          </a>
-        ),
-      },
-    ]}
-  />
-);
 
 const fixedColumns = [
   {
@@ -127,9 +97,9 @@ const fixedColumns = [
     width: 100,
     key: "action",
     align: "center",
-    render: () => (
-      <Dropdown overlay={menu} placement="bottomRight">
-        <a onClick={(e) => e.preventDefault()}>
+    render: (options) => (
+      <Dropdown overlay={() => ActionOptions(options)} placement="bottomRight">
+        <a href="/more" onClick={(e) => e.preventDefault()}>
           More <MoreOutlined />
         </a>
       </Dropdown>
