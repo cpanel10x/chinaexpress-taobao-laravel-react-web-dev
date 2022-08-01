@@ -25,25 +25,25 @@ const items = [
     children: [
       {
         label: <Link to="/admin/order/recent">Recent Orders</Link>,
-        key: "/admin/order/recent",
+        key: "2.1",
       },
       {
         label: <Link to="/admin/order/wallet">Manage Wallet</Link>,
-        key: "/admin/order/wallet",
+        key: "2.5",
       },
       {
-        label: "Manage Invoice",
-        key: "/admin/order/invocie",
+        label: <Link to="/admin/order/invocie">Manage Invoice</Link>,
+        key: "2.3",
       },
       {
-        label: "Tracking Info",
-        key: "/admin/order/tracking",
+        label: <Link to="/admin/order/tracking">Tracking Info</Link>,
+        key: "2.4",
       },
     ],
   },
   {
-    label: "Manage Products",
-    key: "/admin/product",
+    label: <Link to="/admin/product/list">Manage Products</Link>,
+    key: "3",
     icon: <PieChartOutlined />,
   },
   {
@@ -57,7 +57,7 @@ const items = [
       },
       {
         label: "Manage Coupon",
-        key: "/admin/coupon",
+        key: "/admin/coupon/list",
       },
     ],
   },
@@ -114,7 +114,7 @@ const items = [
       },
       {
         label: "Manage Sections",
-        key: "/admin/front-setting/manage/sections",
+        key: "/admin/front-setting/sections",
       },
       {
         label: "Image Loaders",
