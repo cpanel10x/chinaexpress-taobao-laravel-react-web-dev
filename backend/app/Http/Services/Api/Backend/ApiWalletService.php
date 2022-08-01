@@ -16,7 +16,7 @@ class ApiWalletService
 {
     public function list()
     {
-        $query = OrderItem::with('user', 'order', 'product')->orderByDesc('id');
+        $query = OrderItem::with('user', 'order', 'product', 'itemVariations')->orderByDesc('id');
         $column = [];
         $data  = (new PaginationService())->getPaginatedData($query, $column);
         $paginatedQuery = $data['data'];

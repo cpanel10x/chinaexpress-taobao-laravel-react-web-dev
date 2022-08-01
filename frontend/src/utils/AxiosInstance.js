@@ -31,7 +31,7 @@ export const apiGet = async (resource, params) => {
       if (error.response) {
         // console.log(error.response.status);
         // console.log(error.response.headers);
-        if (error.response.status == 401) {
+        if (error.response.status === 401) {
           setAuthenticated({});
           window.location.href("/login");
         }
@@ -52,7 +52,7 @@ export const apiPost = async (resource, params) => {
       if (error.response) {
         // console.log(error.response.status);
         // console.log(error.response.headers);
-        if (error.response.status == 401) {
+        if (error.response.status === 401) {
           setAuthenticated({});
           window.location.href("/login");
         }
@@ -73,7 +73,7 @@ export const apiUpdate = async (resource, params) => {
       if (error.response) {
         // console.log(error.response.status);
         // console.log(error.response.headers);
-        if (error.response.status == 401) {
+        if (error.response.status === 401) {
           setAuthenticated({});
           window.location.href("/login");
         }
@@ -94,7 +94,7 @@ export const apiDelete = async (resource) => {
       if (error.response) {
         // console.log(error.response.status);
         // console.log(error.response.headers);
-        if (error.response.status == 401) {
+        if (error.response.status === 401) {
           setAuthenticated({});
           window.location.href("/login");
         }

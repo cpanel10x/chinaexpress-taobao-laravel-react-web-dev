@@ -1,43 +1,45 @@
 import { Menu } from "antd";
 import { useState } from "react";
+import ViewDetails from "./ViewDetails";
 
-export const ActionOptions = (options) => {
+const Action = ({ walletItem }) => {
+  const [show, setShow] = useState(false);
   const [item, setItem] = useState({});
 
-  const ActionMemuClick = ({ item, key, keyPath, domEvent }) => {
-    console.log("item", item);
-    console.log("key", key);
+  const viewWalletDetails = (e) => {
+    e.preventDefault();
+    setShow(true);
   };
 
   return (
-    <Menu
-      onClick={ActionMemuClick}
-      items={[
-        {
-          key: "1",
-          label: (
-            <a
-              target="_blank"
-              rel="noopener noreferrer"
-              href="https://www.antgroup.com"
-            >
-              View Details
-            </a>
-          ),
-        },
-        {
-          key: "2",
-          label: (
-            <a
-              target="_blank"
-              rel="noopener noreferrer"
-              href="https://www.aliyun.com"
-            >
-              2nd menu item
-            </a>
-          ),
-        },
-      ]}
-    />
+    <>
+      <ViewDetails walletItem={walletItem} show={show} setShow={setShow} />
+      <Menu
+        items={[
+          {
+            key: "1",
+            label: (
+              <a href="/view-details" onClick={(e) => viewWalletDetails(e)}>
+                View Details
+              </a>
+            ),
+          },
+          {
+            key: "2",
+            label: (
+              <a
+                target="_blank"
+                rel="noopener noreferrer"
+                href="https://www.aliyun.com"
+              >
+                2nd menu item
+              </a>
+            ),
+          },
+        ]}
+      />
+    </>
   );
 };
+
+export default Action;

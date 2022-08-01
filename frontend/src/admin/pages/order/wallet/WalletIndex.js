@@ -4,7 +4,7 @@ import moment from "moment";
 import React, { useState, useEffect } from "react";
 import { useWalletData } from "../../../query/WalletApi";
 import { MoreOutlined } from "@ant-design/icons";
-import { ActionOptions } from "./includes/Action";
+import Action from "./includes/Action";
 import { characterLimiter } from "../../../../utils/Helpers";
 const { Title } = Typography;
 
@@ -50,7 +50,7 @@ const fixedColumns = [
     width: 100,
     dataIndex: "shipping_type",
     render: (shipping_type) => {
-      return shipping_type ? shipping_type : "N/A";
+      return shipping_type ? shipping_type : "Express";
     },
   },
   {
@@ -58,11 +58,17 @@ const fixedColumns = [
     align: "center",
     width: 180,
     dataIndex: "source_order_number",
+    render: (item_value) => {
+      return item_value ? item_value : "N/A";
+    },
   },
   {
     title: "TrackingNo",
     width: 160,
     dataIndex: "tracking_number",
+    render: (item_value) => {
+      return item_value ? item_value : "N/A";
+    },
   },
   {
     title: "Title",
@@ -270,12 +276,12 @@ const fixedColumns = [
   },
   {
     title: "Comment1",
-    width: 300,
+    width: 250,
     dataIndex: "comment1",
   },
   {
     title: "Comment2",
-    width: 300,
+    width: 250,
     dataIndex: "comment2",
   },
   {
@@ -284,8 +290,8 @@ const fixedColumns = [
     width: 100,
     key: "action",
     align: "center",
-    render: (options) => (
-      <Dropdown overlay={() => ActionOptions(options)} placement="bottomRight">
+    render: (walletItem) => (
+      <Dropdown overlay={<Action walletItem={walletItem} />} placement="bottomRight">
         <a href="/more" onClick={(e) => e.preventDefault()}>
           More <MoreOutlined />
         </a>
