@@ -2,7 +2,7 @@ import React from "react";
 import AdminRoute from "./routers/AdminRoute";
 import AdminDashboard from "./admin/dashboard/AdminDashboard";
 import RecentOrder from "./admin/pages/order/recent/RecentOrder";
-import Wallet from "./admin/pages/order/wallet/Wallet";
+import WalletIndex from "./admin/pages/order/wallet/WalletIndex";
 import ManageInvoice from "./admin/pages/order/invoice/ManageInvoice";
 import ManageTracking from "./admin/pages/order/tracking/ManageTracking";
 import ManageProducts from "./admin/pages/products/ManageProducts";
@@ -22,7 +22,7 @@ const AdminRouting = () => {
       <AdminRoute path="/admin/dashboard" exact component={AdminDashboard} />
 
       <AdminRoute path="/admin/order/recent" exact component={RecentOrder} />
-      <AdminRoute path="/admin/order/wallet" exact component={Wallet} />
+      <AdminRoute path="/admin/order/wallet" exact component={WalletIndex} />
       <AdminRoute path="/admin/order/invoice" exact component={ManageInvoice} />
       <AdminRoute
         path="/admin/order/tracking"

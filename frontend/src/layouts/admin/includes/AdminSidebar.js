@@ -1,54 +1,48 @@
 import React, { useState } from "react";
 import { Layout, Menu } from "antd";
-import {
-  DesktopOutlined,
-  FileOutlined,
-  PieChartOutlined,
-  TeamOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
+import { PieChartOutlined } from "@ant-design/icons";
 import { useSettings } from "../../../api/GeneralApi";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useHistory, useLocation } from "react-router-dom";
 
 const { Sider } = Layout;
 
 const items = [
   {
-    label: <Link to="/admin/dashboard">Dashboard</Link>,
-    key: "1",
+    label: "Dashboard",
+    key: "/admin/dashboard",
     icon: <PieChartOutlined />,
   },
   {
     label: "Manage Orders",
-    key: "2",
+    key: "/admin/order",
     icon: <PieChartOutlined />,
     children: [
       {
-        label: <Link to="/admin/order/recent">Recent Orders</Link>,
-        key: "2.1",
+        label: "Recent Orders",
+        key: "/admin/order/recent",
       },
       {
-        label: <Link to="/admin/order/wallet">Manage Wallet</Link>,
-        key: "2.5",
+        label: "Manage Wallet",
+        key: "/admin/order/wallet",
       },
       {
-        label: <Link to="/admin/order/invocie">Manage Invoice</Link>,
-        key: "2.3",
+        label: "Manage Invoice",
+        key: "/admin/order/invoice",
       },
       {
-        label: <Link to="/admin/order/tracking">Tracking Info</Link>,
-        key: "2.4",
+        label: "Tracking Info",
+        key: "/admin/order/tracking",
       },
     ],
   },
   {
-    label: <Link to="/admin/product/list">Manage Products</Link>,
-    key: "3",
+    label: "Manage Products",
+    key: "/admin/product/list",
     icon: <PieChartOutlined />,
   },
   {
     label: "Manage Coupons",
-    key: "4",
+    key: "/admin/coupon",
     icon: <PieChartOutlined />,
     children: [
       {
@@ -168,7 +162,7 @@ const items = [
     children: [
       {
         label: "Access",
-        key: "/admin/setting/general",
+        key: "/admin/setting/access",
         children: [
           {
             label: "User Management",
@@ -203,8 +197,13 @@ const items = [
 ];
 
 const AdminSidebar = ({ collapsed, setCollapsed }) => {
+  const location = useLocation();
   const history = useHistory();
   const { data: settings } = useSettings();
+
+  const clickReceive = ({ key }) => {
+    history.push(key);
+  };
 
   return (
     <Sider
@@ -218,7 +217,13 @@ const AdminSidebar = ({ collapsed, setCollapsed }) => {
           alt={settings?.site_name}
         />
       </div>
-      <Menu theme="dark" mode="inline" items={items} />
+      <Menu
+        theme="dark"
+        onClick={clickReceive}
+        defaultSelectedKeys={location.pathname}
+        mode="inline"
+        items={items}
+      />
     </Sider>
   );
 };
