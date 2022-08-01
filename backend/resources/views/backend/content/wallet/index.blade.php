@@ -26,7 +26,6 @@ $options = [
 
   <div id="root"></div>
 
-
   <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
@@ -144,13 +143,10 @@ $options = [
                 <input type="checkbox" name="notify" value="1" class="form-check-input" id="notify">
                 <label class="form-check-label" for="notify">Notify User</label>
               </div>
-              <div class="form-check form-check-inline">
-                <input type="checkbox" name="tracking" value="1" class="form-check-input" id="tracking">
-                <label class="form-check-label" for="tracking">Tracking Update</label>
-              </div>
             </div>
             <div class="form-group">
-              {{ html()->date('tracking_date')->class('form-control') }}
+              {{ html()->label('Tracking Comment')->for('tracking_comment') }}
+              {{ html()->textarea('tracking_comment')->placeholder('Tracking Comment')->rows(2)->class('form-control') }}
             </div>
 
             <div class="form-group">

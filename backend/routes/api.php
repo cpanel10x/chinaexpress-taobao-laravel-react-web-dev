@@ -142,4 +142,9 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function () {
     Route::post('/coupon', [CartController::class, 'couponCodeSubmit'])->middleware('auth:sanctum');
     Route::post('/coupon-reset', [CartController::class, 'couponReset'])->middleware('auth:sanctum');
   });
+
+
+  Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth:sanctum', 'verified']], function () {
+    include_route_files(__DIR__ . '/api-admin/');
+  });
 });

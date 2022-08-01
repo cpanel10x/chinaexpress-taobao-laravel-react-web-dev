@@ -53,3 +53,19 @@ ADD COLUMN `source_order_number` VARCHAR(191) NULL AFTER `status`;
 
 ALTER TABLE `chinaexpress_web`.`order_items` 
 ADD COLUMN `actual_weight` VARCHAR(11) NULL AFTER `weight`;
+
+
+ALTER TABLE `chinaexpress_web`.`order_items` 
+ADD COLUMN `refunded_method` VARCHAR(45) NULL AFTER `refunded`;
+
+
+
+
+
+
+
+
+
+
+
+
