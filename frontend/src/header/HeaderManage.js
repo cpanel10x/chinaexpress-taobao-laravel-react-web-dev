@@ -1,15 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Header from "./Header";
 import MobileHeader from "./MobileHeader";
 import { useMediaQuery } from "react-responsive";
 import { useCart } from "../api/CartApi";
-import { useAuthMutation } from "../api/Auth";
+import { useCustomer } from "../api/Auth";
 import { useWishList } from "../api/WishListApi";
 
 const HeaderManage = (props) => {
   const { settings } = props;
 
-  const { customer } = useAuthMutation();
+  const customer = useCustomer();
 
   const { data: wishList } = useWishList();
   const { data: cart } = useCart();

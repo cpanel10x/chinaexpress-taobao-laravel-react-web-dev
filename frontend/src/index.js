@@ -1,8 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
-import reportWebVitals from "./reportWebVitals";
+// import reportWebVitals from "./reportWebVitals";
 import { QueryClient, QueryClientProvider } from "react-query";
+// import { ReactQueryDevtools } from 'react-query/devtools'
+
 import ReactGA from "react-ga";
 import { instanceSetToken } from "./utils/AxiosInstance";
 
@@ -25,7 +27,7 @@ if (document.getElementById("root")) {
   ReactDOM.render(
     <QueryClientProvider client={queryClient}>
       <App />
-      {/*<ReactQueryDevtools initialIsOpen={false}/>*/}
+      {/* <ReactQueryDevtools initialIsOpen={false} /> */}
     </QueryClientProvider>,
     document.getElementById("root")
   );
@@ -34,4 +36,4 @@ if (document.getElementById("root")) {
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+// reportWebVitals(console.log);

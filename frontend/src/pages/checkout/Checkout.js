@@ -1,33 +1,33 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import Sticky from "react-sticky-el";
-import {goPageTop} from "../../utils/Helpers";
+import { goPageTop } from "../../utils/Helpers";
 import CheckoutSidebar from "./includes/CheckoutSidebar";
 import Swal from "sweetalert2";
-import {useSettings} from "../../api/GeneralApi";
-import {useCartMutation, useCheckoutCart} from "../../api/CartApi";
+import { useSettings } from "../../api/GeneralApi";
+import { useCartMutation, useCheckoutCart } from "../../api/CartApi";
 import CheckoutItem from "./includes/CheckoutItem";
 import Helmet from "react-helmet";
-import {analyticsPageView} from "../../utils/AnalyticsHelpers";
-import {fbTrackCustom} from "../../utils/FacebookPixel";
-import {useMediaQuery} from "react-responsive";
+import { analyticsPageView } from "../../utils/AnalyticsHelpers";
+import { fbTrackCustom } from "../../utils/FacebookPixel";
+import { useMediaQuery } from "react-responsive";
 
 const Checkout = (props) => {
-  const {data: settings} = useSettings();
+  const { data: settings } = useSettings();
 
-  const {data: cart} = useCheckoutCart();
+  const { data: cart } = useCheckoutCart();
 
   const cartItems = cart?.cart_items || [];
 
-  const {removeCart} = useCartMutation();
+  const { removeCart } = useCartMutation();
 
-  const isMobile = useMediaQuery({query: "(max-width: 991px)"});
+  const isMobile = useMediaQuery({ query: "(max-width: 991px)" });
 
   const currency = settings?.currency_icon;
 
   useEffect(() => {
     goPageTop();
     analyticsPageView();
-    fbTrackCustom("checkout-page", {browse: "browse-checkout-page"});
+    fbTrackCustom("checkout-page", { browse: "browse-checkout-page" });
   }, []);
 
   const removeItemFromCart = (e) => {
@@ -66,7 +66,7 @@ const Checkout = (props) => {
           <div className="col-lg-8 col-md-7">
             <div className="bg-transparent shadow-none card card-notice mt-2 mt-lg-5">
               <div className="bg-transparent border-0 p-0">
-                <img src={`/img/card-info.png`} alt="cart-info"/>
+                <img src={`/img/card-info.png`} alt="cart-info" />
               </div>
             </div>
             <div className="card mt-2 my-lg-3">
@@ -88,13 +88,11 @@ const Checkout = (props) => {
 
           <aside className="col-lg-4 col-md-5">
             {!isMobile ? (
-              <Sticky boundaryElement=".stick_block" hideOnBoundaryHit={false}>
-                <CheckoutSidebar
-                  cart={cart}
-                  cartItems={cartItems}
-                  settings={settings}
-                />
-              </Sticky>
+              <CheckoutSidebar
+                cart={cart}
+                cartItems={cartItems}
+                settings={settings}
+              />
             ) : (
               <CheckoutSidebar
                 cart={cart}

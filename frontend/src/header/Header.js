@@ -3,11 +3,13 @@ import { Link } from "react-router-dom";
 import Logout from "./includes/Logout";
 import SpinnerButtonLoader from "../loader/SpinnerButtonLoader";
 import MobileSearchForm from "./includes/MobileSearchForm";
+import { is_backend_authenticated } from "../api/Auth";
 
 const Header = (props) => {
   const { customer, wishList, cart_count, settings } = props;
 
   const { data: user, isLoading } = customer;
+  const view_backend = user?.id && is_backend_authenticated(user);
 
   return (
     <header className="header sticky-top header-intro-clearance header-26">
@@ -65,9 +67,11 @@ const Header = (props) => {
                     </div>
                   </Link>
                   <div className="dropdown-menu dropdown-menu-right nav_customer_menus">
-                    <Link to="/admin/dashboard" className="dropdown-item">
-                      Admin Dashboard
-                    </Link>
+                    {view_backend && (
+                      <Link to="/admin/dashboard" className="dropdown-item">
+                        Admin Dashboard
+                      </Link>
+                    )}
                     <Link to="/dashboard" className="dropdown-item">
                       Dashboard
                     </Link>
