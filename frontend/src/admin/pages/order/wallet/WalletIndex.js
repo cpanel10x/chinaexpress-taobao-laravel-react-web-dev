@@ -1,12 +1,13 @@
-import { Table, Button, Typography, Dropdown } from "antd";
+import {Table, Button, Typography, Dropdown} from "antd";
 import qs from "qs";
 import moment from "moment";
-import React, { useState, useEffect } from "react";
-import { useWalletData } from "../../../query/WalletApi";
-import { MoreOutlined } from "@ant-design/icons";
-import Action from "./includes/Action";
-import { characterLimiter } from "../../../../utils/Helpers";
-const { Title } = Typography;
+import React, {useState, useEffect} from "react";
+import {useWalletData} from "../../../query/WalletApi";
+import {MoreOutlined} from "@ant-design/icons";
+import Action from "./more/Action";
+import {characterLimiter} from "../../../../utils/Helpers";
+
+const {Title} = Typography;
 
 const fixedColumns = [
   {
@@ -16,7 +17,7 @@ const fixedColumns = [
     align: "center",
     width: 120,
     render: (text, record, index) => {
-      return moment(record.created_at).format("DD-MMM-YYYY ");
+      return  record?.created_at ? moment(record.created_at).format("DD-MMM-YYYY") : 'N/A';
     },
   },
   {
@@ -43,6 +44,13 @@ const fixedColumns = [
     render: (ProviderType) => {
       return ProviderType.toUpperCase();
     },
+  },
+  {
+    title: "Status",
+    align: "center",
+    // fixed: "left",
+    width: 110,
+    dataIndex: "status",
   },
   {
     title: "Shipping Method",
@@ -128,7 +136,7 @@ const fixedColumns = [
     align: "center",
     dataIndex: "product_value",
     render: (product_value, record) => {
-      let { DeliveryCost, coupon_contribution } = record;
+      let {DeliveryCost, coupon_contribution} = record;
       return (
         Number(product_value) +
         Number(DeliveryCost) -
@@ -220,7 +228,7 @@ const fixedColumns = [
     align: "center",
     dataIndex: "shipping_rate",
     render: (shipping_rate, record) => {
-      let { actual_weight } = record;
+      let {actual_weight} = record;
       return Math.round(Number(actual_weight) * Number(shipping_rate));
     },
   },
@@ -291,9 +299,9 @@ const fixedColumns = [
     key: "action",
     align: "center",
     render: (walletItem) => (
-      <Dropdown overlay={<Action walletItem={walletItem} />} placement="bottomRight">
+      <Dropdown overlay={<Action walletItem={walletItem}/>} placement="bottomRight">
         <a href="/more" onClick={(e) => e.preventDefault()}>
-          More <MoreOutlined />
+          More <MoreOutlined/>
         </a>
       </Dropdown>
     ),
@@ -318,7 +326,7 @@ const WalletIndex = () => {
 
   const [queryParams, setQueryParams] = useState({});
 
-  const { data: queryData, isLoading } = useWalletData(
+  const {data: queryData, isLoading} = useWalletData(
     qs.stringify(getRandomuserParams(queryParams))
   );
 

@@ -1,19 +1,26 @@
-import { Menu } from "antd";
-import { useState } from "react";
+import {Menu} from "antd";
+import {useState} from "react";
 import ViewDetails from "./ViewDetails";
+import ChangeStatus from "./ChangeStatus";
 
-const Action = ({ walletItem }) => {
+const Action = ({walletItem}) => {
   const [show, setShow] = useState(false);
-  const [item, setItem] = useState({});
+  const [showStatus, setShowStatus] = useState(false);
 
   const viewWalletDetails = (e) => {
     e.preventDefault();
     setShow(true);
   };
 
+  const changeStatus = (e) => {
+    e.preventDefault();
+    setShowStatus(true);
+  };
+
   return (
     <>
-      <ViewDetails walletItem={walletItem} show={show} setShow={setShow} />
+      <ViewDetails walletItem={walletItem} show={show} setShow={setShow}/>
+      <ChangeStatus walletItem={walletItem} show={showStatus} setShow={setShowStatus}/>
       <Menu
         items={[
           {
@@ -28,11 +35,10 @@ const Action = ({ walletItem }) => {
             key: "2",
             label: (
               <a
-                target="_blank"
-                rel="noopener noreferrer"
-                href="https://www.aliyun.com"
+                href="/change-status"
+                onClick={(e) => changeStatus(e)}
               >
-                2nd menu item
+                Change status
               </a>
             ),
           },
