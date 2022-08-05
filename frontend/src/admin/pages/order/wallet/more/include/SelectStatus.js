@@ -19,6 +19,7 @@ const SelectStatus = ({status, setStatus}) => {
     {key: 'refunded', value: 'Refunded'},
     {key: 'delivered', value: 'Delivered'},
     {key: 'lost_in_transit', value: 'Lost in Transit'},
+    {key: 'cancel', value: 'Cancel Order'},
     {key: 'waiting-for-payment', value: 'Waiting for Payment'},
     {key: 'partial-paid', value: 'Partial Paid'},
   ];
@@ -35,7 +36,6 @@ const SelectStatus = ({status, setStatus}) => {
     >
       <Select
         defaultValue={default_value}
-        labelInValue
         showSearch
         style={{width: '100%'}}
         onChange={item => setStatus(item.value)}
@@ -48,7 +48,7 @@ const SelectStatus = ({status, setStatus}) => {
       >
         {
           options.map((opItem, key) => (
-            <Option key={key} value={opItem.key}>{opItem.value}</Option>
+            <Option key={key} value={opItem.key} >{opItem.value}</Option>
           ))
         }
       </Select>

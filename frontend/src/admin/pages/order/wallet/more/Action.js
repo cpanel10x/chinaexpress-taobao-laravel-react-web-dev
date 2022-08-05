@@ -1,32 +1,14 @@
 import {Menu} from "antd";
-import {useState} from "react";
-import ViewDetails from "./ViewDetails";
-import ChangeStatus from "./ChangeStatus";
 
-const Action = ({walletItem}) => {
-  const [show, setShow] = useState(false);
-  const [showStatus, setShowStatus] = useState(false);
-
-  const viewWalletDetails = (e) => {
-    e.preventDefault();
-    setShow(true);
-  };
-
-  const changeStatus = (e) => {
-    e.preventDefault();
-    setShowStatus(true);
-  };
-
+const Action = ({walletItem, handleActionClick}) => {
   return (
     <>
-      <ViewDetails walletItem={walletItem} show={show} setShow={setShow}/>
-      <ChangeStatus walletItem={walletItem} show={showStatus} setShow={setShowStatus}/>
       <Menu
         items={[
           {
             key: "1",
             label: (
-              <a href="/view-details" onClick={(e) => viewWalletDetails(e)}>
+              <a href="/admin/order/wallet" onClick={event => handleActionClick(event, 'view', walletItem)}>
                 View Details
               </a>
             ),
@@ -34,11 +16,16 @@ const Action = ({walletItem}) => {
           {
             key: "2",
             label: (
-              <a
-                href="/change-status"
-                onClick={(e) => changeStatus(e)}
-              >
+              <a href="/admin/order/wallet" onClick={event => handleActionClick(event, 'change-status', walletItem)}>
                 Change status
+              </a>
+            ),
+          },
+          {
+            key: "3",
+            label: (
+              <a href="/admin/order/wallet" onClick={event => handleActionClick(event, 'tracking', walletItem)}>
+                Tracking Info
               </a>
             ),
           },

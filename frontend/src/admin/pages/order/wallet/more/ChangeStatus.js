@@ -1,22 +1,22 @@
 import {Form, Modal, Button} from "antd";
 import React, {useEffect, useState} from "react";
 import SelectStatus from "./include/SelectStatus";
-import NumberInput from "./include/CustomInput";
 import CustomInput from "./include/CustomInput";
 import OutOfStockInput from "./include/OutOfStockInput";
 import RefundedInput from "./include/RefundedInput";
 
 
 const ChangeStatus = ({walletItem, show, setShow}) => {
-  const [status, setStatus] = useState(walletItem?.status || '');
-  const [sourceOrderNum, setSourceOrderNum] = useState(walletItem?.source_order_number || '');
-  const [trackingNumber, setTrackingNumber] = useState(walletItem?.tracking_number || '');
-  const [actualWeight, setActualWeight] = useState(walletItem?.actual_weight || '');
-  const [outOfStock, setOutOfStock] = useState(0);
-  const [adjustment, setAdjustment] = useState(walletItem?.adjustment || '');
-  const [customerTax, setCustomerTax] = useState(walletItem?.customer_tax || '');
-  const [refunded, setRefunded] = useState(walletItem?.refunded || '');
-  const [lostTnTransit, setLostTnTransit] = useState(walletItem?.lost_in_transit || '');
+  const [status, setStatus] = useState(walletItem?.status);
+  const [sourceOrderNum, setSourceOrderNum] = useState(walletItem?.source_order_number);
+  const [trackingNumber, setTrackingNumber] = useState(walletItem?.tracking_number);
+  const [actualWeight, setActualWeight] = useState(walletItem?.actual_weight);
+  const [outOfStock, setOutOfStock] = useState(walletItem?.tracking_number);
+  const [adjustment, setAdjustment] = useState(walletItem?.adjustment);
+  const [customerTax, setCustomerTax] = useState(walletItem?.customer_tax);
+  const [refunded, setRefunded] = useState(walletItem?.refunded);
+  const [lostTnTransit, setLostTnTransit] = useState(walletItem?.lost_in_transit);
+
 
 
   const submitModalForm = () => {
