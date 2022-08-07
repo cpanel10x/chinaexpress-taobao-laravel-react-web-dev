@@ -4,7 +4,7 @@ import {InfoCircleOutlined} from "@ant-design/icons";
 
 const {Option} = Select;
 
-const SelectStatus = ({status, setStatus}) => {
+const SelectStatus = ({form, walletItem, status, setStatus}) => {
 
   const options = [
     {key: 'purchased', value: 'Purchased'},
@@ -26,6 +26,12 @@ const SelectStatus = ({status, setStatus}) => {
 
   const default_value = options?.find(find => find.key === status)?.value || '';
 
+  const statusUpdateAction = (item) => {
+    form.setFieldsValue({...walletItem, status: item});
+    setStatus(item)
+  }
+
+
   return (
     <Form.Item
       label="Select Wallet Status"
@@ -33,12 +39,20 @@ const SelectStatus = ({status, setStatus}) => {
         title: 'Select your status for change',
         icon: <InfoCircleOutlined/>,
       }}
+      name="status"
+      rules={[
+        {
+          required: true,
+          message: 'Please select status ',
+        },
+      ]}
     >
       <Select
         defaultValue={default_value}
+        value={status}
         showSearch
         style={{width: '100%'}}
-        onChange={item => setStatus(item.value)}
+        onChange={item => statusUpdateAction(item)}
         placeholder="Search to Select"
         optionFilterProp="children"
         filterOption={(input, option) => option.children.includes(input)}
@@ -48,7 +62,7 @@ const SelectStatus = ({status, setStatus}) => {
       >
         {
           options.map((opItem, key) => (
-            <Option key={key} value={opItem.key} >{opItem.value}</Option>
+            <Option key={key} value={opItem.key}>{opItem.value}</Option>
           ))
         }
       </Select>

@@ -5,32 +5,37 @@ import {useEffect, useState} from "react";
 
 const {Option} = Select;
 
-const RefundedInput = ({value, setValue}) => {
+const RefundedInput = ({form, refunded, refund_payment_method}) => {
 
-  const [method, setMethod] = useState('Cash');
-  const [refund, setRefund] = useState(value.refund);
+  // const [method, setMethod] = useState('Cash');
+
 
   useEffect(() => {
-    setValue({
-      method,
-      refund
-    })
+    form.setFieldsValue({
+      refunded: refunded,
+      refund_payment_method: refund_payment_method,
+    });
+  }, [refunded, refund_payment_method])
 
-  }, [method, refund, setValue])
 
   return (
     <>
       <Form.Item
-        label="Out of stock"
+        label="Refund payment method"
+        name="refund_payment_method"
         tooltip={{
           title: 'Type out of stock amount for this item',
           icon: <InfoCircleOutlined/>,
         }}
+        rules={[
+          {
+            required: true,
+            message: 'Select refund payment method',
+          },
+        ]}
       >
         <Select
-          defaultValue={method}
           style={{width: '100%',}}
-          onChange={item => setMethod(item.value)}
         >
           <Option value="cash">Cash</Option>
           <Option value="bkash">Bkash</Option>
@@ -39,14 +44,19 @@ const RefundedInput = ({value, setValue}) => {
       </Form.Item>
       <Form.Item
         label="Refunded Amount"
+        name="refunded"
         tooltip={{
           title: 'Refunded Amount of the Product',
           icon: <InfoCircleOutlined/>,
         }}
+        rules={[
+          {
+            required: true,
+            message: 'Please input refunded amount',
+          },
+        ]}
       >
         <InputNumberField
-          value={refund}
-          onChange={setRefund}
         />
       </Form.Item>
     </>

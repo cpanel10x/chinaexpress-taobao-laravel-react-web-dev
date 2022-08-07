@@ -4,50 +4,57 @@ import InputNumberField from "../../../../../../components/InputNumberField";
 import {useEffect, useState} from "react";
 
 
-const OutOfStockInput = ({product_value, value, setValue}) => {
+const OutOfStockInput = ({product_value, out_of_stock, form}) => {
 
-  const [full, setFull] = useState(product_value);
-  const [partial, setPartial] = useState(0);
-  const [option, setOption] = useState('partial');
 
   useEffect(() => {
+    form.setFieldsValue({
+      out_of_stock: out_of_stock,
+    });
+  }, [out_of_stock])
+
+
+  const setOptionAction = (e) => {
+    let option = e.target.value;
     if (option === 'partial') {
-      setValue(partial)
+      form.setFieldsValue({
+        out_of_stock_option: option,
+        out_of_stock: out_of_stock,
+      });
     } else if (option === 'full') {
-      setValue(full)
+      form.setFieldsValue({
+        out_of_stock_option: option,
+        out_of_stock: product_value,
+      });
     }
-  }, [partial, full, option]);
+  }
 
   return (
     <>
+      <Form.Item
+        name="out_of_stock_option"
+      >
+        <Radio.Group defaultValue="partial" buttonStyle="solid" onChange={e => setOptionAction(e)}>
+          <Radio.Button value="partial">Partial</Radio.Button>
+          <Radio.Button value="full">Full Out of Stock</Radio.Button>
+        </Radio.Group>
+      </Form.Item>
       <Form.Item
         label="Out of stock"
         tooltip={{
           title: 'Type out of stock amount for this item',
           icon: <InfoCircleOutlined/>,
         }}
+        name="out_of_stock"
+        rules={[
+          {
+            required: true,
+            message: 'Please input out of stock',
+          },
+        ]}
       >
-        <Radio.Group defaultValue="partial" buttonStyle="solid" onChange={e => setOption(e.target.value)}>
-          <Radio.Button value="partial">Partial</Radio.Button>
-          <Radio.Button value="full">Full Out of Stock</Radio.Button>
-        </Radio.Group>
-        <br/>
-        <br/>
-        {
-          option === 'full' ? (
-              <InputNumberField
-                value={full}
-                onChange={setFull}
-              />
-            )
-            :
-            (
-              <InputNumberField
-                value={partial}
-                onChange={setPartial}
-              />
-            )
-        }
+        <InputNumberField
+        />
       </Form.Item>
     </>
   );

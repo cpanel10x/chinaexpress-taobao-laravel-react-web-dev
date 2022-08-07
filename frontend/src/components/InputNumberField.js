@@ -17,10 +17,12 @@ const InputNumberField = (props) => {
 
   const handleBlur = () => {
     let valueTemp = value;
-    if (value.charAt(value.length - 1) === '.' || value === '-') {
+    if (value?.charAt(value.length - 1) === '.' || value === '-') {
       valueTemp = value.slice(0, -1);
     }
-    onChange(valueTemp.replace(/0*(\d+)/, '$1'));
+    if(valueTemp){
+      onChange(valueTemp.replace(/0*(\d+)/, '$1'));
+    }
   };
 
   const title = value ? (

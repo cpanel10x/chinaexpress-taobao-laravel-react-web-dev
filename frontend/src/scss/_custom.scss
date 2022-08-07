@@ -122,6 +122,13 @@
   }
 }
 
+.stick_footer_nav  {
+  &.stick_add_to_cart_nav{
+    z-index: 9999;
+    box-shadow: none;
+  }
+}
+
 .mobile_header {
   padding-bottom: 10px;
 

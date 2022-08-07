@@ -13,6 +13,13 @@ const CustomInput = ({status, value, setValue}) => {
           title: 'Source Order Number',
           icon: <InfoCircleOutlined/>,
         }}
+        name="source_order_number"
+        rules={[
+          {
+            required: true,
+            message: 'Please input your Source Order Number!',
+          },
+        ]}
       >
         <Input value={value} onChange={setValue} placeholder="input placeholder"/>
       </Form.Item>
@@ -26,6 +33,13 @@ const CustomInput = ({status, value, setValue}) => {
           title: 'Tracking Number',
           icon: <InfoCircleOutlined/>,
         }}
+        name="tracking_number"
+        rules={[
+          {
+            required: true,
+            message: 'Please input your Tracking Number!',
+          },
+        ]}
       >
         <Input value={value} onChange={setValue} placeholder="Tracking Number"/>
       </Form.Item>
@@ -40,6 +54,13 @@ const CustomInput = ({status, value, setValue}) => {
           title: 'Actual weight of total quantity',
           icon: <InfoCircleOutlined/>,
         }}
+        name="actual_weight"
+        rules={[
+          {
+            required: true,
+            message: 'Please input your Actual Weight!',
+          },
+        ]}
       >
         <InputNumberField
           value={value}
@@ -57,6 +78,13 @@ const CustomInput = ({status, value, setValue}) => {
           title: 'Adjustment Amount(+/-) of this item',
           icon: <InfoCircleOutlined/>,
         }}
+        name="adjustment"
+        rules={[
+          {
+            required: true,
+            message: 'Please input your Adjustment Amount',
+          },
+        ]}
       >
         <InputNumberField
           value={value}
@@ -74,6 +102,13 @@ const CustomInput = ({status, value, setValue}) => {
           title: 'Customer Tax amount',
           icon: <InfoCircleOutlined/>,
         }}
+        name="customer_tax"
+        rules={[
+          {
+            required: true,
+            message: 'Please input Customer Tax',
+          },
+        ]}
       >
         <InputNumberField
           value={value}
@@ -91,6 +126,13 @@ const CustomInput = ({status, value, setValue}) => {
           title: 'Lost in Transit amount',
           icon: <InfoCircleOutlined/>,
         }}
+        name="lost_in_transit"
+        rules={[
+          {
+            required: true,
+            message: 'Please input lost in transit',
+          },
+        ]}
       >
         <InputNumberField
           value={value}

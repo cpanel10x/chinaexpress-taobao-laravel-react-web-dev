@@ -2,7 +2,7 @@ import {Table, Button, Typography, Dropdown} from "antd";
 import qs from "qs";
 import moment from "moment";
 import React, {useState, useEffect} from "react";
-import {useWalletData} from "../../../query/WalletApi";
+import {useWalletData, useWalletUpdateStatus} from "../../../query/WalletApi";
 import {MoreOutlined} from "@ant-design/icons";
 import Action from "./more/Action";
 import {characterLimiter} from "../../../../utils/Helpers";
@@ -23,6 +23,8 @@ const WalletIndex = () => {
   const [show, setShow] = useState(false);
   const [showStatus, setShowStatus] = useState(false);
   const [showTracking, setShowTracking] = useState(false);
+
+  const {mutateAsync, isLoading} = useWalletUpdateStatus();
 
 
   const start = () => {
@@ -51,12 +53,17 @@ const WalletIndex = () => {
     } else if (type === 'tracking') {
       setShowTracking(true);
     }
-
-    console.log('type', type)
-
   }
 
   const hasSelected = selectedRowKeys.length > 0;
+
+  const onFinish = (values) => {
+    mutateAsync({...values, item_id: walletItem.id}, {
+      onSuccess: () => {
+        setShow(false);
+      }
+    }).then(r => console.log(r.data));
+  };
 
   return (
     <>
@@ -64,8 +71,9 @@ const WalletIndex = () => {
         walletItem?.id > 0 && (
           <>
             {show && <ViewDetails walletItem={walletItem} show={show} setShow={setShow}/>}
-            {showStatus && <ChangeStatus walletItem={walletItem} show={showStatus} setShow={setShowStatus}/>}
-            {showTracking && <ShowTrackingInformation walletItem={walletItem} show={showTracking} setShow={setShowTracking}/>}
+            {showStatus && <ChangeStatus walletItem={walletItem} onFinish={onFinish} show={showStatus} setShow={setShowStatus}/>}
+            {showTracking &&
+              <ShowTrackingInformation walletItem={walletItem} show={showTracking} setShow={setShowTracking}/>}
           </>
         )
       }

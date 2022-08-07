@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import TinySlider from "tiny-slider-react";
 import 'tiny-slider/dist/tiny-slider.css';
 
-const AliImgGallery = (props) => {
+const ImgGallery = (props) => {
   const {Pictures, activeImg, PreviewUrl, Url, setActiveImg} = props;
 
   const settings = {
@@ -24,13 +24,15 @@ const AliImgGallery = (props) => {
   const imgStyles = {
     objectFit: "cover",
     opacity: 1,
-    transition: "ease-in-out 200ms",
-    height: "5rem",
-    width: "5rem",
+    transition: "ease-in-out 200ms"
   };
 
   const activeImageUrl = (picture) => {
-    return picture;
+    const Large = picture?.Large?.Url || null;
+    const Medium = picture?.Medium?.Url || null;
+    const Small = picture?.Small?.Url || null;
+    let active = Large ? Large : Medium;
+    return active ? active : Small;
   };
 
   const productImage = (event, picture) => {
@@ -41,10 +43,10 @@ const AliImgGallery = (props) => {
     }
   };
 
-  const playVideo = (event, PreviewUrl) => {
+  const playVideo = (event, Url) => {
     event.preventDefault();
-    if (PreviewUrl) {
-      setActiveImg(PreviewUrl);
+    if (Url) {
+      setActiveImg(Url);
     }
   };
 
@@ -66,7 +68,7 @@ const AliImgGallery = (props) => {
               <a
                 className={`rounded video_thumb position-relative ${activeImg === PreviewUrl && "active"}`}
                 href={PreviewUrl}
-                onClick={(event) => playVideo(event, PreviewUrl)}
+                onClick={(event) => playVideo(event, Url)}
               >
                 <img
                   className="rounded tns-lazy-img"
@@ -80,7 +82,7 @@ const AliImgGallery = (props) => {
               </a>
               :
               <a
-                className={`rounded position-relative ${activeImg === picture && "active"}`}
+                className={`rounded position-relative ${activeImg === picture.Large.Url && "active"}`}
                 href={activeImageUrl(picture)}
                 onClick={(event) => productImage(event, picture)}
               >
@@ -101,8 +103,8 @@ const AliImgGallery = (props) => {
 
 };
 
-AliImgGallery.propTypes = {
+ImgGallery.propTypes = {
   Pictures: PropTypes.array.isRequired,
 };
 
-export default AliImgGallery;
+export default ImgGallery;

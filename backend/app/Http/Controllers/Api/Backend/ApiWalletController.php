@@ -38,12 +38,6 @@ class ApiWalletController extends Controller
     return \response($data);
   }
 
-  public function list()
-  {
-    $data = $this->walletService->list();
-    return \response($data);
-  }
-
   /**
    * Store a newly created resource in storage.
    *
@@ -87,6 +81,7 @@ class ApiWalletController extends Controller
   {
     $item_id = request('item_id');
     $status = request('status');
+
     $orderItem = OrderItem::find($item_id);
     $data = [];
     $order_id = $orderItem->order_item_number;
@@ -128,7 +123,7 @@ class ApiWalletController extends Controller
     $status =  false;
     if (!empty($data)) {
       $orderItem->update($data);
-      $abcd = $this->walletService->updateWalletCalculation($orderItem->id);
+      $abcd = $this->apiWalletService->updateWalletCalculation($orderItem->id);
       $status = true;
     }
 

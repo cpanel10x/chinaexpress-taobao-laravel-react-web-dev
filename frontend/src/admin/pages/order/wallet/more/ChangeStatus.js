@@ -4,24 +4,26 @@ import SelectStatus from "./include/SelectStatus";
 import CustomInput from "./include/CustomInput";
 import OutOfStockInput from "./include/OutOfStockInput";
 import RefundedInput from "./include/RefundedInput";
+import {useWalletUpdateStatus} from "../../../../query/WalletApi";
 
 
-const ChangeStatus = ({walletItem, show, setShow}) => {
+const ChangeStatus = ({walletItem, onFinish, show, setShow}) => {
+
+  const [form] = Form.useForm();
+
   const [status, setStatus] = useState(walletItem?.status);
   const [sourceOrderNum, setSourceOrderNum] = useState(walletItem?.source_order_number);
   const [trackingNumber, setTrackingNumber] = useState(walletItem?.tracking_number);
   const [actualWeight, setActualWeight] = useState(walletItem?.actual_weight);
-  const [outOfStock, setOutOfStock] = useState(walletItem?.tracking_number);
   const [adjustment, setAdjustment] = useState(walletItem?.adjustment);
   const [customerTax, setCustomerTax] = useState(walletItem?.customer_tax);
   const [refunded, setRefunded] = useState(walletItem?.refunded);
   const [lostTnTransit, setLostTnTransit] = useState(walletItem?.lost_in_transit);
 
 
-
-  const submitModalForm = () => {
-    console.log('status', status)
-  }
+  useEffect(() => {
+    form.setFieldsValue({...walletItem, status});
+  }, [walletItem, status])
 
 
   return (
@@ -30,14 +32,12 @@ const ChangeStatus = ({walletItem, show, setShow}) => {
         title={`Changes Status #${walletItem.item_number}`}
         okText="Change Status"
         visible={show}
-        onOk={() => submitModalForm()}
+        // onOk={() => submitModalForm()}
         onCancel={() => setShow(false)}
-        footer={(<Button type="primary" block onClick={() => submitModalForm()}>
-          Update Status
-        </Button>)}
+        footer={null}
       >
-        <Form layout="vertical">
-          <SelectStatus status={status} setStatus={setStatus}/>
+        <Form layout="vertical" form={form} name="status_change_form" onFinish={onFinish}>
+          <SelectStatus form={form} walletItem={walletItem} status={status} setStatus={setStatus}/>
           {
             status === "purchased" &&
             <CustomInput status={status} value={sourceOrderNum} setValue={setSourceOrderNum}/>
@@ -52,7 +52,8 @@ const ChangeStatus = ({walletItem, show, setShow}) => {
           }
           {
             status === "out-of-stock" &&
-            <OutOfStockInput product_value={walletItem.product_value} value={outOfStock} setValue={setOutOfStock}/>
+            <OutOfStockInput form={form} product_value={walletItem.product_value}
+                             out_of_stock={walletItem.out_of_stock}/>
           }
           {
             status === "adjustment" &&
@@ -64,12 +65,15 @@ const ChangeStatus = ({walletItem, show, setShow}) => {
           }
           {
             status === "refunded" &&
-            <RefundedInput value={refunded} setValue={setRefunded}/>
+            <RefundedInput form={form} value={refunded} setValue={setRefunded}/>
           }
           {
             status === "lost_in_transit" &&
             <CustomInput status={status} value={lostTnTransit} setValue={setLostTnTransit}/>
           }
+          <Button type="primary" htmlType="submit" block>
+            Update Status
+          </Button>
         </Form>
       </Modal>
     </>
