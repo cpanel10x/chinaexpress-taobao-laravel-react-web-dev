@@ -29,6 +29,14 @@ const Action = ({walletItem, handleActionClick}) => {
               </a>
             ),
           },
+          {
+            key: "4",
+            label: (
+              <a href="/admin/order/wallet" onClick={event => handleActionClick(event, 'delete', walletItem)}>
+                Delete
+              </a>
+            ),
+          },
         ]}
       />
     </>

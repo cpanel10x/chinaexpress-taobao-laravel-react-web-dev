@@ -1,21 +1,15 @@
-import {Table, Button, Typography, Dropdown} from "antd";
-import qs from "qs";
-import moment from "moment";
-import React, {useState, useEffect} from "react";
-import {useWalletData, useWalletUpdateStatus} from "../../../query/WalletApi";
-import {MoreOutlined} from "@ant-design/icons";
-import Action from "./more/Action";
-import {characterLimiter} from "../../../../utils/Helpers";
+import { Button, Typography } from "antd";
+import React, { useState } from "react";
+import { useWalletUpdateStatus } from "../../../query/WalletApi";
 import WalletTable from "./WalletTable";
 import ViewDetails from "./more/ViewDetails";
 import ChangeStatus from "./more/ChangeStatus";
 import ShowTrackingInformation from "./more/ShowTrackingInformation";
+import DeleteWallet from "./more/DeleteWallet";
 
-const {Title} = Typography;
-
+const { Title } = Typography;
 
 const WalletIndex = () => {
-
   const [loading, setLoading] = useState(false);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
 
@@ -23,9 +17,9 @@ const WalletIndex = () => {
   const [show, setShow] = useState(false);
   const [showStatus, setShowStatus] = useState(false);
   const [showTracking, setShowTracking] = useState(false);
+  const [showDelete, setShowDelete] = useState(false);
 
-  const {mutateAsync, isLoading} = useWalletUpdateStatus();
-
+  const { mutateAsync, isLoading } = useWalletUpdateStatus();
 
   const start = () => {
     setLoading(true); // ajax request after empty completing
@@ -45,38 +39,66 @@ const WalletIndex = () => {
 
   const handleActionClick = (event, type, record) => {
     event.preventDefault();
-    setWalletItem(record)
-    if (type === 'view') {
+    setWalletItem(record);
+    if (type === "view") {
       setShow(true);
-    } else if (type === 'change-status') {
+    } else if (type === "change-status") {
       setShowStatus(true);
-    } else if (type === 'tracking') {
+    } else if (type === "tracking") {
       setShowTracking(true);
+    } else if (type === "delete") {
+      setShowDelete(true);
     }
-  }
+  };
 
   const hasSelected = selectedRowKeys.length > 0;
 
   const onFinish = (values) => {
-    mutateAsync({...values, item_id: walletItem.id}, {
-      onSuccess: () => {
-        setShow(false);
+    mutateAsync(
+      { ...values, item_id: walletItem.id },
+      {
+        onSuccess: () => {
+          setShowStatus(false);
+        },
       }
-    }).then(r => console.log(r.data));
+    ).then((r) => console.log(r.data));
   };
 
   return (
     <>
-      {
-        walletItem?.id > 0 && (
-          <>
-            {show && <ViewDetails walletItem={walletItem} show={show} setShow={setShow}/>}
-            {showStatus && <ChangeStatus walletItem={walletItem} onFinish={onFinish} show={showStatus} setShow={setShowStatus}/>}
-            {showTracking &&
-              <ShowTrackingInformation walletItem={walletItem} show={showTracking} setShow={setShowTracking}/>}
-          </>
-        )
-      }
+      {walletItem?.id > 0 && (
+        <>
+          {show && (
+            <ViewDetails
+              walletItem={walletItem}
+              show={show}
+              setShow={setShow}
+            />
+          )}
+          {showStatus && (
+            <ChangeStatus
+              walletItem={walletItem}
+              onFinish={onFinish}
+              show={showStatus}
+              setShow={setShowStatus}
+            />
+          )}
+          {showTracking && (
+            <ShowTrackingInformation
+              walletItem={walletItem}
+              show={showTracking}
+              setShow={setShowTracking}
+            />
+          )}
+          {showDelete && (
+            <DeleteWallet
+              walletItem={walletItem}
+              show={showDelete}
+              setShow={setShowDelete}
+            />
+          )}
+        </>
+      )}
       <Title level={4}>Manage Wallet</Title>
 
       <div
@@ -85,26 +107,38 @@ const WalletIndex = () => {
         }}
       >
         <Button
-          type="primary"
+          type="danger"
           onClick={start}
           disabled={!hasSelected}
           loading={loading}
         >
-          Reload
+          Delete
         </Button>
-        <span
-          style={{
-            marginLeft: 8,
-          }}
+        <Button
+          type="warning"
+          onClick={start}
+          disabled={!hasSelected}
+          loading={loading}
         >
+          Change Status
+        </Button>
+        <Button
+          type="info"
+          onClick={start}
+          disabled={!hasSelected}
+          loading={loading}
+        >
+          Generate Invoice
+        </Button>
+        <span style={{ marginLeft: 8 }}>
           {hasSelected ? `Selected ${selectedRowKeys.length} items` : ""}
         </span>
       </div>
 
       <WalletTable
         rowSelection={rowSelection}
-        handleActionClick={handleActionClick}/>
-
+        handleActionClick={handleActionClick}
+      />
     </>
   );
 };

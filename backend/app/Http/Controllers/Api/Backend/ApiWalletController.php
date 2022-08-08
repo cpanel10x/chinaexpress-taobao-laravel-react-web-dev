@@ -38,6 +38,12 @@ class ApiWalletController extends Controller
     return \response($data);
   }
 
+  public function wallet_tracking_information($wallet_id)
+  {
+    $tracking = (new TrackingService())->show($wallet_id);
+    return response(['tracking' => $tracking]);
+  }
+
   /**
    * Store a newly created resource in storage.
    *
@@ -117,6 +123,8 @@ class ApiWalletController extends Controller
     } elseif ($status == 'refunded') {
       $data = $request->only('refunded', 'refunded_method', 'status');
       $amount = request('refunded');
+    } elseif ($status == 'cancel') {
+      $data = $request->only('status');
     }
 
     // manage customer Messages
@@ -231,12 +239,6 @@ class ApiWalletController extends Controller
     ]);
   }
 
-  public function trashed()
-  {
-    $orders = Order::onlyTrashed()->latest()->paginate(10);
-    return view('backend.content.order.trash', compact('orders'));
-  }
-
   public function restore($id)
   {
     $trashOrder = Order::onlyTrashed()->findOrFail($id);
@@ -257,20 +259,4 @@ class ApiWalletController extends Controller
   }
 
 
-  public function paymentValidator($update_id = null)
-  {
-
-    return request()->validate([
-      'type' => 'required|string|max:155|exists:package_types,slug',
-      'plan' => 'required|string|max:155|exists:packages,slug',
-      'package' => 'required|numeric|max:9999|exists:packages,id',
-      'domain' => $update_id ? 'required|string|max:191|unique:orders,domain,' . $update_id : 'required|string|max:191|unique:orders,domain',
-      'payment_method' => 'required|string|max:191',
-      'agent_account' => 'required|string|max:191', // payment received agent number
-      'subs_year' => 'required|numeric|max:5',
-      'subs_total' => 'required|numeric|max:9999',
-      'client_account' => 'required|string|max:191',
-      'transaction_no' => 'required|string|max:191',
-    ]);
-  }
 }

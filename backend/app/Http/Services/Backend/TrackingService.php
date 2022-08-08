@@ -132,6 +132,7 @@ class TrackingService
             'adjustment' => 'Adjustment',
             'lost_in_transit' => 'Lost in Transit',
             'refunded' => 'Refund to Customer',
+            'cancel' => 'Order Canceled',
             'comment1' => 'Comment-1',
             'comment2' => 'Comment-2',
         ];

@@ -1,9 +1,15 @@
-import {Timeline, Typography, Modal} from "antd";
-import React, {useEffect, useState} from "react";
+import { Timeline, Typography, Modal } from "antd";
+import React from "react";
+import { useWalletTrackingInfo } from "../../../../query/WalletApi";
+import TrackingItem from "./include/TrackingItem";
 
-const {Title} = Typography;
+const { Title } = Typography;
 
-const ShowTrackingInformation = ({walletItem, show, setShow}) => {
+const ShowTrackingInformation = ({ walletItem, show, setShow }) => {
+  const wallet_id = walletItem?.id || null;
+  const { data } = useWalletTrackingInfo(wallet_id);
+
+  console.log("data", data);
 
   return (
     <>
@@ -12,14 +18,12 @@ const ShowTrackingInformation = ({walletItem, show, setShow}) => {
         visible={show}
         onOk={() => setShow(false)}
         onCancel={() => setShow(false)}
-        width={800}
+        width={600}
         footer={false}
       >
         <Timeline>
-          <Timeline.Item>Create a services site 2015-09-01</Timeline.Item>
-          <Timeline.Item>Solve initial network problems 2015-09-01</Timeline.Item>
-          <Timeline.Item>Technical testing 2015-09-01</Timeline.Item>
-          <Timeline.Item>Network problems being solved 2015-09-01</Timeline.Item>
+          {data?.length > 0 &&
+            data.map((item, index) => <TrackingItem item={item} key={index} />)}
         </Timeline>
       </Modal>
     </>

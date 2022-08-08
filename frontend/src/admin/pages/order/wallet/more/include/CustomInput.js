@@ -1,148 +1,137 @@
-import {InfoCircleOutlined} from '@ant-design/icons';
-import {Form, Input} from 'antd';
+import { InfoCircleOutlined } from "@ant-design/icons";
+import { Form, Input } from "antd";
 import InputNumberField from "../../../../../../components/InputNumberField";
 
-
-const CustomInput = ({status, value, setValue}) => {
-
-  if (status === 'purchased') {
+const CustomInput = ({ form, status, walletItem }) => {
+  form.setFieldsValue({ ...walletItem, status });
+  if (status === "purchased") {
     return (
       <Form.Item
         label="Source Order Number"
         tooltip={{
-          title: 'Source Order Number',
-          icon: <InfoCircleOutlined/>,
+          title: "Source Order Number",
+          icon: <InfoCircleOutlined />,
         }}
         name="source_order_number"
         rules={[
           {
             required: true,
-            message: 'Please input your Source Order Number!',
+            message: "Please input your Source Order Number!",
           },
         ]}
       >
-        <Input value={value} onChange={setValue} placeholder="input placeholder"/>
+        <Input placeholder="input placeholder" />
       </Form.Item>
     );
   }
-  if (status === 'shipped-from-suppliers') {
+  if (status === "shipped-from-suppliers") {
     return (
       <Form.Item
         label="Tracking Number"
         tooltip={{
-          title: 'Tracking Number',
-          icon: <InfoCircleOutlined/>,
+          title: "Tracking Number",
+          icon: <InfoCircleOutlined />,
         }}
         name="tracking_number"
         rules={[
           {
             required: true,
-            message: 'Please input your Tracking Number!',
+            message: "Please input your Tracking Number!",
           },
         ]}
       >
-        <Input value={value} onChange={setValue} placeholder="Tracking Number"/>
+        <Input
+          placeholder="Tracking Number"
+        />
       </Form.Item>
     );
   }
 
-  if (status === 'received-in-BD-warehouse') {
+  if (status === "received-in-BD-warehouse") {
     return (
       <Form.Item
         label="Actual Weight"
         tooltip={{
-          title: 'Actual weight of total quantity',
-          icon: <InfoCircleOutlined/>,
+          title: "Actual weight of total quantity",
+          icon: <InfoCircleOutlined />,
         }}
         name="actual_weight"
         rules={[
           {
             required: true,
-            message: 'Please input your Actual Weight!',
+            message: "Please input your Actual Weight!",
           },
         ]}
       >
-        <InputNumberField
-          value={value}
-          onChange={setValue}
-        />
+        <InputNumberField />
       </Form.Item>
     );
   }
 
-  if (status === 'adjustment') {
+  if (status === "adjustment") {
     return (
       <Form.Item
         label="Adjustment"
         tooltip={{
-          title: 'Adjustment Amount(+/-) of this item',
-          icon: <InfoCircleOutlined/>,
+          title: "Adjustment Amount(+/-) of this item",
+          icon: <InfoCircleOutlined />,
         }}
         name="adjustment"
         rules={[
           {
             required: true,
-            message: 'Please input your Adjustment Amount',
+            message: "Please input your Adjustment Amount",
           },
         ]}
       >
-        <InputNumberField
-          value={value}
-          onChange={setValue}
-        />
+        <InputNumberField />
       </Form.Item>
     );
   }
 
-  if (status === 'customer_tax') {
+  if (status === "customer_tax") {
     return (
       <Form.Item
         label="Customer Tax"
         tooltip={{
-          title: 'Customer Tax amount',
-          icon: <InfoCircleOutlined/>,
+          title: "Customer Tax amount",
+          icon: <InfoCircleOutlined />,
         }}
         name="customer_tax"
         rules={[
           {
             required: true,
-            message: 'Please input Customer Tax',
+            message: "Please input Customer Tax",
           },
         ]}
       >
-        <InputNumberField
-          value={value}
-          onChange={setValue}
-        />
+        <InputNumberField/>
       </Form.Item>
     );
   }
 
-  if (status === 'lost_in_transit') {
+  if (status === "lost_in_transit") {
     return (
       <Form.Item
         label="Lost in Transit"
         tooltip={{
-          title: 'Lost in Transit amount',
-          icon: <InfoCircleOutlined/>,
+          title: "Lost in Transit amount",
+          icon: <InfoCircleOutlined />,
         }}
         name="lost_in_transit"
         rules={[
           {
             required: true,
-            message: 'Please input lost in transit',
+            message: "Please input lost in transit",
           },
         ]}
       >
-        <InputNumberField
-          value={value}
-          onChange={setValue}
-        />
+        <InputNumberField />
       </Form.Item>
     );
   }
 
-  return '';
+  return "";
 };
 
 export default CustomInput;
