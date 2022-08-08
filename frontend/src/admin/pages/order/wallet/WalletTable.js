@@ -6,6 +6,7 @@ import Action from "./more/Action";
 import {MoreOutlined} from "@ant-design/icons";
 import {useWalletData} from "../../../query/WalletApi";
 import qs from "qs";
+import {useQueryClient} from "react-query";
 
 
 const getRandomParams = (params) => ({
@@ -14,7 +15,7 @@ const getRandomParams = (params) => ({
   ...params,
 });
 
-const WalletTable = ({rowSelection, handleActionClick}) => {
+const WalletTable = ({rowSelection, handleActionClick, resetQuery, setResetQuery}) => {
   const [data, setData] = useState();
   const [loading, setLoading] = useState(false);
   const [pagination, setPagination] = useState({
@@ -23,9 +24,17 @@ const WalletTable = ({rowSelection, handleActionClick}) => {
   });
   const [queryParams, setQueryParams] = useState({});
 
-  const {data: queryData, isLoading} = useWalletData(
-    qs.stringify(getRandomParams(queryParams))
-  );
+  const qs_query_prams = qs.stringify(getRandomParams(queryParams));
+
+  const cache = useQueryClient();
+  const {data: queryData, isLoading} = useWalletData(qs_query_prams);
+
+  useEffect(() => {
+    if (resetQuery) {
+      cache.invalidateQueries(["wallet", qs_query_prams]);
+      setResetQuery(false);
+    }
+  }, [resetQuery]);
 
   useEffect(() => {
     setLoading(isLoading);

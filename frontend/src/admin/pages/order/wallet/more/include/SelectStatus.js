@@ -1,10 +1,12 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Select, Form} from "antd";
 import {InfoCircleOutlined} from "@ant-design/icons";
 
 const {Option} = Select;
 
-const SelectStatus = ({form, walletItem, status, setStatus}) => {
+const SelectStatus = ({form, walletItem, setStatus}) => {
+
+  form.setFieldsValue(walletItem);
 
   const options = [
     {key: 'purchased', value: 'Purchased'},
@@ -24,13 +26,10 @@ const SelectStatus = ({form, walletItem, status, setStatus}) => {
     {key: 'partial-paid', value: 'Partial Paid'},
   ];
 
-  const default_value = options?.find(find => find.key === status)?.value || '';
-
   const statusUpdateAction = (item) => {
+    setStatus(item);
     form.setFieldsValue({...walletItem, status: item});
-    setStatus(item)
   }
-
 
   return (
     <Form.Item
@@ -48,8 +47,6 @@ const SelectStatus = ({form, walletItem, status, setStatus}) => {
       ]}
     >
       <Select
-        defaultValue={default_value}
-        value={status}
         showSearch
         style={{width: '100%'}}
         onChange={item => statusUpdateAction(item)}

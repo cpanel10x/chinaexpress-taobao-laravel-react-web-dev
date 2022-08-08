@@ -1,38 +1,29 @@
-import { Button, Typography } from "antd";
-import React, { useState } from "react";
-import { useWalletUpdateStatus } from "../../../query/WalletApi";
+import {Button, Typography} from "antd";
+import React, {useState} from "react";
+import {useWalletUpdateStatus} from "../../../query/WalletApi";
 import WalletTable from "./WalletTable";
 import ViewDetails from "./more/ViewDetails";
 import ChangeStatus from "./more/ChangeStatus";
 import ShowTrackingInformation from "./more/ShowTrackingInformation";
-import DeleteWallet from "./more/DeleteWallet";
+import MasterEdit from "./more/MasterEdit";
+import OperationButtons from "./includes/OperationButtons";
 
-const { Title } = Typography;
+const {Title} = Typography;
 
 const WalletIndex = () => {
-  const [loading, setLoading] = useState(false);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [resetQuery, setResetQuery] = useState(false);
 
   const [walletItem, setWalletItem] = useState({});
   const [show, setShow] = useState(false);
   const [showStatus, setShowStatus] = useState(false);
   const [showTracking, setShowTracking] = useState(false);
-  const [showDelete, setShowDelete] = useState(false);
+  const [masterEdit, setMasterEdit] = useState(false);
 
-  const { mutateAsync, isLoading } = useWalletUpdateStatus();
-
-  const start = () => {
-    setLoading(true); // ajax request after empty completing
-
-    setTimeout(() => {
-      setSelectedRowKeys([]);
-      setLoading(false);
-    }, 1000);
-  };
+  const {mutateAsync, isLoading} = useWalletUpdateStatus();
 
   const rowSelection = {
     onChange: (selectedRowKeys, selectedRows) => {
-      console.log("selectedRows: ", selectedRows);
       setSelectedRowKeys(selectedRows);
     },
   };
@@ -46,18 +37,17 @@ const WalletIndex = () => {
       setShowStatus(true);
     } else if (type === "tracking") {
       setShowTracking(true);
-    } else if (type === "delete") {
-      setShowDelete(true);
+    } else if (type === "master_edit") {
+      setMasterEdit(true);
     }
   };
 
-  const hasSelected = selectedRowKeys.length > 0;
-
   const onFinish = (values) => {
     mutateAsync(
-      { ...values, item_id: walletItem.id },
+      {...values, item_id: walletItem.id},
       {
         onSuccess: () => {
+          setResetQuery(true);
           setShowStatus(false);
         },
       }
@@ -81,6 +71,7 @@ const WalletIndex = () => {
               onFinish={onFinish}
               show={showStatus}
               setShow={setShowStatus}
+              setResetQuery={setResetQuery}
             />
           )}
           {showTracking && (
@@ -90,54 +81,25 @@ const WalletIndex = () => {
               setShow={setShowTracking}
             />
           )}
-          {showDelete && (
-            <DeleteWallet
+          {masterEdit && (
+            <MasterEdit
               walletItem={walletItem}
-              show={showDelete}
-              setShow={setShowDelete}
+              show={masterEdit}
+              setShow={setMasterEdit}
+              setResetQuery={setResetQuery}
             />
           )}
         </>
       )}
       <Title level={4}>Manage Wallet</Title>
 
-      <div
-        style={{
-          marginBottom: 16,
-        }}
-      >
-        <Button
-          type="danger"
-          onClick={start}
-          disabled={!hasSelected}
-          loading={loading}
-        >
-          Delete
-        </Button>
-        <Button
-          type="warning"
-          onClick={start}
-          disabled={!hasSelected}
-          loading={loading}
-        >
-          Change Status
-        </Button>
-        <Button
-          type="info"
-          onClick={start}
-          disabled={!hasSelected}
-          loading={loading}
-        >
-          Generate Invoice
-        </Button>
-        <span style={{ marginLeft: 8 }}>
-          {hasSelected ? `Selected ${selectedRowKeys.length} items` : ""}
-        </span>
-      </div>
+      <OperationButtons selectedRowKeys={selectedRowKeys} setResetQuery={setResetQuery}/>
 
       <WalletTable
         rowSelection={rowSelection}
         handleActionClick={handleActionClick}
+        resetQuery={resetQuery}
+        setResetQuery={setResetQuery}
       />
     </>
   );

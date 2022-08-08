@@ -34,7 +34,6 @@ const ChangeStatus = ({ walletItem, onFinish, show, setShow }) => {
           <SelectStatus
             form={form}
             walletItem={walletItem}
-            status={status}
             setStatus={setStatus}
           />
           {status === "purchased" && (

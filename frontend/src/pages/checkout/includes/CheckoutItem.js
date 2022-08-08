@@ -18,7 +18,6 @@ const CheckoutItem = (props) => {
     removeItemFromCart,
   } = props;
 
-  const cache = useQueryClient();
   const { isLoading, mutateAsync } = useAddToWishList();
 
   const { data: wishList } = useWishList();

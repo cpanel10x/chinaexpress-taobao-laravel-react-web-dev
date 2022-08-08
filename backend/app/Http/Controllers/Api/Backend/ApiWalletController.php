@@ -194,11 +194,10 @@ class ApiWalletController extends Controller
   public function update(Request $request, $id)
   {
     $data = request()->all();
-    unset($data['_method']);
     $orderItem  = OrderItem::find($id);
-    if ($orderItem) {
-      $orderItem->update($data);
-      $abcd = $this->walletService->updateWalletCalculation($request, $id);
+    if (count($data) && $orderItem) {
+      $orderItem->fill($data);
+      $orderItem->save();
     }
     return response(['data' => $orderItem]);
   }
@@ -209,22 +208,15 @@ class ApiWalletController extends Controller
    * @param int $page
    * @return Response
    */
-  public function destroy($id)
+  public function destroy()
   {
-    $orderItem = OrderItem::withTrashed()->find($id);
-    $order_user_id = $orderItem->user_id ?? null;
-    $orderItemItems = $orderItem->pluck('id')->toArray();
-    $OrderItemVariation = OrderItemVariation::withTrashed()->whereIn('item_id', $orderItemItems)->where('user_id', $order_user_id);
+    $selected = request('selected', []);
 
-    if ($orderItem->trashed()) {
-      $orderItem->forceDelete();
-      $OrderItemVariation->forceDelete();
-      return \response([
-        'status' => true,
-        'icon' => 'success',
-        'msg' => 'Wallet and Order Item variation permanently deleted',
-      ]);
-    } else if ($orderItem->delete()) {
+    $orderItem = OrderItem::withTrashed()->whereIn('id', $selected);
+    $orderItemItems = $orderItem->pluck('id')->toArray();
+    $OrderItemVariation = OrderItemVariation::withTrashed()->whereIn('item_id', $orderItemItems);
+
+    if ($orderItem->delete()) {
       $OrderItemVariation->delete();
       return \response([
         'status' => true,

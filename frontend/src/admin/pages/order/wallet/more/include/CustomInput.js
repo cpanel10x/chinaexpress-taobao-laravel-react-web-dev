@@ -3,7 +3,9 @@ import { Form, Input } from "antd";
 import InputNumberField from "../../../../../../components/InputNumberField";
 
 const CustomInput = ({ form, status, walletItem }) => {
+
   form.setFieldsValue({ ...walletItem, status });
+
   if (status === "purchased") {
     return (
       <Form.Item

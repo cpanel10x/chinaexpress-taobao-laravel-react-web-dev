@@ -1,5 +1,5 @@
 import axios from "axios";
-import { setAuthenticated } from "../api/Auth";
+import {setAuthenticated} from "../api/Auth";
 
 const baseApiURL = process.env.REACT_APP_API_ENDPOINT;
 
@@ -23,7 +23,7 @@ export const instanceSetToken = (token = "") => {
 
 export const apiGet = async (resource, params) => {
   return await instance
-    .get(`${baseApiURL + resource}`, { params: params })
+    .get(`${baseApiURL + resource}`, {params: params})
     .then((res) => {
       return res.data;
     })
@@ -84,9 +84,11 @@ export const apiUpdate = async (resource, params) => {
     });
 };
 
-export const apiDelete = async (resource) => {
+export const apiDelete = async (resource, params) => {
   return instance
-    .delete(baseApiURL + resource)
+    .delete(baseApiURL + resource, {
+      data: params
+    })
     .then((res) => {
       return res.data;
     })

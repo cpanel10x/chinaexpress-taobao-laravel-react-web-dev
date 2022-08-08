@@ -10,5 +10,6 @@ Route::group(['prefix' => 'order', 'as' => 'order.'], function () {
     Route::get('/wallet', [ApiWalletController::class, 'index']);
     Route::get('/wallet/tracking/{id}', [ApiWalletController::class, 'wallet_tracking_information']);
     Route::post('/wallet', [ApiWalletController::class, 'update_order_wallet_status']);
-    Route::delete('/wallet', [ApiWalletController::class, 'destroy']);
+    Route::put('/wallet/{id}', [ApiWalletController::class, 'update']);
+    Route::delete('/wallet/delete', [ApiWalletController::class, 'destroy']);
 });
