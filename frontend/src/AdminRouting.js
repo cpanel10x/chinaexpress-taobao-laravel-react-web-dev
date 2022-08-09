@@ -19,110 +19,110 @@ import TopNoticeIndex from "./admin/pages/front-setting/top-notice/TopNoticeInde
 const AdminRouting = () => {
     return (
         <>
-            <AdminRoute path="/admin/dashboard" exact component={AdminDashboard}/>
+            <AdminRoute path="/manage/dashboard" exact component={AdminDashboard}/>
 
-            <AdminRoute path="/admin/order/recent" exact component={RecentOrder}/>
-            <AdminRoute path="/admin/order/wallet" exact component={WalletIndex}/>
-            <AdminRoute path="/admin/order/invoice" exact component={ManageInvoice}/>
+            <AdminRoute path="/manage/order/recent" exact component={RecentOrder}/>
+            <AdminRoute path="/manage/order/wallet" exact component={WalletIndex}/>
+            <AdminRoute path="/manage/order/invoice" exact component={ManageInvoice}/>
             <AdminRoute
-                path="/admin/order/tracking"
+                path="/manage/order/tracking"
                 exact
                 component={ManageTracking}
             />
-            <AdminRoute path="/admin/product/list" exact component={ManageProducts}/>
-            <AdminRoute path="/admin/coupon/logs" exact component={CouponLogs}/>
-            <AdminRoute path="/admin/coupon/list" exact component={CouponList}/>
-            <AdminRoute path="/admin/customer" exact component={CustomerIndex}/>
-            <AdminRoute path="/admin/menu" exact component={MenuIndex}/>
-            <AdminRoute path="/admin/taxonomy" exact component={TaxonomyIndex}/>
-            <AdminRoute path="/admin/contact" exact component={ContactIndex}/>
-            <AdminRoute path="/admin/pages" exact component={PageIndex}/>
-            <AdminRoute path="/admin/faqs" exact component={FaqIndex}/>
+            <AdminRoute path="/manage/product/list" exact component={ManageProducts}/>
+            <AdminRoute path="/manage/coupon/logs" exact component={CouponLogs}/>
+            <AdminRoute path="/manage/coupon/list" exact component={CouponList}/>
+            <AdminRoute path="/manage/customer" exact component={CustomerIndex}/>
+            <AdminRoute path="/manage/menu" exact component={MenuIndex}/>
+            <AdminRoute path="/manage/taxonomy" exact component={TaxonomyIndex}/>
+            <AdminRoute path="/manage/contact" exact component={ContactIndex}/>
+            <AdminRoute path="/manage/pages" exact component={PageIndex}/>
+            <AdminRoute path="/manage/faqs" exact component={FaqIndex}/>
             <AdminRoute
-                path="/admin/front-setting/top-notice"
+                path="/manage/front-setting/top-notice"
                 exact
                 component={TopNoticeIndex}
             />
             <AdminRoute
-                path="/admin/front-setting/announcement"
+                path="/manage/front-setting/announcement"
                 exact
                 component={AdminDashboard}
             />
             <AdminRoute
-                path="/admin/front-setting/banner"
+                path="/manage/front-setting/banner"
                 exact
                 component={AdminDashboard}
             />
             <AdminRoute
-                path="/admin/front-setting/promo-banner"
+                path="/manage/front-setting/promo-banner"
                 exact
                 component={AdminDashboard}
             />
             <AdminRoute
-                path="/admin/front-setting/sections"
+                path="/manage/front-setting/sections"
                 exact
                 component={AdminDashboard}
             />
             <AdminRoute
-                path="/admin/front-setting/image-loading"
+                path="/manage/front-setting/image-loading"
                 exact
                 component={AdminDashboard}
             />
             <AdminRoute
-                path="/admin/setting/general"
+                path="/manage/setting/general"
                 exact
                 component={AdminDashboard}
             />
             <AdminRoute
-                path="/admin/setting/price"
+                path="/manage/setting/price"
                 exact
                 component={AdminDashboard}
             />
             <AdminRoute
-                path="/admin/setting/order-limit"
+                path="/manage/setting/order-limit"
                 exact
                 component={AdminDashboard}
             />
             <AdminRoute
-                path="/admin/setting/popup"
+                path="/manage/setting/popup"
                 exact
                 component={AdminDashboard}
             />
             <AdminRoute
-                path="/admin/setting/block-words"
+                path="/manage/setting/block-words"
                 exact
                 component={AdminDashboard}
             />
             <AdminRoute
-                path="/admin/setting/messages"
+                path="/manage/setting/messages"
                 exact
                 component={AdminDashboard}
             />
             <AdminRoute
-                path="/admin/setting/cache-control"
+                path="/manage/setting/cache-control"
                 exact
                 component={AdminDashboard}
             />
             <AdminRoute
-                path="/admin/setting/bkash-api-response"
+                path="/manage/setting/bkash-api-response"
                 exact
                 component={AdminDashboard}
             />
             <AdminRoute
-                path="/admin/setting/general"
+                path="/manage/setting/general"
                 exact
                 component={AdminDashboard}
             />
-            <AdminRoute path="/admin/user" exact component={AdminDashboard}/>
-            <AdminRoute path="/admin/role" exact component={AdminDashboard}/>
-            <AdminRoute path="/admin/bkash/refund" exact component={AdminDashboard}/>
+            <AdminRoute path="/manage/user" exact component={AdminDashboard}/>
+            <AdminRoute path="/manage/role" exact component={AdminDashboard}/>
+            <AdminRoute path="/manage/bkash/refund" exact component={AdminDashboard}/>
             <AdminRoute
-                path="/admin/log/dashboard"
+                path="/manage/log/dashboard"
                 exact
                 component={AdminDashboard}
             />
             <AdminRoute
-                path="/admin/log/error-list"
+                path="/manage/log/error-list"
                 exact
                 component={AdminDashboard}
             />

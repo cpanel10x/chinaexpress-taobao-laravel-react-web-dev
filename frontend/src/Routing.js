@@ -1,5 +1,5 @@
-import React, {useEffect} from "react";
-import {Switch} from "react-router-dom";
+import React, { useEffect } from "react";
+import { Switch } from "react-router-dom";
 import Home from "./pages/home/Home";
 import Login from "./auth/login/Login";
 import My404Component from "./pages/404/My404Component";
@@ -25,7 +25,7 @@ import ManageAddress from "./auth/dashboard/address/ManageAddress";
 import LatestArrivedProduct from "./pages/newArrive/LatestArrivedProduct";
 import AliSellerPage from "./pages/aliexpress/aliSeller/AliSellerPage";
 import TaobaoSellerPage from "./pages/taobaoSeller/taobaoSeller/TaobaoSellerPage";
-import {analyticsPageView} from "./utils/AnalyticsHelpers";
+import { analyticsPageView } from "./utils/AnalyticsHelpers";
 import FavoriteProduct from "./pages/favorite/FavoriteProduct";
 import RecentViewProduct from "./pages/recent-view/RecentViewProduct";
 import Invoices from "./auth/dashboard/invoices/Invoices";
@@ -36,65 +36,113 @@ import FrontAuthRoute from "./routers/FrontAuthRoute";
 import AdminRouting from "./AdminRouting";
 
 const Routing = () => {
-
-
   useEffect(() => {
     analyticsPageView();
   }, []);
 
-  return (<>
-    <Switch>
-      <FrontRoute path="/" exact component={Home}/>
-      <FrontRoute path="/login" exact component={Login}/>
-      <FrontRoute path="/forgot-password" exact component={ForgotPassword}/>
-      <FrontRoute path="/faq" exact component={Faq}/>
-      <FrontRoute path="/contact" exact component={Contact}/>
-      <FrontRoute path="/new-arrived" exact component={LatestArrivedProduct}/>
-      <FrontRoute path="/customer-favorite" exact component={FavoriteProduct}/>
-      <FrontRoute path="/recent-view" exact component={RecentViewProduct}/>
+  return (
+    <>
+      <Switch>
+        <FrontRoute path="/" exact component={Home} />
+        <FrontRoute path="/login" exact component={Login} />
+        <FrontRoute path="/forgot-password" exact component={ForgotPassword} />
+        <FrontRoute path="/faq" exact component={Faq} />
+        <FrontRoute path="/contact" exact component={Contact} />
+        <FrontRoute
+          path="/new-arrived"
+          exact
+          component={LatestArrivedProduct}
+        />
+        <FrontRoute
+          path="/customer-favorite"
+          exact
+          component={FavoriteProduct}
+        />
+        <FrontRoute path="/recent-view" exact component={RecentViewProduct} />
 
-      <FrontRoute path="/pages/:slug" exact component={SinglePage}/>
-      <FrontRoute path="/product/:item_id" exact component={ProductSingle}/>
-      <FrontRoute path="/taobao/vendor/:seller_id?" exact={true} component={TaobaoSellerPage}/>
-      <FrontRoute
-        path="/search"
-        exact={true}
-        component={LoadSearchProducts}
-      />
-      <FrontRoute path="/search/picture/:search_id" exact component={LoadPictureSearchProduct}/>
-      <FrontRoute
-        path="/shop/:category_slug"
-        exact
-        component={LoadShopProducts}
-      />
-      {/* start aliexpress route develop */}
-      <FrontRoute path="/aliexpress/product/:product_id" exact={true} component={AliProductPage}/>
-      <FrontRoute path="/aliexpress/seller/:seller_id?" exact={true} component={AliSellerPage}/>
-      {/* end aliexpress route develop */}
+        <FrontRoute path="/pages/:slug" exact component={SinglePage} />
+        <FrontRoute path="/product/:item_id" exact component={ProductSingle} />
+        <FrontRoute
+          path="/taobao/vendor/:seller_id?"
+          exact={true}
+          component={TaobaoSellerPage}
+        />
+        <FrontRoute
+          path="/search"
+          exact={true}
+          component={LoadSearchProducts}
+        />
+        <FrontRoute
+          path="/search/picture/:search_id"
+          exact
+          component={LoadPictureSearchProduct}
+        />
+        <FrontRoute
+          path="/shop/:category_slug"
+          exact
+          component={LoadShopProducts}
+        />
+        {/* start aliexpress route develop */}
+        <FrontRoute
+          path="/aliexpress/product/:product_id"
+          exact={true}
+          component={AliProductPage}
+        />
+        <FrontRoute
+          path="/aliexpress/seller/:seller_id?"
+          exact={true}
+          component={AliSellerPage}
+        />
+        {/* end aliexpress route develop */}
 
-      <FrontAuthRoute path="/checkout" exact component={Checkout}/>
-      <FrontAuthRoute path="/payment" exact component={Payment}/>
-      <FrontAuthRoute path="/online/payment/:status" exact component={OnlinePaymentStatus}/>
-      <FrontAuthRoute path="/dashboard" exact component={Dashboard}/>
-      <FrontAuthRoute path="/dashboard/orders" exact component={AllOrders}/>
-      <FrontAuthRoute path="/dashboard/orders/:tran_id" exact component={OrderDetails}/>
-      <FrontAuthRoute path="/dashboard/wallet/:id" exact component={WalletDetails}/>
-      <FrontAuthRoute path="/dashboard/my-invoice" exact component={Invoices}/>
-      <FrontAuthRoute path="/dashboard/invoice/:invoice_id" exact component={InvoiceDetails}/>
-      <FrontAuthRoute path="/dashboard/wishlist" exact component={Wishlist}/>
-      <FrontAuthRoute path="/dashboard/address" exact component={ManageAddress}/>
-      <FrontAuthRoute path="/dashboard/profile" exact component={Profile}/>
+        <FrontAuthRoute path="/checkout" exact component={Checkout} />
+        <FrontAuthRoute path="/payment" exact component={Payment} />
+        <FrontAuthRoute
+          path="/online/payment/:status"
+          exact
+          component={OnlinePaymentStatus}
+        />
+        <FrontAuthRoute path="/dashboard" exact component={Dashboard} />
+        <FrontAuthRoute path="/dashboard/orders" exact component={AllOrders} />
+        <FrontAuthRoute
+          path="/dashboard/orders/:tran_id"
+          exact
+          component={OrderDetails}
+        />
+        <FrontAuthRoute
+          path="/dashboard/wallet/:id"
+          exact
+          component={WalletDetails}
+        />
+        <FrontAuthRoute
+          path="/dashboard/my-invoice"
+          exact
+          component={Invoices}
+        />
+        <FrontAuthRoute
+          path="/dashboard/invoice/:invoice_id"
+          exact
+          component={InvoiceDetails}
+        />
+        <FrontAuthRoute path="/dashboard/wishlist" exact component={Wishlist} />
+        <FrontAuthRoute
+          path="/dashboard/address"
+          exact
+          component={ManageAddress}
+        />
+        <FrontAuthRoute path="/dashboard/profile" exact component={Profile} />
 
-      <AdminRouting/>
+        <AdminRouting />
 
-      <FrontRoute
-        path="/:category_slug/:sub_slug?"
-        exact
-        component={LoadCategory}
-      />
-      <FrontRoute path="*" exact component={My404Component}/>
-    </Switch>
-  </>);
+        <FrontRoute
+          path="/:category_slug/:sub_slug?"
+          exact
+          component={LoadCategory}
+        />
+        <FrontRoute path="*" exact component={My404Component} />
+      </Switch>
+    </>
+  );
 };
 
 export default Routing;

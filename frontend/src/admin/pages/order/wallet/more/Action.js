@@ -1,6 +1,6 @@
-import {Menu} from "antd";
+import { Menu } from "antd";
 
-const Action = ({walletItem, handleActionClick}) => {
+const Action = ({ walletItem, handleActionClick }) => {
   return (
     <>
       <Menu
@@ -8,7 +8,12 @@ const Action = ({walletItem, handleActionClick}) => {
           {
             key: "1",
             label: (
-              <a href="/admin/order/wallet" onClick={event => handleActionClick(event, 'view', walletItem)}>
+              <a
+                href="/manage/order/wallet"
+                onClick={(event) =>
+                  handleActionClick(event, "view", walletItem)
+                }
+              >
                 View Details
               </a>
             ),
@@ -16,7 +21,12 @@ const Action = ({walletItem, handleActionClick}) => {
           {
             key: "2",
             label: (
-              <a href="/admin/order/wallet" onClick={event => handleActionClick(event, 'change-status', walletItem)}>
+              <a
+                href="/manage/order/wallet"
+                onClick={(event) =>
+                  handleActionClick(event, "change-status", walletItem)
+                }
+              >
                 Change status
               </a>
             ),
@@ -24,7 +34,12 @@ const Action = ({walletItem, handleActionClick}) => {
           {
             key: "3",
             label: (
-              <a href="/admin/order/wallet" onClick={event => handleActionClick(event, 'tracking', walletItem)}>
+              <a
+                href="/manage/order/wallet"
+                onClick={(event) =>
+                  handleActionClick(event, "tracking", walletItem)
+                }
+              >
                 Tracking Info
               </a>
             ),
@@ -32,7 +47,12 @@ const Action = ({walletItem, handleActionClick}) => {
           {
             key: "4",
             label: (
-              <a href="/admin/order/wallet" onClick={event => handleActionClick(event, 'master_edit', walletItem)}>
+              <a
+                href="/manage/order/wallet"
+                onClick={(event) =>
+                  handleActionClick(event, "master_edit", walletItem)
+                }
+              >
                 Master Edit
               </a>
             ),

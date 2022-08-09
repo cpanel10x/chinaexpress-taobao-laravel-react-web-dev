@@ -1,43 +1,45 @@
-import React, {useEffect, useState} from 'react';
-import {Button, Modal} from "antd";
-import {ExclamationCircleOutlined} from "@ant-design/icons";
-import {useWalletBatchDelete} from "../../../../query/WalletApi";
+import React, { useEffect, useState } from "react";
+import { Button, Modal, Space, Input } from "antd";
+import { ExclamationCircleOutlined } from "@ant-design/icons";
+import { useWalletBatchDelete } from "../../../../query/WalletApi";
+import GenerateInvoice from "./GenerateInvoice";
 
-const OperationButtons = ({selectedRowKeys, setResetQuery}) => {
+const { Search } = Input;
 
+const OperationButtons = ({ selectedRowKeys, setResetQuery }) => {
   const [selected, setSelected] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [invoiceGen, setInvoiceGen] = useState(false);
 
-  const {mutateAsync, isLoading} = useWalletBatchDelete();
+  const { mutateAsync, isLoading } = useWalletBatchDelete();
 
   useEffect(() => {
     let selected_ids = [];
-    selectedRowKeys.map(item => {
-      selected_ids.push(item.id)
-    })
-    setSelected(selected_ids)
-  }, [selectedRowKeys])
-
+    selectedRowKeys.map((item) => {
+      selected_ids.push(item.id);
+      return 0;
+    });
+    setSelected(selected_ids);
+  }, [selectedRowKeys]);
 
   const processDelete = () => {
     Modal.confirm({
-      title: 'Are you sure ?',
-      icon: <ExclamationCircleOutlined/>,
-      content: 'Attention! Selected items will be deleted.',
-      okText: 'Ok, Delete',
-      okType: 'danger',
+      title: "Are you sure ?",
+      icon: <ExclamationCircleOutlined />,
+      content: "Attention! Selected items will be deleted.",
+      okText: "Ok, Delete",
+      okType: "danger",
       onOk: () => {
         mutateAsync(
-          {selected},
+          { selected },
           {
             onSuccess: () => {
               setResetQuery(true);
-              setSelected([])
+              setSelected([]);
             },
           }
         ).then((r) => console.log(r.data));
       },
-      cancelText: 'Cancel',
+      cancelText: "Cancel",
     });
   };
 
@@ -55,52 +57,62 @@ const OperationButtons = ({selectedRowKeys, setResetQuery}) => {
     }
     if (!same_users) {
       Modal.warning({
-        title: 'Processing error!',
-        content: 'Selected items is not same user or is not ready for generate invoice.',
+        title: "Processing error!",
+        content:
+          "Selected items is not same user or is not ready for generate invoice.",
       });
     } else {
-      console.log('start')
+      setInvoiceGen(true);
     }
-  }
+  };
 
   const hasSelected = selected.length > 0;
-
+  const onSearch = (value) => console.log(value);
   return (
-    <div
-      style={{
-        marginBottom: 16,
-      }}
-    >
-      <Button
-        type="danger"
-        onClick={processDelete}
-        disabled={!hasSelected}
-        loading={isLoading}
-        style={{marginRight: 4}}
+    <>
+      {invoiceGen && hasSelected && (
+        <GenerateInvoice
+          rowItems={selectedRowKeys}
+          setResetQuery={setResetQuery}
+          show={invoiceGen}
+          setShow={setInvoiceGen}
+        />
+      )}
+      <div
+        style={{
+          marginBottom: 16,
+        }}
       >
-        Delete
-      </Button>
-      {/*<Button*/}
-      {/*  type="primary"*/}
-      {/*  onClick={start}*/}
-      {/*  disabled={!hasSelected}*/}
-      {/*  loading={loading}*/}
-      {/*  style={{marginRight: 4}}*/}
-      {/*>*/}
-      {/*  Change Status*/}
-      {/*</Button>*/}
-      <Button
-        type="primary"
-        onClick={generateInvoice}
-        disabled={!hasSelected}
-        loading={loading}
-      >
-        Generate Invoice
-      </Button>
-      <span style={{marginLeft: 8}}>
+        <Button
+          type="danger"
+          onClick={processDelete}
+          disabled={!hasSelected}
+          loading={isLoading}
+          style={{ marginRight: 4 }}
+        >
+          Delete
+        </Button>
+        <Button
+          type="primary"
+          onClick={generateInvoice}
+          disabled={!hasSelected}
+        >
+          Generate Invoice
+        </Button>
+        <span style={{ marginLeft: 8 }}>
           {hasSelected ? `Selected ${selectedRowKeys.length} items` : ""}
         </span>
-    </div>
+        <Search
+          placeholder="Search"
+          allowClear
+          enterButton
+          onSearch={onSearch}
+          style={{
+            width: 300,
+          }}
+        />
+      </div>
+    </>
   );
 };
 

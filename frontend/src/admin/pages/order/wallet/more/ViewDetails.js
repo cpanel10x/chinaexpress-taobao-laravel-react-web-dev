@@ -1,5 +1,6 @@
 import { Table, Typography, Modal, Divider, List } from "antd";
 import React, { useEffect, useState } from "react";
+import { slugToMakeTitle } from "../../../../../utils/Helpers";
 
 const { Title } = Typography;
 
@@ -11,63 +12,6 @@ const ViewDetails = ({ walletItem, show, setShow }) => {
   }, [walletItem]);
 
   const MainPictureUrl = walletItem.MainPictureUrl;
-
-  const columns = [
-    {
-      title: "SL",
-      align: "center",
-      width: 50,
-      render: (text, record, index) => {
-        return index + 1;
-      },
-    },
-    {
-      title: "Picture",
-      align: "center",
-      width: 80,
-      dataIndex: "Variations",
-      render: (Picture, record, index) => {
-        let attributes = record.attributes ? JSON.parse(record.attributes) : [];
-        let ImageUrl = attributes?.find(
-          (attr) => attr?.ImageUrl !== undefined
-        )?.ImageUrl;
-        ImageUrl = ImageUrl ? ImageUrl : MainPictureUrl;
-        return <img src={ImageUrl} alt="product-view" />;
-      },
-    },
-    {
-      title: "Variations",
-      width: 180,
-      dataIndex: "attributes",
-      render: (attributes, record) => {
-        const attr_data = attributes ? JSON.parse(attributes) : [];
-        const variationList = attr_data?.map((attribute, key) => (
-          <p className="m-0" key={key}>
-            {attribute?.PropertyName +
-              ` : ` +
-              (attribute?.ValueAlias || attribute?.Value)}
-          </p>
-        ));
-        return (
-          <>
-            {variationList}
-            <p className="m-0">
-              {record.qty} x {record.price}
-            </p>
-          </>
-        );
-      },
-    },
-    {
-      title: "Total",
-      align: "center",
-      width: 100,
-      dataIndex: "subTotal",
-      render: (subTotal) => {
-        return subTotal ? subTotal : 0;
-      },
-    },
-  ];
 
   const sourceLink = () => {
     let ItemId = walletItem.ItemId;
@@ -86,48 +30,10 @@ const ViewDetails = ({ walletItem, show, setShow }) => {
 
   const otherInfoData = () => {
     let otherData = [];
-    let includesData = [
-      "item_number",
-      "ItemId",
-      "ProviderType",
-      "ItemMainUrl",
-      "MainPictureUrl",
-      "regular_price",
-      "weight",
-      "actual_weight",
-      "DeliveryCost",
-      "Quantity",
-      "shipped_by",
-      "shipping_from",
-      "shipping_type",
-      "shipping_rate",
-      "status",
-      "source_order_number",
-      "tracking_number",
-      "product_value",
-      "first_payment",
-      "coupon_contribution",
-      "bd_shipping_charge",
-      "courier_bill",
-      "out_of_stock",
-      "lost_in_transit",
-      "customer_tax",
-      "missing",
-      "adjustment",
-      "refunded",
-      "refunded_method",
-      "last_payment",
-      "due_payment",
-      "invoice_no",
-      "purchases_at",
-      "comment1",
-      "comment2",
-      "created_at",
-      "updated_at",
-    ];
+    let includesData = ['id', 'order_id', 'user_id', 'item_number', 'hasConfigurators', 'ItemId', 'shipped_by', 'shipping_from', 'status', 'purchases_at', 'created_at', 'updated_at', 'deleted_at', 'user', 'order', 'product', 'item_variations'];
     for (let key in walletItem) {
       let value = walletItem[key];
-      if (includesData.includes(key)) {
+      if (!includesData.includes(key)) {
         otherData.push({
           key,
           value,
@@ -145,6 +51,7 @@ const ViewDetails = ({ walletItem, show, setShow }) => {
         onOk={() => setShow(false)}
         onCancel={() => setShow(false)}
         width={800}
+        footer={false}
       >
         <List
           size="small"
@@ -172,11 +79,69 @@ const ViewDetails = ({ walletItem, show, setShow }) => {
         />
         <Divider orientation="left">Variations</Divider>
         <Table
-          columns={columns}
           rowKey={(record) => record.id}
           dataSource={variations}
           pagination={false}
+          size="small"
           bordered
+          columns={[
+            {
+              title: "SL",
+              align: "center",
+              width: 50,
+              render: (text, record, index) => {
+                return index + 1;
+              },
+            },
+            {
+              title: "Picture",
+              align: "center",
+              width: 80,
+              dataIndex: "Variations",
+              render: (Picture, record, index) => {
+                let attributes = record.attributes
+                  ? JSON.parse(record.attributes)
+                  : [];
+                let ImageUrl = attributes?.find(
+                  (attr) => attr?.ImageUrl !== undefined
+                )?.ImageUrl;
+                ImageUrl = ImageUrl ? ImageUrl : MainPictureUrl;
+                return <img src={ImageUrl} alt="product-view" />;
+              },
+            },
+            {
+              title: "Variations",
+              width: 180,
+              dataIndex: "attributes",
+              render: (attributes, record) => {
+                const attr_data = attributes ? JSON.parse(attributes) : [];
+                const variationList = attr_data?.map((attribute, key) => (
+                  <p className="m-0" key={key}>
+                    {attribute?.PropertyName +
+                      ` : ` +
+                      (attribute?.ValueAlias || attribute?.Value)}
+                  </p>
+                ));
+                return (
+                  <>
+                    {variationList}
+                    <p className="m-0">
+                      {record.qty} x {record.price}
+                    </p>
+                  </>
+                );
+              },
+            },
+            {
+              title: "Total",
+              align: "center",
+              width: 100,
+              dataIndex: "subTotal",
+              render: (subTotal) => {
+                return subTotal ? subTotal : 0;
+              },
+            },
+          ]}
         />
         <Divider orientation="left">Others Information</Divider>
         <List
@@ -184,7 +149,7 @@ const ViewDetails = ({ walletItem, show, setShow }) => {
           dataSource={otherInfoData()}
           renderItem={(item) => (
             <List.Item style={{ textTransform: "capitalize" }}>
-              <b>{item?.key}</b> : {item?.value}
+              <b>{slugToMakeTitle(item.key)}</b> : {item?.value}
             </List.Item>
           )}
         />

@@ -68,7 +68,7 @@ const Header = (props) => {
                   </Link>
                   <div className="dropdown-menu dropdown-menu-right nav_customer_menus">
                     {view_backend && (
-                      <Link to="/admin/dashboard" className="dropdown-item">
+                      <Link to="/manage/dashboard" className="dropdown-item">
                         Admin Dashboard
                       </Link>
                     )}

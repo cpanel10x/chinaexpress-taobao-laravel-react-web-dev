@@ -1,13 +1,15 @@
-import React, {useEffect, useState} from 'react';
-import {Dropdown, Table} from "antd";
+import React, { useEffect, useState } from "react";
+import { Dropdown, Table } from "antd";
 import moment from "moment/moment";
-import {capitalizeFirstLetter, characterLimiter} from "../../../../utils/Helpers";
+import {
+  capitalizeFirstLetter,
+  characterLimiter,
+} from "../../../../utils/Helpers";
 import Action from "./more/Action";
-import {MoreOutlined} from "@ant-design/icons";
-import {useWalletData} from "../../../query/WalletApi";
+import { MoreOutlined } from "@ant-design/icons";
+import { useWalletData } from "../../../query/WalletApi";
 import qs from "qs";
-import {useQueryClient} from "react-query";
-
+import { useQueryClient } from "react-query";
 
 const getRandomParams = (params) => ({
   results: params.pagination?.pageSize,
@@ -15,7 +17,12 @@ const getRandomParams = (params) => ({
   ...params,
 });
 
-const WalletTable = ({rowSelection, handleActionClick, resetQuery, setResetQuery}) => {
+const WalletTable = ({
+  rowSelection,
+  handleActionClick,
+  resetQuery,
+  setResetQuery,
+}) => {
   const [data, setData] = useState();
   const [loading, setLoading] = useState(false);
   const [pagination, setPagination] = useState({
@@ -27,7 +34,7 @@ const WalletTable = ({rowSelection, handleActionClick, resetQuery, setResetQuery
   const qs_query_prams = qs.stringify(getRandomParams(queryParams));
 
   const cache = useQueryClient();
-  const {data: queryData, isLoading} = useWalletData(qs_query_prams);
+  const { data: queryData, isLoading } = useWalletData(qs_query_prams);
 
   useEffect(() => {
     if (resetQuery) {
@@ -63,9 +70,14 @@ const WalletTable = ({rowSelection, handleActionClick, resetQuery, setResetQuery
         pagination={pagination}
         loading={loading}
         onChange={handleTableChange}
+        onRow={(record, rowIndex) => {
+          return {
+            onDoubleClick: (event) => handleActionClick(event, "view", record),
+          };
+        }}
         scroll={{
           x: 1200,
-          y: 500,
+          y: 600,
         }}
         bordered
         columns={[
@@ -76,7 +88,9 @@ const WalletTable = ({rowSelection, handleActionClick, resetQuery, setResetQuery
             align: "center",
             width: 120,
             render: (text, record, index) => {
-              return record?.created_at ? moment(record.created_at).format("DD-MMM-YYYY") : 'N/A';
+              return record?.created_at
+                ? moment(record.created_at).format("DD-MMM-YYYY")
+                : "N/A";
             },
           },
           {
@@ -125,7 +139,9 @@ const WalletTable = ({rowSelection, handleActionClick, resetQuery, setResetQuery
             width: 100,
             dataIndex: "shipping_type",
             render: (shipping_type) => {
-              return shipping_type ? capitalizeFirstLetter(shipping_type) : "Express";
+              return shipping_type
+                ? capitalizeFirstLetter(shipping_type)
+                : "Express";
             },
           },
           {
@@ -203,7 +219,7 @@ const WalletTable = ({rowSelection, handleActionClick, resetQuery, setResetQuery
             align: "center",
             dataIndex: "product_value",
             render: (product_value, record) => {
-              let {DeliveryCost, coupon_contribution} = record;
+              let { DeliveryCost, coupon_contribution } = record;
               return (
                 Number(product_value) +
                 Number(DeliveryCost) -
@@ -295,7 +311,7 @@ const WalletTable = ({rowSelection, handleActionClick, resetQuery, setResetQuery
             align: "center",
             dataIndex: "shipping_rate",
             render: (shipping_rate, record) => {
-              let {actual_weight} = record;
+              let { actual_weight } = record;
               return Math.round(Number(actual_weight) * Number(shipping_rate));
             },
           },
@@ -346,7 +362,9 @@ const WalletTable = ({rowSelection, handleActionClick, resetQuery, setResetQuery
               let days_count = secondDate
                 ? firstDate.diff(secondDate, "days", false)
                 : 0;
-              return days_count > 1 ? `${days_count} Days` : `${days_count} Day`;
+              return days_count > 1
+                ? `${days_count} Days`
+                : `${days_count} Day`;
             },
           },
           {
@@ -366,10 +384,17 @@ const WalletTable = ({rowSelection, handleActionClick, resetQuery, setResetQuery
             key: "action",
             align: "center",
             render: (walletItem) => (
-              <Dropdown overlay={<Action walletItem={walletItem} handleActionClick={handleActionClick}/>}
-                        placement="bottomRight">
+              <Dropdown
+                overlay={
+                  <Action
+                    walletItem={walletItem}
+                    handleActionClick={handleActionClick}
+                  />
+                }
+                placement="bottomRight"
+              >
                 <a href="/more" onClick={(e) => e.preventDefault()}>
-                  More <MoreOutlined/>
+                  More <MoreOutlined />
                 </a>
               </Dropdown>
             ),

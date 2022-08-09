@@ -1,8 +1,4 @@
-import {
-  camelCased,
-  truncate,
-} from "lodash";
-
+import { camelCased, truncate } from "lodash";
 
 /**
  *
@@ -35,8 +31,10 @@ export const loadCatImg = (category) => {
   return asset_base_url + "/assets/img/backend/no-image-300x300.png";
 };
 
-
-export const loadProductImg = (product, mainPicture = "/assets/img/backend/no-image-300x300.png") => {
+export const loadProductImg = (
+  product,
+  mainPicture = "/assets/img/backend/no-image-300x300.png"
+) => {
   const Pictures = product?.Pictures ? JSON.parse(product.Pictures) : [];
   if (Pictures?.length > 0) {
     const firstPicture = Pictures[0];
@@ -71,7 +69,6 @@ export const goPageTop = () => {
   }
 };
 
-
 export const characterLimiter = (string, length = 42, separator = "...") => {
   return truncate(string, {
     length: length,
@@ -79,27 +76,24 @@ export const characterLimiter = (string, length = 42, separator = "...") => {
   });
 };
 
-
 export const loadAsset = (path) => {
   const basePath = process.env.REACT_APP_ASSET_ENDPOINT;
   return `${basePath}/${path}`;
 };
-
 
 export const checkIsEmail = (input) => {
   const format = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
   return !!input.match(format);
 };
 
-
 export const slugToMakeTitle = (slug) => {
-  var words = slug.split('_');
+  var words = slug.split("_");
   for (var i = 0; i < words.length; i++) {
     var word = words[i];
     words[i] = word.charAt(0).toUpperCase() + word.slice(1);
   }
-  return words.join(' ');
-}
+  return words.join(" ");
+};
 
 export const taobaoSellerPositiveScore = (VendorScore) => {
   const percent = (VendorScore / 20) * 100;
@@ -110,3 +104,8 @@ export const capitalizeFirstLetter = (string) => {
   return string.charAt(0).toUpperCase() + string.slice(1);
 };
 
+export const collectionSumCalculate = (collection, key) => {
+  return collection.reduce((previousValue, currentValue) => {
+    return previousValue + Number(currentValue[key]);
+  }, 0);
+};

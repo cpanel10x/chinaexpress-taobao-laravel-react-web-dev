@@ -44,45 +44,6 @@ class ApiWalletController extends Controller
     return response(['tracking' => $tracking]);
   }
 
-  /**
-   * Store a newly created resource in storage.
-   *
-   * @param Request $request
-   * @return \Illuminate\Http\JsonResponse
-   * @throws Throwable
-   */
-  public function store(Request $request)
-  {
-    $status = request('status');
-    $item_id = request('item_id');
-    $orderItem = null;
-    $is_array = false;
-    if (is_array($item_id)) {
-      $is_array = true;
-      foreach ($item_id as $item) {
-        $orderItem[] = $this->update_order_wallet_status($item, $status, $request);
-      }
-    } else {
-      $is_array = false;
-      $orderItem = $this->update_order_wallet_status($item_id, $status, $request);
-    }
-
-    $csrf = csrf_token();
-
-    if (!empty($orderItem)) {
-      $order_data = [
-        'status' => true,
-        'csrf' => $csrf,
-        'is_array' => $is_array,
-        'orderItem' => $orderItem,
-      ];
-      return \response()->json($order_data);
-    }
-
-    return \response()->json(['status' => false, 'csrf' => $csrf]);
-  }
-
-
   public function update_order_wallet_status(Request $request)
   {
     $item_id = request('item_id');
@@ -145,44 +106,20 @@ class ApiWalletController extends Controller
     return response(['status' => $status, 'data' => $orderItem]);
   }
 
+
+
+  public function generateInvoices(Request $request)
+  {
+    $wallet = $request->all();
+    return response(['wallet' => $wallet]);
+  }
+
+
   public function storeWalletComment(Request $request, $id)
   {
     $wallet = $this->walletService->storeComments($request, $id);
     return response(['status' => true, 'data' => $wallet]);
   }
-
-  public function walletUpdatedParameters(Request $request, $id)
-  {
-    $wallet = $this->walletService->updatedParameters($request, $id);
-    return response(['wallet' => $wallet]);
-  }
-
-
-  /**
-   * Display the specified resource.
-   *
-   * @param int $id
-   * @return \Illuminate\Contracts\Routing\ResponseFactory|Response
-   */
-  public function show($id)
-  {
-    $data = OrderItem::with('user:id,name,phone,email,first_name,last_name', 'order', 'itemVariations')->find($id);
-    $render = '';
-    $title = 'Wallet details';
-    $status = false;
-    if ($data) {
-      $item_no = $data->item_number;
-      $status = true;
-      $title = "Wallet details of #{$item_no}";
-    }
-
-    return \response([
-      'status' => $status,
-      'title' => $title,
-      'data' => $data,
-    ]);
-  }
-
 
   /**
    * Update the specified resource in storage.
@@ -249,6 +186,4 @@ class ApiWalletController extends Controller
 
     return redirect()->route('admin.order.index')->withFlashSuccess('Order Recovered Successfully');
   }
-
-
 }
