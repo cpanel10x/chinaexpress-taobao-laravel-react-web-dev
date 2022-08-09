@@ -39,9 +39,13 @@ class OrderItem extends Model
     return $this->hasMany(OrderItemVariation::class, 'item_id', 'id');
   }
 
-
   public function orderTracking()
   {
     return $this->hasMany(OrderTracking::class, 'order_item_id', 'id');
+  }
+
+  public function invoice()
+  {
+    return $this->hasOne(InvoiceItem::class, 'order_item_id', 'id');
   }
 }

@@ -22,7 +22,6 @@ const SelectStatus = ({form, walletItem, setStatus}) => {
     {key: 'delivered', value: 'Delivered'},
     {key: 'lost_in_transit', value: 'Lost in Transit'},
     {key: 'cancel', value: 'Cancel Order'},
-    {key: 'waiting-for-payment', value: 'Waiting for Payment'},
     {key: 'partial-paid', value: 'Partial Paid'},
   ];
 

@@ -38,6 +38,6 @@ export const useWalletTrackingInfo = (id) =>
 
 export const useWalletInvoiceGenerate = () =>
   useMutation(["useWalletInvoiceGenerate"], async (props) => {
-    const resData = await apiPost(`admin/order/wallet/invoice-generate`, props);
+    const resData = await apiPost(`admin/order/invoice/generate`, props);
     return resData ? resData : {};
   });

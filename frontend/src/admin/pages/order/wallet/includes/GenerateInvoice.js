@@ -18,14 +18,14 @@ import {
   characterLimiter,
   collectionSumCalculate,
 } from "../../../../../utils/Helpers";
-import { useWalletInvoiceGenerate } from "../../../../query/WalletApi";
+import {useWalletInvoiceGenerate} from "../../../../query/WalletApi";
 
-const { Option } = Select;
+const {Option} = Select;
 
-const GenerateInvoice = ({ rowItems, setResetQuery, show, setShow }) => {
+const GenerateInvoice = ({rowItems, setResetQuery, show, setShow}) => {
   const [form] = Form.useForm();
 
-  const { mutateAsync, isLoading } = useWalletInvoiceGenerate();
+  const {mutateAsync, isLoading} = useWalletInvoiceGenerate();
 
   const total_due = collectionSumCalculate(rowItems, "due_payment");
   const total_weight = collectionSumCalculate(rowItems, "actual_weight");
@@ -33,11 +33,11 @@ const GenerateInvoice = ({ rowItems, setResetQuery, show, setShow }) => {
   const courierBillCalculate = (event) => {
     let bill_amount = event.target.value;
     let payable_amount = Number(total_due) + Number(bill_amount);
-    form.setFieldsValue({ payable_amount });
+    form.setFieldsValue({payable_amount});
   };
 
   const onFinish = (values) => {
-    mutateAsync(values, {
+    mutateAsync({invoices: rowItems, related: {...values, user_id: rowItems[0].user_id}}, {
       onSuccess: () => {
         setResetQuery(true);
         setShow(false);
@@ -50,7 +50,7 @@ const GenerateInvoice = ({ rowItems, setResetQuery, show, setShow }) => {
       title={`Generate Customer Invoices!`}
       visible={show}
       onCancel={() => setShow(false)}
-      icon={<ExclamationCircleOutlined />}
+      icon={<ExclamationCircleOutlined/>}
       width={800}
       footer={false}
     >
@@ -139,7 +139,7 @@ const GenerateInvoice = ({ rowItems, setResetQuery, show, setShow }) => {
               label={"Payment Method"}
               tooltip={{
                 title: `Select Payment Method `,
-                icon: <InfoCircleOutlined />,
+                icon: <InfoCircleOutlined/>,
               }}
               name="payment_method"
               rules={[
@@ -166,7 +166,7 @@ const GenerateInvoice = ({ rowItems, setResetQuery, show, setShow }) => {
               label={"Delivery Method"}
               tooltip={{
                 title: `Select Delivery Method `,
-                icon: <InfoCircleOutlined />,
+                icon: <InfoCircleOutlined/>,
               }}
               name="delivery_method"
               rules={[
@@ -192,7 +192,7 @@ const GenerateInvoice = ({ rowItems, setResetQuery, show, setShow }) => {
               label={"Courier Bill"}
               tooltip={{
                 title: `Input Courier Bill `,
-                icon: <InfoCircleOutlined />,
+                icon: <InfoCircleOutlined/>,
               }}
               name="courier_bill"
               rules={[
@@ -214,11 +214,11 @@ const GenerateInvoice = ({ rowItems, setResetQuery, show, setShow }) => {
               label={"Total Payable"}
               tooltip={{
                 title: `Invoice payable Amount`,
-                icon: <InfoCircleOutlined />,
+                icon: <InfoCircleOutlined/>,
               }}
               name="payable_amount"
             >
-              <Input placeholder="0.00" align="right" disabled />
+              <Input placeholder="0.00" align="right" disabled/>
             </Form.Item>
           </Col>
         </Row>

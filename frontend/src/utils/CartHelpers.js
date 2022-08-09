@@ -1,5 +1,5 @@
-import _, { isEmpty, isObject } from "lodash";
-import { sumCartItemTotal, sumCartItemTotalQuantity } from "./AliHelpers";
+import _, {isEmpty, isObject} from "lodash";
+import {sumCartItemTotal, sumCartItemTotalQuantity} from "./AliHelpers";
 
 export const getProductKeyItem = (product, keyName, returnDefault = null) => {
   if (!_.isEmpty(product) && _.isObject(product)) {
@@ -19,17 +19,18 @@ export const collectSelectedAttributes = (cartAttribute) => {
   return collectAttributes;
 };
 
-const stringifyAttributes = (Attributes) => {
-  let collect = [];
-  Attributes?.map((item) => {
-    collect.push(item.Pid + "_" + item.Vid);
-  });
-  return collect;
-};
+// const stringifyAttributes = (Attributes) => {
+//   let collect = [];
+//   Attributes?.map((item) => {
+//     collect.push(item.Pid + "_" + item.Vid);
+//     return false;
+//   });
+//   return collect;
+// };
 
 export const getActiveConfiguredItems = (ConfiguredItems, cartAttribute) => {
   const CartAttributes = collectSelectedAttributes(cartAttribute);
-  const compare1 = stringifyAttributes(CartAttributes);
+  // const compare1 = stringifyAttributes(CartAttributes);
   let configItems = [];
   for (let i = 0; i < ConfiguredItems.length; i++) {
     const ConfiguredItem = ConfiguredItems[i];
@@ -156,6 +157,7 @@ export const getProductModifiedConfiguredItem = (
     if (findAttr) {
       selectAttributes.push(findAttr);
     }
+    return '';
   });
   configItem.Attributes = selectAttributes;
 
@@ -196,13 +198,13 @@ export const numberWithCommas = (numericDtaa) => {
     let floatNum = Number(numericDtaa).toFixed(2);
     return floatNum.toString().split(".")[0].length > 3
       ? floatNum
-          .toString()
-          .substring(0, floatNum.toString().split(".")[0].length - 3)
-          .replace(/\B(?=(\d{2})+(?!\d))/g, ",") +
-          "," +
-          floatNum
-            .toString()
-            .substring(floatNum.toString().split(".")[0].length - 3)
+        .toString()
+        .substring(0, floatNum.toString().split(".")[0].length - 3)
+        .replace(/\B(?=(\d{2})+(?!\d))/g, ",") +
+      "," +
+      floatNum
+        .toString()
+        .substring(floatNum.toString().split(".")[0].length - 3)
       : floatNum.toString();
   }
   return "0.00";
@@ -435,7 +437,7 @@ export const matchAttributesConfigurator = (
   ConfiguredItems = []
 ) => {
   const remakeAttributes = selectAttributes.map((item) => {
-    return { Pid: item.Pid, Vid: item.Vid };
+    return {Pid: item.Pid, Vid: item.Vid};
   });
   return ConfiguredItems.filter((filter) => {
     const difference = _.differenceWith(
@@ -493,7 +495,7 @@ export const calculateAirShippingCharge = (subTotal, shipping_charges) => {
   let chargeAmount = 0;
   for (let i = 0; i < charges.length; i++) {
     const dCharge = charges[i];
-    if (subTotal == 0) {
+    if (subTotal === 0) {
       chargeAmount = dCharge.rate;
       break;
     } else if (dCharge.minimum <= subTotal && dCharge.maximum >= subTotal) {
@@ -625,7 +627,7 @@ export const CartProductSummary = (cart, advanced_rates, current_rate) => {
     advanced = Math.round((totalPrice * actual_adv_rate) / 100);
     dueAmount = Math.round(totalPrice - advanced);
   }
-  return { totalPrice, advanced, dueAmount, totalQty };
+  return {totalPrice, advanced, dueAmount, totalQty};
 };
 
 export const singleProductTotal = (product) => {
@@ -654,7 +656,7 @@ export const orderSummaryCalculation = (order_items) => {
     firstPayment += firstPrice;
     dueAmount += price - firstPrice;
   });
-  return { productValue, firstPayment, dueAmount };
+  return {productValue, firstPayment, dueAmount};
 };
 
 export const taobaoProductPrepareForLove = (product, rate) => {

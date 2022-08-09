@@ -9,80 +9,80 @@ const { Sider } = Layout;
 const items = [
   {
     label: "Dashboard",
-    key: "/admin/dashboard",
+    key: "/manage/dashboard",
     icon: <PieChartOutlined />,
   },
   {
     label: "Manage Orders",
-    key: "/admin/order",
+    key: "/manage/order",
     icon: <PieChartOutlined />,
     children: [
       {
         label: "Recent Orders",
-        key: "/admin/order/recent",
+        key: "/manage/order/recent",
       },
       {
         label: "Manage Wallet",
-        key: "/admin/order/wallet",
+        key: "/manage/order/wallet",
       },
       {
         label: "Manage Invoice",
-        key: "/admin/order/invoice",
+        key: "/manage/order/invoice",
       },
       {
         label: "Tracking Info",
-        key: "/admin/order/tracking",
+        key: "/manage/order/tracking",
       },
     ],
   },
   {
     label: "Manage Products",
-    key: "/admin/product/list",
+    key: "/manage/product/list",
     icon: <PieChartOutlined />,
   },
   {
     label: "Manage Coupons",
-    key: "/admin/coupon",
+    key: "/manage/coupon",
     icon: <PieChartOutlined />,
     children: [
       {
         label: "Coupon Logs",
-        key: "/admin/coupon/logs",
+        key: "/manage/coupon/logs",
       },
       {
         label: "Manage Coupon",
-        key: "/admin/coupon/list",
+        key: "/manage/coupon/list",
       },
     ],
   },
   {
     label: "Customer",
-    key: "/admin/customer",
+    key: "/manage/customer",
     icon: <PieChartOutlined />,
   },
   {
     label: "Manage Menus",
-    key: "/admin/menu",
+    key: "/manage/menu",
     icon: <PieChartOutlined />,
   },
   {
     label: "Manage Categories",
-    key: "/admin/taxonomy",
+    key: "/manage/taxonomy",
     icon: <PieChartOutlined />,
   },
   {
     label: "Contact Message",
-    key: "/admin/contact",
+    key: "/manage/contact",
     icon: <PieChartOutlined />,
   },
   {
     label: "Manage Pages",
-    key: "/admin/pages",
+    key: "/manage/pages",
     icon: <PieChartOutlined />,
   },
   {
     label: "Manage FAQ",
-    key: "/admin/faqs",
+    key: "/manage/faqs",
     icon: <PieChartOutlined />,
   },
   {
@@ -92,27 +92,27 @@ const items = [
     children: [
       {
         label: "Top Notice",
-        key: "/admin/front-setting/top-notice",
+        key: "/manage/front-setting/top-notice",
       },
       {
         label: "Announcements",
-        key: "/admin/front-setting/announcement",
+        key: "/manage/front-setting/announcement",
       },
       {
         label: "Manage Banners",
-        key: "/admin/front-setting/banner",
+        key: "/manage/front-setting/banner",
       },
       {
         label: "Promotional Banner",
-        key: "/admin/front-setting/promo-banner",
+        key: "/manage/front-setting/promo-banner",
       },
       {
         label: "Manage Sections",
-        key: "/admin/front-setting/sections",
+        key: "/manage/front-setting/sections",
       },
       {
         label: "Image Loaders",
-        key: "/admin/front-setting/image-loading",
+        key: "/manage/front-setting/image-loading",
       },
     ],
   },
@@ -123,72 +123,72 @@ const items = [
     children: [
       {
         label: "General Settings",
-        key: "/admin/setting/general",
+        key: "/manage/setting/general",
       },
       {
         label: "Price Settings",
-        key: "/admin/setting/price",
+        key: "/manage/setting/price",
       },
       {
         label: "Order Limitation",
-        key: "/admin/setting/order-limit",
+        key: "/manage/setting/order-limit",
       },
       {
         label: "Popup Messages",
-        key: "/admin/setting/popup",
+        key: "/manage/setting/popup",
       },
       {
         label: "Block Words",
-        key: "/admin/setting/block-words",
+        key: "/manage/setting/block-words",
       },
       {
         label: "Messages Settings",
-        key: "/admin/setting/messages",
+        key: "/manage/setting/messages",
       },
       {
         label: "Cache Control",
-        key: "/admin/setting/cache-control",
+        key: "/manage/setting/cache-control",
       },
       {
         label: "Bkash API Response",
-        key: "/admin/setting/bkash-api-response",
+        key: "/manage/setting/bkash-api-response",
       },
     ],
   },
   {
-    label: "System Admin",
+    label: "System Manage",
     key: "7",
     icon: <PieChartOutlined />,
     children: [
       {
         label: "Access",
-        key: "/admin/setting/access",
+        key: "/manage/setting/access",
         children: [
           {
             label: "User Management",
-            key: "/admin/user",
+            key: "/manage/user",
           },
           {
             label: "Role Management",
-            key: "/admin/role",
+            key: "/manage/role",
           },
           {
             label: "Bkash Refund Payment",
-            key: "/admin/bkash/refund",
+            key: "/manage/bkash/refund",
           },
         ],
       },
       {
         label: "Log Viewer",
-        key: "/admin/log/viewer",
+        key: "/manage/log/viewer",
         children: [
           {
             label: "Log Dashboard",
-            key: "/admin/log/dashboard",
+            key: "/manage/log/dashboard",
           },
           {
             label: "Error Logs",
-            key: "/admin/log/error-list",
+            key: "/manage/log/error-list",
           },
         ],
       },

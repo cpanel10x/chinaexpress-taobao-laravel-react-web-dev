@@ -1,14 +1,14 @@
-import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
-import { Layout } from "antd";
-import React, { useState } from "react";
+import {MenuFoldOutlined, MenuUnfoldOutlined} from "@ant-design/icons";
+import {Layout} from "antd";
+import React, {useState} from "react";
 import AdminSidebar from "./includes/AdminSidebar";
 
 import "./antd.css";
 import "./scss/Admin.scss";
 
-const { Header, Content, Footer } = Layout;
+const {Header, Content, Footer} = Layout;
 
-const AdminLayout = ({ children }) => {
+const AdminLayout = ({children}) => {
   const [collapsed, setCollapsed] = useState(false);
 
   return (
@@ -17,7 +17,7 @@ const AdminLayout = ({ children }) => {
         minHeight: "100vh",
       }}
     >
-      <AdminSidebar collapsed={collapsed} setCollapsed={setCollapsed} />
+      <AdminSidebar collapsed={collapsed} setCollapsed={setCollapsed}/>
 
       <Layout className="site-layout">
         <Header

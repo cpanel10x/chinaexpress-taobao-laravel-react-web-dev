@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend\Content;
 
 use App\Http\Controllers\Controller;
+use App\Http\Services\Backend\TrackingService;
 use App\Models\Auth\User;
 use App\Models\Content\Order;
 use App\Models\Content\OrderItem;
@@ -98,7 +99,7 @@ class OrderController extends Controller
 
   public function makeAsPayment($id)
   {
-    $order = Order::findOrFail($id);
+    $order = Order::with('orderItems')->findOrFail($id);
     $order_id = $id;
     $order_user_id = $order->user_id;
     if ($order) {
@@ -106,12 +107,15 @@ class OrderController extends Controller
         $order->update([
           'status' => 'partial-paid'
         ]);
-
         OrderItem::where('order_id', $order_id)
           ->where('user_id', $order_user_id)
           ->update([
             'status' => 'partial-paid',
           ]);
+        foreach ($order->orderItems as $item) {
+          $item_id = $item->id;
+          (new TrackingService())->updateTracking($item_id);
+        }
       });
     }
     $tran = $order->order_number ?? '';

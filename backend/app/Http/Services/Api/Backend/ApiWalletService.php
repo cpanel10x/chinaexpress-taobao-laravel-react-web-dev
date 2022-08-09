@@ -16,7 +16,9 @@ class ApiWalletService
 {
     public function list()
     {
-        $query = OrderItem::with('user', 'order', 'product', 'itemVariations')->orderByDesc('id');
+        $query = OrderItem::with('user', 'order', 'product', 'itemVariations')
+            ->whereNotIn('status', ['waiting-for-payment'])
+            ->orderByDesc('id');
         $column = [];
         $data  = (new PaginationService())->getPaginatedData($query, $column);
         $paginatedQuery = $data['data'];

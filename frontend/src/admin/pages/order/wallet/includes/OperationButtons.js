@@ -68,6 +68,7 @@ const OperationButtons = ({ selectedRowKeys, setResetQuery }) => {
 
   const hasSelected = selected.length > 0;
   const onSearch = (value) => console.log(value);
+
   return (
     <>
       {invoiceGen && hasSelected && (
@@ -99,7 +100,7 @@ const OperationButtons = ({ selectedRowKeys, setResetQuery }) => {
         >
           Generate Invoice
         </Button>
-        <span style={{ marginLeft: 8 }}>
+        <span style={{ marginLeft: 8, marginRight: 8 }}>
           {hasSelected ? `Selected ${selectedRowKeys.length} items` : ""}
         </span>
         <Search
