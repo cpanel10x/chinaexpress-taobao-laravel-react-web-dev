@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\PaymentGateway;
 
 use App\Http\Controllers\Controller;
+use App\Http\Services\Backend\TrackingService;
 use App\Models\Auth\User;
 use App\Models\Content\Invoice;
 use App\Models\Content\Order;
@@ -118,6 +119,13 @@ class BkashPaymentController extends Controller
         OrderItem::where('order_id', $order->id)->update(['status' => 'partial-paid']);
         if (config('app.env') === 'production') {
           $this->orderPaymentConfirmationNotification($order);
+        }
+        try {
+          $orderItems = OrderItem::where('order_id', $order->id)->get();
+          foreach ($orderItems as $orderItem) {
+            (new TrackingService())->updateTracking($orderItem->id, $orderItem);
+          }
+        } catch (\Exception $e) {
         }
       }
       return redirect()->to("{$frontend}/online/payment/success?tran_id={$tran_id}&trxID={$trxID}&paymentID={$this->paymentID}&msg={$this->statusMessage}");

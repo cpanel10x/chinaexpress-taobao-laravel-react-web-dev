@@ -11,10 +11,6 @@ const ChangeStatus = ({ walletItem, onFinish, show, setShow }) => {
 
   const [status, setStatus] = useState(walletItem?.status);
 
-  useEffect(() => {
-    form.setFieldsValue(walletItem);
-  }, [walletItem]);
-
   return (
     <>
       <Modal
@@ -30,6 +26,7 @@ const ChangeStatus = ({ walletItem, onFinish, show, setShow }) => {
           form={form}
           name="status_change_form"
           onFinish={onFinish}
+          initialValues={walletItem}
         >
           <SelectStatus
             form={form}

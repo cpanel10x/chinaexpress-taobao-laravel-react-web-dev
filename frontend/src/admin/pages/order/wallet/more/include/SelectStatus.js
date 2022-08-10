@@ -6,8 +6,6 @@ const {Option} = Select;
 
 const SelectStatus = ({form, walletItem, setStatus}) => {
 
-  form.setFieldsValue(walletItem);
-
   const options = [
     {key: 'purchased', value: 'Purchased'},
     {key: 'shipped-from-suppliers', value: 'Shipped from Suppliers'},

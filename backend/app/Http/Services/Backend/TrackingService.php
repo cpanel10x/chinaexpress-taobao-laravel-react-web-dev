@@ -52,9 +52,9 @@ class TrackingService
         }
     }
 
-    public function updateTracking($item_id)
+    public function updateTracking($item_id, $OrderItem = null)
     {
-        $wallet = OrderItem::find($item_id);
+        $wallet = $OrderItem ? $OrderItem : OrderItem::find($item_id);
         $status = $wallet->status;
         $user_id = auth()->id();
 
@@ -66,9 +66,7 @@ class TrackingService
             if ($tracking_find) {
                 $tracking_find->updated_time = now();
                 $tracking_find->save();
-            }
-
-            if (!$tracking_find) {
+            } else {
                 $last_track = OrderTracking::where('order_item_id', $item_id)
                     ->whereNotNull('updated_time')
                     ->orderByDesc('id')

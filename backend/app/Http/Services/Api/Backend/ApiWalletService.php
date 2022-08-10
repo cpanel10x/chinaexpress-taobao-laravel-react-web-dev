@@ -16,9 +16,25 @@ class ApiWalletService
 {
     public function list()
     {
+        $search_val   = request('search');
         $query = OrderItem::with('user', 'order', 'product', 'itemVariations')
             ->whereNotIn('status', ['waiting-for-payment'])
             ->orderByDesc('id');
+
+        $searchable = ['item_number', 'order_id', 'ItemId', 'ProviderType', 'status', 'source_order_number', 'tracking_number',  'invoice_no'];
+
+        if ($search_val && count($searchable) > 0) {
+            $query->where(function ($query) use ($searchable, $search_val) {
+                foreach ($searchable as $col) {
+                    $query->orWhere($col, 'LIKE', "%$search_val%");
+                }
+            })->orWhereHas('order', function ($query) use ($search_val) {
+                $query->where('transaction_id', 'like', '%' . $search_val . '%')
+                    ->orWhere('phone', 'like', '%' . $search_val . '%')
+                    ->orWhere('name', 'like', '%' . $search_val . '%');
+            });
+        }
+
         $column = [];
         $data  = (new PaginationService())->getPaginatedData($query, $column);
         $paginatedQuery = $data['data'];

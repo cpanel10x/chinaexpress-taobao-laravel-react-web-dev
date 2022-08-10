@@ -80,7 +80,7 @@ class ApiWalletController extends Controller
     } elseif ($status == 'customer_tax') {
       $data = $request->only('customer_tax');
     } elseif ($status == 'lost_in_transit') {
-      $data = $request->only('lost_in_transit');
+      $data = $request->only('lost_in_transit', 'status');
     } elseif ($status == 'refunded') {
       $data = $request->only('refunded', 'refunded_method', 'status');
       $amount = request('refunded');
@@ -101,7 +101,7 @@ class ApiWalletController extends Controller
       generate_customer_notifications($status, $user, $order_id, $amount, $tracking);
     }
 
-    (new TrackingService())->updateTracking($request);
+    (new TrackingService())->updateTracking($item_id);
 
     return response(['status' => $status, 'data' => $orderItem]);
   }

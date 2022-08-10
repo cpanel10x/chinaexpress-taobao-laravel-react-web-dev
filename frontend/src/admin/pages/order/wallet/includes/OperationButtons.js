@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from "react";
-import { Button, Modal, Space, Input } from "antd";
-import { ExclamationCircleOutlined } from "@ant-design/icons";
-import { useWalletBatchDelete } from "../../../../query/WalletApi";
+import React, {useEffect, useState} from "react";
+import {Button, Modal, Space, Input} from "antd";
+import {ExclamationCircleOutlined} from "@ant-design/icons";
+import {useWalletBatchDelete} from "../../../../query/WalletApi";
 import GenerateInvoice from "./GenerateInvoice";
 
-const { Search } = Input;
+const {Search} = Input;
 
-const OperationButtons = ({ selectedRowKeys, setResetQuery }) => {
+const OperationButtons = ({selectedRowKeys, setResetQuery, setSearch}) => {
   const [selected, setSelected] = useState([]);
   const [invoiceGen, setInvoiceGen] = useState(false);
 
-  const { mutateAsync, isLoading } = useWalletBatchDelete();
+  const {mutateAsync, isLoading} = useWalletBatchDelete();
 
   useEffect(() => {
     let selected_ids = [];
@@ -24,13 +24,13 @@ const OperationButtons = ({ selectedRowKeys, setResetQuery }) => {
   const processDelete = () => {
     Modal.confirm({
       title: "Are you sure ?",
-      icon: <ExclamationCircleOutlined />,
+      icon: <ExclamationCircleOutlined/>,
       content: "Attention! Selected items will be deleted.",
       okText: "Ok, Delete",
       okType: "danger",
       onOk: () => {
         mutateAsync(
-          { selected },
+          {selected},
           {
             onSuccess: () => {
               setResetQuery(true);
@@ -67,7 +67,6 @@ const OperationButtons = ({ selectedRowKeys, setResetQuery }) => {
   };
 
   const hasSelected = selected.length > 0;
-  const onSearch = (value) => console.log(value);
 
   return (
     <>
@@ -89,7 +88,7 @@ const OperationButtons = ({ selectedRowKeys, setResetQuery }) => {
           onClick={processDelete}
           disabled={!hasSelected}
           loading={isLoading}
-          style={{ marginRight: 4 }}
+          style={{marginRight: 4}}
         >
           Delete
         </Button>
@@ -100,14 +99,15 @@ const OperationButtons = ({ selectedRowKeys, setResetQuery }) => {
         >
           Generate Invoice
         </Button>
-        <span style={{ marginLeft: 8, marginRight: 8 }}>
+        <span style={{marginLeft: 8, marginRight: 8}}>
           {hasSelected ? `Selected ${selectedRowKeys.length} items` : ""}
         </span>
         <Search
           placeholder="Search"
           allowClear
           enterButton
-          onSearch={onSearch}
+          // onChange={e => setSearch(e.target.value)}
+          onSearch={setSearch}
           style={{
             width: 300,
           }}

@@ -18,12 +18,12 @@ const OutOfStockInput = ({product_value, out_of_stock, form}) => {
     let option = e.target.value;
     if (option === 'partial') {
       form.setFieldsValue({
-        out_of_stock_option: option,
+        out_of_stock_type: option,
         out_of_stock: out_of_stock,
       });
     } else if (option === 'full') {
       form.setFieldsValue({
-        out_of_stock_option: option,
+        out_of_stock_type: option,
         out_of_stock: product_value,
       });
     }
@@ -32,7 +32,7 @@ const OutOfStockInput = ({product_value, out_of_stock, form}) => {
   return (
     <>
       <Form.Item
-        name="out_of_stock_option"
+        name="out_of_stock_type"
       >
         <Radio.Group defaultValue="partial" buttonStyle="solid" onChange={e => setOptionAction(e)}>
           <Radio.Button value="partial">Partial</Radio.Button>

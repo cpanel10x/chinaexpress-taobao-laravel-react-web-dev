@@ -13,6 +13,7 @@ const {Title} = Typography;
 const WalletIndex = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [resetQuery, setResetQuery] = useState(false);
+  const [search, setSearch] = useState("");
 
   const [walletItem, setWalletItem] = useState({});
   const [show, setShow] = useState(false);
@@ -93,13 +94,14 @@ const WalletIndex = () => {
       )}
       <Title level={4}>Manage Wallet</Title>
 
-      <OperationButtons selectedRowKeys={selectedRowKeys} setResetQuery={setResetQuery}/>
+      <OperationButtons selectedRowKeys={selectedRowKeys} setResetQuery={setResetQuery} setSearch={setSearch}/>
 
       <WalletTable
         rowSelection={rowSelection}
         handleActionClick={handleActionClick}
         resetQuery={resetQuery}
         setResetQuery={setResetQuery}
+        search={search}
       />
     </>
   );

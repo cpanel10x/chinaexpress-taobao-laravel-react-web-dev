@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { Dropdown, Table } from "antd";
+import React, {useEffect, useState} from "react";
+import {Dropdown, Table} from "antd";
 import moment from "moment/moment";
 import {
   capitalizeFirstLetter,
   characterLimiter,
 } from "../../../../utils/Helpers";
 import Action from "./more/Action";
-import { MoreOutlined } from "@ant-design/icons";
-import { useWalletData } from "../../../query/WalletApi";
+import {MoreOutlined} from "@ant-design/icons";
+import {useWalletData} from "../../../query/WalletApi";
 import qs from "qs";
-import { useQueryClient } from "react-query";
+import {useQueryClient} from "react-query";
 
 const getRandomParams = (params) => ({
   results: params.pagination?.pageSize,
@@ -17,12 +17,7 @@ const getRandomParams = (params) => ({
   ...params,
 });
 
-const WalletTable = ({
-  rowSelection,
-  handleActionClick,
-  resetQuery,
-  setResetQuery,
-}) => {
+const WalletTable = ({rowSelection, handleActionClick, resetQuery, setResetQuery, search}) => {
   const [data, setData] = useState();
   const [loading, setLoading] = useState(false);
   const [pagination, setPagination] = useState({
@@ -31,10 +26,10 @@ const WalletTable = ({
   });
   const [queryParams, setQueryParams] = useState({});
 
-  const qs_query_prams = qs.stringify(getRandomParams(queryParams));
+  const qs_query_prams = qs.stringify(getRandomParams({...queryParams, search}));
 
   const cache = useQueryClient();
-  const { data: queryData, isLoading } = useWalletData(qs_query_prams);
+  const {data: queryData, isLoading} = useWalletData(qs_query_prams);
 
   useEffect(() => {
     if (resetQuery) {
@@ -50,7 +45,7 @@ const WalletTable = ({
       ...queryParams.pagination,
       total: queryData?.totalRecords ?? 0,
     });
-  }, [queryData, isLoading, queryParams]);
+  }, [queryData, isLoading, queryParams, search]);
 
   const handleTableChange = (newPagination, filters, sorter) => {
     setQueryParams({
@@ -219,7 +214,7 @@ const WalletTable = ({
             align: "center",
             dataIndex: "product_value",
             render: (product_value, record) => {
-              let { DeliveryCost, coupon_contribution } = record;
+              let {DeliveryCost, coupon_contribution} = record;
               return (
                 Number(product_value) +
                 Number(DeliveryCost) -
@@ -311,7 +306,7 @@ const WalletTable = ({
             align: "center",
             dataIndex: "shipping_rate",
             render: (shipping_rate, record) => {
-              let { actual_weight } = record;
+              let {actual_weight} = record;
               return Math.round(Number(actual_weight) * Number(shipping_rate));
             },
           },
@@ -394,7 +389,7 @@ const WalletTable = ({
                 placement="bottomRight"
               >
                 <a href="/more" onClick={(e) => e.preventDefault()}>
-                  More <MoreOutlined />
+                  More <MoreOutlined/>
                 </a>
               </Dropdown>
             ),
