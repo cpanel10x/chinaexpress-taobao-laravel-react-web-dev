@@ -1,6 +1,6 @@
 {
   "name": "chinaexpress_frontend",
-  "version": "v1.6.5",
+  "version": "v1.6.6",
   "private": true,
   "dependencies": {
     "@ant-design/icons": "^4.7.0",

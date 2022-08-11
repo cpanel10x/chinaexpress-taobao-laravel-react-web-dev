@@ -106,8 +106,8 @@ const OperationButtons = ({selectedRowKeys, setResetQuery, setSearch}) => {
           placeholder="Search"
           allowClear
           enterButton
-          // onChange={e => setSearch(e.target.value)}
-          onSearch={setSearch}
+          onChange={e => setSearch(e.target.value)}
+          // onSearch={setSearch}
           style={{
             width: 300,
           }}

@@ -7,20 +7,20 @@ const {Option} = Select;
 const SelectStatus = ({form, walletItem, setStatus}) => {
 
   const options = [
+    {key: 'partial-paid', value: 'Partial Paid'},
     {key: 'purchased', value: 'Purchased'},
     {key: 'shipped-from-suppliers', value: 'Shipped from Suppliers'},
     {key: 'received-in-china-warehouse', value: 'Received in China Warehouse'},
     {key: 'shipped-from-china-warehouse', value: 'Shipped from China Warehouse'},
     {key: 'received-in-BD-warehouse', value: 'Received in BD Warehouse'},
-    {key: 'on-transit-to-customer', value: 'On Transit to Customer'},
-    {key: 'out-of-stock', value: 'Out of Stock'},
-    {key: 'adjustment', value: 'Adjustment'},
-    {key: 'customer_tax', value: 'Customer Tax'},
-    {key: 'refunded', value: 'Refunded'},
-    {key: 'delivered', value: 'Delivered'},
-    {key: 'lost_in_transit', value: 'Lost in Transit'},
     {key: 'cancel', value: 'Cancel Order'},
-    {key: 'partial-paid', value: 'Partial Paid'},
+    {key: 'out-of-stock', value: 'Missing or Shortage'},
+    {key: 'adjustment', value: 'Adjustment'},
+    {key: 'lost_in_transit', value: 'Lost in Transit'},
+    {key: 'customer_tax', value: 'Customer Tax'},
+    {key: 'refunded', value: 'Refund to Customer'},
+    {key: 'comment1', value: 'Comment 1'},
+    {key: 'comment2', value: 'Comment 2'},
   ];
 
   const statusUpdateAction = (item) => {
