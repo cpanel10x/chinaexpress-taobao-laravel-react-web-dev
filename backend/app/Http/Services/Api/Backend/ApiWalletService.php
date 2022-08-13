@@ -21,7 +21,7 @@ class ApiWalletService
             ->whereNotIn('status', ['waiting-for-payment'])
             ->orderByDesc('id');
 
-        $searchable = ['item_number', 'order_id', 'ItemId', 'ProviderType', 'status', 'source_order_number', 'tracking_number',  'invoice_no'];
+        $searchable = ['item_number', 'Title', 'order_id','shipping_type','shipping_from', 'ItemId', 'ProviderType', 'status', 'source_order_number', 'tracking_number',  'invoice_no'];
 
         if ($search_val && count($searchable) > 0) {
             $query->where(function ($query) use ($searchable, $search_val) {

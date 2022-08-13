@@ -75,14 +75,14 @@ class ApiWalletController extends Controller
       $data = $request->only('out_of_stock', 'out_of_stock_type', 'status');
       $amount = request('out_of_stock');
     } elseif ($status == 'adjustment') {
-      $data = $request->only('adjustment', 'status');
+      $data = $request->only('adjustment');
       $amount = request('adjustment');
     } elseif ($status == 'customer_tax') {
       $data = $request->only('customer_tax');
     } elseif ($status == 'lost_in_transit') {
-      $data = $request->only('lost_in_transit', 'status');
+      $data = $request->only('lost_in_transit');
     } elseif ($status == 'refunded') {
-      $data = $request->only('refunded', 'refunded_method', 'status');
+      $data = $request->only('refund_payment_method', 'status');
       $amount = request('refunded');
     } elseif ($status == 'cancel') {
       $data = $request->only('status');

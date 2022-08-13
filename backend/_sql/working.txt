@@ -60,7 +60,8 @@ ADD COLUMN `refunded_method` VARCHAR(45) NULL AFTER `refunded`;
 
 
 
-
+ALTER TABLE `chinaexpress_web`.`order_items` 
+ADD COLUMN `refund_payment_method` VARCHAR(191) NULL AFTER `refunded`;
 
 
 
