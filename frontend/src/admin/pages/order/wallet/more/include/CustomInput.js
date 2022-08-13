@@ -4,7 +4,11 @@ import InputNumberField from "../../../../../../components/InputNumberField";
 
 const CustomInput = ({ form, status, walletItem }) => {
 
-  form.setFieldsValue({ ...walletItem, status });
+  form.setFieldsValue({
+    ...walletItem,
+    status,
+    lost_in_transit: walletItem?.product_value || 0
+  });
 
   if (status === "purchased") {
     return (
@@ -107,7 +111,7 @@ const CustomInput = ({ form, status, walletItem }) => {
           },
         ]}
       >
-        <InputNumberField/>
+        <InputNumberField />
       </Form.Item>
     );
   }
@@ -129,6 +133,48 @@ const CustomInput = ({ form, status, walletItem }) => {
         ]}
       >
         <InputNumberField />
+      </Form.Item>
+    );
+  }
+
+  if (status === "comment1") {
+    return (
+      <Form.Item
+        label="comment 1"
+        tooltip={{
+          title: "Max Input 50 character ",
+          icon: <InfoCircleOutlined />,
+        }}
+        name="comment1"
+        rules={[
+          {
+            required: true,
+            message: "Please input your first comment",
+          },
+        ]}
+      >
+        <Input placeholder="First Comment" />
+      </Form.Item>
+    );
+  }
+
+  if (status === "comment2") {
+    return (
+      <Form.Item
+        label="comment 1"
+        tooltip={{
+          title: "Max Input 50 character ",
+          icon: <InfoCircleOutlined />,
+        }}
+        name="comment2"
+        rules={[
+          {
+            required: true,
+            message: "Please input your Second comment",
+          },
+        ]}
+      >
+        <Input placeholder="First Comment" />
       </Form.Item>
     );
   }

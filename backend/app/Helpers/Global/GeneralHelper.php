@@ -173,7 +173,7 @@ if (!function_exists('store_picture')) {
 
 
 if (!function_exists('store_search_picture')) {
-    function store_search_picture($file, $dir_path = '/', $prefix)
+    function store_search_picture($file, $dir_path = '/', $prefix='')
     {
         $imageName = $prefix . '.jpg';
         $dir_path = 'storage/' . $dir_path;

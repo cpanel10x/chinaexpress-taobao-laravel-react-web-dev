@@ -31,6 +31,7 @@ const ChangeStatus = ({ walletItem, onFinish, show, setShow }) => {
           <SelectStatus
             form={form}
             walletItem={walletItem}
+            status={status}
             setStatus={setStatus}
           />
           {status === "purchased" && (
@@ -55,8 +56,14 @@ const ChangeStatus = ({ walletItem, onFinish, show, setShow }) => {
           {status === "customer_tax" && (
             <CustomInput form={form} walletItem={walletItem} status={status} />
           )}
-          {status === "refunded" && <RefundedInput form={form}  walletItem={walletItem} />}
+          {status === "refunded" && <RefundedInput form={form} walletItem={walletItem} />}
           {status === "lost_in_transit" && (
+            <CustomInput form={form} walletItem={walletItem} status={status} />
+          )}
+          {status === "comment1" && (
+            <CustomInput form={form} walletItem={walletItem} status={status} />
+          )}
+          {status === "comment2" && (
             <CustomInput form={form} walletItem={walletItem} status={status} />
           )}
           <Button type="primary" htmlType="submit" block>
