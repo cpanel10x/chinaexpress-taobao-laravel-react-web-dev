@@ -74,6 +74,9 @@ class ApiWalletController extends Controller
     } elseif ($status == 'out-of-stock') {
       $data = $request->only('out_of_stock', 'out_of_stock_type', 'status');
       $amount = request('out_of_stock');
+    } elseif ($status == 'missing') {
+      $data = $request->only('missing');
+      $amount = request('out_of_stock');
     } elseif ($status == 'adjustment') {
       $data = $request->only('adjustment', 'status');
       $amount = request('adjustment');
@@ -86,6 +89,10 @@ class ApiWalletController extends Controller
       $amount = request('refunded');
     } elseif ($status == 'cancel') {
       $data = $request->only('status');
+    } elseif ($status == 'comment1') {
+      $data = $request->only('comment1');
+    } elseif ($status == 'comment2') {
+      $data = $request->only('comment2');
     }
 
     // manage customer Messages

@@ -41,6 +41,8 @@ class SettingController extends Controller
         Setting::save_settings($data);
         Cache::forget('settings'); // remove setting cache
 
+        $this->settingRepository->update_key();
+
         return redirect()->back()->withFlashSuccess('Logo Updated Successfully');
     }
 
@@ -60,6 +62,8 @@ class SettingController extends Controller
 
         Setting::save_settings($data);
         Cache::forget('settings'); // remove setting cache
+
+        $this->settingRepository->update_key();
 
         return redirect()->back()->withFlashSuccess('Setting Updated Successfully');
     }
@@ -88,6 +92,7 @@ class SettingController extends Controller
 
         Setting::save_settings($data);
         Cache::forget('settings'); // remove setting cache
+        $this->settingRepository->update_key();
 
         return redirect()->back()->withFlashSuccess('Setting Updated Successfully');
     }
@@ -100,6 +105,7 @@ class SettingController extends Controller
         $data['ali_air_shipping_charges'] = json_encode($shipping);
         Setting::save_settings($data);
         Cache::forget('settings'); // remove setting cache
+        $this->settingRepository->update_key();
 
         return redirect()->back()->withFlashSuccess('Setting Updated Successfully');
     }
@@ -147,6 +153,7 @@ class SettingController extends Controller
 
         Setting::save_settings($data);
         Cache::forget('settings'); // remove setting cache
+        $this->settingRepository->update_key();
 
         return redirect()->back()->withFlashSuccess('Message Updated Successfully');
     }
@@ -158,17 +165,18 @@ class SettingController extends Controller
         $advanced_rates = request('advanced_rates');
         $ali_pricing_conversion = request('ali_pricing_conversion');
         $data = [];
-        if($shipping && is_array($shipping)){
+        if ($shipping && is_array($shipping)) {
             $data['air_shipping_charges'] = json_encode($shipping);
         }
-        if($advanced_rates && is_array($advanced_rates)){
+        if ($advanced_rates && is_array($advanced_rates)) {
             $data['advanced_rates'] = json_encode($advanced_rates);
         }
-        if($ali_pricing_conversion && is_array($ali_pricing_conversion)){
+        if ($ali_pricing_conversion && is_array($ali_pricing_conversion)) {
             $data['ali_pricing_conversion'] = json_encode($ali_pricing_conversion);
         }
         Setting::save_settings($data);
         Cache::forget('settings'); // remove setting cache
+        $this->settingRepository->update_key();
 
         return redirect()->back()->withFlashSuccess('Shipping Charges Updated Successfully');
     }
@@ -185,6 +193,7 @@ class SettingController extends Controller
         }
         Setting::save_settings(['cart_popup_message' => json_encode($data)]);
         Cache::forget('settings'); // remove setting cache
+        $this->settingRepository->update_key();
 
         return redirect()->back()->withFlashSuccess('Taoabo product popup messages add successfully Updated Successfully');
     }
@@ -201,6 +210,7 @@ class SettingController extends Controller
         }
         Setting::save_settings(['cart_aliexpress_popup_message' => json_encode($data)]);
         Cache::forget('settings'); // remove setting cache
+        $this->settingRepository->update_key();
 
         return redirect()->back()->withFlashSuccess('AliExpress Product popup messages add successfully Updated Successfully');
     }
@@ -217,6 +227,7 @@ class SettingController extends Controller
         }
         Setting::save_settings(['aliexpress_express_popup_message' => json_encode($data)]);
         Cache::forget('settings'); // remove setting cache
+        $this->settingRepository->update_key();
 
         return redirect()->back()->withFlashSuccess('AliExpress product Express button popup messages add successfully Updated Successfully');
     }
@@ -256,9 +267,9 @@ class SettingController extends Controller
         if (\request()->hasFile('section_one_title_image')) {
             $data['section_one_title_image'] = store_picture(\request()->file('section_one_title_image'), 'setting');
         }
-
-
         Setting::save_settings($data);
+        $this->settingRepository->update_key();
+
         return redirect()->back()->withFlashSuccess('Section Updated  Successfully');
     }
 
@@ -275,8 +286,8 @@ class SettingController extends Controller
         if (\request()->hasFile('right_banner_image')) {
             $data['right_banner_image'] = store_picture(\request()->file('right_banner_image'), 'setting/banner-right');
         }
-
         Setting::save_settings($data);
+        $this->settingRepository->update_key();
 
         return redirect()->back()->withFlashSuccess('Banner Right Image Set Successfully');
     }
@@ -299,6 +310,7 @@ class SettingController extends Controller
         $data['top_notice_text'] = $top_notice_text;
 
         Setting::save_settings($data);
+        $this->settingRepository->update_key();
 
         return redirect()->back()->withFlashSuccess('Top Notice Updated  Successfully');
     }
@@ -328,6 +340,7 @@ class SettingController extends Controller
         }
 
         Setting::save_settings($data);
+        $this->settingRepository->update_key();
 
         return redirect()->back()->withFlashSuccess('Loading Image Store Successfully');
     }
@@ -337,6 +350,7 @@ class SettingController extends Controller
     {
         $data = \request()->only(['approx_weight_message', 'china_local_delivery_message', 'china_to_bd_bottom_message', 'order_summary_bottom_message', 'payment_summary_bottom_message']);
         Setting::save_settings($data);
+        $this->settingRepository->update_key();
         return redirect()->back()->withFlashSuccess('Short Message\'s Updated  Successfully');
     }
 
@@ -347,6 +361,7 @@ class SettingController extends Controller
 
         $data = \request()->only(['approx_weight_message', 'china_local_delivery_message', 'china_to_bd_bottom_message', 'order_summary_bottom_message', 'payment_summary_bottom_message']);
         Setting::save_settings($data);
+        $this->settingRepository->update_key();
         return redirect()->back()->withFlashSuccess('Short Message\'s Updated  Successfully');
     }
 }
