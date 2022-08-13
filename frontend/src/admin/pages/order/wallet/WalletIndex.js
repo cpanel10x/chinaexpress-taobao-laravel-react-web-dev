@@ -1,6 +1,6 @@
-import {Button, Typography} from "antd";
-import React, {useState} from "react";
-import {useWalletUpdateStatus} from "../../../query/WalletApi";
+import { Button, Typography } from "antd";
+import React, { useState } from "react";
+import { useWalletUpdateStatus } from "../../../query/WalletApi";
 import WalletTable from "./WalletTable";
 import ViewDetails from "./more/ViewDetails";
 import ChangeStatus from "./more/ChangeStatus";
@@ -8,7 +8,7 @@ import ShowTrackingInformation from "./more/ShowTrackingInformation";
 import MasterEdit from "./more/MasterEdit";
 import OperationButtons from "./includes/OperationButtons";
 
-const {Title} = Typography;
+const { Title } = Typography;
 
 const WalletIndex = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
@@ -21,7 +21,7 @@ const WalletIndex = () => {
   const [showTracking, setShowTracking] = useState(false);
   const [masterEdit, setMasterEdit] = useState(false);
 
-  const {mutateAsync, isLoading} = useWalletUpdateStatus();
+  const { mutateAsync, isLoading } = useWalletUpdateStatus();
 
   const rowSelection = {
     onChange: (selectedRowKeys, selectedRows) => {
@@ -45,7 +45,7 @@ const WalletIndex = () => {
 
   const onFinish = (values) => {
     mutateAsync(
-      {...values, item_id: walletItem.id},
+      { ...values, item_id: walletItem.id },
       {
         onSuccess: () => {
           setResetQuery(true);
@@ -94,7 +94,11 @@ const WalletIndex = () => {
       )}
       <Title level={4}>Manage Wallet</Title>
 
-      <OperationButtons selectedRowKeys={selectedRowKeys} setResetQuery={setResetQuery} setSearch={setSearch}/>
+      <OperationButtons
+        selectedRowKeys={selectedRowKeys}
+        setResetQuery={setResetQuery}
+        setSearch={setSearch}
+      />
 
       <WalletTable
         rowSelection={rowSelection}

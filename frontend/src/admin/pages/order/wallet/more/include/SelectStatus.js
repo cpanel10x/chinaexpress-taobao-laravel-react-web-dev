@@ -1,31 +1,36 @@
-import React, {useEffect, useState} from 'react';
-import {Select, Form} from "antd";
-import {InfoCircleOutlined} from "@ant-design/icons";
+import React, { useEffect, useState } from 'react';
+import { Select, Form } from "antd";
+import { InfoCircleOutlined } from "@ant-design/icons";
 
-const {Option} = Select;
+const { Option } = Select;
 
-const SelectStatus = ({form, walletItem, setStatus}) => {
+const SelectStatus = ({ form, walletItem, status, setStatus }) => {
 
-  const options = [
-    {key: 'partial-paid', value: 'Partial Paid'},
-    {key: 'purchased', value: 'Purchased'},
-    {key: 'shipped-from-suppliers', value: 'Shipped from Suppliers'},
-    {key: 'received-in-china-warehouse', value: 'Received in China Warehouse'},
-    {key: 'shipped-from-china-warehouse', value: 'Shipped from China Warehouse'},
-    {key: 'received-in-BD-warehouse', value: 'Received in BD Warehouse'},
-    {key: 'cancel', value: 'Cancel Order'},
-    {key: 'out-of-stock', value: 'Missing or Shortage'},
-    {key: 'adjustment', value: 'Adjustment'},
-    {key: 'lost_in_transit', value: 'Lost in Transit'},
-    {key: 'customer_tax', value: 'Customer Tax'},
-    {key: 'refunded', value: 'Refund to Customer'},
-    {key: 'comment1', value: 'Comment 1'},
-    {key: 'comment2', value: 'Comment 2'},
+  let options = [
+    { key: 1, statusKey: 'partial-paid', value: 'Partial Paid' },
+    { key: 2, statusKey: 'purchased', value: 'Purchased' },
+    { key: 3, statusKey: 'shipped-from-suppliers', value: 'Shipped from Suppliers' },
+    { key: 4, statusKey: 'received-in-china-warehouse', value: 'Received in China Warehouse' },
+    { key: 5, statusKey: 'shipped-from-china-warehouse', value: 'Shipped from China Warehouse' },
+    { key: 6, statusKey: 'received-in-BD-warehouse', value: 'Received in BD Warehouse' },
+    { key: 7, statusKey: 'cancel', value: 'Order Canceled' },
+    { key: 8, statusKey: 'out-of-stock', value: 'Out of stock' },
+    { key: 8, statusKey: 'missing', value: 'Missing or Shortage' },
+    { key: 9, statusKey: 'adjustment', value: 'Adjustment' },
+    { key: 10, statusKey: 'lost_in_transit', value: 'Lost in Transit' },
+    { key: 11, statusKey: 'customer_tax', value: 'Customer Tax' },
+    { key: 12, statusKey: 'refunded', value: 'Refund to Customer' },
+    { key: 13, statusKey: 'comment1', value: 'Comment 1' },
+    { key: 14, statusKey: 'comment2', value: 'Comment 2' },
   ];
+
+
+  let current_option = options.find(find => find.statusKey === walletItem?.status);
+  options = options.filter(item => item.key >= (current_option?.key || 0));
 
   const statusUpdateAction = (item) => {
     setStatus(item);
-    form.setFieldsValue({...walletItem, status: item});
+    form.setFieldsValue({ status: item });
   }
 
   return (
@@ -33,7 +38,7 @@ const SelectStatus = ({form, walletItem, setStatus}) => {
       label="Select Wallet Status"
       tooltip={{
         title: 'Select your status for change',
-        icon: <InfoCircleOutlined/>,
+        icon: <InfoCircleOutlined />,
       }}
       name="status"
       rules={[
@@ -45,18 +50,15 @@ const SelectStatus = ({form, walletItem, setStatus}) => {
     >
       <Select
         showSearch
-        style={{width: '100%'}}
+        style={{ width: '100%' }}
         onChange={item => statusUpdateAction(item)}
         placeholder="Search to Select"
         optionFilterProp="children"
-        filterOption={(input, option) => option.children.includes(input)}
-        // filterSort={(optionA, optionB) =>
-        //   optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
-        // }
+        filterOption={(input, option) => option.children.toLowerCase().includes(input.toLowerCase())}
       >
         {
           options.map((opItem, key) => (
-            <Option key={key} value={opItem.key}>{opItem.value}</Option>
+            <Option key={key} value={opItem.statusKey}>{opItem.value}</Option>
           ))
         }
       </Select>

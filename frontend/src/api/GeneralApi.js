@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from "react-query";
-import { instance } from "../utils/AxiosInstance";
+import { apiGet, apiPost, instance } from "../utils/AxiosInstance";
 
 export const useHome = () => {
   const banner = useQuery(
@@ -39,20 +39,11 @@ export const useHome = () => {
 };
 
 export const useSettings = (process) =>
-  useQuery(
-    ["settings"],
-    async () => {
-      try {
-        const { data } = await instance.get(`/general`, { params: process });
-        return data?.settings ? JSON.parse(data?.settings) : {};
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    {
-      refetchOnMount: false,
-    }
-  );
+  useQuery(["settings"], async () => {
+    const { settings } = await apiGet(`general`, { params: process });
+    const settingData = settings ? JSON.parse(settings) : {};
+    return settingData;
+  });
 
 export const usePageData = (slug) =>
   useQuery(
