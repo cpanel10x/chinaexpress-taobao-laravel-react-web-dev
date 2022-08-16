@@ -99,6 +99,7 @@ const ProductBody = (props) => {
               )}
               <div className="product-details">
                 <LoadAttributes
+                  cartItem={cartItem}
                   setActiveImg={setActiveImg}
                   cartStore={cartStore}
                   setCartStore={setCartStore}

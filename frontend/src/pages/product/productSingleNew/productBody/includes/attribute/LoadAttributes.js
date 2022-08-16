@@ -4,11 +4,12 @@ import {
   firstAttributeConfiguredItems,
   getProductGroupedAttributes,
 } from "../../../../../../utils/CartHelpers";
-import { characterLimiter } from "../../../../../../utils/Helpers";
+import {characterLimiter} from "../../../../../../utils/Helpers";
 
 const LoadAttributes = (props) => {
-  const { product, cartStore, setActiveImg, setCartStore } = props;
+  const {product, cartItem, cartStore, setActiveImg, setCartStore} = props;
 
+  const cart_variations = cartItem?.variations || [];
   const Attributes = product?.Attributes ? product.Attributes : [];
   const ConfigAttributes = ConfiguratorAttributes(Attributes);
   const groupItems = getProductGroupedAttributes(ConfigAttributes);
@@ -26,7 +27,7 @@ const LoadAttributes = (props) => {
   const selectFirstAttributes = (key, Attribute) => {
     setCartStore({
       FirstAttribute: Attribute,
-      Attributes: { [key]: Attribute },
+      Attributes: {[key]: Attribute},
     });
   };
 
@@ -34,7 +35,7 @@ const LoadAttributes = (props) => {
     if (FirstAttribute?.PropertyName !== key) {
       setCartStore({
         FirstAttribute: Attribute,
-        Attributes: { [key]: Attribute },
+        Attributes: {[key]: Attribute},
       });
     }
   };
@@ -43,7 +44,7 @@ const LoadAttributes = (props) => {
     let oldAttributes = cartStore?.Attributes || {};
     setCartStore({
       ...cartStore,
-      Attributes: { ...oldAttributes, [key]: Attribute },
+      Attributes: {...oldAttributes, [key]: Attribute},
     });
   };
 
@@ -78,17 +79,20 @@ const LoadAttributes = (props) => {
     return exists ? className : null;
   };
 
-  const isExistsQuantity = (Attribute, className = "") => {
-    let exists = false;
-    if (ConfiguredItems?.length > 0) {
-      exists = ConfiguredItems.find((findConfig) =>
-        findConfig?.Configurators?.find(
-          (find) => Attribute.Pid === find.Pid && Attribute.Vid === find.Vid
-        )
-      );
-      exists = parseInt(exists.Quantity) > 0;
+  const isExistsQuantity = (Attribute) => {
+    let exists = 0;
+    if (cart_variations?.length > 0) {
+      for (let i = 0; i < cart_variations?.length; i++) {
+        const variation = cart_variations[i];
+        let attrData = variation?.attributes ? JSON.parse(variation?.attributes) : [];
+        attrData = attrData?.find((find) => Attribute.Pid === find.Pid && Attribute.Vid === find.Vid);
+        if (attrData?.Pid) {
+          exists = variation?.qty || 0;
+          break;
+        }
+      }
     }
-    return !exists ? className : null;
+    return exists;
   };
 
   const currentActiveAttribute = (key) => {
@@ -98,7 +102,6 @@ const LoadAttributes = (props) => {
   const firstGroup = groupItems?.length > 0 ? groupItems.slice(0, 1) : [];
   let otherGroups = groupItems?.length > 1 ? groupItems.slice(1) : [];
 
-  // console.log('firstGroup', firstGroup);
   return (
     <div>
       {firstGroup.map((group, index) => (
@@ -117,18 +120,20 @@ const LoadAttributes = (props) => {
                 onClick={() => selectFirstAttributes(group.key, Attribute)}
                 className={`attrItem text-center ${isExistOnFirstAttr(
                   Attribute
-                )} ${isExistImageOnAttr(Attribute)} ${isExistsQuantity(
-                  Attribute
-                )}`}
+                )} ${isExistImageOnAttr(Attribute)}`}
                 title={Attribute?.ValueAlias || Attribute.Value}
               >
+                {
+                  isExistsQuantity(Attribute) > 0 &&
+                  <span className="selected_qty">{isExistsQuantity(Attribute)}</span>
+                }
                 {index2 === 0 && setFirstAttributeOnLoad(group.key, Attribute)}
                 {Attribute?.MiniImageUrl ? (
                   <img
                     src={Attribute.MiniImageUrl}
                     onClick={() => setActiveImg(Attribute.ImageUrl)}
                     alt={Attribute.Value}
-                    style={{ width: "2.5rem", height: "2.5rem" }}
+                    style={{width: "2.5rem", height: "2.5rem"}}
                   />
                 ) : (
                   `${characterLimiter(
@@ -173,7 +178,7 @@ const LoadAttributes = (props) => {
                       src={Attribute.MiniImageUrl}
                       onClick={() => props.setActiveImg(Attribute.ImageUrl)}
                       alt={Attribute?.ValueAlias || Attribute.Value}
-                      style={{ width: "2.5rem", height: "2.5rem" }}
+                      style={{width: "2.5rem", height: "2.5rem"}}
                     />
                   ) : (
                     characterLimiter(

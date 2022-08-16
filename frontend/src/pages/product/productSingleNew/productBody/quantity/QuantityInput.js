@@ -71,7 +71,6 @@ const QuantityInput = props => {
 		}
 
 		if (process) {
-			console.log('activeProduct', activeProduct);
 			mutateAsync({product: activeProduct},{
 				onSuccess: (cart)=>{
 					cache.setQueryData("customer_cart", cart);
