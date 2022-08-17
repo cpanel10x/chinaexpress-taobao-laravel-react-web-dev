@@ -72,7 +72,7 @@ class ApiWalletController extends Controller
     } elseif ($status == 'delivered') {
       $data = $request->only('status');
     } elseif ($status == 'out-of-stock') {
-      $data = $request->only('out_of_stock', 'out_of_stock_type', 'status');
+      $data = $request->only('out_of_stock', 'status');
       $amount = request('out_of_stock');
     } elseif ($status == 'missing') {
       $data = $request->only('missing');
