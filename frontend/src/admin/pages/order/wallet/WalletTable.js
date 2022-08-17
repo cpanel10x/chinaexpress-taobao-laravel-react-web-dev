@@ -1,15 +1,15 @@
-import React, {useEffect, useState} from "react";
-import {Dropdown, Table} from "antd";
+import React, { useEffect, useState } from "react";
+import { Button, Dropdown, Table } from "antd";
 import moment from "moment/moment";
 import {
   capitalizeFirstLetter,
   characterLimiter,
 } from "../../../../utils/Helpers";
 import Action from "./more/Action";
-import {MoreOutlined} from "@ant-design/icons";
-import {useWalletData} from "../../../query/WalletApi";
+import { EllipsisOutlined, MoreOutlined, SettingOutlined } from "@ant-design/icons";
+import { useWalletData } from "../../../query/WalletApi";
 import qs from "qs";
-import {useQueryClient} from "react-query";
+import { useQueryClient } from "react-query";
 
 const getRandomParams = (params) => ({
   results: params.pagination?.pageSize,
@@ -17,8 +17,9 @@ const getRandomParams = (params) => ({
   ...params,
 });
 
-const WalletTable = ({rowSelection, handleActionClick, resetQuery, setResetQuery, search}) => {
+const WalletTable = ({ rowSelection, handleActionClick, resetQuery, setResetQuery, search }) => {
   const [data, setData] = useState();
+  const [loadSearch, setLoadSearch] = useState('');
   const [loading, setLoading] = useState(false);
   const [pagination, setPagination] = useState({
     current: 1,
@@ -26,24 +27,35 @@ const WalletTable = ({rowSelection, handleActionClick, resetQuery, setResetQuery
   });
   const [queryParams, setQueryParams] = useState({});
 
-  const qs_query_prams = qs.stringify(getRandomParams({...queryParams, search}));
+  const qs_query_prams = qs.stringify(getRandomParams({ ...queryParams, search: loadSearch }));
 
   const cache = useQueryClient();
-  const {data: queryData, isLoading} = useWalletData(qs_query_prams);
+  const { data: queryData, isLoading } = useWalletData(qs_query_prams);
 
   useEffect(() => {
+    if (search !== loadSearch) {
+      setPagination({
+        current: 1,
+        pageSize: 10,
+      })
+      setQueryParams({});
+      setLoadSearch(search);
+    }
+
     if (resetQuery) {
       cache.invalidateQueries(["wallet", qs_query_prams]);
       setResetQuery(false);
     }
-  }, [resetQuery]);
+
+  }, [resetQuery, search, loadSearch]);
+
 
   useEffect(() => {
     setLoading(isLoading);
     setData(queryData?.data);
     setPagination({
       ...queryParams.pagination,
-      total: queryData?.totalRecords ?? 0,
+      total: queryData?.totalRecords || 0,
     });
   }, [queryData, isLoading, queryParams, search]);
 
@@ -214,7 +226,7 @@ const WalletTable = ({rowSelection, handleActionClick, resetQuery, setResetQuery
             align: "center",
             dataIndex: "product_value",
             render: (product_value, record) => {
-              let {DeliveryCost, coupon_contribution} = record;
+              let { DeliveryCost, coupon_contribution } = record;
               return (
                 Number(product_value) +
                 Number(DeliveryCost) -
@@ -306,7 +318,7 @@ const WalletTable = ({rowSelection, handleActionClick, resetQuery, setResetQuery
             align: "center",
             dataIndex: "shipping_rate",
             render: (shipping_rate, record) => {
-              let {actual_weight} = record;
+              let { actual_weight } = record;
               return Math.round(Number(actual_weight) * Number(shipping_rate));
             },
           },
@@ -375,7 +387,7 @@ const WalletTable = ({rowSelection, handleActionClick, resetQuery, setResetQuery
           {
             title: "Action",
             fixed: "right",
-            width: 100,
+            width: 75,
             key: "action",
             align: "center",
             render: (walletItem) => (
@@ -388,9 +400,7 @@ const WalletTable = ({rowSelection, handleActionClick, resetQuery, setResetQuery
                 }
                 placement="bottomRight"
               >
-                <a href="/more" onClick={(e) => e.preventDefault()}>
-                  More <MoreOutlined/>
-                </a>
+                <Button type="link" onClick={(e) => e.preventDefault()} icon={<SettingOutlined />} />
               </Dropdown>
             ),
           },

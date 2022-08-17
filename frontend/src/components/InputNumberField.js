@@ -1,13 +1,13 @@
-import {Input, Tooltip} from "antd";
+import { Input, Tooltip } from "antd";
 import React from "react";
 
 const formatNumber = (value) => new Intl.NumberFormat().format(value);
 
 const InputNumberField = (props) => {
-  const {value, onChange} = props;
+  const { value, onChange, placeholder } = props;
 
   const handleChange = (e) => {
-    const {value: inputValue} = e.target;
+    const { value: inputValue } = e.target;
     const reg = /^-?\d*(\.\d*)?$/;
 
     if (reg.test(inputValue) || inputValue === '' || inputValue === '-') {
@@ -20,21 +20,22 @@ const InputNumberField = (props) => {
     if (value?.charAt(value.length - 1) === '.' || value === '-') {
       valueTemp = value.slice(0, -1);
     }
-    if(valueTemp){
+    if (valueTemp) {
       onChange(valueTemp.replace(/0*(\d+)/, '$1'));
     }
   };
 
   const title = value ? (
-    <span
-      className="numeric-input-title">{value !== '-' ? formatNumber(Number(value)) : '-'}</span>) : ('Input a number');
+    <span className="numeric-input-title">
+      {value !== '-' ? formatNumber(Number(value)) : '-'}
+    </span>) : ('Input a number');
   return (
     <Tooltip trigger={['focus']} title={title} placement="topLeft" overlayClassName="numeric-input">
       <Input
         {...props}
         onChange={handleChange}
         onBlur={handleBlur}
-        placeholder="Input a number"
+        placeholder={placeholder}
         maxLength={25}
       />
     </Tooltip>

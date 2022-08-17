@@ -2,15 +2,13 @@ import { InfoCircleOutlined } from "@ant-design/icons";
 import { Radio, Form, Select } from "antd";
 import InputNumberField from "../../../../../../components/InputNumberField";
 import { useEffect, useState } from "react";
+import InputStatus from "./InputStatus";
 
 const { Option } = Select;
 
 const RefundedInput = ({ form, walletItem }) => {
-  const [method, setMethod] = useState("Cash");
 
-  useEffect(() => {
-    form.setFieldsValue(walletItem);
-  }, [method, walletItem]);
+  form.setFieldsValue({ refunded: walletItem.refunded, refund_payment_method: 'cash' });
 
   return (
     <>
@@ -34,22 +32,16 @@ const RefundedInput = ({ form, walletItem }) => {
           <Option value="bank-transfer">Bank Transfer</Option>
         </Select>
       </Form.Item>
-      <Form.Item
+
+      <InputStatus
+        type="number"
+        required={true}
         label="Refunded Amount"
+        title="Refunded Amount of the Product"
         name="refunded"
-        tooltip={{
-          title: "Refunded Amount of the Product",
-          icon: <InfoCircleOutlined />,
-        }}
-        rules={[
-          {
-            required: true,
-            message: "Please input refunded amount",
-          },
-        ]}
-      >
-        <InputNumberField />
-      </Form.Item>
+        message="Input Refunded Amount of the Product"
+        placeholder="Refunded Amount"
+      />
     </>
   );
 };

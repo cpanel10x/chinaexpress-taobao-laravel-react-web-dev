@@ -17,7 +17,7 @@ class ApiWalletService
     public function list()
     {
         $search_val   = request('search');
-        $query = OrderItem::with('user', 'order', 'product', 'itemVariations')
+        $query = OrderItem::with('user', 'order', 'product', 'itemVariations','trackingExceptional')
             ->whereNotIn('status', ['waiting-for-payment'])
             ->orderByDesc('id');
 

@@ -1,6 +1,7 @@
-import { Table, Typography, Modal, Divider, List } from "antd";
+import { Table, Typography, Modal, Divider, List, Image } from "antd";
 import React, { useEffect, useState } from "react";
 import { slugToMakeTitle } from "../../../../../utils/Helpers";
+import ImageLoader from "../../../../../loader/ImageLoader";
 
 const { Title } = Typography;
 
@@ -105,8 +106,8 @@ const ViewDetails = ({ walletItem, show, setShow }) => {
                 let ImageUrl = attributes?.find(
                   (attr) => attr?.ImageUrl !== undefined
                 )?.ImageUrl;
-                ImageUrl = ImageUrl ? ImageUrl : MainPictureUrl;
-                return <img src={ImageUrl} alt="product-view" />;
+
+                return <ImageLoader path={ImageUrl ? ImageUrl : MainPictureUrl} />
               },
             },
             {

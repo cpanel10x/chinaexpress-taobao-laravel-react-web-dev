@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Select, Form } from "antd";
 import { InfoCircleOutlined } from "@ant-design/icons";
 
@@ -24,13 +24,26 @@ const SelectStatus = ({ form, walletItem, status, setStatus }) => {
     { key: 14, statusKey: 'comment2', value: 'Comment 2' },
   ];
 
-
   let current_option = options.find(find => find.statusKey === walletItem?.status);
   options = options.filter(item => item.key >= (current_option?.key || 0));
 
-  const statusUpdateAction = (item) => {
-    setStatus(item);
-    form.setFieldsValue({ status: item });
+  const statusUpdateAction = (value) => {
+    if (value === 'lost_in_transit') {
+      form.setFieldsValue({
+        ...walletItem,
+        status: value,
+        lost_in_transit: walletItem.product_value,
+      });
+    } else if (value === 'cancel') {
+      let comment = walletItem?.tracking_exceptional?.find(find => find.status === value)?.comment || '';
+      form.setFieldsValue({
+        ...walletItem,
+        comment,
+      });
+    } else {
+      form.setFieldsValue({ ...walletItem, status: value });
+    }
+    setStatus(value);
   }
 
   return (
@@ -51,7 +64,7 @@ const SelectStatus = ({ form, walletItem, status, setStatus }) => {
       <Select
         showSearch
         style={{ width: '100%' }}
-        onChange={item => statusUpdateAction(item)}
+        onSelect={statusUpdateAction}
         placeholder="Search to Select"
         optionFilterProp="children"
         filterOption={(input, option) => option.children.toLowerCase().includes(input.toLowerCase())}

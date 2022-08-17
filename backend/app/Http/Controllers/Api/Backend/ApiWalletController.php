@@ -50,10 +50,10 @@ class ApiWalletController extends Controller
     $status = request('status');
 
     $orderItem = OrderItem::find($item_id);
-    $data = [];
     $order_id = $orderItem->order_item_number;
     $amount = '';
     $tracking = '';
+    $data = [];
     if ($status == 'purchased') {
       $data = $request->only('source_order_number', 'status');
       $data['purchases_at'] = now();

@@ -4,6 +4,7 @@ namespace App\Models\Content;
 
 use App\Models\Auth\User;
 use App\Models\Backend\OrderTracking;
+use App\Models\Backend\OrderTrackingExceptional;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -42,6 +43,11 @@ class OrderItem extends Model
   public function orderTracking()
   {
     return $this->hasMany(OrderTracking::class, 'order_item_id', 'id');
+  }
+
+  public function trackingExceptional()
+  {
+    return $this->hasMany(OrderTrackingExceptional::class, 'order_item_id', 'id');
   }
 
   public function invoice()

@@ -55,7 +55,8 @@ class TrackingService
     public function updateTracking($item_id, $OrderItem = null)
     {
         $wallet = $OrderItem ? $OrderItem : OrderItem::find($item_id);
-        $status = $wallet->status;
+        $status = request('status');
+        $comment = request('comment');
         $user_id = auth()->id();
 
         $tracking = OrderTracking::where('order_item_id', $item_id)->get();
@@ -65,6 +66,9 @@ class TrackingService
             $tracking_find = OrderTracking::where('order_item_id', $item_id)->where('status', $status)->first();
             if ($tracking_find) {
                 $tracking_find->updated_time = now();
+                if ($comment) {
+                    $tracking_find->comment = $comment;
+                }
                 $tracking_find->save();
             } else {
                 $last_track = OrderTracking::where('order_item_id', $item_id)
@@ -82,6 +86,9 @@ class TrackingService
                     $findExceptional->order_tracking_id = $last_track->id;
                     $findExceptional->status = $status;
                     $findExceptional->tracking_status = $exceptArray[$status];
+                    if ($comment) {
+                        $findExceptional->comment = $comment;
+                    }
                     $findExceptional->updated_time = now();
                     $findExceptional->user_id = $user_id;
                     $findExceptional->save();
