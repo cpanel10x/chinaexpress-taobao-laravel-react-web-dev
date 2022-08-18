@@ -43,9 +43,9 @@ Route::namespace('Content')->group(function () {
   Route::get('makeAsPayment/{order}', [OrderController::class, 'makeAsPayment'])->name('order.makeAsPayment');
   Route::resource('order', 'OrderController')->except('edit', 'update');
 
-  Route::get('invoice/trashed', 'InvoiceController@trashed')->name('invoice.trashed');
-  Route::get('invoice/restore/{invoice}', 'InvoiceController@restore')->name('invoice.restore');
-  Route::get('invoice/confirm-received/{invoice}', 'InvoiceController@confirm_received')->name('invoice.confirm.received');
+  Route::get('invoice/trashed', [InvoiceController::class, 'trashed'])->name('invoice.trashed');
+  Route::get('invoice/restore/{invoice}', [InvoiceController::class, 'restore'])->name('invoice.restore');
+  Route::get('invoice/confirm-received/{invoice}', [InvoiceController::class, 'confirm_received'])->name('invoice.confirm.received');
   Route::get('invoice/details/{invoice}', [InvoiceController::class, 'details'])->name('invoice.details');
   Route::resource('invoice', 'InvoiceController');
 

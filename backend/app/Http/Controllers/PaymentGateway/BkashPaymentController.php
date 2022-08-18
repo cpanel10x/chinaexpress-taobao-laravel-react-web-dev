@@ -123,7 +123,7 @@ class BkashPaymentController extends Controller
         try {
           $orderItems = OrderItem::where('order_id', $order->id)->get();
           foreach ($orderItems as $orderItem) {
-            (new TrackingService())->updateTracking($orderItem->id, $orderItem);
+            (new TrackingService())->updateTracking($orderItem->id, 'partial-paid');
           }
         } catch (\Exception $e) {
         }

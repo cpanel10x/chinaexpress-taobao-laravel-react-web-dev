@@ -17,7 +17,7 @@ class ApiWalletService
     public function list()
     {
         $search_val   = request('search');
-        $query = OrderItem::with('user', 'order', 'product', 'itemVariations','trackingExceptional')
+        $query = OrderItem::with('user', 'order', 'product', 'itemVariations', 'trackingExceptional')
             ->whereNotIn('status', ['waiting-for-payment'])
             ->orderByDesc('id');
 
@@ -61,7 +61,7 @@ class ApiWalletService
             $weight_change = 0;
             if ($shipping_type != 'regular') {
                 $shipping_rate = $wallet->shipping_rate;
-                $actual_weight = (int) $wallet->actual_weight;
+                $actual_weight = (float) $wallet->actual_weight;
                 $weight_change = ($shipping_rate * $actual_weight);
             }
 

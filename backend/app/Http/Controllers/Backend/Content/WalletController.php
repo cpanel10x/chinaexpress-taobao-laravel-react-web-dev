@@ -143,8 +143,6 @@ class WalletController extends Controller
       generate_customer_notifications($status, $user, $order_id, $amount, $tracking);
     }
 
-    (new TrackingService())->updateTracking($item_id);
-
     return response(['status' => $status, 'data' => $orderItem]);
   }
 

@@ -100,6 +100,9 @@ class ApiWalletController extends Controller
     if (!empty($data)) {
       $orderItem->update($data);
       $abcd = $this->apiWalletService->updateWalletCalculation($orderItem->id);
+      $req_status = request('status');
+      $comment = request('comment');
+      (new TrackingService())->updateTracking($item_id, $req_status, $comment);
       $status = true;
     }
 
@@ -108,7 +111,6 @@ class ApiWalletController extends Controller
       generate_customer_notifications($status, $user, $order_id, $amount, $tracking);
     }
 
-    (new TrackingService())->updateTracking($item_id);
 
     return response(['status' => $status, 'data' => $orderItem]);
   }

@@ -6,7 +6,7 @@ import RefundedInput from "./include/RefundedInput";
 import InputStatus from "./include/InputStatus";
 import InputTextArea from "./include/InputTextArea";
 
-const ChangeStatus = ({ walletItem, onFinish, show, setShow }) => {
+const ChangeStatus = ({ walletItem, onFinish, show, setShow, isLoading }) => {
   const [form] = Form.useForm();
 
   const [status, setStatus] = useState('');
@@ -155,7 +155,7 @@ const ChangeStatus = ({ walletItem, onFinish, show, setShow }) => {
               maxLength={300}
               placeholder="Second Comment" />
           )}
-          <Button type="primary" htmlType="submit" block>
+          <Button type="primary" htmlType="submit" block loading={isLoading}>
             Update Status
           </Button>
         </Form>

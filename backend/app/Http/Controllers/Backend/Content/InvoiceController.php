@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend\Content;
 
 use App\Http\Controllers\Controller;
+use App\Http\Services\Backend\TrackingService;
 use App\Models\Auth\User;
 use App\Models\Content\Invoice;
 use App\Models\Content\InvoiceItem;
@@ -94,6 +95,7 @@ class InvoiceController extends Controller
         if ($orderItem) {
           if ($orderItem->status == 'received-in-BD-warehouse') {
             $order_item_status = 'on-transit-to-customer';
+            (new TrackingService())->updateTracking($item_id, $order_item_status);
           } else {
             $order_item_status = $orderItem->status;
           }
@@ -195,22 +197,16 @@ class InvoiceController extends Controller
     foreach ($invoice->invoiceItems as $invoice_item) {
       $order_item_id = $invoice_item->order_item_id;
       $OrderItem = OrderItem::find($order_item_id);
-
+      $OrderItem->invoice_no = $invoice->invoice_no;
+      $OrderItem->last_payment = $invoice->total_due;
+      $OrderItem->due_payment = 0;
       if ($OrderItem->status == 'on-transit-to-customer') {
-        $OrderItem->update([
-          'invoice_no' => $invoice->invoice_no,
-          'last_payment' => $invoice_item->total_due,
-          'due_payment' => 0,
-          'status' => 'delivered',
-        ]);
+        $OrderItem->status = 'delivered';
       } else {
-        $OrderItem->update([
-          'invoice_no' => $invoice->invoice_no,
-          'last_payment' => $invoice_item->total_due,
-          'due_payment' => 0,
-          'status' => 'adjusted',
-        ]);
+        $OrderItem->status = 'adjusted';
       }
+      (new TrackingService())->updateTracking($order_item_id, 'delivered');
+      $OrderItem->save();
     }
     $invoice->status = 'confirm_received';
     $invoice->save();

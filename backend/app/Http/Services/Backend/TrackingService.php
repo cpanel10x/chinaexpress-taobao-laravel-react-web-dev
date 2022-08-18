@@ -52,11 +52,9 @@ class TrackingService
         }
     }
 
-    public function updateTracking($item_id, $OrderItem = null)
+    public function updateTracking($item_id,  $status, $comment = null)
     {
-        $wallet = $OrderItem ? $OrderItem : OrderItem::find($item_id);
-        $status = request('status');
-        $comment = request('comment');
+        $wallet =  OrderItem::find($item_id);
         $user_id = auth()->id();
 
         $tracking = OrderTracking::where('order_item_id', $item_id)->get();

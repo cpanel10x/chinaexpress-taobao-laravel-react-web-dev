@@ -31,10 +31,10 @@ const ViewDetails = ({ walletItem, show, setShow }) => {
 
   const otherInfoData = () => {
     let otherData = [];
-    let includesData = ['id', 'order_id', 'user_id', 'item_number', 'hasConfigurators', 'ItemId', 'shipped_by', 'shipping_from', 'status', 'purchases_at', 'created_at', 'updated_at', 'deleted_at', 'user', 'order', 'product', 'item_variations'];
+    let includesData = ['id', 'order_id', 'user_id', 'item_number', 'hasConfigurators', 'ItemId', 'shipped_by', 'shipping_from', 'status', 'purchases_at', 'created_at', 'updated_at', 'deleted_at', 'user', 'order', 'product', 'item_variations', 'tracking_exceptional'];
     for (let key in walletItem) {
-      let value = walletItem[key];
-      if (!includesData.includes(key)) {
+      let value = walletItem?.[key];
+      if (value && !includesData.includes(key)) {
         otherData.push({
           key,
           value,
@@ -150,7 +150,7 @@ const ViewDetails = ({ walletItem, show, setShow }) => {
           dataSource={otherInfoData()}
           renderItem={(item) => (
             <List.Item style={{ textTransform: "capitalize" }}>
-              <b>{slugToMakeTitle(item.key)}</b> : {item?.value}
+              <b>{slugToMakeTitle(item?.key)}</b> : {item?.value}
             </List.Item>
           )}
         />

@@ -114,7 +114,7 @@ class OrderController extends Controller
           ]);
         foreach ($order->orderItems as $item) {
           $item_id = $item->id;
-          (new TrackingService())->updateTracking($item_id);
+          (new TrackingService())->updateTracking($item_id, 'partial-paid');
         }
       });
     }

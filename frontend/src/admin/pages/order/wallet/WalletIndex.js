@@ -73,6 +73,7 @@ const WalletIndex = () => {
               show={showStatus}
               setShow={setShowStatus}
               setResetQuery={setResetQuery}
+              isLoading={isLoading}
             />
           )}
           {showTracking && (
