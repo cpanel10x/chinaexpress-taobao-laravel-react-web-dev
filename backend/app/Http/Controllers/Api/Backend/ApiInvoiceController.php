@@ -105,7 +105,7 @@ class ApiInvoiceController extends Controller
                         'status' => $order_item_status
                     ]);
                 }
-                (new TrackingService())->updateTracking($item_id, $order_item_status);
+                (new TrackingService())->updateTracking($item_id, 'on-transit-to-customer');
             }
 
             $status = $orderItem ? true : false;

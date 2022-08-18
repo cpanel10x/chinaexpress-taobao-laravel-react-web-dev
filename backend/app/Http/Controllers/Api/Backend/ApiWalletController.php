@@ -69,9 +69,7 @@ class ApiWalletController extends Controller
       $data['bd_shipping_charge'] = $orderItem->shipping_rate * (int) request('actual_weight', 0);
     } elseif ($status == 'on-transit-to-customer') {
       $data = $request->only('status');
-    } elseif ($status == 'delivered') {
-      $data = $request->only('status');
-    } elseif ($status == 'out-of-stock') {
+    }elseif ($status == 'out-of-stock') {
       $data = $request->only('out_of_stock', 'status');
       $amount = request('out_of_stock');
     } elseif ($status == 'missing') {
@@ -83,15 +81,15 @@ class ApiWalletController extends Controller
     } elseif ($status == 'customer_tax') {
       $data = $request->only('customer_tax');
     } elseif ($status == 'lost_in_transit') {
-      $data = $request->only('lost_in_transit');
+      $data = $request->only('status','lost_in_transit');
     } elseif ($status == 'refunded') {
       $data = $request->only('refund_payment_method', 'status');
       $amount = request('refunded');
     } elseif ($status == 'cancel') {
-      $data = $request->only('status');
+      $data = $request->only('status', 'missing');
     } elseif ($status == 'comment1') {
       $data = $request->only('comment1');
-    } elseif ($status == 'comment2') {
+  } elseif ($status == 'comment2') {
       $data = $request->only('comment2');
     }
 

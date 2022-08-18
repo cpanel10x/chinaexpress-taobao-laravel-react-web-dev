@@ -1,7 +1,8 @@
 {
   "name": "chinaexpress_frontend",
-  "version": "v1.7.1",
+  "version": "v1.7.2",
   "private": true,
+  "homepage": "https://www.chinaexpress.com.bd",
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
     "@craco/craco": "^6.4.5",
