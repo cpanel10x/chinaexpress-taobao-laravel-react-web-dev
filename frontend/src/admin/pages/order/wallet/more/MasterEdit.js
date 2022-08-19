@@ -16,25 +16,7 @@ const MasterEdit = ({ walletItem, show, setShow, setResetQuery }) => {
 
   useEffect(() => {
     let wallet_collection = [];
-    let exceptItems = [
-      "id",
-      "order_id",
-      "user_id",
-      "item_number",
-      "hasConfigurators",
-      "ItemId",
-      "shipped_by",
-      "shipping_from",
-      "status",
-      "purchases_at",
-      "created_at",
-      "updated_at",
-      "deleted_at",
-      "user",
-      "order",
-      "product",
-      "item_variations",
-    ];
+    let exceptItems = ['id', 'order_id', 'user_id', 'item_number', 'hasConfigurators', 'ItemId', 'shipped_by', 'shipping_from', 'status', 'purchases_at', 'created_at', 'updated_at', 'deleted_at', 'user', 'order', 'product', 'item_variations', 'tracking_exceptional'];
     for (let key in walletItem) {
       if (!exceptItems.includes(key)) {
         wallet_collection.push({

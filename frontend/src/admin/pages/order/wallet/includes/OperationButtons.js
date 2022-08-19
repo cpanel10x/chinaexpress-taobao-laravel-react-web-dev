@@ -1,16 +1,16 @@
-import React, {useEffect, useState} from "react";
-import {Button, Modal, Space, Input} from "antd";
-import {ExclamationCircleOutlined} from "@ant-design/icons";
-import {useWalletBatchDelete} from "../../../../query/WalletApi";
+import React, { useEffect, useState } from "react";
+import { Button, Modal, Space, Input } from "antd";
+import { ExclamationCircleOutlined } from "@ant-design/icons";
+import { useWalletBatchDelete } from "../../../../query/WalletApi";
 import GenerateInvoice from "./GenerateInvoice";
 
-const {Search} = Input;
+const { Search } = Input;
 
-const OperationButtons = ({selectedRowKeys, setResetQuery, setSearch}) => {
+const OperationButtons = ({ selectedRowKeys, setResetQuery, setSearch }) => {
   const [selected, setSelected] = useState([]);
   const [invoiceGen, setInvoiceGen] = useState(false);
 
-  const {mutateAsync, isLoading} = useWalletBatchDelete();
+  const { mutateAsync, isLoading } = useWalletBatchDelete();
 
   useEffect(() => {
     let selected_ids = [];
@@ -24,13 +24,13 @@ const OperationButtons = ({selectedRowKeys, setResetQuery, setSearch}) => {
   const processDelete = () => {
     Modal.confirm({
       title: "Are you sure ?",
-      icon: <ExclamationCircleOutlined/>,
+      icon: <ExclamationCircleOutlined />,
       content: "Attention! Selected items will be deleted.",
       okText: "Ok, Delete",
       okType: "danger",
       onOk: () => {
         mutateAsync(
-          {selected},
+          { selected },
           {
             onSuccess: () => {
               setResetQuery(true);
@@ -49,19 +49,31 @@ const OperationButtons = ({selectedRowKeys, setResetQuery, setSearch}) => {
     for (let i = 0; i < selectedRowKeys.length; i++) {
       let item = selectedRowKeys[i];
       let user_id2 = item.user_id;
-      if (user_id > 0 && user_id2 !== user_id) {
+      if (item.invoice_no) {
         same_users = false;
+        Modal.warning({
+          title: "Processing error!",
+          content: <p>#<b>{item.item_number}</b> Invoice already generate. <br /> Invoice No: #<b>{item.invoice_no}</b></p>,
+        });
+        break;
+      } else if (item.status !== 'received-in-BD-warehouse') {
+        same_users = false;
+        Modal.warning({
+          title: "Processing error!",
+          content: <p>#<b>{item.item_number}</b> is not ready for generate Invoice</p>,
+        });
+        break;
+      } else if (user_id > 0 && user_id2 !== user_id) {
+        same_users = false;
+        Modal.warning({
+          title: "Processing error!",
+          content: <p>#<b>{item.item_number}</b> is not same customer</p>,
+        });
         break;
       }
       user_id = user_id2;
     }
-    if (!same_users) {
-      Modal.warning({
-        title: "Processing error!",
-        content:
-          "Selected items is not same user or is not ready for generate invoice.",
-      });
-    } else {
+    if (same_users) {
       setInvoiceGen(true);
     }
   };
@@ -88,7 +100,7 @@ const OperationButtons = ({selectedRowKeys, setResetQuery, setSearch}) => {
           onClick={processDelete}
           disabled={!hasSelected}
           loading={isLoading}
-          style={{marginRight: 4}}
+          style={{ marginRight: 4 }}
         >
           Delete
         </Button>
@@ -99,7 +111,7 @@ const OperationButtons = ({selectedRowKeys, setResetQuery, setSearch}) => {
         >
           Generate Invoice
         </Button>
-        <span style={{marginLeft: 8, marginRight: 8}}>
+        <span style={{ marginLeft: 8, marginRight: 8 }}>
           {hasSelected ? `Selected ${selectedRowKeys.length} items` : ""}
         </span>
         <Search

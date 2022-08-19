@@ -89,23 +89,21 @@ class ApiInvoiceController extends Controller
                 }
             }
             $total_invoices = is_array($invoices) ? count($invoices) : 0;
-            $courier_bill = $courier_bill > 0 & $total_invoices > 0 ? $courier_bill / $total_invoices : 0;
+            $courier_bill = $courier_bill > 0 && $total_invoices > 0 ? $courier_bill / $total_invoices : 0;
             $orderItem = null;
-            foreach ($item_ids as $item_id) {
-                $orderItem = OrderItem::find($item_id);
-                if ($orderItem) {
-                    if ($orderItem->status == 'received-in-BD-warehouse') {
-                        $order_item_status = 'on-transit-to-customer';
-                    } else {
-                        $order_item_status = $orderItem->status;
-                    }
-                    $orderItem->update([
-                        'courier_bill' => floating($courier_bill, 2),
-                        'invoice_no' => $invoice_no,
-                        'status' => $order_item_status
-                    ]);
+            $wallet_Items = OrderItem::whereIn('id', $item_ids)->get();
+            foreach ($wallet_Items as $wallet) {
+                if ($wallet->status == 'received-in-BD-warehouse') {
+                    $order_item_status = 'on-transit-to-customer';
+                } else {
+                    $order_item_status = $wallet->status;
                 }
-                (new TrackingService())->updateTracking($item_id, 'on-transit-to-customer');
+                $wallet->courier_bill = $courier_bill;
+                $wallet->invoice_no = $invoice_no;
+                $wallet->status = $order_item_status;
+                $wallet->save();
+
+                (new TrackingService())->updateTracking($wallet->id, 'on-transit-to-customer');
             }
 
             $status = $orderItem ? true : false;

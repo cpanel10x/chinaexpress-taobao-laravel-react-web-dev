@@ -194,19 +194,22 @@ class InvoiceController extends Controller
     if (!$invoice) {
       return redirect()->back()->withFlashError('Invoice status not changed');
     }
-    foreach ($invoice->invoiceItems as $invoice_item) {
-      $order_item_id = $invoice_item->order_item_id;
-      $OrderItem = OrderItem::find($order_item_id);
+
+    $wallet_items = OrderItem::whereIn('id', $invoice->invoiceItems->pluck('order_item_id')->toArray())
+      ->get();
+
+    foreach ($wallet_items as $OrderItem) {
       $OrderItem->invoice_no = $invoice->invoice_no;
       $OrderItem->last_payment = $invoice->total_due;
       $OrderItem->due_payment = 0;
-      if ($OrderItem->status == 'on-transit-to-customer') {
-        $OrderItem->status = 'delivered';
-      } else {
-        $OrderItem->status = 'adjusted';
-      }
-      (new TrackingService())->updateTracking($order_item_id, 'delivered');
+      // if ($OrderItem->status == 'on-transit-to-customer') {
+      //   $OrderItem->status = 'delivered';
+      // } else {
+      //   $OrderItem->status = 'adjusted';
+      // }
+      $OrderItem->status = 'delivered';
       $OrderItem->save();
+      (new TrackingService())->updateTracking($OrderItem->id, 'delivered');
     }
     $invoice->status = 'confirm_received';
     $invoice->save();

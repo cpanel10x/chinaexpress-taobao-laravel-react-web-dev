@@ -22,6 +22,7 @@ const ChangeStatus = ({ walletItem, onFinish, show, setShow, isLoading }) => {
       let comment = walletItem?.tracking_exceptional?.find(find => find.status === current_status)?.comment || '';
       form.setFieldsValue({
         ...walletItem,
+        missing: walletItem.product_value,
         comment,
       });
     } else {
@@ -126,14 +127,25 @@ const ChangeStatus = ({ walletItem, onFinish, show, setShow, isLoading }) => {
           {status === "refunded" && <RefundedInput form={form} walletItem={walletItem} />}
 
           {status === "cancel" && (
-            <InputTextArea
-              required={true}
-              label="Cancel Comment"
-              title="Cancel Comment"
-              name="comment"
-              message="Input Cancel Comment"
-              maxLength={100}
-              placeholder="Cancel Comment" />
+            <>
+              <InputStatus
+                type="number"
+                required={true}
+                label="Amount will affected"
+                title="Amount will affected"
+                name="missing"
+                message="Input Amount will affected"
+                placeholder="Affected Amount"
+              />
+              <InputTextArea
+                required={true}
+                label="Cancel Comment"
+                title="Cancel Comment"
+                name="comment"
+                message="Input Cancel Comment"
+                maxLength={100}
+                placeholder="Cancel Comment" />
+            </>
           )}
           {status === "comment1" && (
             <InputTextArea

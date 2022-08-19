@@ -1,6 +1,7 @@
 import React from 'react';
 import { Select, Form } from "antd";
 import { InfoCircleOutlined } from "@ant-design/icons";
+import { numParse } from '../../../../../../utils/Helpers';
 
 const { Option } = Select;
 
@@ -38,8 +39,9 @@ const SelectStatus = ({ form, walletItem, status, setStatus }) => {
       let comment = walletItem?.tracking_exceptional?.find(find => find.status === value)?.comment || '';
       form.setFieldsValue({
         ...walletItem,
-        status: value,
         comment,
+        status: value,
+        missing: (numParse(walletItem.product_value) + numParse(walletItem.DeliveryCost) - numParse(walletItem.coupon_contribution)),
       });
     } else {
       form.setFieldsValue({ ...walletItem, status: value });

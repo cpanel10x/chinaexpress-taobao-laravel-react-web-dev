@@ -49,13 +49,10 @@ class ApiWalletService
         $wallet = OrderItem::find($id);
         if ($wallet) {
             $product_price = ($wallet->product_value + $wallet->DeliveryCost - $wallet->coupon_contribution);
-
-            $courier_bill = $wallet->courier_bill;
             $refunded = $wallet->refunded;
-            $customer_tax = $wallet->customer_tax;
-            $last_payment = $wallet->last_payment;
-
             $adjustment = $wallet->adjustment;
+            $customer_tax = $wallet->customer_tax;
+            $courier_bill = $wallet->courier_bill;
 
             $shipping_type = $wallet->shipping_type;
             $weight_change = 0;
@@ -65,10 +62,15 @@ class ApiWalletService
                 $weight_change = ($shipping_rate * $actual_weight);
             }
 
-            $sumData = ($product_price -  $wallet->first_payment - $wallet->out_of_stock - $wallet->missing - $wallet->lost_in_transit);
-            $sumData = ($sumData + $refunded + $customer_tax + $weight_change + $courier_bill) - $last_payment;
+            $first_payment = $wallet->first_payment;
+            $out_of_stock = $wallet->out_of_stock;
+            $missing = $wallet->missing;
+            $lost_in_transit = $wallet->lost_in_transit;
+            $last_payment = $wallet->last_payment;
 
-            $wallet->due_payment = ($sumData + $adjustment);
+            $positive = ((int)$product_price + (int)$refunded + $adjustment + (int)$customer_tax + (int)$weight_change + (int)$courier_bill);
+            $negative = ($first_payment + $out_of_stock + $missing + $lost_in_transit + $last_payment);
+            $wallet->due_payment = ($positive - $negative);
             $wallet->save();
         }
         return $wallet;

@@ -69,8 +69,12 @@ class ApiWalletController extends Controller
       $data['bd_shipping_charge'] = $orderItem->shipping_rate * (int) request('actual_weight', 0);
     } elseif ($status == 'on-transit-to-customer') {
       $data = $request->only('status');
-    }elseif ($status == 'out-of-stock') {
-      $data = $request->only('out_of_stock', 'status');
+    } elseif ($status == 'out-of-stock') {
+      if (request('out_of_stock_type') == 'full') {
+        $data = $request->only('out_of_stock', 'status');
+      } else {
+        $data = $request->only('out_of_stock');
+      }
       $amount = request('out_of_stock');
     } elseif ($status == 'missing') {
       $data = $request->only('missing');
@@ -81,15 +85,15 @@ class ApiWalletController extends Controller
     } elseif ($status == 'customer_tax') {
       $data = $request->only('customer_tax');
     } elseif ($status == 'lost_in_transit') {
-      $data = $request->only('status','lost_in_transit');
+      $data = $request->only('status', 'lost_in_transit');
     } elseif ($status == 'refunded') {
-      $data = $request->only('refund_payment_method', 'status');
+      $data = $request->only('refund_payment_method', 'refunded', 'status');
       $amount = request('refunded');
     } elseif ($status == 'cancel') {
       $data = $request->only('status', 'missing');
     } elseif ($status == 'comment1') {
       $data = $request->only('comment1');
-  } elseif ($status == 'comment2') {
+    } elseif ($status == 'comment2') {
       $data = $request->only('comment2');
     }
 
@@ -97,7 +101,7 @@ class ApiWalletController extends Controller
     $status =  false;
     if (!empty($data)) {
       $orderItem->update($data);
-      $abcd = $this->apiWalletService->updateWalletCalculation($orderItem->id);
+      $this->apiWalletService->updateWalletCalculation($orderItem->id);
       $req_status = request('status');
       $comment = request('comment');
       (new TrackingService())->updateTracking($item_id, $req_status, $comment);
@@ -142,6 +146,7 @@ class ApiWalletController extends Controller
     if (count($data) && $orderItem) {
       $orderItem->fill($data);
       $orderItem->save();
+      $this->apiWalletService->updateWalletCalculation($orderItem->id);
     }
     return response(['data' => $orderItem]);
   }

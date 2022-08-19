@@ -109,3 +109,8 @@ export const collectionSumCalculate = (collection, key) => {
     return previousValue + Number(currentValue[key]);
   }, 0);
 };
+
+export const numParse = (number, floating = 0) => {
+  let newNumber = number > 0 ? Number(number) : 0;
+  return floating > 0 ? newNumber.toFixed(floating) : floating;
+};

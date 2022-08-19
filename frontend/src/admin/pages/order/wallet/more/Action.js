@@ -1,6 +1,16 @@
-import { Menu } from "antd";
+import { Button, Menu } from "antd";
 
-const Action = ({ walletItem, handleActionClick }) => {
+const Action = ({ walletItem, handleActionClick, isLoading }) => {
+
+  const { status } = walletItem;
+
+  const btnClick = (event, option) => {
+    handleActionClick(event, option, walletItem)
+  }
+
+  const disabledIf = ['refunded', 'delivered'];
+
+
   return (
     <>
       <Menu
@@ -8,53 +18,37 @@ const Action = ({ walletItem, handleActionClick }) => {
           {
             key: "1",
             label: (
-              <a
-                href="/manage/order/wallet"
-                onClick={(event) =>
-                  handleActionClick(event, "view", walletItem)
-                }
-              >
+              <Button type="text" onClick={e => btnClick(e, "view")} size="small" loading={isLoading}>
                 View Details
-              </a>
+              </Button>
             ),
           },
           {
             key: "2",
             label: (
-              <a
-                href="/manage/order/wallet"
-                onClick={(event) =>
-                  handleActionClick(event, "change-status", walletItem)
-                }
-              >
+              <Button type="text"
+                onClick={e => btnClick(e, "change-status")}
+                size="small"
+                disabled={disabledIf.includes(status)}
+                loading={isLoading}>
                 Change status
-              </a>
+              </Button>
             ),
           },
           {
             key: "3",
             label: (
-              <a
-                href="/manage/order/wallet"
-                onClick={(event) =>
-                  handleActionClick(event, "tracking", walletItem)
-                }
-              >
+              <Button type="text" onClick={e => btnClick(e, "tracking")} size="small" loading={isLoading}>
                 Tracking Info
-              </a>
+              </Button>
             ),
           },
           {
             key: "4",
             label: (
-              <a
-                href="/manage/order/wallet"
-                onClick={(event) =>
-                  handleActionClick(event, "master_edit", walletItem)
-                }
-              >
+              <Button type="text" onClick={e => btnClick(e, "master_edit")} size="small" loading={isLoading}>
                 Master Edit
-              </a>
+              </Button>
             ),
           },
         ]}
