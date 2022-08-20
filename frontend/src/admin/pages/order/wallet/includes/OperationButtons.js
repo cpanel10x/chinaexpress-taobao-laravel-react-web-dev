@@ -3,6 +3,7 @@ import { Button, Modal, Space, Input } from "antd";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { useWalletBatchDelete } from "../../../../query/WalletApi";
 import GenerateInvoice from "./GenerateInvoice";
+import { has_permission } from "../../../../../api/Auth";
 
 const { Search } = Input;
 
@@ -78,11 +79,13 @@ const OperationButtons = ({ selectedRowKeys, setResetQuery, setSearch }) => {
     }
   };
 
+  const can_invoice = has_permission('wallet.generate.invoice');
+  const can_delete = has_permission('recent.order.delete');
   const hasSelected = selected.length > 0;
 
   return (
     <>
-      {invoiceGen && hasSelected && (
+      {invoiceGen && hasSelected && can_invoice && (
         <GenerateInvoice
           rowItems={selectedRowKeys}
           setResetQuery={setResetQuery}
@@ -95,22 +98,28 @@ const OperationButtons = ({ selectedRowKeys, setResetQuery, setSearch }) => {
           marginBottom: 16,
         }}
       >
-        <Button
-          type="danger"
-          onClick={processDelete}
-          disabled={!hasSelected}
-          loading={isLoading}
-          style={{ marginRight: 4 }}
-        >
-          Delete
-        </Button>
-        <Button
-          type="primary"
-          onClick={generateInvoice}
-          disabled={!hasSelected}
-        >
-          Generate Invoice
-        </Button>
+        {
+          can_delete &&
+          <Button
+            type="danger"
+            onClick={processDelete}
+            disabled={!hasSelected}
+            loading={isLoading}
+            style={{ marginRight: 4 }}
+          >
+            Delete
+          </Button>
+        }
+        {
+          can_invoice &&
+          <Button
+            type="primary"
+            onClick={generateInvoice}
+            disabled={!hasSelected}
+          >
+            Generate Invoice
+          </Button>
+        }
         <span style={{ marginLeft: 8, marginRight: 8 }}>
           {hasSelected ? `Selected ${selectedRowKeys.length} items` : ""}
         </span>

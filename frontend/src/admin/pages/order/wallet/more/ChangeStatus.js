@@ -3,8 +3,8 @@ import React, { useEffect, useState } from "react";
 import SelectStatus from "./include/SelectStatus";
 import OutOfStockInput from "./include/OutOfStockInput";
 import RefundedInput from "./include/RefundedInput";
-import InputStatus from "./include/InputStatus";
-import InputTextArea from "./include/InputTextArea";
+import InputPlain from "../../../../../components/input/InputPlain";
+import InputTextArea from "../../../../../components/input/InputTextArea";
 
 const ChangeStatus = ({ walletItem, onFinish, show, setShow, isLoading }) => {
   const [form] = Form.useForm();
@@ -53,7 +53,7 @@ const ChangeStatus = ({ walletItem, onFinish, show, setShow, isLoading }) => {
             walletItem={walletItem}
           />
           {status === "purchased" && (
-            <InputStatus
+            <InputPlain
               label="Source Order Number"
               title="Source Order Number"
               name="source_order_number"
@@ -63,7 +63,7 @@ const ChangeStatus = ({ walletItem, onFinish, show, setShow, isLoading }) => {
             />
           )}
           {status === "shipped-from-suppliers" && (
-            <InputStatus
+            <InputPlain
               label="Tracking Number"
               title="Tracking Number"
               name="tracking_number"
@@ -73,7 +73,7 @@ const ChangeStatus = ({ walletItem, onFinish, show, setShow, isLoading }) => {
             />
           )}
           {status === "received-in-BD-warehouse" && (
-            <InputStatus
+            <InputPlain
               type="number"
               required={true}
               label="Actual Weight"
@@ -92,7 +92,7 @@ const ChangeStatus = ({ walletItem, onFinish, show, setShow, isLoading }) => {
             />
           )}
           {status === "adjustment" && (
-            <InputStatus
+            <InputPlain
               type="number"
               required={true}
               label="Adjustment"
@@ -103,7 +103,7 @@ const ChangeStatus = ({ walletItem, onFinish, show, setShow, isLoading }) => {
             />
           )}
           {status === "lost_in_transit" && (
-            <InputStatus
+            <InputPlain
               type="number"
               required={true}
               label="Max value of lost"
@@ -114,7 +114,7 @@ const ChangeStatus = ({ walletItem, onFinish, show, setShow, isLoading }) => {
             />
           )}
           {status === "customer_tax" && (
-            <InputStatus
+            <InputPlain
               type="number"
               required={true}
               label="Customer Tax"
@@ -128,7 +128,7 @@ const ChangeStatus = ({ walletItem, onFinish, show, setShow, isLoading }) => {
 
           {status === "cancel" && (
             <>
-              <InputStatus
+              <InputPlain
                 type="number"
                 required={true}
                 label="Amount will affected"

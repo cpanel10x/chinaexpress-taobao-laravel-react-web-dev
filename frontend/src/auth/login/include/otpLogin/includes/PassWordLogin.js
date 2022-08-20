@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { useAuthMutation } from "../../../../../api/Auth";
 import SpinnerButtonLoader from "../../../../../loader/SpinnerButtonLoader";
 import Swal from "sweetalert2";
-import { withRouter } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
-const PassWordLogin = (props) => {
-  const { response, setResponse } = props;
+const PassWordLogin = ({ response, setResponse }) => {
+  const history = useHistory();
   const phone = response?.data?.phone;
   const email = response?.data?.email;
 
@@ -24,7 +24,7 @@ const PassWordLogin = (props) => {
       {
         onSuccess: (res) => {
           if (res?.id > 0) {
-            props.history.push("/dashboard");
+            history.push("/dashboard");
           } else {
             const err = res.errors;
             const pwdError = err?.password ? err.password[0] : null;
@@ -94,4 +94,4 @@ const PassWordLogin = (props) => {
   );
 };
 
-export default withRouter(PassWordLogin);
+export default PassWordLogin;

@@ -1,8 +1,6 @@
 import { InfoCircleOutlined } from "@ant-design/icons";
-import { Radio, Form, Select } from "antd";
-import InputNumberField from "../../../../../../components/InputNumberField";
-import { useEffect, useState } from "react";
-import InputStatus from "./InputStatus";
+import { Form, Select } from "antd";
+import InputPlain from "../../../../../../components/input/InputPlain";
 
 const { Option } = Select;
 
@@ -33,7 +31,7 @@ const RefundedInput = ({ form, walletItem }) => {
         </Select>
       </Form.Item>
 
-      <InputStatus
+      <InputPlain
         type="number"
         required={true}
         label="Refunded Amount"

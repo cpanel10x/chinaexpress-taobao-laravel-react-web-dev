@@ -1,8 +1,5 @@
-import { InfoCircleOutlined } from '@ant-design/icons';
-import { Radio, Form, Input } from 'antd';
-import InputNumberField from "../../../../../../components/InputNumberField";
-import { useEffect, useState } from "react";
-import InputStatus from './InputStatus';
+import { Radio, Form } from 'antd';
+import InputPlain from '../../../../../../components/input/InputPlain';
 
 
 const OutOfStockInput = ({ product_value, out_of_stock, form }) => {
@@ -34,7 +31,7 @@ const OutOfStockInput = ({ product_value, out_of_stock, form }) => {
         </Radio.Group>
       </Form.Item>
 
-      <InputStatus
+      <InputPlain
         type="number"
         label="Out of stock"
         title="Out of stock"

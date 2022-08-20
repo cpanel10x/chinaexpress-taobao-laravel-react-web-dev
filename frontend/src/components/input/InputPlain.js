@@ -1,35 +1,34 @@
 import { InfoCircleOutlined } from "@ant-design/icons";
 import { Form, Input } from "antd";
-import InputNumberField from "../../../../../../components/InputNumberField";
+import InputNumberField from "./includes/InputNumberField";
 
 
-const InputStatus = ({ label, title, name, required, message, placeholder, type }) => {
-
+const InputPlain = ({ label, title, name, required, message, placeholder, type, disabled, readOnly }) => {
 
     return (
         <Form.Item
             label={label}
             tooltip={{
-                title: title,
+                title: title ? title : label,
                 icon: <InfoCircleOutlined />,
             }}
             name={name}
             rules={[
                 {
                     required: required,
-                    message: message,
+                    message: message ? message : label,
                 },
             ]}
         >
             {
                 type === 'number' ?
-                    <InputNumberField placeholder={placeholder} />
+                    <InputNumberField placeholder={placeholder ? placeholder : label} />
                     :
-                    <Input placeholder={placeholder} />
+                    <Input placeholder={placeholder ? placeholder : label} disabled={disabled} readOnly={readOnly} />
 
             }
         </Form.Item>
     );
 }
 
-export default InputStatus;
+export default InputPlain;

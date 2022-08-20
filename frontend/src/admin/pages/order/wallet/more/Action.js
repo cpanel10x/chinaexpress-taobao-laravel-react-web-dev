@@ -1,6 +1,6 @@
 import { Button, Menu } from "antd";
 
-const Action = ({ walletItem, handleActionClick, isLoading }) => {
+const Action = ({ walletItem, handleActionClick, isLoading, canMasterEdit }) => {
 
   const { status } = walletItem;
 
@@ -8,52 +8,54 @@ const Action = ({ walletItem, handleActionClick, isLoading }) => {
     handleActionClick(event, option, walletItem)
   }
 
+  const menuItems = [
+    {
+      key: "1",
+      label: (
+        <Button type="text" onClick={e => btnClick(e, "view")} size="small" loading={isLoading}>
+          View Details
+        </Button>
+      ),
+    },
+    {
+      key: "2",
+      label: (
+        <Button type="text" onClick={e => btnClick(e, "tracking")} size="small" loading={isLoading}>
+          Tracking Info
+        </Button>
+      ),
+    },
+  ];
+
   const disabledIf = ['refunded', 'delivered'];
+  if (!disabledIf.includes(status)) {
+    menuItems.push({
+      key: "3",
+      label: (
+        <Button type="text"
+          onClick={e => btnClick(e, "change-status")}
+          size="small"
+          loading={isLoading}>
+          Change status
+        </Button>
+      ),
+    })
+  }
+
+  if (canMasterEdit) {
+    menuItems.push({
+      key: "4",
+      label: (
+        <Button type="text" onClick={e => btnClick(e, "master_edit")} size="small" loading={isLoading}>
+          Master Edit
+        </Button>
+      ),
+    })
+  }
 
 
   return (
-    <>
-      <Menu
-        items={[
-          {
-            key: "1",
-            label: (
-              <Button type="text" onClick={e => btnClick(e, "view")} size="small" loading={isLoading}>
-                View Details
-              </Button>
-            ),
-          },
-          {
-            key: "2",
-            label: (
-              <Button type="text"
-                onClick={e => btnClick(e, "change-status")}
-                size="small"
-                disabled={disabledIf.includes(status)}
-                loading={isLoading}>
-                Change status
-              </Button>
-            ),
-          },
-          {
-            key: "3",
-            label: (
-              <Button type="text" onClick={e => btnClick(e, "tracking")} size="small" loading={isLoading}>
-                Tracking Info
-              </Button>
-            ),
-          },
-          {
-            key: "4",
-            label: (
-              <Button type="text" onClick={e => btnClick(e, "master_edit")} size="small" loading={isLoading}>
-                Master Edit
-              </Button>
-            ),
-          },
-        ]}
-      />
-    </>
+    <Menu items={menuItems} />
   );
 };
 

@@ -312,10 +312,12 @@ class AuthController extends Controller
   {
     $user = auth('sanctum')->check() ? auth('sanctum')->user() : null;
     $token = request()->bearerToken();
-    $v_back =  $user ? $user->can('view backend') : false;
+    $permissions =  $user ? $user->getPermissionNames() : [];
+    $roles =  $user ? $user->roles->pluck('name') : [];
     return response([
       'user' => $user,
-      'v_back' => $v_back,
+      'permissions' => $permissions,
+      'roles' => $roles,
       'token' => $user ? $token : null,
     ]);
   }

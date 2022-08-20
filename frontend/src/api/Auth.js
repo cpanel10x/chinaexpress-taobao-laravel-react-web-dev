@@ -11,27 +11,27 @@ export const isAuthenticated = () => {
   return isAuthenticated ? JSON.parse(isAuthenticated)?.login || false : false;
 };
 
-export const isBackendAuthenticated = () => {
-  const access = window.localStorage.getItem("_access");
-  return access ? JSON.parse(access)?.view_backend || false : false;
+export const has_permission = (permission_name) => {
+  let access = window.localStorage.getItem("_access");
+  access = access ? JSON.parse(access) : [];
+  let roles = window.localStorage.getItem("_roles");
+  roles = roles ? JSON.parse(roles) : [];
+  if (roles?.includes('administrator')) {
+    return true;
+  }
+  return access?.includes(permission_name) || false;
 };
 
-export const is_backend_authenticated = (customer) => {
-  const permissions = customer.permissions || [];
-  const permission = permissions.find(
-    (permission) => permission.name === "view backend"
-  );
-  return permission?.name ? true : false;
-};
 
-export const setAuthenticated = (customer) => {
-  if (customer?.id) {
-    const view_backend = is_backend_authenticated(customer);
+export const setAuthenticated = (data) => {
+  if (data?.user?.id) {
     localStorage.setItem("isAuthenticate", JSON.stringify({ login: true }));
-    localStorage.setItem("_access", JSON.stringify({ view_backend }));
+    localStorage.setItem("_access", JSON.stringify(data?.permissions || []));
+    localStorage.setItem("_roles", JSON.stringify(data?.roles || []));
   } else {
     window.localStorage.removeItem("_token");
     window.localStorage.removeItem("_access");
+    window.localStorage.removeItem("_roles");
     window.localStorage.removeItem("isAuthenticate");
   }
 };
@@ -40,7 +40,7 @@ const authUserValidate = (data) => {
   const token = data?.token ? data?.token : null;
   const user = data?.user ? data?.user : data;
   instanceSetToken(token);
-  setAuthenticated(user);
+  setAuthenticated(data);
   return user;
 };
 

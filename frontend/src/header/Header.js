@@ -3,13 +3,13 @@ import { Link } from "react-router-dom";
 import Logout from "./includes/Logout";
 import SpinnerButtonLoader from "../loader/SpinnerButtonLoader";
 import MobileSearchForm from "./includes/MobileSearchForm";
-import { is_backend_authenticated } from "../api/Auth";
+import { has_permission } from "../api/Auth";
 
 const Header = (props) => {
   const { customer, wishList, cart_count, settings } = props;
 
   const { data: user, isLoading } = customer;
-  const view_backend = user?.id && is_backend_authenticated(user);
+  const view_backend = has_permission('view backend');
 
   return (
     <header className="header sticky-top header-intro-clearance header-26">

@@ -3,33 +3,36 @@ import moment from "moment";
 
 const { Title } = Typography;
 
-const TrackingItem = ({ item }) => {
-  const exceptions = item?.exceptions || [];
 
-  if (exceptions?.length > 0) {
-    return (
-      <>
-        {exceptions.map((exception, index) => (
-          <Timeline.Item
-            color={exception.updated_time ? "green" : "gray"}
-            index="index"
-          >
-            <Title type={"danger"} level={5} style={{ margin: 0 }}>{exception.tracking_status}</Title>
-            {
-              exception.comment &&
-              <p style={{ margin: 0 }}>{exception.comment}</p>
-            }
-            {exception.updated_time
-              ? moment(exception.updated_time).format("DD-MM-YYYY hh:mm a")
-              : ""}
-          </Timeline.Item>
-        ))}
-      </>
-    );
-  }
 
+const ExceptionItems = ({ exceptions }) => {
   return (
     <>
+      {exceptions.map((exception, index) => (
+        <Timeline.Item
+          color={exception.updated_time ? "green" : "gray"}
+          index={index}
+        >
+          <Title type={"danger"} level={5} style={{ margin: 0 }}>{exception.tracking_status}</Title>
+          {
+            exception.comment &&
+            <p style={{ margin: 0 }}>{exception.comment}</p>
+          }
+          {exception.updated_time
+            ? moment(exception.updated_time).format("DD-MM-YYYY hh:mm a")
+            : ""}
+        </Timeline.Item>
+      ))}
+    </>
+  );
+}
+
+
+const TrackingItem = ({ item }) => {
+  const exceptions = item?.exceptions || [];
+  return (
+    <>
+      {exceptions?.length > 0 && <ExceptionItems exceptions={exceptions} />}
       <Timeline.Item color={item.updated_time ? "green" : "gray"}>
         <Title level={5} style={{ margin: 0 }}>{item.tracking_status}</Title>
         {

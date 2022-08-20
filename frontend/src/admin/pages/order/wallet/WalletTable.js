@@ -6,7 +6,7 @@ import {
   characterLimiter,
 } from "../../../../utils/Helpers";
 import Action from "./more/Action";
-import { EllipsisOutlined, MoreOutlined, SettingOutlined } from "@ant-design/icons";
+import { SettingOutlined } from "@ant-design/icons";
 import { useWalletData } from "../../../query/WalletApi";
 import qs from "qs";
 import { useQueryClient } from "react-query";
@@ -17,7 +17,7 @@ const getRandomParams = (params) => ({
   ...params,
 });
 
-const WalletTable = ({ rowSelection, handleActionClick, resetQuery, setResetQuery, search }) => {
+const WalletTable = ({ rowSelection, handleActionClick, resetQuery, setResetQuery, search, canMasterEdit }) => {
   const [data, setData] = useState();
   const [loadSearch, setLoadSearch] = useState('');
   const [loading, setLoading] = useState(false);
@@ -253,7 +253,7 @@ const WalletTable = ({ rowSelection, handleActionClick, resetQuery, setResetQuer
             },
           },
           {
-            title: "Missing / Shortage",
+            title: "Missing / Cancel",
             width: 110,
             align: "center",
             dataIndex: "missing",
@@ -396,6 +396,7 @@ const WalletTable = ({ rowSelection, handleActionClick, resetQuery, setResetQuer
                   <Action
                     walletItem={walletItem}
                     handleActionClick={handleActionClick}
+                    canMasterEdit={canMasterEdit}
                   />
                 }
                 placement="bottomRight"

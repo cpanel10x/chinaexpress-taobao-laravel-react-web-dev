@@ -1,12 +1,13 @@
-import { Button, Typography } from "antd";
+import { Typography } from "antd";
 import React, { useState } from "react";
 import { useWalletUpdateStatus } from "../../../query/WalletApi";
 import WalletTable from "./WalletTable";
 import ViewDetails from "./more/ViewDetails";
 import ChangeStatus from "./more/ChangeStatus";
 import ShowTrackingInformation from "./more/ShowTrackingInformation";
-import MasterEdit from "./more/MasterEdit";
+import MasterEdit from "./master-edit/MasterEdit";
 import OperationButtons from "./includes/OperationButtons";
+import { has_permission } from "../../../../api/Auth";
 
 const { Title } = Typography;
 
@@ -55,9 +56,14 @@ const WalletIndex = () => {
     ).then((r) => console.log(r.data));
   };
 
+
+  const can_status = has_permission('recent.order.change.status');
+  const can_details = has_permission('wallet.view.details');
+  const canMasterEdit = has_permission('wallet.master.edit');
+
   return (
     <>
-      {walletItem?.id > 0 && (
+      {walletItem?.id > 0 && can_details && (
         <>
           {show && (
             <ViewDetails
@@ -66,7 +72,7 @@ const WalletIndex = () => {
               setShow={setShow}
             />
           )}
-          {showStatus && (
+          {showStatus && can_status && (
             <ChangeStatus
               walletItem={walletItem}
               onFinish={onFinish}
@@ -83,7 +89,7 @@ const WalletIndex = () => {
               setShow={setShowTracking}
             />
           )}
-          {masterEdit && (
+          {masterEdit && canMasterEdit && (
             <MasterEdit
               walletItem={walletItem}
               show={masterEdit}
@@ -107,6 +113,7 @@ const WalletIndex = () => {
         resetQuery={resetQuery}
         setResetQuery={setResetQuery}
         search={search}
+        canMasterEdit={canMasterEdit}
       />
     </>
   );

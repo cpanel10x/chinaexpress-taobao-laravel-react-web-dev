@@ -9,12 +9,10 @@ const ShowTrackingInformation = ({ walletItem, show, setShow }) => {
   const wallet_id = walletItem?.id || null;
   const { data } = useWalletTrackingInfo(wallet_id);
 
-  console.log("data", data);
-
   return (
     <>
       <Modal
-        title={`Wallet Tracking Information #${walletItem.item_number}`}
+        title={<Title level={5} style={{ margin: 0 }}> Wallet Tracking Information #{walletItem.item_number} </Title>}
         visible={show}
         onOk={() => setShow(false)}
         onCancel={() => setShow(false)}
@@ -25,7 +23,7 @@ const ShowTrackingInformation = ({ walletItem, show, setShow }) => {
           {data?.length > 0 &&
             data.map((item, index) => <TrackingItem item={item} key={index} />)}
         </Timeline>
-      </Modal>
+      </Modal >
     </>
   );
 };
