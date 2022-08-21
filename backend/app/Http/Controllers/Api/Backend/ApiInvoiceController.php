@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Http\Services\Api\Backend\ApiWalletService;
 use App\Http\Services\Backend\TrackingService;
 use App\Models\Auth\User;
 use App\Models\Content\Invoice;
@@ -104,6 +105,9 @@ class ApiInvoiceController extends Controller
                 $wallet->save();
 
                 (new TrackingService())->updateTracking($wallet->id, 'on-transit-to-customer');
+                if ($courier_bill) {
+                    (new ApiWalletService())->updateWalletCalculation($wallet->id);
+                }
             }
 
             $status = $orderItem ? true : false;

@@ -3,9 +3,10 @@ import PropTypes from "prop-types";
 
 import TinySlider from "tiny-slider-react";
 import 'tiny-slider/dist/tiny-slider.css';
+import ImageLoader from "../../../../../loader/ImageLoader";
 
 const ImgGallery = (props) => {
-  const {Pictures, activeImg, PreviewUrl, Url, setActiveImg} = props;
+  const { Pictures, activeImg, PreviewUrl, Url, setActiveImg } = props;
 
   const settings = {
     items: 4,
@@ -56,7 +57,7 @@ const ImgGallery = (props) => {
 
   let modifiedPictures = Pictures;
   if (Url && PreviewUrl) {
-    modifiedPictures = [{type: 'video', Url, PreviewUrl}, ...Pictures];
+    modifiedPictures = [{ type: 'video', Url, PreviewUrl }, ...Pictures];
   }
 
   return (
@@ -70,14 +71,14 @@ const ImgGallery = (props) => {
                 href={PreviewUrl}
                 onClick={(event) => playVideo(event, Url)}
               >
-                <img
-                  className="rounded tns-lazy-img"
-                  src={PreviewUrl}
-                  style={imgStyles}
-                  alt="video"
+                <ImageLoader
+                  path={PreviewUrl}
+                  width={'100%'}
+                  height={80}
                 />
+
                 <div className="videoPlayerIcon">
-                  <i className="icon-play-circled"/>
+                  <i className="icon-play-circled" />
                 </div>
               </a>
               :
@@ -86,11 +87,10 @@ const ImgGallery = (props) => {
                 href={activeImageUrl(picture)}
                 onClick={(event) => productImage(event, picture)}
               >
-                <img
-                  className="rounded tns-lazy-img"
-                  src={activeImageUrl(picture)}
-                  style={imgStyles}
-                  alt="picture"
+                <ImageLoader
+                  path={activeImageUrl(picture)}
+                  width={'100%'}
+                  height={85}
                 />
               </a>
           }

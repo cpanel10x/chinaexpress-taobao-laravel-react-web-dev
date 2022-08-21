@@ -244,18 +244,15 @@ const MasterEdit = ({ walletItem, show, setShow, setResetQuery }) => {
           required={false}
         />
 
-
         <InputPlain
           label="Product Title"
           title="Product title must not empty"
           name="Title"
-          disabled={true}
         />
 
         <InputPlain
           label="Source Link"
           name="ItemMainUrl"
-          disabled={true}
         />
 
         <Button type="primary" htmlType="submit" block loading={isLoading}>

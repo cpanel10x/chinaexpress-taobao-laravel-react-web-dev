@@ -8,7 +8,7 @@ import SectionsProducts from "./sections/SectionsProducts";
 import RecentProduct from "./includes/Products/recentProduct/RecentProduct";
 import NewArriveProduct from "./includes/Products/NewArriveProduct/NewArriveProduct";
 
-const Home = (props) => {
+const Home = () => {
 
    const {data: settings} = useSettings();
 

@@ -1,25 +1,25 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import Sticky from "react-sticky-el";
 import LoadAttributes from "./includes/attribute/LoadAttributes";
 import ProductSummary from "./includes/ProductSummary";
 import MediaPart from "./includes/MediaPart";
-import {getActiveConfiguredItems} from "../../../../utils/CartHelpers";
+import { getActiveConfiguredItems } from "../../../../utils/CartHelpers";
 import QuantityInput from "./quantity/QuantityInput";
 import SocialShare from "./includes/SocialShare";
 import SellerInfo from "./includes/SellerInfo";
 import PriceCard from "./includes/PriceCard";
-import {useCartMutation} from "../../../../api/CartApi";
-import {useMediaQuery} from "react-responsive";
+import { useCartMutation } from "../../../../api/CartApi";
+import { useMediaQuery } from "react-responsive";
 import AddToCartButtons from "./addToCart/AddToCartButtons";
 import SellDisAllowed from "../sale-disallow/SellDisAllowed";
 
 const ProductBody = (props) => {
-  const {product, settings} = props;
+  const { product, settings } = props;
   const [cartStore, setCartStore] = useState({});
   const [activeImg, setActiveImg] = useState("");
 
   const {
-    mainCart: {data: cart},
+    mainCart: { data: cart },
   } = useCartMutation();
 
   const product_id = product?.Id ? product.Id : "na";
@@ -49,7 +49,7 @@ const ProductBody = (props) => {
   let IsSellAllowed = product?.IsSellAllowed;
   let Expired = FeaturedValues.includes("Expired");
 
-  const isMobile = useMediaQuery({query: "(max-width: 991px)"});
+  const isMobile = useMediaQuery({ query: "(max-width: 991px)" });
 
   return (
     <div className="product-details-top">
@@ -80,7 +80,7 @@ const ProductBody = (props) => {
           {isMobile && <h1 className="single-product-title">{Title}</h1>}
 
           {!IsSellAllowed ? (
-            <SellDisAllowed/>
+            <SellDisAllowed />
           ) : (
             <div>
               <PriceCard
@@ -122,8 +122,8 @@ const ProductBody = (props) => {
                   product={product}
                   settings={settings}
                 />
-                <SellerInfo product={product}/>
-                <SocialShare product={product} settings={settings}/>
+                <SellerInfo product={product} />
+                <SocialShare product={product} settings={settings} />
               </div>
             </div>
           )}

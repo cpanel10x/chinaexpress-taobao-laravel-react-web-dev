@@ -8,6 +8,7 @@ import ShowTrackingInformation from "./more/ShowTrackingInformation";
 import MasterEdit from "./master-edit/MasterEdit";
 import OperationButtons from "./includes/OperationButtons";
 import { has_permission } from "../../../../api/Auth";
+import FilterModal from "./filter/FilterModal";
 
 const { Title } = Typography;
 
@@ -21,6 +22,8 @@ const WalletIndex = () => {
   const [showStatus, setShowStatus] = useState(false);
   const [showTracking, setShowTracking] = useState(false);
   const [masterEdit, setMasterEdit] = useState(false);
+  const [filter, setFilter] = useState(false);
+  const [filterSelected, setFilterSelected] = useState([]);
 
   const { mutateAsync, isLoading } = useWalletUpdateStatus();
 
@@ -99,16 +102,26 @@ const WalletIndex = () => {
           )}
         </>
       )}
+      {filter && (
+        <FilterModal
+          show={filter}
+          setShow={setFilter}
+          filterSelected={filterSelected}
+          setFilterSelected={setFilterSelected}
+        />
+      )}
       <Title level={4}>Manage Wallet</Title>
 
       <OperationButtons
         selectedRowKeys={selectedRowKeys}
         setResetQuery={setResetQuery}
         setSearch={setSearch}
+        setFilter={setFilter}
       />
 
       <WalletTable
         rowSelection={rowSelection}
+        filterSelected={filterSelected}
         handleActionClick={handleActionClick}
         resetQuery={resetQuery}
         setResetQuery={setResetQuery}

@@ -1,22 +1,22 @@
 import React from "react";
-import {Link} from "react-router-dom";
-import LazyLoad from "react-lazyload";
-import {getDBAliProductPrice, getDBProductPrice, taobaoCardProductPrepareForLove} from "../../../utils/CartHelpers";
+import { Link } from "react-router-dom";
+import { getDBAliProductPrice, getDBProductPrice, taobaoCardProductPrepareForLove } from "../../../utils/CartHelpers";
 import SmallSpinnerButtonLoader from "../../../loader/SmallSpinnerButtonLoader";
-import {useQueryClient} from "react-query";
-import {useSettings} from "../../../api/GeneralApi";
-import {useAddToWishList} from "../../../api/WishListApi";
+import { useQueryClient } from "react-query";
+import { useSettings } from "../../../api/GeneralApi";
+import { useAddToWishList } from "../../../api/WishListApi";
+import ImageLoader from "../../../loader/ImageLoader";
 
 const SectionProductCard = (props) => {
-	const {product, className} = props;
+	const { product, className } = props;
 
-	const {data: settings} = useSettings();
+	const { data: settings } = useSettings();
 	const rate = settings?.increase_rate || 0;
 	const ali_rate = settings?.ali_increase_rate || 0;
 	const currency_icon = settings?.currency_icon || '৳';
 
 	const cache = useQueryClient();
-	const {isLoading, mutateAsync} = useAddToWishList();
+	const { isLoading, mutateAsync } = useAddToWishList();
 
 	const addToWishlist = (e) => {
 		e.preventDefault();
@@ -51,18 +51,16 @@ const SectionProductCard = (props) => {
 			<div className="product">
 				<figure className="product-media">
 					<Link to={productPageLink()} className="w-100">
-						<LazyLoad height={236} once>
-							<img
-								src={image}
-								className="product-image"
-								alt={Title}
-							/>
-						</LazyLoad>
+						<ImageLoader
+							path={image}
+							width={'100%'}
+							height={220}
+						/>
 					</Link>
 					<div className="product-action-vertical">
 						{
 							isLoading ?
-								<SmallSpinnerButtonLoader buttonClass="btn-product-icon btn-wishlist btn-expandable" textClass="text-white"/>
+								<SmallSpinnerButtonLoader buttonClass="btn-product-icon btn-wishlist btn-expandable" textClass="text-white" />
 								:
 								<a
 									href={`/add-to-wishlist`}
@@ -70,7 +68,7 @@ const SectionProductCard = (props) => {
 									title="Add Wishlist"
 									className="btn-product-icon btn-wishlist btn-expandable"
 								>
-									<i className="icon-heart-empty"/> <span>Love This</span>
+									<i className="icon-heart-empty" /> <span>Love This</span>
 								</a>
 						}
 						<Link
@@ -97,8 +95,8 @@ const SectionProductCard = (props) => {
 						</Link>
 					</h3>
 					<div className="clearfix d-block product-price">
-                  <span className="float-left">{`${currency_icon}`} <span
-	                  className="price_span">{productPrice()}</span></span>
+						<span className="float-left">{`${currency_icon}`} <span
+							className="price_span">{productPrice()}</span></span>
 						{
 							product?.total_sold > 0 && <span className="sold_item_text">SOLD: {product.total_sold}</span>
 						}

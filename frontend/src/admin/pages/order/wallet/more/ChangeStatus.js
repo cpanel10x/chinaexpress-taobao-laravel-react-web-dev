@@ -5,6 +5,7 @@ import OutOfStockInput from "./include/OutOfStockInput";
 import RefundedInput from "./include/RefundedInput";
 import InputPlain from "../../../../../components/input/InputPlain";
 import InputTextArea from "../../../../../components/input/InputTextArea";
+import { cancelComment, cancelMissingAmt } from "./include/walletHelpers";
 
 const ChangeStatus = ({ walletItem, onFinish, show, setShow, isLoading }) => {
   const [form] = Form.useForm();
@@ -19,11 +20,10 @@ const ChangeStatus = ({ walletItem, onFinish, show, setShow, isLoading }) => {
         lost_in_transit: walletItem.product_value,
       });
     } else if (current_status === 'cancel') {
-      let comment = walletItem?.tracking_exceptional?.find(find => find.status === current_status)?.comment || '';
       form.setFieldsValue({
         ...walletItem,
-        missing: walletItem.product_value,
-        comment,
+        comment: cancelComment(walletItem, current_status),
+        missing: cancelMissingAmt(walletItem),
       });
     } else {
       form.setFieldsValue(walletItem);

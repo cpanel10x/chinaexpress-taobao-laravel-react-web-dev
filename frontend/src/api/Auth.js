@@ -16,10 +16,15 @@ export const has_permission = (permission_name) => {
   access = access ? JSON.parse(access) : [];
   let roles = window.localStorage.getItem("_roles");
   roles = roles ? JSON.parse(roles) : [];
-  if (roles?.includes('administrator')) {
-    return true;
+  if (roles?.length > 0) {
+    if (roles?.includes('administrator')) {
+      return true;
+    }
   }
-  return access?.includes(permission_name) || false;
+  if (access?.length > 0) {
+    return access?.includes(permission_name) || false;
+  }
+  return false;
 };
 
 

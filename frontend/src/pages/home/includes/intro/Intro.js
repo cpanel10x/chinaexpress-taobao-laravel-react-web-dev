@@ -15,14 +15,14 @@ import "swiper/css";
 import "swiper/css/zoom";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import ImageLoader from "../../../../loader/ImageLoader";
 
 const Intro = ({ settings }) => {
   const {
     banner: { data: banners, isLoading },
   } = useHome();
 
-  const right_banner_image =
-    settings?.right_banner_image || "img/right-banner-2.png";
+  const right_banner_image = settings?.right_banner_image || "img/right-banner-2.png";
   const right_banner_image_link = settings?.right_banner_image_link || null;
 
   const imgStyles = {
@@ -65,21 +65,17 @@ const Intro = ({ settings }) => {
                                 target="_blank"
                                 rel="noopener noreferrer"
                               >
-                                <img
+                                <ImageLoader
                                   className={`tns-lazy-img`}
-                                  src={loadAsset(banner.post_thumb)}
-                                  data-src={loadAsset(banner.post_thumb)}
-                                  style={imgStyles}
-                                  alt={banner.id}
+                                  path={loadAsset(banner.post_thumb)}
+                                  width={'100%'}
                                 />
                               </a>
                             ) : (
-                              <img
+                              <ImageLoader
                                 className={`tns-lazy-img`}
-                                src={loadAsset(banner.post_thumb)}
-                                data-src={loadAsset(banner.post_thumb)}
-                                style={imgStyles}
-                                alt={banner.id}
+                                path={loadAsset(banner.post_thumb)}
+                                width={'100%'}
                               />
                             )}
                           </div>
@@ -96,7 +92,11 @@ const Intro = ({ settings }) => {
 
           <div className="col-md-3 d-none d-lg-block">
             <a href={right_banner_image_link ? right_banner_image_link : "#"}>
-              <img src={loadAsset(right_banner_image)} className="img-fluid" />
+              <ImageLoader
+                path={loadAsset(right_banner_image)}
+                width={'100%'}
+                height={'100%'}
+              />
             </a>
           </div>
         </div>

@@ -3,12 +3,13 @@ import React from "react";
 import LoaderImg from './../assets/img/loader.png';
 
 
-const ImageLoader = ({ path, width, height }) => {
+const ImageLoader = ({ className, path, width, height, loader }) => {
     return (
         <>
             <Image
-                width={width ? width : 80}
-                height={height ? height : 80}
+                className={className}
+                width={width ? width : 'auto'}
+                height={height ? height : 'auto'}
                 preview={false}
                 src={path}
                 placeholder={
@@ -18,7 +19,7 @@ const ImageLoader = ({ path, width, height }) => {
                         src={LoaderImg}
                     />
                 }
-                fallback={LoaderImg}
+                fallback={loader ? loader : LoaderImg}
             />
         </>
     );

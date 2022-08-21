@@ -17,7 +17,7 @@ const getRandomParams = (params) => ({
   ...params,
 });
 
-const WalletTable = ({ rowSelection, handleActionClick, resetQuery, setResetQuery, search, canMasterEdit }) => {
+const WalletTable = ({ rowSelection, filterSelected, handleActionClick, resetQuery, setResetQuery, search, canMasterEdit }) => {
   const [data, setData] = useState();
   const [loadSearch, setLoadSearch] = useState('');
   const [loading, setLoading] = useState(false);
@@ -42,12 +42,20 @@ const WalletTable = ({ rowSelection, handleActionClick, resetQuery, setResetQuer
       setLoadSearch(search);
     }
 
+    if (filterSelected?.length > 0) {
+      setPagination({
+        current: 1,
+        pageSize: 10,
+      })
+      setQueryParams({ status: filterSelected });
+    }
+
     if (resetQuery) {
       cache.invalidateQueries(["wallet", qs_query_prams]);
       setResetQuery(false);
     }
 
-  }, [resetQuery, search, loadSearch]);
+  }, [resetQuery, search, loadSearch, filterSelected]);
 
 
   useEffect(() => {

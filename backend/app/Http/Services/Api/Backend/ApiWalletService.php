@@ -17,12 +17,11 @@ class ApiWalletService
     public function list()
     {
         $search_val   = request('search');
+        $status   = request('status', []);
         $query = OrderItem::with('user', 'order', 'product', 'itemVariations', 'trackingExceptional')
             ->whereNotIn('status', ['waiting-for-payment'])
             ->orderByDesc('id');
-
         $searchable = ['item_number', 'Title', 'order_id', 'shipping_type', 'shipping_from', 'ItemId', 'ProviderType', 'status', 'source_order_number', 'tracking_number',  'invoice_no'];
-
         if ($search_val && count($searchable) > 0) {
             $query->where(function ($query) use ($searchable, $search_val) {
                 foreach ($searchable as $col) {
@@ -33,6 +32,10 @@ class ApiWalletService
                     ->orWhere('phone', 'like', '%' . $search_val . '%')
                     ->orWhere('name', 'like', '%' . $search_val . '%');
             });
+        }
+
+        if (count($status) > 0) {
+            $query->whereIn('status', $status);
         }
 
         $column = [];

@@ -1,14 +1,14 @@
 import React from "react";
-import {Link} from "react-router-dom";
-import {loadAsset} from "../../../utils/Helpers";
+import { Link } from "react-router-dom";
+import { loadAsset } from "../../../utils/Helpers";
 import ProductSectionSkeleton from "../../../skeleton/productSkeleton/ProductSectionSkeleton";
 import RecentItems from "../includes/Products/recentProduct/includes/RecentItems";
-import {useSectionProducts} from "../../../api/ProductApi";
+import { useSectionProducts } from "../../../api/ProductApi";
 
 const SectionsProducts = (props) => {
-	const {settings, section} = props;
+	const { settings, section } = props;
 
-	const {data: products, isLoading} = useSectionProducts(section);
+	const { data: products, isLoading } = useSectionProducts(section);
 
 	const title = settings?.[`${section}_title`] || '';
 	const image = settings?.[`${section}_title_image`] || '';
@@ -22,7 +22,7 @@ const SectionsProducts = (props) => {
 			<div className="container deal-section">
 				<div className="card my-5">
 					<div className="card-body">
-						<ProductSectionSkeleton/>
+						<ProductSectionSkeleton />
 					</div>
 				</div>
 			</div>
@@ -37,7 +37,7 @@ const SectionsProducts = (props) => {
 						<div className="col-6">
 							<h3 className="title ">
 								{visible_title === "image" ? (
-									<img src={loadAsset(image)}/>
+									<img src={loadAsset(image)} />
 								) : (
 									title
 								)}
@@ -51,7 +51,7 @@ const SectionsProducts = (props) => {
 							}
 						</div>
 					</div>
-					{products?.length > 0 && <RecentItems products={products} settings={settings}/>}
+					{products?.length > 0 && <RecentItems products={products} settings={settings} />}
 				</div>
 			</div>
 		</div>

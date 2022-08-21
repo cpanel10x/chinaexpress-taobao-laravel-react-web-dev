@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Button, Modal, Space, Input } from "antd";
-import { ExclamationCircleOutlined } from "@ant-design/icons";
+import { Button, Modal, Input } from "antd";
+import { ExclamationCircleOutlined, FilterOutlined } from "@ant-design/icons";
 import { useWalletBatchDelete } from "../../../../query/WalletApi";
 import GenerateInvoice from "./GenerateInvoice";
 import { has_permission } from "../../../../../api/Auth";
 
 const { Search } = Input;
 
-const OperationButtons = ({ selectedRowKeys, setResetQuery, setSearch }) => {
+
+const OperationButtons = ({ selectedRowKeys, setResetQuery, setSearch, setFilter }) => {
   const [selected, setSelected] = useState([]);
   const [invoiceGen, setInvoiceGen] = useState(false);
 
@@ -43,7 +44,7 @@ const OperationButtons = ({ selectedRowKeys, setResetQuery, setSearch }) => {
       cancelText: "Cancel",
     });
   };
-
+  const allowedStatus = ['received-in-BD-warehouse', 'lost_in_transit', 'cancel', 'out-of-stock'];
   const generateInvoice = () => {
     let same_users = true;
     let user_id = 0;
@@ -57,11 +58,11 @@ const OperationButtons = ({ selectedRowKeys, setResetQuery, setSearch }) => {
           content: <p>#<b>{item.item_number}</b> Invoice already generate. <br /> Invoice No: #<b>{item.invoice_no}</b></p>,
         });
         break;
-      } else if (item.status !== 'received-in-BD-warehouse') {
+      } else if (!allowedStatus.includes(item.status)) {
         same_users = false;
         Modal.warning({
           title: "Processing error!",
-          content: <p>#<b>{item.item_number}</b> is not ready for generate Invoice</p>,
+          content: <p>#<b>{item.item_number}</b> has status "${item.status}", is not ready for generate Invoice</p>,
         });
         break;
       } else if (user_id > 0 && user_id2 !== user_id) {
@@ -120,9 +121,17 @@ const OperationButtons = ({ selectedRowKeys, setResetQuery, setSearch }) => {
             Generate Invoice
           </Button>
         }
-        <span style={{ marginLeft: 8, marginRight: 8 }}>
+        <span style={{ marginLeft: 4 }}>
           {hasSelected ? `Selected ${selectedRowKeys.length} items` : ""}
         </span>
+        <Button
+          style={{ marginRight: 8 }}
+          type="danger"
+          onClick={e => setFilter(true)}
+          icon={<FilterOutlined />}
+        >
+          Filter
+        </Button>
         <Search
           placeholder="Search"
           allowClear
