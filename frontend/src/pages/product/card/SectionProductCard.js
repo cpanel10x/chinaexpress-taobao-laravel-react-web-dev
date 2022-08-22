@@ -6,6 +6,8 @@ import { useQueryClient } from "react-query";
 import { useSettings } from "../../../api/GeneralApi";
 import { useAddToWishList } from "../../../api/WishListApi";
 import ImageLoader from "../../../loader/ImageLoader";
+import useResponsive from "../../../utils/responsive";
+import { imageHeightCalculate, productPageLink, productPrice } from "./includes/productCardHelper";
 
 const SectionProductCard = (props) => {
 	const { product, className } = props;
@@ -14,6 +16,9 @@ const SectionProductCard = (props) => {
 	const rate = settings?.increase_rate || 0;
 	const ali_rate = settings?.ali_increase_rate || 0;
 	const currency_icon = settings?.currency_icon || '৳';
+
+
+	const device = useResponsive();
 
 	const cache = useQueryClient();
 	const { isLoading, mutateAsync } = useAddToWishList();
@@ -35,26 +40,18 @@ const SectionProductCard = (props) => {
 	const ItemId = product?.ItemId || product?.product_code;
 	const ProviderType = product?.provider_type || product?.ProviderType;
 
-	const productPageLink = () => {
-		return ProviderType === 'aliexpress' ? `/aliexpress/product/${ItemId}` : `/product/${ItemId}`;
-	};
-
-	const productPrice = () => {
-		if (ProviderType === 'aliexpress') {
-			return getDBAliProductPrice(product, ali_rate);
-		}
-		return getDBProductPrice(product, rate);
-	};
+	const productLink = productPageLink(ProviderType, ItemId);
+	const priceData = productPrice(product, rate, ali_rate);
+	const img_height = imageHeightCalculate(device);
 
 	return (
 		<div className={className ? className : 'col-lg-12 col-md-6 col-6'}>
 			<div className="product">
 				<figure className="product-media">
-					<Link to={productPageLink()} className="w-100">
+					<Link to={productLink} className="w-100">
 						<ImageLoader
 							path={image}
-							width={'100%'}
-							height={220}
+							height={img_height}
 						/>
 					</Link>
 					<div className="product-action-vertical">
@@ -72,7 +69,7 @@ const SectionProductCard = (props) => {
 								</a>
 						}
 						<Link
-							to={productPageLink()}
+							to={productLink}
 							className="btn-product-icon btn-quickview"
 							title="Quick view"
 						>
@@ -90,13 +87,13 @@ const SectionProductCard = (props) => {
 						}}
 						title={Title}
 					>
-						<Link to={productPageLink()}>
+						<Link to={productLink}>
 							{Title}
 						</Link>
 					</h3>
 					<div className="clearfix d-block product-price">
 						<span className="float-left">{`${currency_icon}`} <span
-							className="price_span">{productPrice()}</span></span>
+							className="price_span">{priceData}</span></span>
 						{
 							product?.total_sold > 0 && <span className="sold_item_text">SOLD: {product.total_sold}</span>
 						}

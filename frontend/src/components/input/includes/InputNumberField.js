@@ -17,7 +17,7 @@ const InputNumberField = (props) => {
 
   const handleBlur = () => {
     let valueTemp = value;
-    if (value?.charAt(value.length - 1) === '.' || value === '-') {
+    if (value.toString().charAt(value.length - 1) === '.' || value === '-') {
       valueTemp = value.slice(0, -1);
     }
     if (valueTemp) {

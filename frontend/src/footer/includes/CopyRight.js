@@ -1,15 +1,12 @@
 import React from 'react';
-import {getSetting} from "../../utils/Helpers";
-import {useQuery} from "react-query";
-import {getSettings} from "../../api/GeneralApi";
 
 const CopyRight = (props) => {
-	const {width, settings} = props;
+	const { isMobile, settings } = props;
 
-	const copyright_text = settings?.copyright_text || 'All Rights are reserved by sumontech';
+	const copyright_text = settings?.copyright_text || 'Developed by sumontech';
 
 	return (
-		<div className="footer-bottom font-weight-normal" style={width <= 751 ? {marginBottom: "60px"} : {marginBottom: "0"}}>
+		<div className="footer-bottom font-weight-normal" style={isMobile ? { marginBottom: "60px" } : { marginBottom: "0" }}>
 			<div className="container">
 				<p className="footer-copyright font-weight-normal ml-lg-2 second-primary-color">
 					© {copyright_text}
@@ -25,7 +22,7 @@ const CopyRight = (props) => {
 							target="_blank"
 							rel="noreferrer"
 						>
-							<i className="icon-facebook"/>
+							<i className="icon-facebook" />
 						</a>
 					}
 
@@ -38,7 +35,7 @@ const CopyRight = (props) => {
 							target="_blank"
 							rel="noreferrer"
 						>
-							<i className="icon-twitter"/>
+							<i className="icon-twitter" />
 						</a>
 					}
 					{
@@ -50,7 +47,7 @@ const CopyRight = (props) => {
 							target="_blank"
 							rel="noreferrer"
 						>
-							<i className="icon-instagram-1"/>
+							<i className="icon-instagram-1" />
 						</a>
 					}
 					{
@@ -62,7 +59,7 @@ const CopyRight = (props) => {
 							target="_blank"
 							rel="noreferrer"
 						>
-							<i className="icon-youtube-play"/>
+							<i className="icon-youtube-play" />
 						</a>
 					}
 				</div>

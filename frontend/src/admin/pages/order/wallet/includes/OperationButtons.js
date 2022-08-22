@@ -121,17 +121,9 @@ const OperationButtons = ({ selectedRowKeys, setResetQuery, setSearch, setFilter
             Generate Invoice
           </Button>
         }
-        <span style={{ marginLeft: 4 }}>
+        <span style={{ marginLeft: 8 }}>
           {hasSelected ? `Selected ${selectedRowKeys.length} items` : ""}
         </span>
-        <Button
-          style={{ marginRight: 8 }}
-          type="danger"
-          onClick={e => setFilter(true)}
-          icon={<FilterOutlined />}
-        >
-          Filter
-        </Button>
         <Search
           placeholder="Search"
           allowClear

@@ -17,7 +17,7 @@ const getRandomParams = (params) => ({
   ...params,
 });
 
-const WalletTable = ({ rowSelection, filterSelected, handleActionClick, resetQuery, setResetQuery, search, canMasterEdit }) => {
+const WalletTable = ({ rowSelection, handleActionClick, resetQuery, setResetQuery, search, canMasterEdit }) => {
   const [data, setData] = useState();
   const [loadSearch, setLoadSearch] = useState('');
   const [loading, setLoading] = useState(false);
@@ -27,7 +27,7 @@ const WalletTable = ({ rowSelection, filterSelected, handleActionClick, resetQue
   });
   const [queryParams, setQueryParams] = useState({});
 
-  const qs_query_prams = qs.stringify(getRandomParams({ ...queryParams, search: loadSearch }));
+  const qs_query_prams = qs.stringify(getRandomParams(queryParams));
 
   const cache = useQueryClient();
   const { data: queryData, isLoading } = useWalletData(qs_query_prams);
@@ -38,16 +38,8 @@ const WalletTable = ({ rowSelection, filterSelected, handleActionClick, resetQue
         current: 1,
         pageSize: 10,
       })
-      setQueryParams({});
+      setQueryParams({ ...queryParams, search: loadSearch });
       setLoadSearch(search);
-    }
-
-    if (filterSelected?.length > 0) {
-      setPagination({
-        current: 1,
-        pageSize: 10,
-      })
-      setQueryParams({ status: filterSelected });
     }
 
     if (resetQuery) {
@@ -55,7 +47,7 @@ const WalletTable = ({ rowSelection, filterSelected, handleActionClick, resetQue
       setResetQuery(false);
     }
 
-  }, [resetQuery, search, loadSearch, filterSelected]);
+  }, [resetQuery, search, loadSearch, cache, qs_query_prams, setResetQuery]);
 
 
   useEffect(() => {
@@ -87,7 +79,7 @@ const WalletTable = ({ rowSelection, filterSelected, handleActionClick, resetQue
         onChange={handleTableChange}
         onRow={(record, rowIndex) => {
           return {
-            onDoubleClick: (event) => handleActionClick(event, "view", record),
+            onDoubleClick: (event) => handleActionClick(event, "change-status", record),
           };
         }}
         scroll={{
@@ -102,7 +94,11 @@ const WalletTable = ({ rowSelection, filterSelected, handleActionClick, resetQue
             fixed: "left",
             align: "center",
             width: 120,
-            render: (text, record, index) => {
+            // defaultSortOrder: 'descend',
+            // sorter: (a, b) => {
+            //   return true;
+            // },
+            render: (text, record,) => {
               return record?.created_at
                 ? moment(record.created_at).format("DD-MMM-YYYY")
                 : "N/A";
@@ -129,6 +125,27 @@ const WalletTable = ({ rowSelection, filterSelected, handleActionClick, resetQue
             fixed: "left",
             width: 130,
             dataIndex: "status",
+            filters: [
+              { text: 'Partial Paid', value: 'partial-paid', },
+              { text: 'Purchased', value: 'purchased', },
+              { text: 'Shipped from Suppliers', value: 'shipped-from-suppliers', },
+              { text: 'Received in China Warehouse', value: 'received-in-china-warehouse', },
+              { text: 'Shipped from China Warehouse', value: 'shipped-from-china-warehouse', },
+              { text: 'Received in BD Warehouse', value: 'received-in-BD-warehouse', },
+              { text: 'Order Canceled', value: 'cancel', },
+              { text: 'Out of stock', value: 'out-of-stock', },
+              { text: 'Missing or Cancel', value: 'missing', },
+              { text: 'Adjustment', value: 'adjustment', },
+              { text: 'Lost in Transit', value: 'lost_in_transit', },
+              { text: 'Customer Tax', value: 'customer_tax', },
+              { text: 'Refund to Customer', value: 'refunded', },
+              { text: 'Delivered', value: 'delivered', },
+            ],
+            filterMode: 'tree',
+            filterSearch: true,
+            onFilter: (value, record) => {
+              return true;
+            }
           },
           {
             title: "Transaction Number",

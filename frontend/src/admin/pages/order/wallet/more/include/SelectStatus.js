@@ -17,7 +17,7 @@ const SelectStatus = ({ form, walletItem, status, setStatus }) => {
     { key: 6, statusKey: 'received-in-BD-warehouse', value: 'Received in BD Warehouse' },
     { key: 7, statusKey: 'cancel', value: 'Order Canceled' },
     { key: 8, statusKey: 'out-of-stock', value: 'Out of stock' },
-    { key: 8, statusKey: 'missing', value: 'Missing or Cancel' },
+    { key: 8, statusKey: 'missing', value: 'Missing or Shortage' },
     { key: 9, statusKey: 'adjustment', value: 'Adjustment' },
     { key: 10, statusKey: 'lost_in_transit', value: 'Lost in Transit' },
     { key: 11, statusKey: 'customer_tax', value: 'Customer Tax' },
@@ -30,11 +30,12 @@ const SelectStatus = ({ form, walletItem, status, setStatus }) => {
   options = options.filter(item => item.key >= (current_option?.key || 0));
 
   const statusUpdateAction = (value) => {
+    setStatus(value);
     if (value === 'lost_in_transit') {
       form.setFieldsValue({
         ...walletItem,
         status: value,
-        lost_in_transit: walletItem.product_value,
+        lost_in_transit: cancelMissingAmt(walletItem),
       });
     } else if (value === 'cancel') {
       form.setFieldsValue({
@@ -46,7 +47,6 @@ const SelectStatus = ({ form, walletItem, status, setStatus }) => {
     } else {
       form.setFieldsValue({ ...walletItem, status: value });
     }
-    setStatus(value);
   }
 
   return (

@@ -1,33 +1,19 @@
-import React, { useLayoutEffect, useState } from "react";
+import React from "react";
 import CopyRight from "./CopyRight";
 import StickyFooter from "./StickyFooter";
 import MobileMenu from "./MobileMenu";
+import useResponsive from "../../utils/responsive";
 
-const useWindowSize = () => {
-  const [size, setSize] = useState([0, 0]);
-  useLayoutEffect(() => {
-    function updateSize() {
-      setSize([window.innerWidth, window.innerHeight]);
-    }
-
-    window.addEventListener("resize", updateSize);
-    updateSize();
-    return () => window.removeEventListener("resize", updateSize);
-  }, []);
-  return size;
-};
 
 const StickyFooterManage = (props) => {
   const { settings } = props;
-  let [width, height] = useWindowSize();
 
-  width = width ? width : window.innerWidth;
-  height = height ? height : window.innerHeight;
+  const { isMobile } = useResponsive();
 
-  if (width <= 751 && height > 0) {
+  if (isMobile) {
     return (
       <>
-        <CopyRight width={width} settings={settings} />
+        <CopyRight isMobile={isMobile} settings={settings} />
         <MobileMenu />
         <div className="container">
           <StickyFooter settings={settings} />
@@ -36,7 +22,7 @@ const StickyFooterManage = (props) => {
     );
   }
 
-  return <CopyRight width={width} settings={settings} />;
+  return <CopyRight settings={settings} />;
 };
 
 export default StickyFooterManage;

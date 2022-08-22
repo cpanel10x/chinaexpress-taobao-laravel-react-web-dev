@@ -1,10 +1,10 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Header from "./Header";
 import MobileHeader from "./MobileHeader";
-import { useMediaQuery } from "react-responsive";
 import { useCart } from "../api/CartApi";
 import { useCustomer } from "../api/Auth";
 import { useWishList } from "../api/WishListApi";
+import useResponsive from "../utils/responsive";
 
 const HeaderManage = (props) => {
   const { settings } = props;
@@ -14,7 +14,7 @@ const HeaderManage = (props) => {
   const { data: wishList } = useWishList();
   const { data: cart } = useCart();
 
-  const isMobile = useMediaQuery({ query: "(max-width: 991px)" });
+  const { isMobile } = useResponsive();
 
   const cart_count =
     cart?.cart_items?.filter((item) => item?.IsCart > 0)?.length || 0;

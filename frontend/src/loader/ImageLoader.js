@@ -8,14 +8,14 @@ const ImageLoader = ({ className, path, width, height, loader }) => {
         <>
             <Image
                 className={className}
-                width={width ? width : 'auto'}
+                width={width ? width : '100%'}
                 height={height ? height : 'auto'}
                 preview={false}
                 src={path}
                 placeholder={
                     <Image
-                        width={width ? width : 80}
-                        height={height ? height : 80}
+                        width={width ? width : '100%'}
+                        height={height ? height : 'auto'}
                         src={LoaderImg}
                     />
                 }

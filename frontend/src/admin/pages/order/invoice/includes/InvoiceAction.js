@@ -1,6 +1,6 @@
 import { Button, Menu } from "antd";
 
-const Action = ({ walletItem, handleActionClick, isLoading, canMasterEdit }) => {
+const InvoiceAction = ({ walletItem, handleActionClick, isLoading, canMasterEdit }) => {
 
   const { status } = walletItem;
 
@@ -59,4 +59,4 @@ const Action = ({ walletItem, handleActionClick, isLoading, canMasterEdit }) => 
   );
 };
 
-export default Action;
+export default InvoiceAction;

@@ -17,7 +17,7 @@ const ChangeStatus = ({ walletItem, onFinish, show, setShow, isLoading }) => {
     if (current_status === 'lost_in_transit') {
       form.setFieldsValue({
         ...walletItem,
-        lost_in_transit: walletItem.product_value,
+        lost_in_transit: cancelMissingAmt(walletItem),
       });
     } else if (current_status === 'cancel') {
       form.setFieldsValue({
@@ -83,12 +83,21 @@ const ChangeStatus = ({ walletItem, onFinish, show, setShow, isLoading }) => {
               placeholder="Actual Weight"
             />
           )}
-
           {status === "out-of-stock" && (
             <OutOfStockInput
               form={form}
-              product_value={walletItem.product_value}
-              out_of_stock={walletItem.out_of_stock}
+              walletItem={walletItem}
+            />
+          )}
+          {status === "missing" && (
+            <InputPlain
+              type="number"
+              required={true}
+              label="Missing or Shortage"
+              title="Missing or Shortage Amount item"
+              name="missing"
+              message="Input Missing Amount"
+              placeholder="Missing Amount"
             />
           )}
           {status === "adjustment" && (

@@ -1,23 +1,24 @@
 import { Radio, Form } from 'antd';
 import InputPlain from '../../../../../../components/input/InputPlain';
+import { cancelMissingAmt } from './walletHelpers';
 
 
-const OutOfStockInput = ({ product_value, out_of_stock, form }) => {
+const OutOfStockInput = ({ walletItem, form }) => {
+  const { out_of_stock } = walletItem;
 
   form.setFieldsValue({ out_of_stock });
-
 
   const setOptionAction = (e) => {
     let option = e.target.value;
     if (option === 'partial') {
       form.setFieldsValue({
         out_of_stock_type: option,
-        out_of_stock: out_of_stock,
+        out_of_stock
       });
     } else if (option === 'full') {
       form.setFieldsValue({
         out_of_stock_type: option,
-        out_of_stock: product_value,
+        out_of_stock: cancelMissingAmt(walletItem),
       });
     }
   }

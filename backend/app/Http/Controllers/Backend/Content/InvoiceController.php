@@ -202,12 +202,11 @@ class InvoiceController extends Controller
       $OrderItem->invoice_no = $invoice->invoice_no;
       $OrderItem->last_payment = $invoice->total_due;
       $OrderItem->due_payment = 0;
-      // if ($OrderItem->status == 'on-transit-to-customer') {
-      //   $OrderItem->status = 'delivered';
-      // } else {
-      //   $OrderItem->status = 'adjusted';
-      // }
-      $OrderItem->status = 'delivered';
+      if ($OrderItem->status == 'on-transit-to-customer') {
+        $OrderItem->status = 'delivered';
+      } else {
+        $OrderItem->status = 'adjusted-by-invoice';
+      }
       $OrderItem->save();
       (new TrackingService())->updateTracking($OrderItem->id, 'delivered');
     }
